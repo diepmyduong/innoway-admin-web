@@ -83,3 +83,12 @@
     color: $brand-success;
   }
 }
+
+//Custom
+.callout-yahoo {
+  border-left-color: $yahoo;
+
+  h4 {
+    color: $yahoo;
+  }
+}

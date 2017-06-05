@@ -1,0 +1,13 @@
+.bill-progress {
+    margin-left:-16px;
+    margin-bottom:-16px !important;
+}
+.callout {
+    cursor: pointer;
+}
+.employee-avatar {
+    width: 30%;
+}
+.employee-avatar>div {
+    float:right;
+}

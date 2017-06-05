@@ -1,3 +1,251 @@
 <div class="animated fadeIn">
-    
+    <div class="card-group">
+        <div class="card">
+            <div class="card-block">
+                <div class="h1 text-muted text-right mb-2">
+                <i class="icon-bubbles"></i>
+                </div>
+                <div class="h4 mb-0">87.500</div>
+                <small class="text-muted text-uppercase font-weight-bold">Phản hồi</small>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-block">
+                <div class="h1 text-muted text-right mb-2">
+                <i class="icon-people"></i>
+                </div>
+                <div class="h4 mb-0">385</div>
+                <small class="text-muted text-uppercase font-weight-bold">Khách đã đặt</small>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-block">
+                <div class="h1 text-muted text-right mb-2">
+                <i class="icon-basket-loaded"></i>
+                </div>
+                <div class="h4 mb-0">1238</div>
+                <small class="text-muted text-uppercase font-weight-bold">Đơn đặt hàng</small>
+                <div class="progress progress-xs mt-1 mb-0">
+                <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-block">
+                <div class="h1 text-muted text-right mb-2">
+                <i class="fa fa-usd"></i>
+                </div>
+                <div class="h4 mb-0">999,999,000 VND</div>
+                <small class="text-muted text-uppercase font-weight-bold">Doanh thu trong ngày</small>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-block">
+                <div class="h1 text-muted text-right mb-2">
+                <i class="icon-speedometer"></i>
+                </div>
+                <div class="h4 mb-0">100,000,000</div>
+                <small class="text-muted text-uppercase font-weight-bold">Lượng truy cập</small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+        <div class="card email-app">
+            <nav>
+                <div class="input-group">
+                    <input type="text" class="form-control"  placeholder="Tìm kiếm đơn hàng"/>
+                </div>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:;"><i class="icon-direction"></i> Trạng thái</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="form-group">
+                            <select id="select" name="select" class="form-control" size="1">
+                                <option value="0">Tất cả</option>
+                                <option value="1" selected>Đã gửi</option>
+                                <option value="2">Đang xử lý</option>
+                                <option value="3">Đang điều phối</option>
+                                <option value="3">Đã điều phối</option>
+                                <option value="3">Đang giao</option>
+                                <option value="3">Đã thanh toán</option>
+                                <option value="3">Đã thu tiền</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:;"><i class="icon-user"></i> Khách hàng</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="form-group">
+                            <input type="text" class="form-control"  placeholder="Số điện thoại"/>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:;"><i class="glyphicons glyphicons-bike-park"></i> Nhân viên</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="form-group">
+                            <input type="text" class="form-control"  placeholder="Tên nhân viên"/>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:;"><i class="glyphicons glyphicons-map"></i> Khu vực</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="form-group">
+                            <select id="select" name="select" class="form-control" size="1">
+                                <option value="0" selected>Tất cả</option>
+                                <option value="1">Quận 1</option>
+                                <option value="1">Quận 2</option>
+                                <option value="1">Quận 3</option>
+                                <option value="1">Quận 4</option>
+                                <option value="1">Quận 5</option>
+                                <option value="1">Quận 6</option>
+                                <option value="1">Quận 7</option>
+                                <option value="1">Quận 8</option>
+                                <option value="1">Quận 9</option>
+                                <option value="1">Quận 10</option>
+                                <option value="1">Quận 11</option>
+                                <option value="1">Quận 12</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:;"><i class="glyphicons glyphicons-map-marker"></i> Nơi giao</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="form-group">
+                            <input type="text" class="form-control"  placeholder="Địa chỉ"/>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <main>
+                <div class="toolbar">
+                    <span class="btn-group">
+                        <button type="button" class="btn btn-default">0</button>
+                        <button type="button" class="btn btn-info">1</button>
+                        <button type="button" class="btn btn-warning">2</button>
+                        <button type="button" class="btn btn-primary">2</button>
+                        <button type="button" class="btn btn-success">2</button>
+                        <button type="button" class="btn btn-danger">2</button>
+                    </span>
+
+                    <button type="button" class="btn btn-secondary"><span class="fa fa-trash-o"></span></button>
+
+                    <span class="btn-group float-right">
+                        <button type="button" class="btn btn-secondary"><span class="fa fa-chevron-left"></span></button>
+                        <button type="button" class="btn btn-secondary"><span class="fa fa-chevron-right"></span></button>
+                    </span>
+                </div>
+                <div class="callout m-0 py-1">
+                    <!--<div class="avatar float-right employee-avatar">
+                        <div>
+                            Nguyễn văn A
+                            <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                        </div>
+                    </div>-->
+                    <div>Mã đơn hàng: <strong>1000004</strong></div>
+                    <small class="mr-1"><i class="icon-calendar"></i> 3pm</small>
+                    <small class="mr-1"><i class="icon-location-pin"></i> Quận 1 </small>
+                    <small class="mr-1"><i class="glyphicons glyphicons-heart"></i> 10 </small>
+                    <small class="mr-1"><i class="fa fa-usd"></i> 100,000 VND </small>
+                </div>
+                <hr class="mx-1 my-0">
+                <div class="callout callout-warning m-0 py-1">
+                    <!--<div class="avatar float-right employee-avatar">
+                        <div>
+                            Nguyễn Văn B
+                            <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                        </div>
+                    </div>-->
+                    <div>Mã đơn hàng: <strong>1000001</strong></div>
+                    <small class="mr-1"><i class="icon-calendar"></i> 3pm</small>
+                    <small class="mr-1"><i class="icon-location-pin"></i> Quận 1 </small>
+                    <small class="mr-1"><i class="glyphicons glyphicons-heart"></i> 10 </small>
+                    <small class="mr-1"><i class="fa fa-usd"></i> 100,000 VND </small>
+                    <div class="progress progress-xs mt-1 mb-0 bill-progress">
+                        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <hr class="mx-1 my-0">
+                <div class="callout callout-primary m-0 py-1">
+                    <div class="avatar float-right employee-avatar">
+                        <div>
+                            Nguyễn văn A
+                            <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                        </div>
+                    </div>
+                    <div>Mã đơn hàng: <strong>1000002</strong></div>
+                    <small class="mr-1"><i class="icon-calendar"></i> 3pm</small>
+                    <small class="mr-1"><i class="icon-location-pin"></i> Quận 1 </small>
+                    <small class="mr-1"><i class="glyphicons glyphicons-heart"></i> 10 </small>
+                    <small class="mr-1"><i class="fa fa-usd"></i> 100,000 VND </small>
+                </div>
+                <hr class="mx-1 my-0">
+                <div class="callout callout-success m-0 py-1">
+                    <div class="avatar float-right employee-avatar">
+                        <div>
+                            Nguyễn văn A
+                            <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                        </div>
+                    </div>
+                    <div>Mã đơn hàng: <strong>1000003</strong></div>
+                    <small class="mr-1"><i class="icon-calendar"></i> 3pm</small>
+                    <small class="mr-1"><i class="icon-location-pin"></i> Quận 1 </small>
+                    <small class="mr-1"><i class="glyphicons glyphicons-heart"></i> 10 </small>
+                    <small class="mr-1"><i class="fa fa-usd"></i> 100,000 VND </small>
+                </div>
+                <hr class="mx-1 my-0">
+                <div class="callout callout-info m-0 py-1">
+                    <div class="avatar float-right employee-avatar">
+                        <div>
+                            Nguyễn văn A
+                            <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                        </div>
+                    </div>
+                    <div>Mã đơn hàng: <strong>1000003</strong></div>
+                    <small class="mr-1"><i class="icon-calendar"></i> 3pm</small>
+                    <small class="mr-1"><i class="icon-location-pin"></i> Quận 1 </small>
+                    <small class="mr-1"><i class="glyphicons glyphicons-heart"></i> 10 </small>
+                    <small class="mr-1"><i class="fa fa-usd"></i> 100,000 VND </small>
+                </div>
+                <hr class="mx-1 my-0">
+                <div class="callout callout-danger m-0 py-1">
+                    <div class="avatar float-right employee-avatar">
+                        <div>
+                            Nguyễn văn A
+                            <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                        </div>
+                    </div>
+                    <div>Mã đơn hàng: <strong>1000003</strong></div>
+                    <small class="mr-1"><i class="icon-calendar"></i> 3pm</small>
+                    <small class="mr-1"><i class="icon-location-pin"></i> Quận 1 </small>
+                    <small class="mr-1"><i class="glyphicons glyphicons-heart"></i> 10 </small>
+                    <small class="mr-1"><i class="fa fa-usd"></i> 100,000 VND </small>
+                </div>
+                <hr class="mx-1 my-0">
+                <div class="callout callout-yahoo m-0 py-1">
+                    <div class="avatar float-right employee-avatar">
+                        <div>
+                            Nguyễn văn A
+                            <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                        </div>
+                    </div>
+                    <div>Mã đơn hàng: <strong>1000003</strong></div>
+                    <small class="mr-1"><i class="icon-calendar"></i> 3pm</small>
+                    <small class="mr-1"><i class="icon-location-pin"></i> Quận 1 </small>
+                    <small class="mr-1"><i class="glyphicons glyphicons-heart"></i> 10 </small>
+                    <small class="mr-1"><i class="fa fa-usd"></i> 100,000 VND </small>
+                </div>
+                <hr class="mx-1 my-0">
+            </main>
+        </div>
+        </div>
+    </div>
 </div>
+
+
