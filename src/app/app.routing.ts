@@ -25,6 +25,14 @@ export const routes: Routes = [
         path: 'products',
         loadChildren: './products/products.module#ProductsModule'
       },
+      {
+        path: 'chatbot',
+        loadChildren: './chatbot/chatbot.module#ChatbotModule'
+      },
+      {
+        path: 'settings',
+        loadChildren: './settings/settings.module#SettingsModule'
+      },
     ]
   }
 ];
