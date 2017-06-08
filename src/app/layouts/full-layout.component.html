@@ -61,8 +61,46 @@
                 <li class="nav-title text-center">
                     <span>Quản lý</span>
                 </li>
-                <li class="nav-item">
+               <!--  <li class="nav-item">
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/products']"><i class="icon-speedometer"></i> Sản phẩm </a>
+                </li> -->
+                 <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Sản phẩm</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/products/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/products/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/employee']"><i class="icon-social-reddit"></i> Nhân viên </a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/bill']"><i class="icon-social-reddit"></i> Đơn hàng </a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/customer']"><i class="icon-social-reddit"></i> Khách hàng </a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/promotion']"><i class="icon-social-reddit"></i> Khuyến mãi </a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/notification']"><i class="icon-social-reddit"></i> Notification </a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/feedback']"><i class="icon-social-reddit"></i> Phản hồi </a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/summary']"><i class="icon-social-reddit"></i> Thống kê </a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/report']"><i class="icon-social-reddit"></i> Báo cáo </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/blog']"><i class="icon-social-reddit"></i> Blog </a>
                 </li>
                 <li class="nav-title text-center">
                     <span>Tiện ích</span>

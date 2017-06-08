@@ -26,6 +26,42 @@ export const routes: Routes = [
         loadChildren: './products/products.module#ProductsModule'
       },
       {
+        path: 'employee',
+        loadChildren: './employee/employee.module#EmployeeModule'
+      },
+      {
+        path: 'bill',
+        loadChildren: './bill/bill.module#BillModule'
+      },
+      {
+        path: 'promotion',
+        loadChildren: './promotion/promotion.module#PromotionModule'
+      },
+      {
+        path: 'notification',
+        loadChildren: './notification/notification.module#NotificationModule'
+      },
+      {
+        path: 'blog',
+        loadChildren: './blog/blog.module#BlogModule'
+      },
+      {
+        path: 'customer',
+        loadChildren: './customer/customer.module#CustomerModule'
+      },
+      {
+        path: 'report',
+        loadChildren: './report/report.module#ReportModule'
+      },
+      {
+        path: 'summary',
+        loadChildren: './summary/summary.module#SummaryModule'
+      },
+      {
+        path: 'feedback',
+        loadChildren: './feedback/feedback.module#FeedbackModule'
+      },
+      {
         path: 'chatbot',
         loadChildren: './chatbot/chatbot.module#ChatbotModule'
       },

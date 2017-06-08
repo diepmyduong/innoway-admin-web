@@ -32,7 +32,7 @@ import { FullLayoutComponent } from './layouts/full-layout.component';
     NAV_DROPDOWN_DIRECTIVES,
     BreadcrumbsComponent,
     SIDEBAR_TOGGLE_DIRECTIVES,
-    AsideToggleDirective
+    AsideToggleDirective,
   ],
   providers: [{
     provide: LocationStrategy,
