@@ -26,8 +26,16 @@ export const routes: Routes = [
         loadChildren: './products/products.module#ProductsModule'
       },
       {
+        path: 'unit',
+        loadChildren: './unit/unit.module#UnitModule'
+      },
+      {
         path: 'employee',
         loadChildren: './employee/employee.module#EmployeeModule'
+      },
+      {
+        path: 'product-type',
+        loadChildren: './product-type/product-type.module#ProductTypeModule'
       },
       {
         path: 'bill',
@@ -59,7 +67,7 @@ export const routes: Routes = [
       },
       {
         path: 'feedback',
-        loadChildren: './feedback/feedback.module#FeedbackModule'
+        loadChildren: './feedback/feedback.module#BlogModule'
       },
       {
         path: 'chatbot',
