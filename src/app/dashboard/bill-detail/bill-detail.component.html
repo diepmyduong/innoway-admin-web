@@ -1,10 +1,51 @@
 <div class="toolbar">
     <button type="button" class="btn btn-secondary"><span class="fa fa-reply" (click)="backToList()"></span></button>
     <span class="btn-group">
+        <button type="button" class="btn btn-secondary"><span class="fa fa-map-marker"></span></button>
+        <button type="button" class="btn btn-secondary"><span class="fa fa-phone"></span></button>
+    </span>
+    <span class="btn-group pull-right">
         <button type="button" class="btn btn-secondary"><span class="fa fa-chevron-left"></span></button>
         <button type="button" class="btn btn-secondary"><span class="fa fa-chevron-right"></span></button>
     </span>
 </div>
-<div class="content">
-
+<div class="content animated fadeIn">
+    <h4>Thông tin đơn hàng <span class="badge badge-warning pull-right">Đang giao</span></h4>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td style="width:120px">Đơn hàng</td>
+                <td>: {{id}}</td>
+            </tr>
+            <tr>
+                <td>Khách hàng</td>
+                <td>: bambi</td>
+            </tr>
+            <tr>
+                <td>Điện thoại</td>
+                <td>: 01225697181</td>
+            </tr>
+            <tr>
+                <td>Địa chỉ</td>
+                <td>: 1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4>Sản phẩm</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Số lượng</th>
+                <th>Thành tiền (VNĐ)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Giặt phơi</td>
+                <td>1</td>
+                <td>8,000</td>
+            </tr>
+        </tbody>
+    </table>
 </div>

@@ -17,6 +17,7 @@ import { AppRoutingModule } from './app.routing';
 
 //Layouts
 import { FullLayoutComponent } from './layouts/full-layout.component';
+import { SimpleLayoutComponent } from './layouts/simple-layout.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { FullLayoutComponent } from './layouts/full-layout.component';
   declarations: [
     AppComponent,
     FullLayoutComponent,
+    SimpleLayoutComponent,
     NAV_DROPDOWN_DIRECTIVES,
     BreadcrumbsComponent,
     SIDEBAR_TOGGLE_DIRECTIVES,
