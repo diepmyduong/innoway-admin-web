@@ -18,7 +18,7 @@ import { AppRoutingModule } from './app.routing';
 //Layouts
 import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
-import { BlacklistRuleComponent } from './blacklist-rule/blacklist-rule.component';
+
 
 
 @NgModule({
@@ -37,7 +37,6 @@ import { BlacklistRuleComponent } from './blacklist-rule/blacklist-rule.componen
     BreadcrumbsComponent,
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
-    BlacklistRuleComponent,
   ],
   providers: [{
     provide: LocationStrategy,
