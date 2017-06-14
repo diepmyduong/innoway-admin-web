@@ -1,0 +1,70 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+        	<div class="row">
+	        	<div class="col-lg-4 mt-h">
+	        		<span><i class="fa fa-align-justify px-1 mt-h"></i> Danh sách bài viết</span>
+	        	</div>
+	        	<div class="col-lg-8 col-xs-12 mt-h">	          	
+
+	          		<button type="button" class="btn btn-outline-success mt-0 px-2 float-right">Thêm</button>
+	          		
+	          		<form class="form-inline float-right px-2">
+	          		 	<label class="form-control-label mr-1" for="text-input">Số lượng:  </label>
+			            <select class="form-control input-sm">
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="50">50</option>
+							<option value="100">100</option>
+						</select> 
+			            <i class="fa fa-search px-1"></i>
+			            <input class="form-control" type="text" placeholder="Search...">
+			        </form>
+                    
+				</div>
+        	</div>
+        </div>
+        <div class="card-block">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th class="text-center">Số điện thoại</th>
+                <th class="text-center">Tên người dùng</th>
+                <th class="text-center">Nguyên nhân</th>
+                <th class="text-center">Trạng thái</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center"><a class="nav-link" routerLinkActive="active" [routerLink]="['/blacklist/detail']">0901403811</a></td>
+                <td class="text-center"><a class="nav-link" routerLinkActive="active" [routerLink]="['/customer/detail']">X</a></td>
+                <td class="text-center">Độ uy tín thấp</td>          
+                <td class="text-center">
+                  	<span class="badge badge-success p-h">Active</span>
+                </td>
+                <td class="text-center">
+                	<span class="badge badge-default"><i class="icon-eye icons font-xl p-q d-block"></i></span>
+                 	<span class="badge badge-success"><i class="icon-pencil icons font-xl p-q d-block"></i></span>
+                 	<span class="badge badge-danger"><i class="icon-trash icons font-xl p-q d-block"></i></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Prev</a></li>
+            <li class="page-item active">
+              <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">4</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -156,6 +156,28 @@
                   </ul>
                 </li>
                 <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Topping</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/topping/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/topping/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Loại topping</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/topping-type/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/topping-type/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
                   <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Thuộc tính sản phẩm</a>
                   <ul class="nav-dropdown-items">
                     <li class="nav-item">
@@ -188,8 +210,16 @@
                     </li>
                   </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/bill']"><i class="icon-social-reddit"></i> Đơn hàng </a>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Đơn hàng</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/bill/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/bill/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
                 </li>
                 <li class="nav-item nav-dropdown" routerLinkActive="open">
                   <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Khách hàng</a>
@@ -224,13 +254,51 @@
                     </li>
                   </ul>
                 </li>
-                 <li class="nav-item">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/notification']"><i class="icon-social-reddit"></i> Notification </a>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Notification</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/notification/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/notification/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
                 </li>
-                 <li class="nav-item">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/feedback']"><i class="icon-social-reddit"></i> Phản hồi </a>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Loại notification</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/notification-type/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/notification-type/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
                 </li>
-                 <li class="nav-item">
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Phản hồi</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/feedback/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/feedback/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Tiêu chí phản hồi</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/feedback-rule/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/feedback-rule/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/summary']"><i class="icon-social-reddit"></i> Thống kê </a>
                 </li>
                  <li class="nav-item">

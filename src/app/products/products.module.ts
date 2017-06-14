@@ -5,6 +5,7 @@ import { ProductsRoutingModule } from './products-routing.module';
 import { AddComponent } from './add/add.component';
 
 import { TabsModule } from 'ng2-bootstrap/tabs';
+import { DetailComponent } from './detail/detail.component';
 
 @NgModule({
   imports: [
@@ -12,6 +13,6 @@ import { TabsModule } from 'ng2-bootstrap/tabs';
     ProductsRoutingModule,
     TabsModule
   ],
-  declarations: [ProductsComponent, AddComponent]
+  declarations: [ProductsComponent, AddComponent, DetailComponent]
 })
 export class ProductsModule { }

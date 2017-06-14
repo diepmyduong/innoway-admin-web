@@ -67,6 +67,10 @@ export const routes: Routes = [
         loadChildren: './notification/notification.module#NotificationModule'
       },
       {
+        path: 'notification-type',
+        loadChildren: './notification-type/notification-type.module#NotificationTypeModule'
+      },
+      {
         path: 'blog',
         loadChildren: './blog/blog.module#BlogModule'
       },
@@ -95,6 +99,10 @@ export const routes: Routes = [
         loadChildren: './feedback/feedback.module#FeedbackModule'
       },
       {
+        path: 'feedback-rule',
+        loadChildren: './feedback-rule/feedback-rule.module#FeedbackRuleModule'
+      },
+      {
         path: 'ship-fee',
         loadChildren: './ship-fee/ship-fee.module#ShipFeeModule'
       },
@@ -108,7 +116,11 @@ export const routes: Routes = [
       },
       {
         path: 'blacklist',
-        loadChildren: './blacklist/blacklist.module#BlackListModule'
+        loadChildren: './blacklist/blacklist.module#BlacklistModule'
+      },
+      {
+        path: 'blacklist-rule',
+        loadChildren: './blacklist-rule/blacklist-rule.module#BlacklistRuleModule'
       },
       {
         path: 'brand',
