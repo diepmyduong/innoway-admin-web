@@ -107,12 +107,12 @@ export const routes: Routes = [
         loadChildren: './ship-fee/ship-fee.module#ShipFeeModule'
       },
       {
-        path: 'ship-fee-type',
-        loadChildren: './ship-fee-type/ship-fee-type.module#ShipFeeTypeModule'
-      },
-      {
         path: 'schedule',
         loadChildren: './schedule/schedule.module#ScheduleModule'
+      },
+      {
+        path: 'deposit',
+        loadChildren: './deposit/deposit.module#DepositModule'
       },
       {
         path: 'blacklist',
@@ -153,10 +153,6 @@ export const routes: Routes = [
       {
         path: 'area',
         loadChildren: './area/area.module#AreaModule'
-      },
-      {
-        path: 'ship-fee',
-        loadChildren: './ship-fee/ship-fee.module#ShipFeeModule'
       },
     ]
   },

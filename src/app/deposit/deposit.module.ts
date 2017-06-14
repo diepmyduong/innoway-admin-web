@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ScheduleRoutingModule } from './schedule-routing.module';
-import { ScheduleComponent } from './schedule.component';
+import { DepositRoutingModule } from './deposit-routing.module';
+import { DepositComponent } from './deposit.component';
 import { AddComponent } from './add/add.component';
 import { DetailComponent } from './detail/detail.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    ScheduleRoutingModule
+    DepositRoutingModule
   ],
-  declarations: [ScheduleComponent, AddComponent, DetailComponent]
+  declarations: [DepositComponent, AddComponent, DetailComponent]
 })
-export class ScheduleModule { }
+export class DepositModule { }

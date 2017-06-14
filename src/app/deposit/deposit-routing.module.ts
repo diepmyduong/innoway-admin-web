@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes,RouterModule } from '@angular/router';
 
-import { ScheduleComponent } from './schedule.component';
+import { DepositComponent } from './deposit.component';
 import { AddComponent } from './add/add.component';
 import { DetailComponent } from './detail/detail.component';
 
@@ -14,7 +14,7 @@ const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Thời khóa biểu'
+      title: 'Ký quỹ'
     },
     children:[
       {
@@ -26,7 +26,7 @@ const routes: Routes = [
       },
       {
         path: 'list',
-        component: ScheduleComponent,
+        component: DepositComponent,
         data: {
           title: "Danh sách"
         }
@@ -46,4 +46,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ScheduleRoutingModule {}
+export class DepositRoutingModule {}

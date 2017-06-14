@@ -1,202 +1,73 @@
 <div class="animated fadeIn">
   <div class="row">
-  <div class="col-md-4">
-  </div>
-    <div class="col-md-8">
+    <div class="col-lg-12">
       <div class="card">
         <div class="card-header">
-          <strong>Basic Form</strong> Elements
+          <div class="row">
+            <div class="col-lg-4 mt-h">
+              <span><i class="fa fa-align-justify px-1 mt-h"></i> Danh sách sản phẩm</span>
+            </div>
+            <div class="col-lg-8 col-xs-12 mt-h">             
+
+                <button type="button" class="btn btn-outline-success mt-0 px-2 float-right">Thêm</button>
+                
+                <form class="form-inline float-right px-2">
+                  <label class="form-control-label mr-1" for="text-input">Số lượng:  </label>
+                  <select class="form-control input-sm">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select> 
+                  <i class="fa fa-search px-1"></i>
+                  <input class="form-control" type="text" placeholder="Search...">
+              </form>
+                    
+        </div>
+          </div>
         </div>
         <div class="card-block">
-          <form action="" method="post" enctype="multipart/form-data" class="form-horizontal ">
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label">Static</label>
-              <div class="col-md-9">
-                <p class="form-control-static">Username</p>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Text Input</label>
-              <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
-                <span class="help-block">This is a help text</span>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input">Email Input</label>
-              <div class="col-md-9">
-                <input type="email" id="email-input" name="email-input" class="form-control" placeholder="Enter Email">
-                <span class="help-block">Please enter your email</span>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="password-input">Password</label>
-              <div class="col-md-9">
-                <input type="password" id="password-input" name="password-input" class="form-control" placeholder="Password">
-                <span class="help-block">Please enter a complex password</span>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="disabled-input">Disabled Input</label>
-              <div class="col-md-9">
-                <input type="text" id="disabled-input" name="disabled-input" class="form-control" placeholder="Disabled" disabled>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="textarea-input">Textarea</label>
-              <div class="col-md-9">
-                <textarea id="textarea-input" name="textarea-input" rows="9" class="form-control" placeholder="Content.."></textarea>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="select">Select</label>
-              <div class="col-md-9">
-                <select id="select" name="select" class="form-control" size="1">
-                  <option value="0">Please select</option>
-                  <option value="1">Option #1</option>
-                  <option value="2">Option #2</option>
-                  <option value="3">Option #3</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="select">Select Large</label>
-              <div class="col-md-9">
-                <select id="select" name="select" class="form-control input-lg" size="1">
-                  <option value="0">Please select</option>
-                  <option value="1">Option #1</option>
-                  <option value="2">Option #2</option>
-                  <option value="3">Option #3</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="select">Select Small</label>
-              <div class="col-md-9">
-                <select id="select" name="select" class="form-control input-sm" size="1">
-                  <option value="0">Please select</option>
-                  <option value="1">Option #1</option>
-                  <option value="2">Option #2</option>
-                  <option value="3">Option #3</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="select">Disabled Select</label>
-              <div class="col-md-9">
-                <select id="disabledSelect" class="form-control" disabled>
-                  <option value="0">Please select</option>
-                  <option value="1">Option #1</option>
-                  <option value="2">Option #2</option>
-                  <option value="3">Option #3</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="multiple-select">Multiple select</label>
-              <div class="col-md-9">
-                <select id="multiple-select" name="multiple-select" class="form-control" size="5" multiple>
-                  <option value="1">Option #1</option>
-                  <option value="2">Option #2</option>
-                  <option value="3">Option #3</option>
-                  <option value="4">Option #4</option>
-                  <option value="5">Option #5</option>
-                  <option value="6">Option #6</option>
-                  <option value="7">Option #7</option>
-                  <option value="8">Option #8</option>
-                  <option value="9">Option #9</option>
-                  <option value="10">Option #10</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label">Radios</label>
-              <div class="col-md-9">
-                <div class="radio">
-                  <label for="radio1">
-                    <input type="radio" id="radio1" name="radios" value="option1"> Option 1
-                  </label>
-                </div>
-                <div class="radio">
-                  <label for="radio2">
-                    <input type="radio" id="radio2" name="radios" value="option2"> Option 2
-                  </label>
-                </div>
-                <div class="radio">
-                  <label for="radio3">
-                    <input type="radio" id="radio3" name="radios" value="option3"> Option 3
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label">Inline Radios</label>
-              <div class="col-md-9">
-                <label class="radio-inline" for="inline-radio1">
-                  <input type="radio" id="inline-radio1" name="inline-radios" value="option1"> One
-                </label>
-                <label class="radio-inline" for="inline-radio2">
-                  <input type="radio" id="inline-radio2" name="inline-radios" value="option2"> Two
-                </label>
-                <label class="radio-inline" for="inline-radio3">
-                  <input type="radio" id="inline-radio3" name="inline-radios" value="option3"> Three
-                </label>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label">Checkboxes</label>
-              <div class="col-md-9">
-                <div class="checkbox">
-                  <label for="checkbox1">
-                    <input type="checkbox" id="checkbox1" name="checkbox1" value="option1"> Option 1
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label for="checkbox2">
-                    <input type="checkbox" id="checkbox2" name="checkbox2" value="option2"> Option 2
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label for="checkbox3">
-                    <input type="checkbox" id="checkbox3" name="checkbox3" value="option3"> Option 3
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label">Inline Checkboxes</label>
-              <div class="col-md-9">
-                <label class="checkbox-inline" for="inline-checkbox1">
-                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1">One
-                </label>
-                <label class="checkbox-inline" for="inline-checkbox2">
-                  <input type="checkbox" id="inline-checkbox2" name="inline-checkbox2" value="option2">Two
-                </label>
-                <label class="checkbox-inline" for="inline-checkbox3">
-                  <input type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3">Three
-                </label>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="file-input">File input</label>
-              <div class="col-md-9">
-                <input type="file" id="file-input" name="file-input">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="file-multiple-input">Multiple File input</label>
-              <div class="col-md-9">
-                <input type="file" id="file-multiple-input" name="file-multiple-input" multiple>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="card-footer">
-          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th class="text-center">Hình ảnh</th>
+                <th class="text-center">Tên sản phẩm</th>
+                <th class="text-center">Loại sản phẩm</th>
+                <th class="text-center">Giá bán</th>
+                <th class="text-center">Trạng thái</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center"><img height="50px" src="http://www.petruskylhp.net/banlienlac/wp-content/uploads/2016/01/cafe.png"></td>
+                <td class="text-center">Cafe Latte</td>
+                <td class="text-center">Cafe</td>
+                <td class="text-center">30.000đ</td>
+                <td class="text-center">
+                    <span class="badge badge-success p-h">Active</span>
+                </td>
+                <td class="text-center">
+                  <span class="badge badge-default"><i class="icon-eye icons font-xl p-q d-block"></i></span>
+                  <span class="badge badge-success"><i class="icon-pencil icons font-xl p-q d-block"></i></span>
+                  <span class="badge badge-danger"><i class="icon-trash icons font-xl p-q d-block"></i></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Prev</a></li>
+            <li class="page-item active">
+              <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">4</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
         </div>
       </div>
     </div>
-    <!--/.col-->
-  </div>
-</div>			
+  <!--/.row-->
+</div>
+
