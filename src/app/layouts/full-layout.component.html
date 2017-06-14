@@ -298,11 +298,27 @@
                     </li>
                   </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/summary']"><i class="icon-social-reddit"></i> Thống kê </a>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Danh sách đen</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/blacklist/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/blacklist/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
                 </li>
-                 <li class="nav-item">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/report']"><i class="icon-social-reddit"></i> Báo cáo </a>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Tiêu chí danh sách đen</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/blacklist-rule/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/blacklist-rule/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
                 </li>
                 <li class="nav-item nav-dropdown" routerLinkActive="open">
                   <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Bài viết</a>
@@ -326,6 +342,26 @@
                     </li>
                   </ul>
                 </li>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Thống kê</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item"><i class="icon-star">Chi phí</li>    
+                    <li class="nav-item"><i class="icon-star">Đơn hàng</li>    
+                    <li class="nav-item"><i class="icon-star">Sản phẩm</li>    
+                    <li class="nav-item"><i class="icon-star">Nhân viên</li>    
+                    <li class="nav-item"><i class="icon-star">Hoạt động</li>                 
+                  </ul>
+                </li>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Báo cáo</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item"><i class="icon-star">Chi phí</li>    
+                    <li class="nav-item"><i class="icon-star">Đơn hàng</li>    
+                    <li class="nav-item"><i class="icon-star">Sản phẩm</li>    
+                    <li class="nav-item"><i class="icon-star">Nhân viên</li>    
+                    <li class="nav-item"><i class="icon-star">Hoạt động</li>                 
+                  </ul>
+                </li>              
                 <li class="nav-title text-center">
                     <span>Tiện ích</span>
                 </li>
@@ -337,6 +373,28 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLinkActive="active" [routerLink]="['/settings']"><i class="icon-social-reddit"></i> Cài đặt </a>
+                </li>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Khu vực</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/area/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/area/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item nav-dropdown" routerLinkActive="open">
+                  <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Phí ship</a>
+                  <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/ship-fee/add']"><i class="icon-star"></i> Thêm</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/ship-fee/list']"><i class="icon-star"></i> Danh sách</a>
+                    </li>
+                  </ul>
                 </li>
             </ul>
         </nav>

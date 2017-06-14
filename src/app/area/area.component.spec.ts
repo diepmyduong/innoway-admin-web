@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ShipFeeTypeComponent } from './ship-fee-type.component';
+import { AreaComponent } from './area.component';
 
-describe('ShipFeeTypeComponent', () => {
-  let component: ShipFeeTypeComponent;
-  let fixture: ComponentFixture<ShipFeeTypeComponent>;
+describe('AreaComponent', () => {
+  let component: AreaComponent;
+  let fixture: ComponentFixture<AreaComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShipFeeTypeComponent ]
+      declarations: [ AreaComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ShipFeeTypeComponent);
+    fixture = TestBed.createComponent(AreaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

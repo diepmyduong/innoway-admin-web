@@ -14,7 +14,7 @@ const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Danh sách đen'
+      title: 'Tiêu chí danh sách đen'
     },
     children:[
       {

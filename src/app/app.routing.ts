@@ -150,6 +150,14 @@ export const routes: Routes = [
         path: 'settings',
         loadChildren: './settings/settings.module#SettingsModule'
       },
+      {
+        path: 'area',
+        loadChildren: './area/area.module#AreaModule'
+      },
+      {
+        path: 'ship-fee',
+        loadChildren: './ship-fee/ship-fee.module#ShipFeeModule'
+      },
     ]
   },
   {
