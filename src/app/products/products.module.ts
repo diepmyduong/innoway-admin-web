@@ -4,10 +4,13 @@ import { ProductsComponent } from './products.component';
 import { ProductsRoutingModule } from './products-routing.module';
 import { AddComponent } from './add/add.component';
 
+import { TabsModule } from 'ng2-bootstrap/tabs';
+
 @NgModule({
   imports: [
     CommonModule,
-    ProductsRoutingModule
+    ProductsRoutingModule,
+    TabsModule
   ],
   declarations: [ProductsComponent, AddComponent]
 })
