@@ -117,13 +117,10 @@ export const routes: Routes = [
       {
         path: 'blacklist',
         loadChildren: './blacklist/blacklist.module#BlacklistModule'
-<<<<<<< HEAD
-=======
       },
       {
         path: 'blacklist-rule',
         loadChildren: './blacklist-rule/blacklist-rule.module#BlacklistRuleModule'
->>>>>>> 9422f113a4d641dd2b475a645493b54f849341a5
       },
       {
         path: 'brand',
