@@ -108,7 +108,7 @@ export const routes: Routes = [
       },
       {
         path: 'blacklist',
-        loadChildren: './blacklist/blacklist.module#BlackListModule'
+        loadChildren: './blacklist/blacklist.module#BlacklistModule'
       },
       {
         path: 'brand',
