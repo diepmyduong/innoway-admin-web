@@ -19,6 +19,8 @@ import { AppRoutingModule } from './app.routing';
 import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
 
+
+
 @NgModule({
   imports: [
     BrowserModule,

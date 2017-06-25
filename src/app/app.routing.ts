@@ -67,6 +67,10 @@ export const routes: Routes = [
         loadChildren: './notification/notification.module#NotificationModule'
       },
       {
+        path: 'notification-type',
+        loadChildren: './notification-type/notification-type.module#NotificationTypeModule'
+      },
+      {
         path: 'blog',
         loadChildren: './blog/blog.module#BlogModule'
       },
@@ -95,20 +99,31 @@ export const routes: Routes = [
         loadChildren: './feedback/feedback.module#FeedbackModule'
       },
       {
-        path: 'ship-fee',
-        loadChildren: './ship-fee/ship-fee.module#ShipFeeModule'
+        path: 'feedback-rule',
+        loadChildren: './feedback-rule/feedback-rule.module#FeedbackRuleModule'
       },
       {
-        path: 'ship-fee-type',
-        loadChildren: './ship-fee-type/ship-fee-type.module#ShipFeeTypeModule'
+        path: 'ship-fee',
+        loadChildren: './ship-fee/ship-fee.module#ShipFeeModule'
       },
       {
         path: 'schedule',
         loadChildren: './schedule/schedule.module#ScheduleModule'
       },
       {
+        path: 'deposit',
+        loadChildren: './deposit/deposit.module#DepositModule'
+      },
+      {
         path: 'blacklist',
         loadChildren: './blacklist/blacklist.module#BlacklistModule'
+<<<<<<< HEAD
+=======
+      },
+      {
+        path: 'blacklist-rule',
+        loadChildren: './blacklist-rule/blacklist-rule.module#BlacklistRuleModule'
+>>>>>>> 9422f113a4d641dd2b475a645493b54f849341a5
       },
       {
         path: 'brand',
@@ -137,6 +152,10 @@ export const routes: Routes = [
       {
         path: 'settings',
         loadChildren: './settings/settings.module#SettingsModule'
+      },
+      {
+        path: 'area',
+        loadChildren: './area/area.module#AreaModule'
       },
     ]
   },
