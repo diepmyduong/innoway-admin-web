@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LocationStrategy, HashLocationStrategy,PathLocationStrategy } from '@angular/common';
 
 import { AppComponent } from './app.component';
@@ -11,7 +12,6 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { SIDEBAR_TOGGLE_DIRECTIVES } from './shared/sidebar.directive';
 import { AsideToggleDirective } from './shared/aside.directive';
 import { BreadcrumbsComponent } from './shared/breadcrumb.component';
-
 // Routing Module
 import { AppRoutingModule } from './app.routing';
 
@@ -24,6 +24,7 @@ import { SimpleLayoutComponent } from './layouts/simple-layout.component';
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),

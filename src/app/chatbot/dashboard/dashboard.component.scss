@@ -1,0 +1,24 @@
+
+.portal-container {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    position: absolute;
+    top: 66px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    .portal {
+        min-width: 300px;
+        display: inline-block;
+        height: 100%;
+        white-space: normal;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        & > .card {
+            position: relative;
+            height: 100%;
+            overflow: auto;
+        }
+    }
+}

@@ -1,12 +1,41 @@
 <div class="toolbar">
     <span class="btn-group">
-        <button type="button" class="btn btn-default">0</button>
-        <button type="button" class="btn btn-info">1</button>
-        <button type="button" class="btn btn-warning">2</button>
-        <button type="button" class="btn btn-primary">2</button>
-        <button type="button" class="btn btn-success">2</button>
-        <button type="button" class="btn btn-danger">2</button>
+        <button type="button" class="btn btn-outline-primary"> Lời chào</button>
+        <button type="button" class="btn btn-outline-primary"> Menu</button>
+        <button type="button" class="btn btn-outline-primary"> Nút bắt đầu</button>
     </span>
 </div>
-<div class="content">
+<div class="portal-container">
+    <div class="portal" style="width:200px" >
+        <div class="card m-0"> 
+            <div class="card-header" >
+                Lời chào
+                <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+            </div>
+            <div class="card-block">
+            </div>
+        </div>
+    </div>
+    <div class="portal " style="width:400px">
+        <div class="card m-0"> 
+            <div class="card-header">
+                Menu
+                <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+            </div>
+            <div class="card-block">
+                <Tree [nodes]="nodes"></Tree>
+                <div style="height:800px"></div>
+            </div>
+        </div>
+    </div>
+    <div class="portal" style="width:600px" >
+        <div class="card m-0"> 
+            <div class="card-header">
+                Nút bắt đầu
+                <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+            </div>
+            <div class="card-block">
+            </div>
+        </div>
+    </div>
 </div>
