@@ -19,6 +19,8 @@ import { AppRoutingModule } from './app.routing';
 import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
 
+//Modal
+import { ModalModule } from 'ng2-bootstrap/modal';
 
 
 @NgModule({
@@ -28,6 +30,7 @@ import { SimpleLayoutComponent } from './layouts/simple-layout.component';
     AppRoutingModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
+    ModalModule.forRoot(),
     ChartsModule
   ],
   declarations: [

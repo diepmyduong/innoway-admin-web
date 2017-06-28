@@ -1,0 +1,235 @@
+<div class="toolbar p-0">
+    <nav class="navbar sticky-top navbar-light bg-faded m-0" style="background: rgba(150,150,150,0.2);">
+	  	<div class="row">
+		    <div class="col-md-2 text-center">
+		    	TEXT
+		    </div>
+		    <div class="col-md-2 text-center">
+		    	BUTTON
+		    </div>
+		    <div class="col-md-2 text-center">
+		    	MEDIA
+		    </div>
+		    <div class="col-md-2 text-center">
+		    	LIST
+		    </div>
+		    <div class="col-md-2 text-center">
+		    	QUICK REPLY
+		    </div>
+		    <div class="col-md-2 text-center">
+		    	MORE
+		    </div>
+	    </div>
+	</nav>
+</div>
+<div class="portal-container">
+    <div class="portal" style="width:200px" >
+        <div class="card m-0"> 
+            <div class="card-header">            		        
+		        <div class="row">		              
+	              	<div class="col-md-9">
+	                	<input type="text" id="text-input" name="text-input" class="form-control input_transparent" placeholder="Danh sách" disabled="">	       
+	              	</div>
+	              	<div class="col-md-3">
+	              		<button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+	              	</div>
+	   			</div>
+            </div>
+            <div class="card-block">
+	            <div class="row">
+		        	<div class="col-md-12 mt-h mb-h">
+		        		<div class="row">
+			        		<div class="col-md-10">
+				        		Story A
+			        		</div>
+			        		<div class="col-md-2">
+			        			<i class="fa icon-close pull-right"></i>
+			        		</div>
+			        	</div>
+		        	</div>
+		        	<div class="col-md-12 mt-h mb-h">
+		        		<div class="row">
+			        		<div class="col-md-10">
+				        		Story B
+			        		</div>
+			        		<div class="col-md-2">
+			        			<i class="fa icon-close pull-right"></i>
+			        		</div>
+			        	</div>
+		        	</div>
+		        	<div class="col-md-12 mt-h mb-h">
+		        		<div class="row">
+			        		<div class="col-md-10">
+				        		Story C
+			        		</div>
+			        		<div class="col-md-2">
+			        			<i class="fa icon-close pull-right"></i>
+			        		</div>
+			        	</div>
+		        	</div>
+		        </div>
+            </div>
+        </div>
+    </div>
+    <div class="portal" style="width:300px" >
+        <div class="card m-0"> 
+           <div class="card-header">            		        
+		        <div class="row">		              
+	              	<div class="col-md-6">
+	                	<input type="text" id="text-input" name="text-input" class="form-control input_transparent" placeholder="Strory A">	       
+	              	</div>
+	              	<div class="col-md-6">
+	              		<button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+	              		<button type="button" class="btn btn-success btn-sm pull-right" data-toggle="modal" (click)="myModalTextWidget.show()"><i class="fa fa-plus"></i></button>
+	              	</div>
+	   			</div>
+            </div>
+            <div class="card-block">
+            	<div class="row">
+	            	<div class="col-sm-12">
+				      <div class="card">
+				        <div class="card-header">
+				          Card 1
+				          <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa icon-trash"></i></button>
+				        </div>
+				        <div class="card-block">
+				          Giới thiệu bạn các sản phẩm mới nhất của dịch vụ ăn uống chúng tôi?
+				        </div>
+				        <div class="card-footer text-center">
+				          MUA NGAY
+				        </div>
+				        <div class="card-footer text-center">
+				          ĐẶT HÀNG
+				        </div>
+				        <div class="card-footer text-center">
+				          + ADD BUTTON
+				        </div>
+				      </div>
+					</div><!--/.col-->
+				</div>				
+            </div>
+            <div class="card-footer">
+                Story 1.a
+                <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="portal" style="width:600px" >
+        <div class="card m-0"> 
+            <div class="card-header">            		        
+		        <div class="row">		              
+	              	<div class="col-md-9">
+	                	<input type="text" id="text-input" name="text-input" class="form-control input_transparent" placeholder="Strory A">	       
+	              	</div>
+	              	<div class="col-md-3">
+	              		<button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+	              	</div>
+	   			</div>
+            </div>
+            <div class="card-block">
+            </div>
+        </div>
+    </div>
+    <div class="portal" style="width:600px" >
+        <div class="card m-0"> 
+            <div class="card-header">            		        
+		        <div class="row">		              
+	              	<div class="col-md-9">
+	                	<input type="text" id="text-input" name="text-input" class="form-control input_transparent" placeholder="Strory A">	       
+	              	</div>
+	              	<div class="col-md-3">
+	              		<button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+	              	</div>
+	   			</div>
+            </div>
+            <div class="card-block">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div bsModal #myModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Chọn loại Card</h4>
+        <button type="button" class="close" (click)="myModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="row">
+        <div class="form-group col-sm-4">
+              <label for="ccmonth">Card</label>
+              <select class="form-control" id="ccmonth">
+              	<option>Chọn loại card</option>
+                <option>Text</option>
+                <option>Button</option>
+                <option>List</option>
+                <option>Quick Reply</option>
+                <option>Media</option>
+                <option>More</option>
+              </select>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal.hide()">Hủy</button>
+        <button type="button" class="btn btn-primary">Đồng ý</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div bsModal #myModalTextWidget="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Text Card</h4>
+        <button type="button" class="close" (click)="myModalTextWidget.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="textarea-input">Mô tả</label>
+            <div class="col-md-9">
+                <textarea id="textarea-input" name="textarea-input" rows="3" class="form-control" placeholder="Mô tả"></textarea>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModalTextWidget.hide()">Hủy</button>
+        <button type="button" class="btn btn-primary">Đồng ý</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div bsModal #myModalTextWidget="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Text Card</h4>
+        <button type="button" class="close" (click)="myModalTextWidget.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="textarea-input">Mô tả</label>
+            <div class="col-md-9">
+                <textarea id="textarea-input" name="textarea-input" rows="3" class="form-control" placeholder="Mô tả"></textarea>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModalTextWidget.hide()">Hủy</button>
+        <button type="button" class="btn btn-primary">Đồng ý</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

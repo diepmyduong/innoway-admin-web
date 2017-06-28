@@ -4,6 +4,7 @@ import { ChatbotComponent } from './chatbot.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
+import { StoryComponent } from './story/story.component';
 const routes: Routes = [
   {
     path: '',
@@ -47,6 +48,13 @@ const routes: Routes = [
             component: SettingsComponent,
             data: {
               title: "Cài đặt"
+            }
+          },
+          {
+            path: 'stories',
+            component: StoryComponent,
+            data: {
+              title: "Stories"
             }
           },
           {
