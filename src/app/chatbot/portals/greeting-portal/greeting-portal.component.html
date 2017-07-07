@@ -1,0 +1,29 @@
+
+<div class="card m-0 portal-card" style="width:500px"> 
+    <div class="card-header"> 
+      <strong>Lời chào </strong>
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+      </div>
+    </div>
+    <div class="card-block portal-block">
+      <div class="row p-1">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate esse, in animi asperiores, labore ut molestiae amet id soluta necessitatibus.
+      </div>
+      <div class="form-group row" *ngIf="frmGreeting">
+        <form [formGroup]="frmGreeting" class="col-md-12">
+          <textarea id="textarea-input" formControlName="text" rows="4" class="form-control" placeholder="Nội dung lời chào"></textarea>
+        </form>
+      </div>
+      <div class="row text-center">
+        <img src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.2365-6/14287888_188235318253964_1078929636_n.png?oh=3880668e5d15f7898477c8e71a66ee2e&oe=59C88DF5" 
+        alt="" width="400" style="object-fit: contain;width: 100%;height: 300px;">
+      </div>
+      
+    </div>
+    <div class="card-footer">
+      <div class="col-md-12">
+        <button (click)="save()" type="button" class="btn btn-outline-primary btn-lg btn-block">Lưu</button>
+      </div>
+    </div>
+</div>

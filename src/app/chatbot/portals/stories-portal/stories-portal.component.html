@@ -1,0 +1,21 @@
+
+<div class="card m-0 portal-card"> 
+    <div class="card-header"> 
+      <strong>Danh sách </strong>
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+      </div>
+    </div>
+    <div class="card-block portal-block">
+      <div class="col-md-12 mt-h mb-h" *ngFor="let story of stories">
+        <div class="row">
+          <div class="col-md-10" (click)="selectStory(story)">
+            {{story.title}}
+          </div>
+          <div class="col-md-2">
+            <i class="icon icon-close pull-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

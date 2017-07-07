@@ -1,0 +1,48 @@
+<div class="card m-0 portal-card" style="width:500px"> 
+    <div class="card-header"> 
+      <strong>Menu </strong>
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+      </div>
+    </div>
+    <div class="card-block portal-block">
+      <div class="row text-center">
+        <img src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.2365-6/16686128_804279846389859_443648268883197952_n.png?oh=28f03f341a6ef39957b9d361723fa723&oe=59D503D6" 
+        alt="" style="object-fit: contain;width: 100%;height: 200px;">
+      </div>
+      <div class="row p-1">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate esse, in animi asperiores, labore ut molestiae amet id soluta necessitatibus.
+      </div>
+      <div class="row">
+        <div class="p-1 col-md-12" >
+          <button *ngFor="let item of setting.data.call_to_actions; let i = index"
+          
+          dropdown placement="top right"
+          data-toggle="dropdown" dropdownToggle
+          class="btn btn-block btn-lg btn-secondary text-left">
+            {{item.title}}
+            <i class="fa fa-chevron-right fa-lg pull-right" *ngIf="item.type == 'nested'"></i>
+            <div class="dropdown-menu dropdown-menu-right drop-up" *dropdownMenu aria-labelledby="simple-dropdown">
+                <a (click)="editItem(item,i)"
+                class="dropdown-item" href="javascript:;" ><i class="fa fa-user"></i> Chỉnh sửa</a>
+                <a *ngIf="item.type == 'postback'" (click)="showStory(item)"
+                class="dropdown-item" href="javascript:;" ><i class="fa fa-wrench"></i> Xem Story</a>
+                <a *ngIf="item.type == 'nested'" (click)="showNestedMenu(item,i)"
+                class="dropdown-item" href="javascript:;" ><i class="fa fa-wrench"></i> Xem Submenu</a>
+                <a (click)="removeItem(i)"
+                class="dropdown-item" href="javascript:;" ><i class="fa fa-shield"></i> Xoá</a>
+            </div>
+          </button>
+          <button *ngIf="setting.data.call_to_actions.length != 3"
+          class="btn btn-block btn-lg btn-primary" (click)="addItem()">
+            + ADD ITEM
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="col-md-12">
+        <button (click)="save()" type="button" class="btn btn-outline-primary btn-lg btn-block">Lưu</button>
+      </div>
+    </div>
+</div>

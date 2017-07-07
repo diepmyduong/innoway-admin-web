@@ -5,6 +5,8 @@ import { p404Component } from './404.component';
 import { p500Component } from './500.component';
 import { LoginComponent } from './login.component';
 import { RegisterComponent } from './register.component';
+import { ChatbotLoginComponent } from './chatbot-login.component';
+import { UnAuthGuard } from '../chatbot/services/auth.guard';
 
 const routes: Routes = [
   {
@@ -39,6 +41,11 @@ const routes: Routes = [
           title: 'Login Page'
         }
       },
+      {
+        path: 'chatbot-login',
+        component: ChatbotLoginComponent,
+        canActivate: [UnAuthGuard]
+      }
       // {
       //   path: 'register',
       //   component: RegisterComponent,

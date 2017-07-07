@@ -1,0 +1,53 @@
+<div class="card m-0 portal-card" style="width:500px"> 
+    <div class="card-header"> 
+      <strong>Nút bắt đầu </strong>
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+      </div>
+    </div>
+    <div class="card-block portal-block">
+      <div class="row p-1">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate esse, in animi asperiores, labore ut molestiae amet id soluta necessitatibus.
+      </div>
+      <div class="row text-center">
+        <img src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.2365-6/14302685_243106819419381_1314180151_n.png?oh=87f49e0717ef1e2d992a4c5768b6f4e9&oe=59CF8B5C" 
+        alt="" width="400" style="object-fit: contain;width: 100%;height: 300px;">
+      </div>
+      <div class="row p-1">
+        <hr class="mx-1 my-0">
+        <h3>Get started Story</h3>
+        <button *ngIf="!getStartedStory"
+          class="btn btn-block btn-lg btn-secondary text-left" disabled="disabled">
+          Chưa có story nào được chọn
+        </button>
+        <button *ngIf="getStartedStory" (click)="selectGetStartedStory()"
+          class="btn btn-block btn-lg btn-secondary text-left">
+          {{getStartedStory._story.title}}
+        </button>
+      </div>
+      <div class="row p-1">
+        <hr class="mx-1 my-0">
+        <h3>Search another story</h3>
+      </div>
+      <div class="row">
+        <ng-select class="col-md-12"
+          [multiple]="false"
+          [items]="items"
+          (data)="refreshValue($event)"
+          (selected)="selected($event)"
+          (removed)="removed($event)"
+          placeholder="Story Title">
+        </ng-select>
+        <div class="col-md-12">
+          <button type="button" class="btn btn-outline-primary btn-lg btn-block">
+            + Add Story
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="col-md-12">
+        <button (click)="save()" type="button" class="btn btn-outline-primary btn-lg btn-block">Lưu</button>
+      </div>
+    </div>
+</div>

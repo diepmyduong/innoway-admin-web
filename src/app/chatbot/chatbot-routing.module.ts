@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
 import { StoryComponent } from './story/story.component';
+import { AuthGuard } from './services/auth.guard';
 const routes: Routes = [
   {
     path: '',
@@ -14,7 +15,7 @@ const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Chatbot'
+      title: 'Điều hướng'
     },
     children: [
       {
@@ -29,33 +30,33 @@ const routes: Routes = [
         component: ChatbotComponent,
         data: {
           title: "Danh sách trang"
-        }
-      },
-      {
-        path: 'dashboard',
-        redirectTo: 'dashboard/settings',
-        pathMatch: 'full'
-      },
-      {
-        path: 'dashboard',
-        component: DashboardComponent,
-        data: {
-          title: "Điều hướng"
         },
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'dashboard/:pid',
+        redirectTo: 'dashboard/:pid/settings',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard/:pid',
+        component: DashboardComponent,
         children: [
           {
             path: 'settings',
             component: SettingsComponent,
             data: {
               title: "Cài đặt"
-            }
+            },
+            canActivate: [AuthGuard]
           },
           {
             path: 'stories',
             component: StoryComponent,
             data: {
               title: "Stories"
-            }
+            },
+            canActivate: [AuthGuard]
           },
           {
             path: '**', 

@@ -15,10 +15,37 @@
         white-space: normal;
         overflow-x: hidden;
         overflow-y: scroll;
-        & > .card {
+        .portal-card {
             position: relative;
             height: 100%;
-            overflow: auto;
+            overflow: hidden;
+            .portal-block{
+                overflow: auto;
+            }
+        }
+        
+        .form-control::-webkit-input-placeholder {
+            color: #374767;
+        }
+
+        .form-group::-webkit-input-placeholder {
+            color: #374767;
+        }
+
+        .input_transparent {
+            background: rgba(255,255,255,0); 
+            border: rgba(255,255,255,0) !important; 
+            color: #000; 
+            padding: 0px;
         }
     }
 }
+
+app-dashboard {
+    min-height: 0;
+}
+
+.drop-up {
+    bottom:100% !important; top:auto !important;
+}
+

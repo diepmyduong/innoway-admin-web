@@ -1,0 +1,58 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title">Button Card</h4>
+    <button type="button" class="close" (click)="closeModal()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+        <label for="name">Nhập tiêu đề</label>
+        <input type="text" class="form-control" id="name" placeholder="Nhập tiêu đề">
+    </div>
+    <tabset>
+      <tab>
+      <ng-template tabHeading><i class="icon-eye"></i> URL</ng-template>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+                    <label for="name">Link URL</label>
+                    <input type="text" class="form-control" id="name" placeholder="Nhập link URL">
+                </div>
+        </div>
+      </div>
+    </tab>
+    <tab>
+      <ng-template tabHeading><i class="icon-eye"></i> Postback</ng-template>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group col-sm-4">
+                    <label for="ccmonth">Chọn story</label>
+                    <select class="form-control" id="ccmonth">
+                      <option>Chọn story</option>
+                      <option>Story 1</option>
+                      <option>Story 2</option>
+                      <option>Story 3</option>				           
+                    </select>
+              </div>
+        </div>
+      </div>
+    </tab>
+    <tab>
+      <ng-template tabHeading><i class="icon-eye"></i> Phone Call</ng-template>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+                    <label for="name">Nhập số điện thoại</label>
+                    <input type="text" class="form-control" id="name" placeholder="Nhập số điện thoại">
+                </div>
+        </div>
+      </div>
+    </tab>
+  </tabset>	
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="closeModal()">Hủy</button>
+    <button type="button" class="btn btn-primary">Đồng ý</button>
+  </div>
+</div>

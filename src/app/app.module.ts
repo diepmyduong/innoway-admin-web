@@ -20,8 +20,14 @@ import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
 
 //Modal
-import { ModalModule } from 'ng2-bootstrap/modal';
+// import { ModalModule } from 'ng2-bootstrap/modal';
+import { ModalModule as Ng2ModalModule } from 'angular2-modal';
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 
+import { ModalCardTypesComponent } from './chatbot/modals/modal-card-types/modal-card-types.component';
+import { ChatbotLayoutComponent } from './layouts/chatbot-layout/chatbot-layout.component';
+
+import { ChatbotModule } from './chatbot/chatbot.module';
 
 @NgModule({
   imports: [
@@ -30,8 +36,11 @@ import { ModalModule } from 'ng2-bootstrap/modal';
     AppRoutingModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
-    ModalModule.forRoot(),
-    ChartsModule
+    // ModalModule.forRoot(),
+    Ng2ModalModule.forRoot(),
+    BootstrapModalModule,
+    ChartsModule,
+    ChatbotModule.forRoot()
   ],
   declarations: [
     AppComponent,
@@ -41,6 +50,7 @@ import { ModalModule } from 'ng2-bootstrap/modal';
     BreadcrumbsComponent,
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
+    ChatbotLayoutComponent,
   ],
   providers: [{
     provide: LocationStrategy,

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , NgZone} from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { PageService } from '../services/page.service';
 
 @Component({
   selector: 'app-settings',
@@ -31,10 +33,105 @@ export class SettingsComponent implements OnInit {
       ]
     }
   ];
-  constructor() { }
+  public pid: string;
+  public page: any;
+  public settings: any;
+
+  public stack = [];
+
+  constructor(
+    private router:Router,
+    private activatedRoute: ActivatedRoute,
+    private pageService: PageService,
+    private zone: NgZone
+  ) { 
+    
+  }
 
   ngOnInit() {
+    this.activatedRoute.parent.params.subscribe(params =>{
+      this.pid = params.pid;
+      this.page = null;
+      this.pageService.getPageWithId(this.pid).then(page =>{
+        this.page = page;
+        console.log("PAGE",this.page);
+        this.pageService.getPageSettings(this.page.access_token).then(settings =>{
+          console.log("SETTINGS",settings);
+          this.zone.run(()=>{
+            this.settings = settings;
+            this.stack = [{
+              type: "get_started",
+              data: {}
+            }]
+          });
+        });
+      });
+    })
     
+  }
+
+  scrollToIndex(index){
+    setTimeout(()=>{
+      console.log("TARGET",$("#portal-"+index).offset().left);
+      $(".portal-container").animate({
+          scrollLeft: $("#portal-"+index).offset().left
+      }, 1000);
+    },500);
+    
+    // $("portal-container").scrollTo("portal-"+index);
+  }
+
+  onPortalLoaded(portal){
+    console.log("LOADED PORTAL",portal);
+    this.scrollToIndex(portal.index);
+  }
+
+  openMenuSetting(){
+    this.zone.run(()=>{
+      this.stack = [];
+      this.stack.push({
+        type: "menu",
+        data: this.settings.settings.persistent_menu
+      })
+    });
+    
+  }
+
+  openGreetingSetting(){
+    this.zone.run(()=>{
+      this.stack = [];
+      this.stack.push({
+        type: "greeting",
+        data: this.settings.settings.greeting
+      })
+    });
+  }
+  openGetStartedSetting(){
+    this.zone.run(()=>{
+      this.stack = [];
+      this.stack.push({
+        type: "get_started",
+        data: this.settings.settings.get_started
+      })
+    })
+  }
+
+  onStorySelected(portal){
+    console.log("STORY SELECTED",portal);
+    this.stack.length = portal.index + 1;
+    this.stack.push({
+      type: "story",
+      data: portal.data
+    })
+  }
+
+  onNestedMenuSelected(portal){
+    console.log("Item Selected",portal);
+    this.stack.length = portal.index + 1;
+    this.stack.push({
+      type: "submenu",
+      data: portal.data
+    })
   }
 
 }

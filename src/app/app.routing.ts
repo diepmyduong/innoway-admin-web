@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 //Layouts
 import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
+import { ChatbotLayoutComponent } from './layouts/chatbot-layout/chatbot-layout.component';
 
 export const routes: Routes = [
   {
@@ -143,10 +144,6 @@ export const routes: Routes = [
         loadChildren: './service/service.module#ServiceModule'
       },
       {
-        path: 'chatbot',
-        loadChildren: './chatbot/chatbot.module#ChatbotModule'
-      },
-      {
         path: 'settings',
         loadChildren: './settings/settings.module#SettingsModule'
       },
@@ -168,6 +165,20 @@ export const routes: Routes = [
         loadChildren: './pages/pages.module#PagesModule',
       }
     ]
+  },
+  {
+    path: 'chatbot',
+    component: ChatbotLayoutComponent,
+    data: {
+      title: 'Chat bot'
+    },
+    children: [
+      {
+        path: '',
+        loadChildren: './chatbot/chatbot.module#ChatbotModule'
+      },
+    ]
+    
   }
 ];
 

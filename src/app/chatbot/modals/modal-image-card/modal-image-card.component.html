@@ -1,0 +1,22 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title">Image Card</h4>
+    <button type="button" class="close" (click)="closeModal()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <img src="https://freeiconshop.com/wp-content/uploads/edd/person-flat.png" width="200px" height="200px">
+      </div>
+      <div class="col-md-12 mt-h">
+          <input type="file" id="file-input" name="file-input">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="closeModal()">Hủy</button>
+    <button type="button" class="btn btn-primary">Đồng ý</button>
+  </div>
+</div>

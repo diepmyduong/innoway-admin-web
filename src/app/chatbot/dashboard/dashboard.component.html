@@ -1,23 +1,21 @@
-<div class="row">
-    <div class="animated fadeIn col-12" style="height:100vh">
-        <div class="card email-app" style="position: absolute;top: 0;left: 0;right: 0;bottom: 0;">
-            <nav>
+<div class="row m-0" style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;">
+    <div class="animated fadeIn col-12 " style="height:100%" >
+        <div class="card email-app m-0" style="position: absolute;top: 0;left: 0;right: 0;bottom: 0;">
+            <nav *ngIf="page" >
                 <div class="row">
                 <div class="avatar" style="margin:auto">
-                    <img src="https://scontent.xx.fbcdn.net/v/t1.0-1/c13.12.155.155/s50x50/1620726_612489952155780_738475466_n.jpg?oh=4159a51a0efd820b4873a1408f6008d7&oe=59D80778" 
-                    class="img-avatar" alt="admin@bootstrapmaster.com">
-                    
+                    <img  [src]="page.picture.data.url" class="img-avatar" alt="admin@bootstrapmaster.com">
                 </div>
                 
                 </div>
-                <p class="text-center"><strong>QUÁN CHÈ VUI</strong></p>
+                <p class="text-center"><strong >{{page.name}}</strong></p>
                 
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link" [routerLink]="['/chatbot/dashboard/settings']" ><i class="fa fa-gear"></i> Cài đặt</a>
+                        <a class="nav-link" [routerLink]="['/chatbot/dashboard',page.id,'settings']" ><i class="fa fa-gear"></i> Cài đặt</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" [routerLink]="['/chatbot/dashboard/stories']"><i class="fa fa-comments-o"></i> Stories</a>
+                        <a class="nav-link" [routerLink]="['/chatbot/dashboard',page.id,'stories']"><i class="fa fa-comments-o"></i> Stories</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="javascript:;" ><i class="fa fa-rocket"></i> Thông báo</a>
@@ -37,4 +35,5 @@
         </div>
     </div>
 </div>
+<span defaultOverlayTarget></span>
 

@@ -1,0 +1,149 @@
+<div class="card m-0 portal-card"> 
+  <div class="card-header">            		        
+    <div class="row">		              
+      <div class="col-md-6">
+        <input type="text" id="text-input" name="text-input" class="form-control input_transparent" placeholder="Story Title" [value]="data.title">	       
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="card-block portal-block">
+    <div class="row">
+      <div class="col-sm-12">
+
+        <div class="card">
+          <div class="card-header">
+            Card 1
+            <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa icon-trash"></i></button>
+          </div>
+          <div class="card-block">
+            Giới thiệu bạn các sản phẩm mới nhất của dịch vụ ăn uống chúng tôi?
+          </div>
+          <div class="card-footer text-center">
+            MUA NGAY
+          </div>
+          <div class="card-footer text-center">
+            ĐẶT HÀNG
+          </div>
+          <div class="card-footer text-center"  data-toggle="modal" (click)="myModalButtonWidget.show()">
+            + ADD BUTTON
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            Card 1
+            <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa icon-trash"></i></button>
+          </div>
+          <div class="card-block">
+            <div class="card">
+            <div class="card-header">
+              Card 1
+              <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa icon-trash"></i></button>
+              <button type="button" class="btn btn-success btn-sm pull-right"><i class="fa icon-cloud-upload" data-toggle="modal" (click)="myModalImageWidget.show()"></i></button>
+            </div>
+            <div class="card-block text-center">
+              <i class="fa icon-user"></i> Xem tài khoản
+            </div>				    
+            <div class="card-footer text-center"  data-toggle="modal" (click)="myModalButtonWidget.show()">
+              + TÍNH NĂNG
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              Card 1
+              <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa icon-trash"></i></button>
+            </div>
+            <div class="card-block text-center">
+              Nhập thông tin...
+            </div>				    
+            <div class="card-footer text-center"  data-toggle="modal" (click)="myModalButtonWidget.show()">
+              + TÍNH NĂNG
+            </div>
+          </div>
+          </div>				    
+          <div class="card-footer text-center">
+            + ADD BUTTON
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            Card 1
+            <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa icon-trash"></i></button>
+          </div>
+          <div class="card-block">
+            <img src="https://freeiconshop.com/wp-content/uploads/edd/person-flat.png" width="100%" data-toggle="modal" (click)="myModalImageWidget.show()">
+          </div>				      
+        </div>
+
+
+        <div class="card">
+          <div class="card-header">
+            Card 1
+            <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa icon-trash"></i></button>
+          </div>
+          <div class="card-block">				        
+            <div class="row">
+              <div class="col-md-12 text-center">
+                  <img src="http://www.irmedia.si/wp-content/uploads/yootheme/photograph.png" height="30px" data-toggle="modal" (click)="myModalImageWidget.show()"/>
+              </div>
+              <div class="col-md-12">
+                <input type="text" class="form-control m-h" id="name" placeholder="Nhập tiêu đề">
+                <input type="text" class="form-control m-h" id="name" placeholder="Nhập mô tả">
+                <button type="button" class="btn btn-default btn-sm m-h">ADD BUTTON</button>
+              </div>
+            </div>	
+            <hr>
+            <div class="row">
+              <div class="col-md-12 text-center">
+                  <img src="http://www.irmedia.si/wp-content/uploads/yootheme/photograph.png" height="30px" data-toggle="modal" (click)="myModalImageWidget.show()"/>
+              </div>
+              <div class="col-md-12">
+                <input type="text" class="form-control m-h" id="name" placeholder="Nhập tiêu đề">
+                <input type="text" class="form-control m-h" id="name" placeholder="Nhập mô tả">
+                <button type="button" class="btn btn-default btn-sm m-h">ADD BUTTON</button>
+              </div>
+            </div>				       
+          </div>				      
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            Card 1
+            <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa icon-trash"></i></button>
+          </div>
+          <div class="card-block">
+            <label>Tốc độ nhập text</label>
+            <input type="text" class="form-control m-h" id="name" placeholder="Nhập tốc độ 0.1 - 5s">
+            <label>Tắt/mở</label>
+            <label class="switch switch-3d switch-primary">
+              <input type="checkbox" class="switch-input" checked>
+              <span class="switch-label"></span>
+              <span class="switch-handle"></span>
+            </label>
+          </div>				        
+        </div>
+
+      </div>
+    </div>				
+  </div>
+  <div class="card-footer">
+    <div class="form-group row m-0">
+      <div class="col-md-12 p-0">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-primary" (click)="showModal('card_types')"><i class="fa fa-plus"></i></button>
+          </span>
+          <input type="text" id="input1-group2" name="input1-group2" class="form-control" placeholder="Username">
+        </div>
+      </div>
+    </div>          		        
+    <!--<div class="row">		              
+      <input type="text" id="text-input" name="text-input" class="form-control input_transparent" placeholder="Strory A">	 
+      
+    </div>-->
+  </div>
+</div>
