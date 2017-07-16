@@ -1,19 +1,55 @@
-<div class="card m-0 portal-card"> 
+<div class="card m-0 portal-card" style="width:500px"> 
   <div class="card-header">            		        
     <div class="row">		              
       <div class="col-md-6">
         <input type="text" id="text-input" name="text-input" class="form-control input_transparent" placeholder="Story Title" [value]="data.title">	       
       </div>
       <div class="col-md-6">
-        <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+
+        <button (click)="closePortal()"
+        type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+        <button (click)="addCard()"
+        type="button" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus"></i> Thêm card</button>
       </div>
     </div>
   </div>
   <div class="card-block portal-block">
     <div class="row">
-      <div class="col-sm-12">
-
-        <div class="card">
+      <div class="col-sm-12" *ngFor="let card of cards; let i = index">
+        <app-text-card *ngIf="card.type == 'text'"
+          [data]="card.data"
+          (onEdited)="onCardEdited($event,i)"
+          (onRemoved)="onCardRemoved($event,i)"
+          (onOrderChanged)="onCardOrderChanged($event,i)"
+          (onQuickReplies)="onQuickReplies(i)">
+        </app-text-card >
+        <app-buttons-card *ngIf="card.type == 'buttons'"
+          [data]="card.data"
+          (onEdited)="onCardEdited($event,i)"
+          (onRemoved)="onCardRemoved($event,i)"
+          (onOrderChanged)="onCardOrderChanged($event,i)"
+          (onAddButton)="onAddButton(i)"
+          (onEditButton)="onEditButton($event,i)"
+          (onRemoveButton)="onRemoveButton($event,i)"
+          (onPostback)="onPostback($event,i)"
+          (onQuickReplies)="onQuickReplies(i)">
+        </app-buttons-card>
+        <app-generic-card *ngIf="card.type == 'generic'"
+          [data]="card.data"
+          (onEdited)="onCardEdited($event,i)"
+          (onRemoved)="onCardRemoved($event,i)"
+          (onOrderChanged)="onCardOrderChanged($event,i)"
+          (onPostback)="onElementPostback($event,i)"
+          (onQuickReplies)="onQuickReplies(i)"
+          (onAddElement)="onAddElement($event,i)"
+          (onEditElement)="onEditElement($event,i)"
+          (onRemoveElement)="onRemoveElement($event,i)"
+          (onAddButton)="onAddElementButton($event,i)"
+          (onEditButton)="onEditElementButton($event,i)"
+          (onRemoveButton)="onRemoveElementButton($event,i)"
+        >
+        </app-generic-card>
+        <!--<div class="card">
           <div class="card-header">
             Card 1
             <button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa icon-trash"></i></button>
@@ -125,7 +161,7 @@
               <span class="switch-handle"></span>
             </label>
           </div>				        
-        </div>
+        </div>-->
 
       </div>
     </div>				
@@ -133,12 +169,15 @@
   <div class="card-footer">
     <div class="form-group row m-0">
       <div class="col-md-12 p-0">
-        <div class="input-group">
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-primary" (click)="showModal('card_types')"><i class="fa fa-plus"></i></button>
-          </span>
-          <input type="text" id="input1-group2" name="input1-group2" class="form-control" placeholder="Username">
-        </div>
+        <tag-input [(ngModel)]='keys'
+        [identifyBy]="'_id'" [displayBy]="'key'"
+        [placeholder]="'Từ khoá'"
+        [secondaryPlaceholder]="'Chưa có từ khoá nào'"
+        (onAdd)="onAddingKey($event)"
+        ></tag-input>
+        <!--<div class="input-group">
+          <input type="text" id="input1-group2" name="input1-group2" class="form-control" placeholder="Text card">
+        </div>-->
       </div>
     </div>          		        
     <!--<div class="row">		              

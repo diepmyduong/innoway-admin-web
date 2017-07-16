@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalDirective } from 'ng2-bootstrap/modal/modal.component';
+import { Router, ActivatedRoute } from '@angular/router';
+import { PageService } from '../services/page.service';
 import { overlayConfigFactory } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { CardTypesModalContext, ModalCardTypesComponent } from '../modals/modal-card-types/modal-card-types.component';
@@ -23,12 +25,36 @@ export class StoryComponent implements OnInit {
     }
   ];
 
+  public page: any;
+  public pid: string;
+  public pageObject: any;
+
   constructor(
-    private modal: Modal
+    private router:Router,
+    private activatedRoute: ActivatedRoute,
+    private modal: Modal,
+    private pageService: PageService
   ) { }
 
   ngOnInit() {
-    console.log($);
+    this.activatedRoute.parent.params.subscribe(params =>{
+      this.pid = params.pid;
+      if(this.pageService._pages[this.pid]){
+        this.pageObject = this.pageService._pages[this.pid];
+        this.page = this.pageObject.data;
+        console.log("PAGE OBJECT",this.pageObject);;
+      }else{
+        this.pageService.getPageWithId(this.pid).then((page:any) =>{
+          this.page = page;
+          this.pageObject = this.pageService._pages[this.pid];
+          console.log("PAGE",this.page);
+          console.log("PAGE OBJECT",this.pageObject);
+          this.pageService.getPageWithId(this.pid).then(page =>{
+            this.page = page;
+          });
+        });
+      }
+    })
   }
 
   showModal(type){
@@ -70,7 +96,7 @@ export class StoryComponent implements OnInit {
     this.stack.length = portal.index + 1;
     this.stack.push({
       type: "story",
-      data: portal.data
+      data: this.pageObject.buildStory(portal.data)
     })
     console.log("STACK",this.stack);
   }
@@ -78,8 +104,12 @@ export class StoryComponent implements OnInit {
   scrollToIndex(index){
     setTimeout(()=>{
       console.log("TARGET",$("#portal-"+index).offset().left);
+      var offset = 0;
+      for(var i = 0; i <= index;i++){
+        offset += $("#portal-"+index).width();
+      }
       $(".portal-container").animate({
-          scrollLeft: $("#portal-"+index).offset().left
+          scrollLeft: offset
       }, 1000);
     },500);
     
@@ -90,5 +120,20 @@ export class StoryComponent implements OnInit {
     console.log("LOADED PORTAL",portal);
     this.scrollToIndex(portal.index);
   }
+
+  onPortalClosed(portal){
+    console.log("CLOSE PORTAL",portal);
+    this.stack.length = portal.index;
+  }
+
+  onQuickReplies(portal){
+    console.log('quick replies at', portal);
+    this.stack.length = portal.index + 1;
+    this.stack.push({
+      type: "quick_replies",
+      data: portal.data
+    })
+  }
+  
 
 }

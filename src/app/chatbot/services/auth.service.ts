@@ -17,13 +17,13 @@ export class AuthService {
     this._user = new innoway_chatbot.User();
     $(this._user).on(innoway_chatbot.User.EventTypes.AUTHENTICATE_STATECHANGE,(e,state)=>{
       self.setLoggedIn(state);
-      console.log("AUTHENTICATE_STATECHANGE",state);
+      // console.log("AUTHENTICATE_STATECHANGE",state);
     })
   }
 
   setLoggedIn(value: boolean) {
     // Update login status subject
-    console.log("SET LOGIN",value);
+    // console.log("SET LOGIN",value);
     this.loggedIn$.next(value);
     this.loggedIn = value;
   }

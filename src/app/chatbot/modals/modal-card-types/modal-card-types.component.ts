@@ -18,11 +18,12 @@ export class ModalCardTypesComponent implements OnInit,CloseGuard, ModalComponen
   constructor(
     public dialog: DialogRef<CardTypesModalContext>
   ) { 
-    this.context = dialog.context;
-    dialog.setCloseGuard(this);
+    
   }
 
   ngOnInit() {
+    this.context = this.dialog.context;
+    this.dialog.setCloseGuard(this);
   }
 
   beforeDismiss(): boolean {
@@ -35,6 +36,10 @@ export class ModalCardTypesComponent implements OnInit,CloseGuard, ModalComponen
 
   closeModal(){
     this.dialog.close();
+  }
+
+  add(){
+    this.dialog.close(this.context);
   }
 
 }

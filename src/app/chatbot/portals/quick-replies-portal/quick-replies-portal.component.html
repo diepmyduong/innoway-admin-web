@@ -1,0 +1,44 @@
+<div class="card m-0 portal-card" style="width:500px"> 
+    <div class="card-header"> 
+      <strong>Quick Replies </strong>
+      <div class="btn-group pull-right">
+        <button (click)="closePortal()"
+        type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>
+      </div>
+    </div>
+    <div class="card-block portal-block">
+      <div class="row">
+        <div class="p-1 col-md-12" >
+          <button *ngFor="let item of quick_replies; let i = index"
+          
+          dropdown placement="top right"
+          data-toggle="dropdown" dropdownToggle
+          class="btn btn-block btn-lg btn-secondary text-left">
+            <div class="avatar">
+                <img *ngIf="item.image_url" 
+                [src]="item.image_url" class="img-avatar">
+            </div>
+            {{item.title}}
+            <i class="fa fa-chevron-right fa-lg pull-right" *ngIf="item.type == 'nested'"></i>
+            <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+                <a (click)="editItem(i)"
+                class="dropdown-item" href="javascript:;" ><i class="fa fa-user"></i> Chỉnh sửa</a>
+                <a *ngIf="item.content_type == 'text'" (click)="showStory(i)"
+                class="dropdown-item" href="javascript:;" ><i class="fa fa-wrench"></i> Xem Story</a>
+                <a (click)="removeItem(i)"
+                class="dropdown-item" href="javascript:;" ><i class="fa fa-shield"></i> Xoá</a>
+            </div>
+          </button>
+          <button *ngIf="quick_replies.length != 11"
+          class="btn btn-block btn-lg btn-primary" (click)="addItem()">
+            + ADD ITEM
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--<div class="card-footer">
+      <div class="col-md-12">
+        <button (click)="save()" type="button" class="btn btn-outline-primary btn-lg btn-block">Lưu</button>
+      </div>
+    </div>-->
+</div>

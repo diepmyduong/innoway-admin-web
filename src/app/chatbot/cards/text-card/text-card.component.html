@@ -1,0 +1,23 @@
+<div class="card">
+  <div class="card-header">
+    Text Card
+    <div class="btn-group pull-right">
+      <button (click)="quickReplies()"
+      type="button" class="btn btn-primary btn-sm"><i class="fa fa-reply-all"></i></button>
+      <button (click)="editCard()"
+      type="button" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></button>
+      <button (click)="removeCard()" 
+      type="button" class="btn btn-danger btn-sm "><i class="fa fa-trash"></i></button>
+    </div>
+    <div class="btn-group pull-right mr-1">
+      <button (click)="upOrder()"
+      type="button" class="btn btn-primary btn-sm"><i class="fa fa-arrow-up"></i></button>
+      <button (click)="downOrder()"
+      type="button" class="btn btn-primary btn-sm"><i class="fa fa-arrow-down"></i></button>
+    </div>
+    
+  </div>
+  <div class="card-block">
+    {{data.text}}
+  </div>
+</div>

@@ -28,7 +28,7 @@ export class GetStartedPortalComponent implements OnInit {
       index: this.stackIndex,
       data: this.setting
     })
-    this.stories = this.pageService.getStories(this.page.access_token);
+    this.stories = this.pageService.getStories(this.page);
     this.stories.subscribe(stories =>{
       console.log("STORIES",stories);
       this.items = stories.map(story =>{
@@ -38,7 +38,7 @@ export class GetStartedPortalComponent implements OnInit {
         }
       })
     })
-    this.pageService.getStartedStory(this.page.access_token).then(story =>{
+    this.pageService.getStartedStory(this.page).then(story =>{
       console.log("GET STARTED STORY",story);
       this.getStartedStory = story;
     })
@@ -47,7 +47,7 @@ export class GetStartedPortalComponent implements OnInit {
   private value:any = ['Athens'];
 
   public selected(value:any):void {
-    this.pageService.getStory(this.page.access_token,value.id).then(story =>{
+    this.pageService.getStory(this.page,value.id).then(story =>{
       console.log('Selected value is: ', story);
       this.getStartedStory = story;
       this.onStorySelected.emit({

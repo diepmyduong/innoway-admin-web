@@ -1,4 +1,4 @@
-<div class="toolbar">
+<!--<div class="toolbar" *ngIf="page">
 	<span class="btn-group">
 			<button type="button" class="btn btn-outline-primary" (click)="showModal('text_card')"> TEXT</button>
 			<button type="button" class="btn btn-outline-primary" (click)="showModal('button_card')"> BUTTON</button>
@@ -7,40 +7,31 @@
 			<button type="button" class="btn btn-outline-primary"> QUICK REPLY</button>
 			<button type="button" class="btn btn-outline-primary"> MORE</button>
 	</span>
-	<!--<nav class="navbar sticky-top navbar-light bg-faded m-0" style="background: rgba(150,150,150,0.2);">
-	  	<div class="row">
-		    <div class="col-md-2 text-center" (click)="showModal('text_card')">
-		    	TEXT
-		    </div>
-		    <div class="col-md-2 text-center" (click)="showModal('button_card')">
-		    	BUTTON
-		    </div>
-		    <div class="col-md-2 text-center">
-		    	MEDIA
-		    </div>
-		    <div class="col-md-2 text-center">
-		    	LIST
-		    </div>
-		    <div class="col-md-2 text-center">
-		    	QUICK REPLY
-		    </div>
-		    <div class="col-md-2 text-center">
-		    	MORE
-		    </div>
-	    </div>
-	</nav>-->
-</div>
-<div class="portal-container">
+</div>-->
+<div class="portal-container non-toolbar" *ngIf="page">
 		<div class="portal" [id]="'portal-'+i" *ngFor="let portal of stack; let i = index">
 			<app-stories-portal *ngIf="portal.type == 'stories'" 
 					(onStorySelected)="onStorySelected($event)"
 					(onLoaded)="onPortalLoaded($event)"
+					[page]="pageObject"
 					[stackIndex]="i">
 			</app-stories-portal>
 			<app-story-portal *ngIf="portal.type == 'story'"
 					[stackIndex]="i"
 					[story]="portal.data"
-					(onLoaded)="onPortalLoaded($event)">
+					(onLoaded)="onPortalLoaded($event)"
+					(onClose)="onPortalClosed($event)"
+					(onPostbackSelected)="onStorySelected($event)"
+					(onQuickRepliesSelected)="onQuickReplies($event)">
 			</app-story-portal>
+			<app-quick-replies-portal *ngIf="portal.type == 'quick_replies'"
+					[stackIndex]="i"
+					[story]="portal.data.story"
+					[card]="portal.data.card"
+					(onLoaded)="onPortalLoaded($event)"
+					(onClose)="onPortalClosed($event)"
+					(onPostbackSelected)="onStorySelected($event)"
+					>
+			</app-quick-replies-portal>	
 		</div>
 </div>

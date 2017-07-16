@@ -17,6 +17,7 @@ export class SubmenuPortalComponent implements OnInit {
   @Input() page:any;
   @Output() onPostbackSelected = new EventEmitter<any>();
   @Output() onNestedMenuSelected = new EventEmitter<any>();
+  @Output() onClose = new EventEmitter<any>(); 
 
   action: any;
   setting: any;
@@ -160,7 +161,7 @@ export class SubmenuPortalComponent implements OnInit {
 
   removeItem(index){
     this.action.call_to_actions.splice(index, 1);
-    
+    this.storeSetting()
   }
 
   showStory(action){
@@ -184,6 +185,12 @@ export class SubmenuPortalComponent implements OnInit {
 
   save(){
     this.storeSetting();
+  }
+
+  closePortal(){
+    this.onClose.emit({
+      index: this.stackIndex
+    })
   }
 
 }

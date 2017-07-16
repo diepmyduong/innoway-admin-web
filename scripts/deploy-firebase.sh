@@ -6,5 +6,5 @@ rsync -avh ./dist/ ./firebase/public/ --delete
 
 cd firebase
 
-firebase deploy
+sudo firebase deploy
 

@@ -23,7 +23,7 @@ export class ChatbotLayoutComponent implements OnInit {
         this.subscribedPage = pages.filter(page =>{
           return page.is_webhooks_subscribed;
         })
-        console.log("SUBSCRIED PAGE",this.subscribedPage);
+        // console.log("SUBSCRIED PAGE",this.subscribedPage);
       });
     })
   }

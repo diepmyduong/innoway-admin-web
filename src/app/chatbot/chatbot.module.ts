@@ -2,6 +2,8 @@ import { NgModule,ModuleWithProviders } from '@angular/core';
 import { CommonModule} from '@angular/common';
 import { TabsModule } from 'ng2-bootstrap/tabs';
 import { BsDropdownModule } from 'ng2-bootstrap/dropdown';
+import { TagInputModule } from 'ngx-chips';
+import { SwiperModule } from 'angular2-useful-swiper';
 // import { TreeModule } from 'angular-tree-component';
 // import { TreeModule } from 'ng2-tree';
 //Modal
@@ -32,10 +34,21 @@ import { MenuPortalComponent } from './portals/menu-portal/menu-portal.component
 import { GetStartedPortalComponent } from './portals/get-started-portal/get-started-portal.component';
 import { SubmenuPortalComponent } from './portals/submenu-portal/submenu-portal.component';
 import { ModalMenuItemTypesComponent } from './modals/modal-menu-item-types/modal-menu-item-types.component';
+import { ModalStoryComponent } from './modals/modal-story/modal-story.component';
+import { TextCardComponent } from './cards/text-card/text-card.component';
+import { ButtonsCardComponent } from './cards/buttons-card/buttons-card.component';
+import { ModalButtonTypesComponent } from './modals/modal-button-types/modal-button-types.component';
+import { QuickRepliesPortalComponent } from './portals/quick-replies-portal/quick-replies-portal.component';
+import { ModalQuickRepliesItemComponent } from './modals/modal-quick-replies-item/modal-quick-replies-item.component';
+import { GenericPortalComponent } from './portals/generic-portal/generic-portal.component';
+import { GenericCardComponent } from './cards/generic-card/generic-card.component';
+import { ModalGenericCardComponent } from './modals/modal-generic-card/modal-generic-card.component';
+import { ModalElementComponent } from './modals/modal-element/modal-element.component';
 
 
 @NgModule({
   imports: [
+    TagInputModule,
     CommonModule,
     ChatbotRoutingModule,
     TabsModule,
@@ -45,16 +58,22 @@ import { ModalMenuItemTypesComponent } from './modals/modal-menu-item-types/moda
     SelectModule,
     FormsModule,
     ReactiveFormsModule,
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    SwiperModule
   ],
   entryComponents: [
     ModalCardTypesComponent,
     ModalTextCardComponent,
     ModalButtonCardComponent,
     ModalImageCardComponent,
-    ModalMenuItemTypesComponent
+    ModalMenuItemTypesComponent,
+    ModalStoryComponent,
+    ModalButtonTypesComponent,
+    ModalQuickRepliesItemComponent,
+    ModalGenericCardComponent,
+    ModalElementComponent
   ],
-  declarations: [ChatbotComponent, LoginComponent, DashboardComponent, SettingsComponent, StoryComponent, NotificationComponent, ModalCardTypesComponent, ModalTextCardComponent, ModalButtonCardComponent, ModalImageCardComponent, StoriesPortalComponent, StoryPortalComponent, GreetingPortalComponent, MenuPortalComponent, GetStartedPortalComponent, SubmenuPortalComponent, ModalMenuItemTypesComponent],
+  declarations: [ChatbotComponent, LoginComponent, DashboardComponent, SettingsComponent, StoryComponent, NotificationComponent, ModalCardTypesComponent, ModalTextCardComponent, ModalButtonCardComponent, ModalImageCardComponent, StoriesPortalComponent, StoryPortalComponent, GreetingPortalComponent, MenuPortalComponent, GetStartedPortalComponent, SubmenuPortalComponent, ModalMenuItemTypesComponent, ModalStoryComponent, TextCardComponent, ButtonsCardComponent, ModalButtonTypesComponent, QuickRepliesPortalComponent, ModalQuickRepliesItemComponent, GenericPortalComponent, GenericCardComponent, ModalGenericCardComponent, ModalElementComponent],
   providers: [PageService],
   // providers: [AuthGuard, AuthService,UnAuthGuard]
 })

@@ -3,7 +3,7 @@ import { PageService } from '../../services/page.service';
 import { overlayConfigFactory } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { MenuItemTypesModalContext, ModalMenuItemTypesComponent } from '../../modals/modal-menu-item-types/modal-menu-item-types.component';
-
+import { StoryModalContext, ModalStoryComponent } from '../../modals/modal-story/modal-story.component';
 @Component({
   selector: 'app-menu-portal',
   templateUrl: './menu-portal.component.html',
@@ -145,7 +145,7 @@ export class MenuPortalComponent implements OnInit {
   }
 
   showStory(action){
-    this.pageService.getStory(this.page.access_token,action.payload).then(story =>{
+    this.pageService.getStory(this.page,action.payload).then(story =>{
       console.log('Selected value is: ', story);
       this.onPostbackSelected.emit({
         index: this.stackIndex,
@@ -163,7 +163,7 @@ export class MenuPortalComponent implements OnInit {
 
   save(){
     var setting = this.getSetting();
-    this.pageService.activeSetting(this.page.access_token,{
+    this.pageService.activeSetting(this.page,{
       type: "persistent_menu",
       setting: setting.data
     }).then(success =>{

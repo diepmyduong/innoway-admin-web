@@ -36,6 +36,7 @@ export class SettingsComponent implements OnInit {
   public pid: string;
   public page: any;
   public settings: any;
+  public pageObject:any;
 
   public stack = [];
 
@@ -51,23 +52,37 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.parent.params.subscribe(params =>{
       this.pid = params.pid;
-      this.page = null;
-      this.pageService.getPageWithId(this.pid).then(page =>{
-        this.page = page;
-        console.log("PAGE",this.page);
-        this.pageService.getPageSettings(this.page.access_token).then(settings =>{
-          console.log("SETTINGS",settings);
-          this.zone.run(()=>{
-            this.settings = settings;
-            this.stack = [{
-              type: "get_started",
-              data: {}
-            }]
+      if(this.pageService._pages[this.pid]){
+        this.pageObject = this.pageService._pages[this.pid];
+        this.page = this.pageObject.data;
+        console.log("PAGE OBJECT",this.pageObject);
+        this.getPageSettings();
+      }else{
+        this.pageService.getPageWithId(this.pid).then((page:any) =>{
+          this.page = page;
+          this.pageObject = this.pageService._pages[this.pid];
+          console.log("PAGE",this.page);
+          console.log("PAGE OBJECT",this.pageObject);
+          this.pageService.getPageWithId(this.pid).then(page =>{
+            this.page = page;
+            this.getPageSettings();
           });
         });
-      });
+      }
     })
-    
+  }
+
+  private getPageSettings(){
+    this.pageService.getPageSettings(this.pageObject).then(settings =>{
+      console.log("SETTINGS",settings);
+      this.zone.run(()=>{
+        this.settings = settings;
+        this.stack = [{
+          type: "get_started",
+          data: {}
+        }]
+      });
+    });
   }
 
   scrollToIndex(index){
@@ -132,6 +147,11 @@ export class SettingsComponent implements OnInit {
       type: "submenu",
       data: portal.data
     })
+  }
+
+  onPortalClosed(portal){
+    console.log("CLOSE PORTAL",portal);
+    this.stack.length = portal.index;
   }
 
 }

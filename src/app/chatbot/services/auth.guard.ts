@@ -14,10 +14,10 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return new Observable<boolean>((ob)=>{
-      console.log("AUTH",this.auth);
+      // console.log("AUTH",this.auth);
       var checkLogin = this.auth.loggedIn$.subscribe((authenticated)=>{
         authenticated = this.auth.authenticated;
-        console.log("AUTH SUB",authenticated);
+        // console.log("AUTH SUB",authenticated);
         if(authenticated) {
           ob.next(true);
         }else if(authenticated != undefined){
@@ -37,10 +37,10 @@ export class UnAuthGuard implements CanActivate {
 
   canActivate(): Observable<boolean> {
     return new Observable<boolean>((ob)=>{
-      console.log("UNAUTH",this.auth);
+      // console.log("UNAUTH",this.auth);
       var checkLogin = this.auth.loggedIn$.subscribe((authenticated)=>{
         authenticated = this.auth.authenticated;
-        console.log("UNAUTH SUB",authenticated);
+        // console.log("UNAUTH SUB",authenticated);
         if(authenticated) {    
           var url = localStorage.getItem('innoway-chatbot.url.previous-state');
           if(!url || url == '/pages/chatbot-login'){

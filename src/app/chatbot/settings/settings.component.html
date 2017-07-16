@@ -7,26 +7,22 @@
 </div>
 <div class="portal-container" *ngIf="page">
 		<div class="portal" [id]="'portal-'+i" *ngFor="let portal of stack; let i = index">
-			<app-stories-portal *ngIf="portal.type == 'stories'" 
-					(onStorySelected)="onStorySelected($event)"
-					(onLoaded)="onPortalLoaded($event)"
-					[stackIndex]="i">
-			</app-stories-portal>
 			<app-story-portal *ngIf="portal.type == 'story'"
 					[stackIndex]="i"
 					[story]="portal.data"
-					(onLoaded)="onPortalLoaded($event)">
+					(onLoaded)="onPortalLoaded($event)"
+                    (onClose)="onPortalClosed($event)">
 			</app-story-portal>
             <app-greeting-portal *ngIf="portal.type == 'greeting'"
                     [stackIndex]="i"
                     (onLoaded)="onPortalLoaded($event)"
-                    [page]="page"
+                    [page]="pageObject"
                     [setting]="portal.data">
             </app-greeting-portal>
             <app-menu-portal *ngIf="portal.type == 'menu'"
                     [stackIndex]="i"
                     (onLoaded)="onPortalLoaded($event)"
-                    [page]="page"
+                    [page]="pageObject"
                     [setting]="portal.data"
                     (onPostbackSelected)="onStorySelected($event)"
                     (onNestedMenuSelected)="onNestedMenuSelected($event)">
@@ -34,15 +30,16 @@
             <app-submenu-portal *ngIf="portal.type == 'submenu'"
                     [stackIndex]="i"
                     (onLoaded)="onPortalLoaded($event)"
-                    [page]="page"
+                    [page]="pageObject"
                     [level]="portal.data"
                     (onPostbackSelected)="onStorySelected($event)"
-                    (onNestedMenuSelected)="onNestedMenuSelected($event)">
+                    (onNestedMenuSelected)="onNestedMenuSelected($event)"
+                    (onClose)="onPortalClosed($event)">
             </app-submenu-portal>
             <app-get-started-portal *ngIf="portal.type == 'get_started'"
                     [stackIndex]="i"
                     (onLoaded)="onPortalLoaded($event)"
-                    [page]="page"
+                    [page]="pageObject"
                     [setting]="portal.data"
                     (onStorySelected)="onStorySelected($event)">
             </app-get-started-portal>

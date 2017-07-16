@@ -12,6 +12,7 @@ export class DashboardComponent implements OnInit {
 
   public pid:string;
   public page: any;
+  public pageObject:any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -25,11 +26,21 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe(params =>{
       this.pid = params.pid;
-      this.pageService.getPageWithId(this.pid).then((page:any) =>{
-        this.page = page;
-        console.log("PAGE",this.page);
-        if(!page.is_webhooks_subscribed) this.router.navigate(['/chatbot/pages']);
-      });
+      if(this.pageService._pages[this.pid]){
+        this.pageObject = this.pageService._pages[this.pid];
+        this.page = this.pageObject.data;
+        console.log("PAGE OBJECT",this.pageObject);
+      }else{
+        this.pageService.getPageWithId(this.pid).then((page:any) =>{
+          this.page = page;
+          this.pageObject = this.pageService._pages[this.pid];
+          console.log("PAGE",this.page);
+          console.log("PAGE OBJECT",this.pageObject);
+          if(!page.is_webhooks_subscribed) this.router.navigate(['/chatbot/pages']);
+        });
+      }
+      
+      
     })
   }
 

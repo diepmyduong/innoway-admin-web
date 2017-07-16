@@ -7,22 +7,19 @@
   </div>
   <div class="modal-body">
   <div class="row">
-    <div class="form-group col-sm-4">
+    <div class="form-group col-sm-12">
           <label for="ccmonth">Card</label>
-          <select class="form-control" id="ccmonth">
-            <option>Chọn loại card</option>
-            <option>Text</option>
-            <option>Button</option>
-            <option>List</option>
-            <option>Quick Reply</option>
-            <option>Media</option>
-            <option>More</option>
+          <select class="form-control" id="ccmonth" [(ngModel)]="context.type">
+            <option >Chọn loại card</option>
+            <option value="text">Text</option>
+            <option value="buttons">Button</option>
+            <option value="generic">Generic</option>
           </select>
         </div>
     </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="closeModal()">Hủy</button>
-    <button type="button" class="btn btn-primary">Đồng ý</button>
+    <button type="button" class="btn btn-primary" (click)="add()">Đồng ý</button>
   </div>
 </div>

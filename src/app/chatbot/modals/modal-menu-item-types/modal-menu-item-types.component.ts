@@ -40,7 +40,7 @@ export class ModalMenuItemTypesComponent implements OnInit,CloseGuard, ModalComp
       this.frmMenuItem.controls['url'].setValue(this.context.data.url);
     }
     
-    this.pageService.getStories(this.context.data.page.access_token).subscribe(stories =>{
+    this.pageService.getStories(this.context.data.page).subscribe(stories =>{
       this.stories = stories.map(story =>{
         
         if(this.context.data.payload && story._id === this.context.data.payload){
@@ -96,7 +96,7 @@ export class ModalMenuItemTypesComponent implements OnInit,CloseGuard, ModalComp
 
   public selected(value:any):void {
     this.frmMenuItem.controls.payload.setValue(value.id);
-    this.pageService.getStory(this.context.data.page.access_token,value.id).then(story =>{
+    this.pageService.getStory(this.context.data.page,value.id).then(story =>{
       console.log('Selected value is: ', story);
       // this.getStartedStory = story;
       // this.onStorySelected.emit({

@@ -6,15 +6,15 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="form-group row">
+    <form [formGroup]="frmCard" class="row">
         <label class="col-md-12 form-control-label" for="textarea-input">Nội dung</label>
         <div class="col-md-12">
-            <textarea id="textarea-input" name="textarea-input" rows="3" class="form-control" placeholder="Nhập nội dung"></textarea>
+            <textarea formControlName="text" rows="3" class="form-control" placeholder="Nhập nội dung"></textarea>
         </div>
-    </div>
+    </form>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="closeModal()">Hủy</button>
-    <button type="button" class="btn btn-primary">Đồng ý</button>
+    <button type="button" class="btn btn-primary" (click)="add()">Đồng ý</button>
   </div>
 </div>

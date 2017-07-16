@@ -33,7 +33,7 @@ export class GreetingPortalComponent implements OnInit {
   save(){
     if(this.frmGreeting.valid){
       this.setting.data.text = this.frmGreeting.controls["text"].value;
-      this.pageService.activeSetting(this.page.access_token,{
+      this.pageService.activeSetting(this.page,{
         type: "greeting",
         setting: this.setting.data
       }).then(success =>{

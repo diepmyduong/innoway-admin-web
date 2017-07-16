@@ -10,6 +10,7 @@ export class PageService {
   public pages:BehaviorSubject<Array<any>>;
   public _pages:any =  {};
 
+
   constructor(
     private auth: AuthService,
     private router: Router
@@ -32,7 +33,8 @@ export class PageService {
           this.pages.error(err);
         }else{
           res.data.forEach(page =>{
-            this._pages[page.id] = page;
+            this._pages[page.id] = new innoway_chatbot.Page(page.access_token);
+            this._pages[page.id].data = page;
           });
           this.pages.next(res.data);
         }
@@ -99,7 +101,8 @@ export class PageService {
         if(err){
           reject(err);
         }else{
-          this._pages[data.id] = data;
+          this._pages[data.id] = new innoway_chatbot.Page(data.access_token);
+          this._pages[data.id].data = data;
           resolve(data);
         }
       })
@@ -110,78 +113,201 @@ export class PageService {
     return new Promise((resolve,reject)=>{
       this.auth.user.getPageInfoWithId(pid,(err,data)=>{
         if(err) reject(err);
-        else resolve(data);
+        else {
+          this._pages[pid] = new innoway_chatbot.Page(data.access_token);
+          this._pages[pid].data = data;
+          resolve(data);
+        }
       })
     })
   }
 
-  getPageSettings(page_token){
+  // SETTING
+
+  getPageSettings(pageObject){
     return new Promise((resolve,reject)=>{
-      var page = new innoway_chatbot.Page(page_token);
-      page.getSettings((err,data)=>{
+      // var page = new innoway_chatbot.Page(page_token);
+      pageObject.getSettings((err,data)=>{
         if(err) reject(err);
         else resolve(data);
       })
     });
   }
 
-  activeSetting(page_token,setting){
+  activeSetting(pageObject,setting){
     return new Promise((resolve,reject)=>{
-      var page = new innoway_chatbot.Page(page_token);
-      page.activeSetting(setting,(err,data)=>{
+      // var page = new innoway_chatbot.Page(page_token);
+      pageObject.activeSetting(setting,(err,data)=>{
         if(err) reject(err);
         else resolve(data);
       })
     })
   }
 
-  deactiveSettings(page_token,types){
+  deactiveSettings(pageObject,types){
     return new Promise((resolve,reject)=>{
-      var page = new innoway_chatbot.Page(page_token);
-      page.activeSetting(types,(err,data)=>{
+      // var page = new innoway_chatbot.Page(page_token);
+      pageObject.activeSetting(types,(err,data)=>{
         if(err) reject(err);
-        else resolve(data);
+        else resolve(data); 
       })
     })
   }
 
-  getStories(page_token){
-    var page = new innoway_chatbot.Page(page_token);
+  //=== STORIES
+
+  getStories(pageObject){
+    // var page = new innoway_chatbot.Page(page_token);
     var story = new BehaviorSubject<Array<any>>([]);
-    page.getStories((err,data)=>{
+    $(pageObject).on(innoway_chatbot.Page.EventTypes.STORY_CHANGE,(change)=>{
+      console.log("STORY Change",change);
+      pageObject.getStories((err,data)=>{
+        if(err) story.error(err);
+        else story.next(data);
+      });
+    })
+    pageObject.getStories((err,data)=>{
       if(err) story.error(err);
       else story.next(data);
     });
     return story;
   }
 
-  getStory(page_token,story_id){
+  getStory(pageObject,story_id){
     return new Promise((resolve,reject)=>{
-      var page = new innoway_chatbot.Page(page_token);
-      page.getStory(story_id,(err,data)=>{
+      // var page = new innoway_chatbot.Page(page_token);
+      pageObject.getStory(story_id,(err,data)=>{
         if(err) reject(err);
         else resolve(data);
       })
     })
   }
 
-  getStartedStory(page_token){
+  getStartedStory(pageObject){
     return new Promise((resolve,reject)=>{
-      var page = new innoway_chatbot.Page(page_token);
-      page.getStartedStory((err,data)=>{
+      // var page = new innoway_chatbot.Page(page_token);
+      pageObject.getStartedStory((err,data)=>{
         if(err) reject(err);
         else resolve(data);
       })
     })
   }
 
-  setStartedStory(story){
+  setStartedStory(storyObject){
     return new Promise((resolve,reject)=>{
-      story.setAsGetStarted((err,data)=>{
+      storyObject.setAsGetStarted((err,data)=>{
         if(err) reject(err);
         else resolve(data);
       })
     })
   }
 
+  updateStory(storyObject,title){
+    return new Promise((resolve,reject)=>{
+      storyObject.update(title,(err,data)=>{
+        if(err) reject(err);
+        else resolve(data);
+      })
+    })
+  }
+
+  addStory(pageObject,title = null){
+    return new Promise((resolve,reject)=>{
+      pageObject.newStory(title,(err,data)=>{
+        if(err) reject(err);
+        else resolve(data);
+      })
+    })
+  }
+
+  removeStory(storyObject){
+    return new Promise((resolve,reject)=>{
+      storyObject.destroy((err,res)=>{
+        if(err) reject(err);
+        else resolve(res);
+      })
+    })
+  }
+
+  //=== STORY
+  getCards(storyObject){
+    return new Promise((resolve,reject)=>{
+      storyObject.getCards((err,res)=>{
+        if(err) reject(err)
+        else resolve(res);
+      });
+    })
+  }
+
+  getKeys(storyObject){
+    return new Promise((resolve,reject)=>{
+      storyObject.getKeys((err,res)=>{
+        if(err) reject(err)
+        else resolve(res);
+      })
+    })
+  }
+
+  addTextCard(storyObject,data){
+    return new Promise((resolve,reject)=>{
+      storyObject.addCard({
+        type: "text",
+        data: data
+      },(err,res)=>{
+        if(err) reject(err);
+        else resolve(res);
+      })
+    })
+  }
+
+  addButtonCard(storyObject,data){
+    return new Promise((resolve,reject)=>{
+      storyObject.addCard({
+        type: "buttons",
+        data: data
+      },(err,res)=>{
+        if(err) reject(err);
+        else resolve(res);
+      })
+    })
+  }
+
+  addGenericCard(storyObject,data){
+    return new Promise((resolve,reject)=>{
+      storyObject.addCard({
+        type: "generic",
+        data: data
+      },(err,res)=>{
+        if(err) reject(err);
+        else resolve(res);
+      })
+    })
+  }
+
+  updateCard(storyObject,card){
+    return new Promise((resolve,reject)=>{
+      storyObject.updateCard(card,(err,res)=>{
+        if(err) reject(err);
+        else resolve(res);
+      })
+    })
+  }
+
+  removeCard(storyObject,card){
+    return new Promise((resolve,reject)=>{
+      storyObject.removeCard(card._id,(err,res)=>{
+        if(err) reject(err);
+        else resolve(res);
+      })
+    })
+  }
+
+  addKey(storyObject,key){
+    return new Promise((resolve,reject)=>{
+      storyObject.addKey(key,(err,res)=>{
+        if(err) reject(err);
+        else resolve(res);
+      })
+    })
+  }
 }
