@@ -22,7 +22,8 @@
 					(onLoaded)="onPortalLoaded($event)"
 					(onClose)="onPortalClosed($event)"
 					(onPostbackSelected)="onStorySelected($event)"
-					(onQuickRepliesSelected)="onQuickReplies($event)">
+					(onQuickRepliesSelected)="onQuickReplies($event)"
+					(onSchedule)="onSchedule($event)">
 			</app-story-portal>
 			<app-quick-replies-portal *ngIf="portal.type == 'quick_replies'"
 					[stackIndex]="i"
@@ -33,5 +34,11 @@
 					(onPostbackSelected)="onStorySelected($event)"
 					>
 			</app-quick-replies-portal>	
+			<app-schedule-portal *ngIf="portal.type == 'schedule'"
+				(onLoaded)="onPortalLoaded($event)"
+				[page]="pageObject"
+				[stackIndex]="i"
+			>
+			</app-schedule-portal>
 		</div>
 </div>

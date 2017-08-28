@@ -15,6 +15,7 @@ export class StoriesPortalComponent implements OnInit {
   @Output() onStorySelected = new EventEmitter<any>();
   @Output() onClose = new EventEmitter<any>();
   stories = [];
+  selected = {};
   constructor(
     private pageService:PageService,
     private zone: NgZone,
@@ -38,6 +39,8 @@ export class StoriesPortalComponent implements OnInit {
   }
 
   selectStory(story){
+    this.selected = {};
+    this.selected[story._id] = story;
     this.onStorySelected.emit({
       index: this.stackIndex,
       data: story

@@ -1,11 +1,11 @@
 <div class="portal-container non-toolbar" *ngIf="page">
 		<div class="portal" [id]="'portal-'+i" *ngFor="let portal of stack; let i = index">
-			<app-schedule-portal *ngIf="portal.type == 'schedule'"
+			<app-subscribers-portal *ngIf="portal.type == 'subscribers'"
         (onLoaded)="onPortalLoaded($event)"
         [page]="pageObject"
         [stackIndex]="i"
       >
-			</app-schedule-portal>
+			</app-subscribers-portal>
       <!--<app-stories-portal *ngIf="portal.type == 'stories'" 
 					(onStorySelected)="onStorySelected($event)"
 					(onLoaded)="onPortalLoaded($event)"

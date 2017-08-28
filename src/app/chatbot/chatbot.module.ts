@@ -44,6 +44,10 @@ import { GenericPortalComponent } from './portals/generic-portal/generic-portal.
 import { GenericCardComponent } from './cards/generic-card/generic-card.component';
 import { ModalGenericCardComponent } from './modals/modal-generic-card/modal-generic-card.component';
 import { ModalElementComponent } from './modals/modal-element/modal-element.component';
+import { SubscribersComponent } from './subscribers/subscribers.component';
+import { SubscribersPortalComponent } from './portals/subscribers-portal/subscribers-portal.component';
+import { ModalSendStoryComponent } from './modals/modal-send-story/modal-send-story.component';
+import { SchedulePortalComponent } from './portals/schedule-portal/schedule-portal.component';
 
 
 @NgModule({
@@ -71,9 +75,10 @@ import { ModalElementComponent } from './modals/modal-element/modal-element.comp
     ModalButtonTypesComponent,
     ModalQuickRepliesItemComponent,
     ModalGenericCardComponent,
-    ModalElementComponent
+    ModalElementComponent,
+    ModalSendStoryComponent
   ],
-  declarations: [ChatbotComponent, LoginComponent, DashboardComponent, SettingsComponent, StoryComponent, NotificationComponent, ModalCardTypesComponent, ModalTextCardComponent, ModalButtonCardComponent, ModalImageCardComponent, StoriesPortalComponent, StoryPortalComponent, GreetingPortalComponent, MenuPortalComponent, GetStartedPortalComponent, SubmenuPortalComponent, ModalMenuItemTypesComponent, ModalStoryComponent, TextCardComponent, ButtonsCardComponent, ModalButtonTypesComponent, QuickRepliesPortalComponent, ModalQuickRepliesItemComponent, GenericPortalComponent, GenericCardComponent, ModalGenericCardComponent, ModalElementComponent],
+  declarations: [ChatbotComponent, LoginComponent, DashboardComponent, SettingsComponent, StoryComponent, NotificationComponent, ModalCardTypesComponent, ModalTextCardComponent, ModalButtonCardComponent, ModalImageCardComponent, StoriesPortalComponent, StoryPortalComponent, GreetingPortalComponent, MenuPortalComponent, GetStartedPortalComponent, SubmenuPortalComponent, ModalMenuItemTypesComponent, ModalStoryComponent, TextCardComponent, ButtonsCardComponent, ModalButtonTypesComponent, QuickRepliesPortalComponent, ModalQuickRepliesItemComponent, GenericPortalComponent, GenericCardComponent, ModalGenericCardComponent, ModalElementComponent, SubscribersComponent, SubscribersPortalComponent, ModalSendStoryComponent, SchedulePortalComponent],
   providers: [PageService],
   // providers: [AuthGuard, AuthService,UnAuthGuard]
 })

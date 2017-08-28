@@ -24,6 +24,7 @@ export class StoryPortalComponent implements OnInit {
   @Output() onClose = new EventEmitter<any>();
   @Output() onPostbackSelected = new EventEmitter<any>();
   @Output() onQuickRepliesSelected = new EventEmitter<any>();
+  @Output() onSchedule = new EventEmitter<any>();
 
   public data:any;
   page:any;
@@ -195,8 +196,6 @@ export class StoryPortalComponent implements OnInit {
       })
     });
   }
-
-  
 
   addImageCard(){
     this.showModal("image_card").then(modal =>{
@@ -540,6 +539,13 @@ export class StoryPortalComponent implements OnInit {
     this.pageService.updateCard(this.story,this.cards[cardIndex]).then(success=>{
       console.log("REMOVED",success);
     });
+  }
+
+  showSchedule(){
+    this.onSchedule.emit({
+      index: this.stackIndex,
+      data: this.story
+    })
   }
 
 }

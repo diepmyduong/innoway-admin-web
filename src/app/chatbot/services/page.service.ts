@@ -310,4 +310,64 @@ export class PageService {
       })
     })
   }
+
+  //Subscribers
+  getSubscribers(pageObject){
+    return new Promise((resolve,reject)=>{
+      pageObject.getSubscribers((err,data)=>{
+        if(err) reject(err);
+        else resolve(data);
+      })
+    })
+  }
+
+  getSubscriber(pageObject,sub_id){
+    return new Promise((resolve,reject)=>{
+      pageObject.getSubscriber(sub_id,(err,data)=>{
+        if(err) reject(err);
+        else resolve(data);
+      })
+    })
+  }
+
+  updateSubscriber(pageObject,sub_id,data){
+    return new Promise((resolve,reject)=>{
+      pageObject.editSubscriber(sub_id,data,(err,updated)=>{
+        if(err) reject(err);
+        else resolve(updated);
+      })
+    })
+  }
+
+  removeSubscriber(pageObject,sub_id){
+    return new Promise((resolve,reject)=>{
+      pageObject.removeSubscriber(sub_id,(err,data)=>{
+        if(err) reject(err);
+        else resolve(data);
+      })
+    })
+  }
+
+  sendToSubscribers(pageObject,story_id,sids){
+    return new Promise((resolve,reject)=>{
+      pageObject.sendToSubscribers({
+        subscribers: sids,
+        storyId: story_id
+      },(err,data)=>{
+        if(err) reject(err);
+        else resolve(data);
+      })
+    })
+  }
+
+  sendToAllSubscribers(pageObject,story_id){
+    return new Promise((resolve,reject)=>{
+      pageObject.sendToAllSubscribers({
+        storyId: story_id
+      },(err,data)=>{
+        if(err) reject(err);
+        else resolve(data);
+      })
+    })
+  }
 }

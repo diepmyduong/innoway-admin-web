@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PageService } from '../services/page.service';
-
+import { overlayConfigFactory } from 'angular2-modal';
+import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 @Component({
-  selector: 'app-notification',
-  templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+  selector: 'app-subscribers',
+  templateUrl: './subscribers.component.html',
+  styleUrls: ['./subscribers.component.scss']
 })
-export class NotificationComponent implements OnInit {
+export class SubscribersComponent implements OnInit {
 
   stack = [
     {
-      type: "schedule",
+      type: "subscribers",
       data: {}
     }
   ];
@@ -24,6 +25,7 @@ export class NotificationComponent implements OnInit {
   constructor(
     private router:Router,
     private activatedRoute: ActivatedRoute,
+    private modal: Modal,
     private pageService: PageService
   ) { }
 
@@ -64,7 +66,5 @@ export class NotificationComponent implements OnInit {
   onPortalClosed(portal){
     this.stack.length = portal.index;
   }
-
-
 
 }

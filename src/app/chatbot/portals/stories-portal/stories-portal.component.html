@@ -8,8 +8,26 @@
         <!--<button type="button" class="btn btn-danger btn-sm pull-right"><i class="fa fa-close"></i></button>-->
       </div>
     </div>
-    <div class="card-block portal-block">
-      <div class="row p-0">
+    <div class="card-block portal-block p-0">
+      <div
+      dropdown placement="top right"
+      data-toggle="dropdown" dropdownToggle
+      *ngFor="let story of stories;let i = index;">
+        <div class="callout m-0 py-1 story" [class.callout-success]="selected[story._id]">
+            <div><strong>{{story.title}}</strong></div>
+            <!-- <small class="text-muted mr-1"><i [class]="'fa fa-'+subscriber.meta.gender"></i>&nbsp; {{subscriber.meta.gender}}</small> -->
+        </div>
+        <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+            <a (click)="editStory(story)"
+            class="dropdown-item" href="javascript:;" ><i class="fa fa-pencil"></i> Chỉnh sửa</a>
+            <a (click)="selectStory(story)"
+            class="dropdown-item" href="javascript:;" ><i class="fa fa-eye"></i> Xem Story</a>
+            <a (click)="removeStory(story)"
+            class="dropdown-item" href="javascript:;" ><i class="fa fa-trash"></i> Xoá</a>
+        </div>
+        <hr class="mx-1 my-0">
+      </div>
+      <!-- <div class="row p-0">
         <div class="p-0 col-md-12" >
           <button *ngFor="let story of stories"
           dropdown placement="top right"
@@ -26,6 +44,6 @@
             </div>
           </button>
         </div>
-      </div>
+      </div> -->
     </div>
 </div>

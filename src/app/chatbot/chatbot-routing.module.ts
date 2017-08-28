@@ -5,6 +5,8 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
 import { StoryComponent } from './story/story.component';
+import { SubscribersComponent } from './subscribers/subscribers.component';
+import { NotificationComponent } from './notification/notification.component';
 import { AuthGuard } from './services/auth.guard';
 const routes: Routes = [
   {
@@ -55,6 +57,22 @@ const routes: Routes = [
             component: StoryComponent,
             data: {
               title: "Stories"
+            },
+            canActivate: [AuthGuard]
+          },
+          {
+            path: 'subscribers',
+            component: SubscribersComponent,
+            data: {
+              title: "Khách hàng"
+            },
+            canActivate: [AuthGuard]
+          },
+          {
+            path: 'notification',
+            component: NotificationComponent,
+            data: {
+              title: "Thông báo"
             },
             canActivate: [AuthGuard]
           },

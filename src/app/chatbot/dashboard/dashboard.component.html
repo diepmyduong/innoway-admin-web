@@ -18,10 +18,10 @@
                         <a class="nav-link" [routerLink]="['/chatbot/dashboard',page.id,'stories']"><i class="fa fa-comments-o"></i> Stories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="javascript:;" ><i class="fa fa-rocket"></i> Thông báo</a>
+                        <a class="nav-link" [routerLink]="['/chatbot/dashboard',page.id,'notification']" ><i class="fa fa-rocket"></i> Thông báo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="javascript:;"><i class="fa fa-users"></i> Khách hàng</a>
+                        <a class="nav-link" [routerLink]="['/chatbot/dashboard',page.id,'subscribers']"><i class="fa fa-users"></i> Khách hàng</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="javascript:;"><strong><i class="fa fa-trash-o"></i> Huỷ đăng ký</strong></a>

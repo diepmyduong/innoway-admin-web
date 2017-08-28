@@ -1,0 +1,39 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title">Gửi Tin</h4>
+    <button type="button" class="close" (click)="closeModal()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+  <form [formGroup]="frmSend" class="row">
+    <div class="form-group col-sm-12">
+      <label>Loại tin gửi</label>
+      <select class="form-control" formControlName="type">
+        <option>Chọn loại tin</option>
+        <option value="text" >Text</option>
+        <option value="story">Story</option>
+      </select>
+    </div>
+    <div *ngIf="frmSend.controls['type'].value === 'text'"
+    class="form-group col-md-12">
+      <label class="col-md-12 form-control-label" for="textarea-input">Nội dung</label>
+      <div class="col-md-12">
+          <textarea formControlName="text" rows="3" class="form-control" placeholder="Nhập nội dung"></textarea>
+      </div>
+    </div>
+    <div class="form-group col-sm-12" *ngIf="frmSend.controls['type'].value === 'story'">
+      <label for="ccmonth"> Chọn Story Để gửi</label>
+      <ng-select class="col-md-12"
+        [multiple]="false"
+        [items]="stories"
+        (selected)="selected($event)"
+        placeholder="Story Title">
+      </ng-select>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="closeModal()">Hủy</button>
+    <button type="button" class="btn btn-primary" (click)="send()"><i class="fa fa-send"></i> Gửi</button>
+  </div>
+</div>

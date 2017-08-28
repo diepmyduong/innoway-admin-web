@@ -3,7 +3,9 @@ import { TextMessageFormControl, TextMessageValidateMessages } from './controls/
 
 export const TextCardFormGroup  = (fb: FormBuilder) => {
     return fb.group({
-        text   : TextMessageFormControl
+        type  : [''],
+        text  : TextMessageFormControl,
+        story : ['']
     });
 } 
 

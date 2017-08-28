@@ -92,18 +92,15 @@ export class StoryComponent implements OnInit {
   }
 
   onStorySelected(portal){
-    console.log("SELECTED STORY",portal);
     this.stack.length = portal.index + 1;
     this.stack.push({
       type: "story",
       data: this.pageObject.buildStory(portal.data)
     })
-    console.log("STACK",this.stack);
   }
 
   scrollToIndex(index){
     setTimeout(()=>{
-      console.log("TARGET",$("#portal-"+index).offset().left);
       var offset = 0;
       for(var i = 0; i <= index;i++){
         offset += $("#portal-"+index).width();
@@ -117,20 +114,25 @@ export class StoryComponent implements OnInit {
   }
 
   onPortalLoaded(portal){
-    console.log("LOADED PORTAL",portal);
     this.scrollToIndex(portal.index);
   }
 
   onPortalClosed(portal){
-    console.log("CLOSE PORTAL",portal);
     this.stack.length = portal.index;
   }
 
   onQuickReplies(portal){
-    console.log('quick replies at', portal);
     this.stack.length = portal.index + 1;
     this.stack.push({
       type: "quick_replies",
+      data: portal.data
+    })
+  }
+
+  onSchedule(portal){
+    this.stack.length = portal.index + 1;
+    this.stack.push({
+      type: "schedule",
       data: portal.data
     })
   }
