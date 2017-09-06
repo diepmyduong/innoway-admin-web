@@ -1,15 +1,235 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef, ViewContainerRef } from '@angular/core';
+import { PageService } from "app/chatbot/services/page.service";
+import { Modal } from "angular2-modal/plugins/bootstrap";
+import { NotificationsService } from "angular2-notifications";
+import { GetAllItemInterface } from './../interface/getAllItemInterface';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { CustomValidators } from "ng2-validation/dist";
+import { InnowayService } from './../services'
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 @Component({
   selector: 'app-topping-type',
   templateUrl: './topping-type.component.html',
   styleUrls: ['./topping-type.component.scss']
 })
-export class ToppingTypeComponent implements OnInit {
+export class ToppingTypeComponent implements OnInit, GetAllItemInterface {
+  public data: Array<any> = null;
+  public canLoadMore: boolean;
+  public limit: number;
+  public isMultipleSelect: boolean;
+  public seletectedItems: string[];
+  public searchName: string;
+  public numberOfItem: number;
+  public numberOfPage: number;
+  public pageOptions: number[];
+  public currentPageOption: number;
+  public defaultThumb: string;
+  public loadDataMode: number;
+  public notificationOption: any;
 
-  constructor() { }
+  isSelectItems: boolean;
 
-  ngOnInit() {
+  private form: FormGroup;
+  private toppingService: any;
+
+  constructor(public innoway: InnowayService,
+    private modal: Modal,
+    private pageService: PageService,
+    private zone: NgZone,
+    private route: ActivatedRoute,
+    private router: Router,
+    private notificationService: NotificationsService,
+    private ref: ChangeDetectorRef,
+    private vcRef: ViewContainerRef) {
+
+    //config default
+    this.pageOptions = [10, 20, 50, 100, 200];
+    this.limit = 10;
+    this.seletectedItems = [];
+    this.canLoadMore = false;
+    this.isMultipleSelect = false;
+    this.defaultThumb = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
+
+    //config notification
+    this.notificationOption = {
+      position: ["top", "right"],
+      timeOut: 1000,
+      lastOnBottom: true,
+    };
+
+    //config form
+    this.form = new FormGroup({
+      pageOptionInput: new FormControl('', null),
+      searchNameInput: new FormControl('', null),
+    });
+    this.form.controls["pageOptionInput"].setValue(this.pageOptions[0]);
+
+    //config modal
+    modal.overlay.defaultViewContainer = vcRef;
+
+    //add topping service
+    this.toppingService = innoway.getService('topping');
   }
 
+  ngOnInit(): void {
+    this.loadData({
+      fields: ["name","status"]
+    });
+  }
+
+  async loadData(query:any = {}) {
+    try {
+      console.log('query',query);
+      //call api
+      let items = await  this.innoway.getAll('topping', query);
+      items.subscribe(toppings =>{
+        this.data = toppings;
+        console.log("toppings",this.data);
+        //update UI
+        this.ref.detectChanges();
+      })
+
+    } catch (err) {
+      console.log("error: " + err);
+      this.pushNotification("Error!", "Cập nhật dữ liệu bị lỗi", -1);
+      this.router.navigate(['/dashboard']);
+    }
+  }
+
+  addItem() {
+    this.router.navigate(['/topping-type/add']);
+  }
+
+  editItem(id: string) {
+    this.router.navigate(['/topping-type/add', id]);
+  }
+
+  viewItem(id: string) {
+    this.router.navigate(['/topping-type/detail', id]);
+  }
+
+  deleteOneItem(id: string) {
+    let ids: string[] = [];
+    ids.push(id);
+    this.deleteItem(ids, ids.length - 1);
+  }
+
+  async deleteItem(ids: string[], index: number) {
+    try {
+
+      //update UI
+      this.data.forEach((item1, index1: number) => {
+        if (item1.id == ids[index]) {
+          this.removeItemByIndex(index1);
+          return;
+        }
+      });
+
+      this.seletectedItems.forEach((item1, index1: number) => {
+        if (item1 == ids[index]) {
+          this.removeSelectedItemByIndex(index1);
+          return;
+        }
+      });
+
+      //call api
+      await this.toppingService.delete(ids[index]);
+
+      //push notification
+      this.pushNotification("Success", "Xóa thành công!", 0);
+      this.ref.detectChanges();
+
+      //delete more items
+      ids = ids.filter((item1, index1) => index1 !== index);
+      index--;
+      if (index > -1) {
+        this.deleteItem(ids, index);
+      }
+    } catch (err) {
+      this.pushNotification("Error!", "Xóa dữ liệu bị lỗi", -1);
+      this.ref.detectChanges();
+    }
+  }
+
+  deleteSelectedItem() {
+    this.deleteItem(this.seletectedItems, this.seletectedItems.length - 1);
+    this.ref.detectChanges();
+  }
+
+  removeItemByIndex(index: number) {
+    this.data = this.data.filter((item1, index1) => index1 !== index);
+  }
+
+  removeSelectedItemByIndex(index: number) {
+    this.seletectedItems = this.seletectedItems.filter((item1, index1) => index1 !== index);
+  }
+
+  selectAllItem() {
+    this.seletectedItems = [];
+    this.data.forEach((item: any) => {
+      this.seletectedItems.push(item.id);
+    });
+  }
+
+  deselectAllItem() {
+    this.seletectedItems = [];
+  }
+
+  queryName() {
+    throw new Error('Method not implemented.');
+  }
+
+  loadMore() {
+    throw new Error('Method not implemented.');
+  }
+
+  pagination() {
+    throw new Error('Method not implemented.');
+  }
+
+  switchModeSelectItem(event: any) {
+    this.isMultipleSelect = event;
+  }
+
+  pushNotification(title, content, type: number) {
+    switch (type) {
+      case -1: {
+        this.notificationService.alert(
+          title.toString(),
+          content.toString(),
+          {
+            showProgressBar: true,
+            pauseOnHover: false,
+            clickToClose: false,
+          }
+        )
+        break;
+      }
+      case 0: {
+        this.notificationService.success(
+          title.toString(),
+          content.toString(),
+          {
+            showProgressBar: true,
+            pauseOnHover: false,
+            clickToClose: false,
+          }
+        )
+        break;
+      }
+      default: {
+        this.notificationService.success(
+          title.toString(),
+          content.toString(),
+          {
+            showProgressBar: true,
+            pauseOnHover: false,
+            clickToClose: false,
+          }
+        )
+      }
+    }
+  }
 }

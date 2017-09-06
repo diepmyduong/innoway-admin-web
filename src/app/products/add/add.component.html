@@ -1,4 +1,5 @@
 <div class="animated fadeIn">
+ <form [formGroup]="form">
   <div class="row">
     <div class="col-md-7">
 	    <div class="row">
@@ -8,20 +9,18 @@
 		          <strong>Nhập thông tin</strong>
 		        </div>
 		        <div class="card-block">
-		          <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
 		            <div class="form-group row">
 		              <label class="col-md-3 form-control-label" for="text-input">Tên sản phẩm</label>
 		              <div class="col-md-9">
-		                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tên sản phẩm">
+		                <input type="text" formControlName="nameInput" id="text-input" name="text-input" class="form-control" placeholder="Tên sản phẩm">
 		              </div>
 		            </div>
 		            <div class="form-group row">
 		              <label class="col-md-3 form-control-label" for="textarea-input">Mô tả</label>
 		              <div class="col-md-9">
-		                <textarea id="textarea-input" name="textarea-input" rows="9" class="form-control" placeholder="Mô tả"></textarea>
+		                <textarea id="textarea-input" formControlName="descriptionInput" name="textarea-input" rows="9" class="form-control" placeholder="Mô tả"></textarea>
 		              </div>
            			</div>
-		          </form>
 		        </div>
 		      </div>
 		    </div>
@@ -34,13 +33,13 @@
 		         	<div class="form-group row">
 		              <label class="col-md-3 form-control-label" for="text-input">Giá sản phẩm</label>
 		              <div class="col-md-9">
-		                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Giá sản phẩm">
+		                <input type="text"  formControlName="priceInput" id="text-input" name="text-input" class="form-control" placeholder="Giá sản phẩm">
 		              </div>
 		            </div>
 		            <div class="form-group row">
 		              <label class="col-md-3 form-control-label" for="text-input">Giá gốc sản phẩm</label>
 		              <div class="col-md-9">
-		                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Giá gốc sản phẩm">
+		                <input type="text" id="text-input" formControlName="basePriceInput" name="text-input" class="form-control" placeholder="Giá gốc sản phẩm">
 		              </div>
 		            </div>
 		        </div>
@@ -55,15 +54,9 @@
 		         	<div class="form-group row">
 		              <label class="col-md-3 form-control-label" for="text-input">Đơn vị</label>
 		              <div class="col-md-9">
-		                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Đơn vị">
+		                <input type="text" id="text-input"  formControlName="unitInput" name="text-input" class="form-control" placeholder="Đơn vị">
 		              </div>
-		            </div>
-		            <div class="form-group row">
-		              <label class="col-md-3 form-control-label" for="text-input">Bước nhảy</label>
-		              <div class="col-md-9">
-		                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Bước nhảy">
-		              </div>
-		            </div>
+		            </div>		           
 		        </div>
 		      </div>
 		    </div>
@@ -177,25 +170,26 @@
 				  	  	<div class="form-group row">
 		              		<label class="col-md-4 form-control-label" for="select">Loại sản phẩm</label>
 			              	<div class="col-md-8">
-				                <select id="select" name="select" class="form-control" size="1">
+				                <!-- <select id="select" name="select" class="form-control" size="1">
 				                  	<option value="0">Chọn loại sản phẩm</option>
 				                  	<option value="1">Cafe sữa</option>
 				                 	<option value="2">Trà sữa</option>
 				                  	<option value="3">Yogurt</option>
-				                </select>
+				                </select> -->
+				                 <select id="select_category" formControlName="categoryInput" name="select_category" class="form-control" (change)="onChangeCategory(category.value)" #category >
+				                  <option *ngFor="let item of categories;let i = index" [value]="i" [attr.selected]="i == 0 ? true : null">{{item.name==null?'':item.name}}</option>
+				                </select> 
 			              	</div>
 		            	</div>
 		            	<div class="form-group row">
-			              	<label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
-			              	<div class="col-md-8">
-				                <select id="select" name="select" class="form-control" size="1">
-					                <option value="0">Chọn trạng thái</option>
-					                <option value="1">Hoạt động</option>
-					                <option value="2">Không hoạt động</option>
-				                </select>
-			              	</div>
-			            </div>
-			        </div>
+			              <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
+			              <div class="col-md-8">
+			                <select id="select" formControlName="statusInput" name="select" class="form-control" [attr.selected]="i == 0 ? true : null" (change)="onChangeStatus(status.value)" #status>
+			                  <option *ngFor="let status of statuses;let i = index" [value]="i">{{status==1?'Hoạt động':'Không hoạt động'}}</option>
+			                </select>
+			              </div>
+			            </div>  
+			        </div>  
 			    </div>
 		  	</div>
 		  	<div class="col-md-12">
@@ -219,8 +213,65 @@
 			        </div>
 			    </div>
 		    </div>
+
+		    <div class="col-md-12">
+		    	<div class="card">
+		    		<div class="card-header">
+			          <strong>Chọn topping</strong>
+			        </div>
+				   	<div class="card-block">
+			          <ng-select *ngIf="items.length > 0"
+			            [multiple]="true"
+			            [items]="items"
+			            (data)="refreshValue($event)"
+			            (selected)="selected($event)"
+			            (removed)="removed($event)"
+			            placeholder="Chọn topping">
+			          </ng-select>
+			          <br/>
+
+			          <div *ngIf="value.length > 0">
+			          	<p *ngFor="let toppingValue of toppingValues; let i = index">
+			          	{{i}}
+			          		<span *ngFor="let item of toppingValue; let j = index">{{item.name}},</span>
+			          	</p>
+			          </div>
+			          <!-- <pre class="alert alert-info">{{itemsToString(value)}}</pre> -->
+			        </div>
+		        </div>
+		    </div>
+
+		   <div class="col-md-12">
+			    <div class="card">
+			    	<div class="card-header">
+			          <strong>Thêm sản phẩm</strong>
+			           <button type="submit" class="btn btn-sm btn-primary" (click)="addImageModal()"> Add image</button>
+			        </div>
+			        <div class="card-block">			        
+	        			<div class="row" *ngIf="images!=null">
+	        				<img class="col-md-3" style="width: 100%; height: 80px; padding: 4px;" src={{image}} *ngFor="let image of images; let i = index"/>
+	        			</div>
+			        </div>
+			    </div>
+			</div>
+
+		    <div class="col-md-12">
+			    <div class="card">
+			    	<div class="card-header">
+			          <strong>Thêm sản phẩm</strong>
+			        </div>
+			     	<div class="card-block">
+			          <button type="submit" class="btn btn-sm btn-primary" *ngIf="!isEdit" (click)="submitAndNew()"> Submit &amp; New</button>
+			          <button type="reset" class="btn btn-sm btn-success" *ngIf="!isEdit" (click)="submitAndClose()"> Submit &amp; Close</button>
+			          <button type="submit" class="btn btn-sm btn-primary" *ngIf="isEdit" (click)="updateAndClose()"> Update &amp; Close</button>
+			        </div>
+			    </div>
+			</div>    
 	    </div>
     </div>		
   </div>
+ </form>
 </div>
+
+<simple-notifications [options]="notification_option"></simple-notifications>
 

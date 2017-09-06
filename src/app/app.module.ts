@@ -29,6 +29,14 @@ import { ChatbotLayoutComponent } from './layouts/chatbot-layout/chatbot-layout.
 
 import { ChatbotModule } from './chatbot/chatbot.module';
 
+import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
+
+import { ServicesModule } from './services';
+// import { ModalComponent } from './modal/modal.component';
+
+import { ModalModule } from 'ng2-bootstrap/modal';
+// import { ModalModule as CustomModal} from './modal/modal.module';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -40,7 +48,12 @@ import { ChatbotModule } from './chatbot/chatbot.module';
     Ng2ModalModule.forRoot(),
     BootstrapModalModule,
     ChartsModule,
-    ChatbotModule.forRoot()
+    ChatbotModule.forRoot(),
+    SimpleNotificationsModule.forRoot(),
+    PushNotificationsModule,
+    ServicesModule,
+    ModalModule.forRoot(),
+    // CustomModal
   ],
   declarations: [
     AppComponent,

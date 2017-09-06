@@ -12,7 +12,7 @@
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,AngularJS,Angular,Angular2,jQuery,CSS,HTML,RWD,Dashboard,Vue,Vue.js,React,React.js">
 
     <title>Innoway - Admin Dashboard</title>
-    
+
     <!-- Icons -->
     <link href="../node_modules/ng2-tree/styles.css" rel="stylesheet">
     <link href="../node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet">
@@ -61,8 +61,15 @@
 
     </div>
     <script src="assets/js/jquery.min.js"></script>
+    <script src="https://rawgit.com/diepmyduong/innoway2-web-sdk/dev/dist/innoway2.min.js"></script>
+    <script type="text/javascript">
+        innoway2.init({
+            host: "https://innoway2.herokuapp.com/",
+            brand_id: "3791cbd0-8eeb-11e7-9619-576bbea02309"
+        })
+    </script>
     <script src="https://rawgit.com/diepmyduong/innoway-chatbot-client/master/dist/innoway_chatbot.min.js"></script>
-    
+
 </body>
 
 </html>

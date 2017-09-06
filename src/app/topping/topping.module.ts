@@ -1,6 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import { UiSwitchModule } from 'angular2-ui-switch'
+import { VSChecklistModule } from 'ng2-vs-checklist';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
+import { TextMaskModule } from 'angular2-text-mask';
+import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
+import { CustomFormsModule } from 'ng2-validation';
+
 import { ToppingRoutingModule } from './topping-routing.module';
 import { ToppingComponent } from './topping.component';
 import { AddComponent } from './add/add.component';
@@ -9,8 +17,22 @@ import { DetailComponent } from './detail/detail.component';
 @NgModule({
   imports: [
     CommonModule,
-    ToppingRoutingModule
+    ToppingRoutingModule,
+    FormsModule,
+    UiSwitchModule,
+    VSChecklistModule,
+    AngularMultiSelectModule,
+    CustomFormsModule,
+    ReactiveFormsModule,
+    TextMaskModule,
+    SimpleNotificationsModule,
+    PushNotificationsModule,
   ],
-  declarations: [ToppingComponent, AddComponent, DetailComponent]
+  declarations: [ToppingComponent, AddComponent, DetailComponent],
+  exports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
+  ]
 })
 export class ToppingModule { }

@@ -3,6 +3,7 @@ import { Routes,RouterModule } from '@angular/router';
 
 import { ProductsComponent } from './products.component';
 import { AddComponent } from './add/add.component';
+import { DetailComponent } from './detail/detail.component';
 
 const routes: Routes = [
 	{
@@ -10,10 +11,10 @@ const routes: Routes = [
 		redirectTo: 'list',
 		pathMatch: 'full'
 	},
-  {
+  	{
     path: '',
     data: {
-      title: 'Sản phẩm'
+      title: 'Loại sản phẩm'
     },
     children:[
     	{
@@ -24,10 +25,24 @@ const routes: Routes = [
 	    	}
     	},
     	{
+	    	path: 'add/:id',
+	    	component: AddComponent,
+	    	data: {
+	    		title: "Sửa"
+	    	}
+    	},
+    	{
 	    	path: 'list',
 	    	component: ProductsComponent,
 	    	data: {
 	    		title: "Danh sách"
+	    	}
+    	},
+    	{
+	    	path: 'detail/:id',
+	    	component: DetailComponent,
+	    	data: {
+	    		title: "Chi tiết"
 	    	}
     	},
     ]

@@ -11,7 +11,7 @@ const routes: Routes = [
 		redirectTo: 'list',
 		pathMatch: 'full'
 	},
-  {
+  	{
     path: '',
     data: {
       title: 'Loại sản phẩm'
@@ -25,6 +25,13 @@ const routes: Routes = [
 	    	}
     	},
     	{
+	    	path: 'add/:id',
+	    	component: AddComponent,
+	    	data: {
+	    		title: "Sửa"
+	    	}
+    	},
+    	{
 	    	path: 'list',
 	    	component: ProductTypeComponent,
 	    	data: {
@@ -32,7 +39,7 @@ const routes: Routes = [
 	    	}
     	},
     	{
-	    	path: 'detail',
+	    	path: 'detail/:id',
 	    	component: DetailComponent,
 	    	data: {
 	    		title: "Chi tiết"

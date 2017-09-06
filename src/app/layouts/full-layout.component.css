@@ -1,3 +1,13 @@
 .callout {
     cursor: pointer;
 }
+
+.navbar-brand{
+	color:white;
+	background-image: none !important;
+}
+
+.navbar-brand p{
+	padding-top: 6px;
+	padding-left: 45px;
+}

@@ -1,42 +1,44 @@
 <div class="animated fadeIn">
-  <div class="row">    
+  <div class="row">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <strong>Thông tin</strong>
+          <strong>{{isEdit?"Cập nhật":"Thêm"}} loại topping</strong>
         </div>
         <div class="card-block">
-          <form action="" method="post" enctype="multipart/form-data" class="form-horizontal ">
+          <form [formGroup]="form">
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Loại topping</label>
               <div class="col-md-8">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Loại topping">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Loại topping" formControlName="nameInput">
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
               <div class="col-md-8">
-                <textarea id="textarea-input" name="textarea-input" rows="5" class="form-control" placeholder="Mô tả"></textarea>
+                <textarea id="textarea-input" formControlName="descriptionInput" name="textarea-input" rows="5" class="form-control" placeholder="Mô tả"></textarea>
               </div>
-   			</div>
+            </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
               <div class="col-md-8">
-                <select id="select" name="select" class="form-control" size="1">
-                  <option value="0">Chọn trạng thái</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="2">Không hoạt động</option>
+                <select id="select" formControlName="statusInput" name="select" class="form-control" [attr.selected]="1" #status>
+                  <option *ngFor="let status of statuses;let i = index" [value]="i">{{status==1?'Hoạt động':'Không hoạt động'}}</option>
                 </select>
               </div>
-            </div>         
+            </div>
           </form>
         </div>
-        <div class="card-footer">
-          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+        <div class="card-block">
+          <button type="submit" class="btn btn-sm btn-primary" *ngIf="!isUpdate" (click)="submitAndNew()"> Submit &amp; New</button>
+          <button type="submit" class="btn btn-sm btn-success" *ngIf="!isUpdate" (click)="submitAndClose()"> Submit &amp; Close</button>
+          <button type="submit" class="btn btn-sm btn-primary" *ngIf="isUpdate" (click)="updateAndClose()"> Update &amp; Close</button>
+          <button type="submit" class="btn btn-sm btn-primary" *ngIf="isUpdate" (click)="deleteAndClose()"> Delete &amp; Close</button>
         </div>
       </div>
     </div>
     <!--/.col-->
   </div>
-</div>	
+</div>
+
+<simple-notifications [options]="notificationOption"></simple-notifications>
