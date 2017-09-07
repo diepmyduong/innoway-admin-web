@@ -1,10 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { NgZone } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef,ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { InnowayServiceService } from '../services/innoway-service.service';
+import { InnowayService } from '../services'
 
-declare let innoway2:any;
+import { DataTable } from 'angular-2-data-table-bootstrap4';
+
+declare let swal:any;
 
 @Component({
   selector: 'app-product-type',
@@ -13,114 +14,144 @@ declare let innoway2:any;
 })
 export class ProductTypeComponent implements OnInit {
 
-  service:any;
-  canLoadMore = true;
-  limit = 20;
-  isMultipleSelect: boolean = false;
-  seletectedItems: string[] = [];
-  searchName:string="";
-  numberOfItem:number=10;
-  numberOfPage:number=0;
-  pageOptions: number[] = [10,25,50,100,200];
-  currentPageOption: number;
-  categories:BehaviorSubject<[any]> = null;
-  thumbDefaultCategory: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
-
   constructor(
-    private zone:NgZone,
   	private router:Router,
-    private Innoway: InnowayServiceService,
+    public innoway: InnowayService,
     private ref: ChangeDetectorRef
   ) { 
-    
+    this.categoryService = innoway.getService('product_category');
   }
+
+  categoryService:any;
+  items:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  itemCount = 0; // item total  count
+  thumbDefaultCategory: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
+  itemFields = ["$all"]; //Get All field
+
+  //Search bar
+  query:any = {} //query to search and paging items
+  searchTimeOut = 250; //milisecond
+  searchRef:any;  
+
+  @ViewChild(DataTable) itemsTable;
 
   ngOnInit() {
-    this.getCategories();
-    this.service = this.Innoway.services['product_category'];
   }
 
-  async getCategories(){
-    this.categories = await this.Innoway.getAll('product_category');
+  async reloadItems(params){
+    let {limit, offset, sortBy, sortAsc} = params;
+    this.query.limit = limit;
+    this.query.offset = offset;
+    this.query.order = sortBy?[[sortBy,sortAsc?'ASC':'DESC']]:null;
+    await this.getItems();
   }
 
-  selectItem(model){
-    alert("select "+model.id);
-  	this.router.navigate(['/product-type/detail', model.id]);
+  async getItems(){
+    let query = Object.assign({
+      fields: this.itemFields
+    },this.query);
+    this.items = await this.innoway.getAll('product_category',query);
+    this.itemCount = this.categoryService.currentPageCount;
+    return this.items;
+  }
+
+  rowClick(event){
+    console.log('Row clicked',event);
+  }
+
+  rowDoubleClick(event){
+    console.log('Row double click',event);
   }
 
   addItem(){
     this.router.navigate(['/product-type/add']);
   }
 
-  editItem(model){
-    this.router.navigate(['/product-type/add', model.id]);
+  editItem(item){
+    this.router.navigate(['/product-type/add', item.id]);
   }
 
-  viewItem(model){
-    this.router.navigate(['/product-type/detail', model.id]);
+  viewItem(item){
+    this.router.navigate(['/product-type/detail', item.id]);
   }
 
-  deleteItem(model){
-  	innoway2.api.module('product_category').delete(model.id).then(data =>{
+  async confirmDelete(){
+    return await swal({
+      title: 'Xoá',
+      text: "Bạn có chắc la muốn xoá",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Xoá',
+      cancelButtonText: 'Quay lại'
+    })
+  }
+
+  async alertCannotDelete(){
+    return await swal({
+      title: 'Không thể xoá',
+      type: 'warning',
+      timer: 1000,
+    });
+  }
+
+  async alertDeleteSuccess(){
+    return await swal({
+      title: 'Xoá thành công',
+      type: 'success',
+      timer: 1000,
+    });
+  }
+
+  async deleteItem(item){
+    item.deleting = true;
+    try {
+      try { await this.confirmDelete() } catch(err) { return };
+      await this.categoryService.delete(item.id)
       this.ref.detectChanges();
-  	}).catch(err =>{
-  		console.error(err);
-  	});
-  }
-
-  reloadPage() { // click handler or similar
-    this.zone.runOutsideAngular(() => {
-        location.reload();
-    });
-  }
-
-  switchModeSelectItem(event){
-    this.isMultipleSelect=event;
-  }
-
-  selectAllItems(){
-    this.seletectedItems=[];
-    this.categories.forEach((item:any) => {
-      this.seletectedItems.push(item.id);
-    });
-  }
-
-  deselectAllItems(){
-    this.seletectedItems=[];
-  }
-
-  deleteSelectedItems(){
-    alert(this.seletectedItems);
-  }
-
-  queryName(event){
-    alert(event);
-  }
-
-  queryKeyDownFunction(event, data) {
-    if(event.keyCode == 13) {
-      alert(data);
+      this.alertDeleteSuccess();
+    }catch(err){
+      this.alertCannotDelete();
+    }finally{
+      item.deleting = false;
     }
   }
 
-  onChangePageOption(data){
-    this.currentPageOption=data;
-    alert(data);
-  }
-
-  errorHandler(event) {
-    console.debug(event);
-    event.target.src = this.thumbDefaultCategory;
-  }
-
-  async loadMore(){
-    var items = await this.service.getAllWithQuery({
-      page: this.service.pagination.next_page
+  async deleteAll(){
+    let rows = this.itemsTable.selectedRows;
+    let ids = [];
+    rows.forEach(row =>{
+      row.item.deleting = true;
+      ids.push(row.item.id);
     });
+    try {
+      try { await this.confirmDelete() } catch(err) { return };
+      await this.categoryService.deleteAll(ids)
+      this.itemsTable.reloadItems();
+      this.alertDeleteSuccess();
+    }catch(err){
+      this.alertCannotDelete();
+    }finally{
+      rows.forEach(row =>{
+        row.item.deleting = false;
+      });
+    }
+    
+    
+  }
 
-    if(items.length == 0 || items.length < this.limit) this.canLoadMore = false;
-
-    this.ref.detectChanges();
+  onSearch(e){
+    const key = e.target.value;
+    if(this.searchRef) clearTimeout(this.searchRef);
+    this.searchRef = setTimeout(()=>{
+      this.query.filter = {
+        $or: {
+          name: { $iLike: `%${key}%`},
+          description: { $iLike: `%${key}%`},
+        }
+      }
+      this.getItems();
+    },this.searchTimeOut);
   }
 }

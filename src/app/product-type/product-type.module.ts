@@ -15,7 +15,10 @@ import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-not
 import { CustomFormsModule } from 'ng2-validation';
 
 //Provider
-import { InnowayServiceService } from '../services/innoway-service.service'
+
+// Loading Buttons
+import { LaddaModule } from 'angular2-ladda';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 @NgModule({
   imports: [
@@ -29,9 +32,10 @@ import { InnowayServiceService } from '../services/innoway-service.service'
     TextMaskModule,
     SimpleNotificationsModule,
     PushNotificationsModule,
-    CustomFormsModule
+    CustomFormsModule,
+    DataTableModule,
+    LaddaModule
   ],
-  declarations: [ProductTypeComponent, AddComponent, DetailComponent],
-  providers: [InnowayServiceService]
+  declarations: [ProductTypeComponent, AddComponent, DetailComponent]
 })
 export class ProductTypeModule { }
