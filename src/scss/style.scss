@@ -263,3 +263,14 @@
     .no-js #loader-wrapper {
         display: none;
     }
+
+    .pagination-page {
+        .input-group-addon {
+            flex-direction: row;
+        }
+    }
+
+    .text-muted.danger {
+        color: red !important;
+        display: block;
+    }

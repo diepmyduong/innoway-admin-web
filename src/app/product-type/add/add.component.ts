@@ -1,10 +1,9 @@
-import { Component, OnInit, NgZone, ViewChild ,ChangeDetectorRef} from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { NotificationsService } from 'angular2-notifications';
-import { CustomValidators } from 'ng2-validation';
+import { Component, OnInit ,ChangeDetectorRef} from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { NgForm } from '@angular/forms';
+import { InnowayService } from '../../services';
 
-declare var innoway2:any;
+declare var swal:any;
 
 @Component({
   selector: 'app-add',
@@ -13,50 +12,33 @@ declare var innoway2:any;
 })
 export class AddComponent implements OnInit {
 
-  form: FormGroup= null;
-  id: any=[];
-  isEdit: boolean = false;
-  statuses: number[]=[1,0];
-  indexSelectedStatus: number = 0;
-  indexSelectedTopping: number = 0;
-  thumbDefaultCategory: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
-
-  category: any = [];
-  //currentCategory: any =[];
-
-  public notification_option = {
-    position: ["top", "right"],
-    timeOut: 1000,
-    lastOnBottom: true,
-  };
-
-  @ViewChild('imageCategory') input:any; 
-
-    // ngAfterViewInit() {
-    //  alert(this.input);      
-    // }
-
   constructor(
-    private zone:NgZone,
     private route: ActivatedRoute,
     private router: Router,
-    private _service: NotificationsService,
-    private ref: ChangeDetectorRef
+    private ref: ChangeDetectorRef,
+    public innoway: InnowayService
   ) { 
-      this.form = new FormGroup({
-        name: new FormControl('', [Validators.required]),
-        description: new FormControl('', null),
-        image: new FormControl('', CustomValidators.url),
-      });
+      this.categoryService = innoway.getService('product_category');
   }
 
+  id: any;
+  isEdit: boolean = false;
+  
+  submitting:boolean = false;
+  categoryService:any;
+
+  name:string;
+  description:string;
+  image:string;
+  status:number;
+  
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.id = this.route.snapshot.params['id'];
     if(this.id == null){
       this.isEdit=false;
+      this.setDefaultData();
     }else{
       this.isEdit=true;
-
     }
 
     if(this.isEdit){
@@ -64,128 +46,132 @@ export class AddComponent implements OnInit {
     }
   }
 
+  setDefaultData(){
+    this.status = 1;
+  }
+
   async setData(){
-    this.category = await innoway2.api.module('product_category').get(this.id);
-    console.log('Set Data', this.category );
-    this.form.controls['name'].setValue(this.category.name);
-    this.form.controls['description'].setValue(this.category.description);
-    this.form.controls['image'].setValue(this.category.image);
-    this.ref.detectChanges();
-  }
-
-  onChangeTopping(index){
-    this.indexSelectedTopping=index;
-  }
-
-  onChangeStatus(index){
-    this.indexSelectedStatus=index;
-  }
-
-  submitAndNew(){
-    alert(this.form.valid);
-    if(this.form.valid){
-      this.addToppingValue(false);
-    }else{
-      this.createNotification("Xảy ra lỗi", "Nội dung chưa hợp lệ!");
-    }
-  }
-
-  submitAndClose(){
-    if(this.form.valid){
-      this.addToppingValue(true);
-    }else{
-      this.createNotification("Xảy ra lỗi", "Nội dung chưa hợp lệ!");
-    }
-  }
-
-  updateAndClose(){
-    this.category={
-        "name":this.form.controls['name'].value,
-        "description":this.form.controls['description'].value,
-        "image":this.form.controls['image'].value.toString(),
-        "status":this.statuses[this.indexSelectedStatus].toString()
-    };
-
-    // alert(JSON.stringify(this.category));
-    if(this.form.valid){
-      innoway2.api.module('product_category').update(this.id,this.category).then(data =>{
-        this.zone.run(()=>{
-          this.createNotification(this.category.name, "Cập nhật "+this.category.name+" thành công!");
-        });
-      }).catch(err =>{
-        console.error(err);
+    try {
+      let category = await this.categoryService.get(this.id,{
+        fields: ["name","description","image","status"]
       });
+      this.name = category.name
+      this.image = category.image
+      this.description = category.description
+      this.status = category.status
+    }catch(err){
+      try { await this.alertItemNotFound()} catch(err){}
+      this.router.navigate(['product-type'])
     }
   }
 
-  addToppingValue(isNagativeToDashboard){
-    this.category={
-        "name":this.form.controls['name'].value,
-        "description":this.form.controls['description'].value,
-        "image":this.form.controls['image'].value,
-        "status":this.statuses[this.indexSelectedStatus].toString()
-    };
-
-    // alert(JSON.stringify(this.category));
-
-    innoway2.api.module('product_category').add(this.category).then(data =>{
-        this.zone.run(()=>{
-          this.createNotification(this.category.name, "Thêm "+this.category.name+" thành công!");
-        });
-        if(isNagativeToDashboard){
-          this.router.navigate(['/dashboard']);
-        }else{
-          this.category=[];
-          this.form.controls['name'].setValue("");
-          this.form.controls['description'].setValue("");
-          this.form.controls['image'].setValue("");
-        }
-    }).catch(err =>{
-      console.error(err);
-    });
+  backToList(){
+    this.router.navigate(['/product-type/list'])
   }
 
-  unmaskPrice(raw){
-    let price = parseFloat(raw.replace(new RegExp("(,)|(Đồng)|(\ )","g"),""));
-    this.form.controls['price'].setValue(price);
-    return price;
+  alertItemNotFound(){
+    swal({
+      title: 'Không còn tồn tại',
+      type: 'warning',
+      timer: 2000
+    })
   }
 
-  createNotification(title, content) {
-    this._service.success(
-	    title.toString(),
-	    content.toString(),
-	    {
-	        showProgressBar: true,
-	        pauseOnHover: false,
-	        clickToClose: false,             
-	    }
-    )
+  alertAddSuccess(){
+    return swal({
+      title: 'Đã thêm',
+      type: 'success',
+      timer: 2000,
+    })
   }
 
-  errorHandler(event){
-
+  alertUpdateSuccess(){
+    return swal({
+      title: 'Đã cập nhật',
+      type: 'success',
+      timer: 2000,
+    })
   }
 
-  validateData(isEdit, data, field){
-    let output;
-    if(isEdit){
-      if(data==null){
-        output="";
-        this.category[field]="";
-      }else{
-        output=data;
-        this.category[field]=data;
-      }
+  alertFormNotValid(){
+    return swal({
+      title: 'Nội dung nhập không hợp lệ',
+      type: 'warning',
+      timer: 2000,
+    })
+  }
+
+  alertAddFailed(){
+    return swal({
+      title: 'Thêm không thành công',
+      type: 'warning',
+      timer: 2000,
+    })
+  }
+
+  alertUpdateFailed(){
+    return swal({
+      title: 'Cập nhật không thành công',
+      type: 'warning',
+      timer: 2000,
+    })
+  }
+
+  async addItem(form:NgForm){
+    if(form.valid){
+      let {name,description,image} = this;
+      await this.categoryService.add({name,description,image})
+      this.alertAddSuccess();
+      form.reset();
     }else{
-      if(data==null){
-        output="";
-        this.category[field]="";
-      }else{
-        output=data;
-        this.category[field]=data;
-      }
+      this.alertFormNotValid();
     }
-    return output;
+  }
+
+  async updateItem(form:NgForm){
+    if(form.valid){
+      let {name,description,image,status} = this;
+      await this.categoryService.update(this.id,{name,description,image,status})
+      this.alertUpdateSuccess();
+      form.reset();
+    }else{
+      this.alertFormNotValid();
+    }
+  }
+
+  async submitAndNew(form:NgForm){
+    console.log('submit',form);
+    this.submitting = true;
+    try {
+      await this.addItem(form);
+    }catch(err){
+      this.alertAddFailed()
+    }finally{
+      this.submitting = false;
+    }
+  }
+
+  async submitAndClose(form:NgForm){
+    this.submitting = true;
+    try {
+      await this.addItem(form);
+      this.backToList();
+    }catch(err){
+      this.alertAddFailed()
+    }finally{
+      this.submitting = false;
+    }
+  }
+
+  async updateAndClose(form:NgForm){
+    this.submitting = true;
+    try {
+      await this.updateItem(form);
+      this.backToList();
+    }catch(err){
+      this.alertUpdateFailed();
+    }finally{
+      this.submitting = false;
+    }
   }
 }
