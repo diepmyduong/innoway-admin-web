@@ -52,6 +52,7 @@ export class ProductTypeComponent implements OnInit {
     },this.query);
     this.items = await this.innoway.getAll('product_category',query);
     this.itemCount = this.categoryService.currentPageCount;
+    this.ref.detectChanges();
     return this.items;
   }
 
@@ -109,7 +110,7 @@ export class ProductTypeComponent implements OnInit {
     try {
       try { await this.confirmDelete() } catch(err) { return };
       await this.categoryService.delete(item.id)
-      this.ref.detectChanges();
+      this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     }catch(err){
       this.alertCannotDelete();
@@ -128,6 +129,7 @@ export class ProductTypeComponent implements OnInit {
     try {
       try { await this.confirmDelete() } catch(err) { return };
       await this.categoryService.deleteAll(ids)
+      this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     }catch(err){
