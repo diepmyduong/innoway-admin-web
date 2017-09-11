@@ -10,6 +10,10 @@ declare let swal:any;
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit {
+  categoryService:any;
+  id:string;
+  item:any;
+  itemFields = ['$all']
 
   constructor(
     private route: ActivatedRoute,
@@ -18,11 +22,6 @@ export class DetailComponent implements OnInit {
   ) {
   	this.categoryService = innoway.getService('product_category');
   }
-
-  categoryService:any;
-  id:string;
-  item:any;
-  itemFields = ['$all']
 
   ngOnInit() {
 

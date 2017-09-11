@@ -1,161 +1,204 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef, ViewContainerRef } from '@angular/core';
+import { PageService } from "app/chatbot/services/page.service";
+import { Modal } from "angular2-modal/plugins/bootstrap";
+import { NotificationsService } from "angular2-notifications";
+import { AddPageInterface } from "../../interface/addPageInterface"
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { NotificationsService } from 'angular2-notifications';
-import { CustomValidators } from 'ng2-validation';
-import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+import { FormGroup, FormControl, Validators, NgForm } from "@angular/forms";
+import { CustomValidators } from "ng2-validation/dist";
+import { InnowayService } from '../../services'
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-declare var innoway2:any;
+declare var swal: any;
 
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class AddComponent implements OnInit {
-  
-  form: FormGroup= null;
+
+export class AddComponent implements OnInit, AddPageInterface {
+  id: any;
   isEdit: boolean = false;
-  statuses: string[]=['Hoạt động','Không hoạt động'];
-  indexSelectedStatus: number = 0;
-
-  indexSelectedTopping: number = 0;
-  toppingValue: any = [];
-  toppingTypes: [any];
-  currentToppingValue: any = [];
-  currentTopping: any =[];
-
-  public mask = createNumberMask({
-    prefix: '',
-    suffix: ' Đồng'
-  });
-
-  public notification_option = {
-    position: ["top", "right"],
-    timeOut: 1000,
-    lastOnBottom: true,
-  };
+  submitting: boolean = false;
+  toppingService: any;
+  toppingValueService: any;
+  name: string;
+  description: string;
+  price: string;
+  status: number = 1;
+  topping_id: string;
+  toppings: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  toppingDefault: any;
 
   constructor(
-    private zone:NgZone,
     private route: ActivatedRoute,
     private router: Router,
-    private _service: NotificationsService,
-  ) { 
-      this.form = new FormGroup({
-        name: new FormControl('', [Validators.required]),
-        av_price: new FormControl('', Validators.required),
-        price: new FormControl('', null),
-        description: new FormControl('', null)
+    private ref: ChangeDetectorRef,
+    public innoway: InnowayService) {
+    this.toppingService = innoway.getService('topping');
+    this.toppingValueService = innoway.getService('topping_value');
+  }
+
+  ngOnInit(): void {
+    this.id = this.route.snapshot.params['id'];
+    if (this.id == null) {
+      this.isEdit = false;
+      this.setDefaultData();
+    } else {
+      this.isEdit = true;
+    }
+
+    if (this.isEdit) {
+      this.setData();
+    }
+
+    this.loadToppingData();
+  }
+
+  setDefaultData() {
+    this.status = 1;
+  }
+
+  async loadToppingData() {
+    try {
+      let data = await this.innoway.getAll('topping', {
+        fields: ["id", "name"]
       });
-      this.form.controls['av_price'].valueChanges.subscribe(this.unmaskPrice.bind(this))
-  }
-
-  ngOnInit() {
-    let id = this.route.snapshot.paramMap.get('id');
-    if(id == null){
-      this.isEdit=false;
-    }else{
-      this.isEdit=true;
-    }
-
-  	innoway2.api.module('topping').getAll().then(data =>{
-      this.zone.run(()=>{
-         this.toppingTypes=data;
-      })
-    }).catch(err =>{
-      console.error(err);
-    });
-
-    if(this.isEdit){
-      innoway2.api.module('topping_value').get(id).then(data =>{
-        this.zone.run(()=>{
-          this.currentToppingValue=data;
-          this.loadTopping(this.currentToppingValue.topping_id);
-        });
-      }).catch(err =>{
-        console.error(err);
-      })
+      this.toppings = data._value;
+      this.topping_id = this.toppings[0].name;
+      // this.topping_id.value=this.toppings[0].name;
+      this.ref.detectChanges();
+    } catch (err) {
+      try { await this.alertItemNotFound() } catch (err) { }
+      this.router.navigate(['topping'])
     }
   }
 
-  loadTopping(topping_id){
-    innoway2.api.module('topping').get(topping_id).then(data =>{
-      this.zone.run(()=>{  
-        this.currentTopping=data;
+  async setData() {
+    try {
+      let data = await this.toppingValueService.get(this.id, {
+        fields: ["name", "topping_id", "description", "price", "status"]
       });
-    }).catch(err =>{
-      console.error(err);
-    });
-  }
-
-  onChangeTopping(index){
-    this.indexSelectedTopping=index;
-  }
-
-  onChangeStatus(index){
-    this.indexSelectedStatus=index;
-  }
-
-  submitAndNew(){
-
-    alert(this.form.valid);
-
-    if(this.form.valid){
-      this.addToppingValue();
+      this.name = data.name;
+      this.topping_id = data.topping;
+      this.description = data.description;
+      this.price = data.price;
+      this.status = data.status;
+    } catch (err) {
+      try { await this.alertItemNotFound() } catch (err) { }
+      this.router.navigate(['topping'])
     }
   }
 
-  submitAndClose(){
-    if(this.form.valid){
-      this.addToppingValue();
-      this.zone.runOutsideAngular(() => {
-          location.reload();
-      });
+  backToList() {
+    this.router.navigate(['/topping/list'])
+  }
+
+  alertItemNotFound() {
+    swal({
+      title: 'Không còn tồn tại',
+      type: 'warning',
+      timer: 2000
+    })
+  }
+
+  alertAddSuccess() {
+    return swal({
+      title: 'Đã thêm',
+      type: 'success',
+      timer: 2000,
+    })
+  }
+
+  alertUpdateSuccess() {
+    return swal({
+      title: 'Đã cập nhật',
+      type: 'success',
+      timer: 2000,
+    })
+  }
+
+  alertFormNotValid() {
+    return swal({
+      title: 'Nội dung nhập không hợp lệ',
+      type: 'warning',
+      timer: 2000,
+    })
+  }
+
+  alertAddFailed() {
+    return swal({
+      title: 'Thêm không thành công',
+      type: 'warning',
+      timer: 2000,
+    })
+  }
+
+  alertUpdateFailed() {
+    return swal({
+      title: 'Cập nhật không thành công',
+      type: 'warning',
+      timer: 2000,
+    })
+  }
+
+  async addItem(form: NgForm) {
+    if (form.valid) {
+      let { name, topping_id, description, price, status } = this;
+      await this.toppingValueService.add({ name, topping_id, description, price, status })
+      this.alertAddSuccess();
+      form.reset();
+      form.controls["status"].setValue(1);
+    } else {
+      this.alertFormNotValid();
     }
   }
 
-  updateAndClose(){
-
+  async updateItem(form: NgForm) {
+    if (form.valid) {
+      let { name, topping_id, description, price, status } = this;
+      await this.toppingValueService.update(this.id, { name, topping_id, description, price, status })
+      this.alertUpdateSuccess();
+      form.reset();
+    } else {
+      this.alertFormNotValid();
+    }
   }
 
-  addToppingValue(){
-    this.toppingValue={
-        "name":this.form.controls['name'].value,
-        "price":this.form.controls['price'].value,
-        "description":this.form.controls['description'].value,
-        "topping_id":this.toppingTypes[this.indexSelectedTopping].id,
-        "status":this.statuses[this.indexSelectedStatus]
-      };
-
-    alert(Object.keys(this.toppingValue)+ " " +this.toppingValue.topping_id+ " "+this.toppingValue.status);
-
-    this.createNotification();
-
-    // innoway2.api.module('topping_value').add(this.toppingValue).then(data =>{
-    //     this.createNotification();
-    //     alert(data.code);
-    // }).catch(err =>{
-    //   console.error(err);
-    // });
+  async submitAndNew(form: NgForm) {
+    console.log('submit', form);
+    this.submitting = true;
+    try {
+      await this.addItem(form);
+    } catch (err) {
+      this.alertAddFailed()
+    } finally {
+      this.submitting = false;
+    }
   }
 
-  unmaskPrice(raw){
-    let price = parseFloat(raw.replace(new RegExp("(,)|(Đồng)|(\ )","g"),""));
-    this.form.controls['price'].setValue(price);
-    return price;
+  async submitAndClose(form: NgForm) {
+    this.submitting = true;
+    try {
+      await this.addItem(form);
+      this.backToList();
+    } catch (err) {
+      this.alertAddFailed()
+    } finally {
+      this.submitting = false;
+    }
   }
 
-  createNotification() {
-    this._service.success(
-        this.toppingValue.name,
-        'Được thêm thành công',
-        {
-            showProgressBar: true,
-            pauseOnHover: false,
-            clickToClose: false,             
-        }
-    )
+  async updateAndClose(form: NgForm) {
+    this.submitting = true;
+    try {
+      await this.updateItem(form);
+      this.backToList();
+    } catch (err) {
+      this.alertUpdateFailed();
+    } finally {
+      this.submitting = false;
+    }
   }
-
 }

@@ -20,6 +20,8 @@ import { InnowayServiceService } from '../services/innoway-service.service'
 import { UploadImageByUrlComponent } from '../modal/upload-image-by-url/upload-image-by-url.component';
 import { ModalModule as Ng2ModalModule } from 'angular2-modal';
 import { ModalModule as CustomModal} from '../modal/modal.module';
+import { LaddaModule } from 'angular2-ladda';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 @NgModule({})
 export declare class Ng2UiSwitchModule extends UiSwitchModule {}
@@ -43,7 +45,9 @@ export declare class Ng2UiSwitchModule extends UiSwitchModule {}
     CustomFormsModule,
     SelectModule,
     ModalModule.forRoot(),
-    CustomModal
+    CustomModal,
+    LaddaModule,
+    DataTableModule
   ],
   declarations: [ToppingTypeComponent, AddComponent, DetailComponent],
   providers: [InnowayServiceService]

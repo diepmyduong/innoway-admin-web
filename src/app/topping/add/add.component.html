@@ -1,60 +1,78 @@
 <div class="animated fadeIn">
-  <div class="row">
+  <form class="row" #itemFrm="ngForm">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <strong>Thông tin</strong>
+          <strong>{{isEdit?"Cập nhật":"Thêm"}} topping</strong>
         </div>
         <div class="card-block">
-          <form [formGroup]="form">
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Topping</label>
               <div class="col-md-8">
-                <input type="text" formControlName="nameInput" class="form-control"/>
-                <!-- <p *ngIf="form.controls.name.errors?.required">(Không được bỏ trống)</p> -->
+                <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name"
+                  class="form-control" [placeholder]="'Nhập tên loại topping'" required/>
+                <small *ngIf="nameControl.errors?.required"
+                class="text-muted danger" >
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Giá</label>
+              <label class="col-md-4 form-control-label" for="select">Loại topping</label>
               <div class="col-md-8">
-                <input [textMask]="{mask: mask}" type="text" formControlName="av_price" #av_price class="form-control" placeholder="{{isEdit||currentToppingValue.price==null?'Nhập giá topping':null}}" value={{currentToppingValue.price}}/>
-                <input type="text" [hidden]="true" formControlName="priceInput" class="form-control"/>
-                <!-- <p *ngIf="form.controls.av_price.errors?.required">(Không được bỏ trống)</p> -->
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Loại topping</label>
-              <div class="col-md-8">
-                <select id="select_topping" class="form-control" formControlName="toppingTypeInput" #topping>
-                  <option *ngFor="let toppingType of toppingTypes;let i = index" [value]="i" [attr.selected]="i == 0 ? true : null">{{toppingType.name==null?'':toppingType.name}}</option>
+                <select id="select1" #topping_idControl="ngModel" [(ngModel)]="topping_id" name="topping_id" class="form-control">
+                  <option *ngFor="let v of toppings" [value]="v.id">
+                    {{v.name}}
+                  </option>
                 </select>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
               <div class="col-md-8">
-                <textarea id="textarea-input" name="description" rows="5" class="form-control" formControlName="descriptionInput"></textarea>
+                <textarea id="textarea-input" #descriptionControl="ngModel" rows="5" [(ngModel)]="description" name="description"
+                  class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
+              </div>
+   			    </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Giá topping</label>
+              <div class="col-md-8">
+
+                <input type="text" #nameControl="ngModel" [(ngModel)]="price" name="price"
+                  class="form-control" [placeholder]="'Nhập giá'" required/>
+                <!-- <small *ngIf="priceControl.errors?.required"
+                class="text-muted danger" >
+                  (Không được bỏ trống)
+                </small> -->
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
               <div class="col-md-8">
-                <select id="select" name="select" class="form-control" [attr.selected]="i == 0 ? true : null" formControlName="statusInput" #status>
-                  <option *ngFor="let status of statuses;let i = index" [value]="i">{{status}}</option>
+                <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
+                  <option *ngFor="let v of [0,1]" [value]="v">
+                    {{ v===1?"Hoạt động":"Không hoạt động"}}
+                  </option>
                 </select>
               </div>
             </div>
-          </form>
         </div>
-        <div class="card-block">
-          <button type="submit" class="btn btn-sm btn-primary" *ngIf="!isUpdate" (click)="submitAndNew()"> Submit &amp; New</button>
-          <button type="submit" class="btn btn-sm btn-success" *ngIf="!isUpdate" (click)="submitAndClose()"> Submit &amp; Close</button>
-          <button type="submit" class="btn btn-sm btn-primary" *ngIf="isUpdate" (click)="updateAndClose()"> Update &amp; Close</button>
-          <button type="submit" class="btn btn-sm btn-primary" *ngIf="isUpdate" (click)="deleteAndClose()"> Delete &amp; Close</button>
+        <div class="card-footer">
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit"
+            class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; New
+          </button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit"
+            class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; Close
+          </button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit"
+            class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Update &amp; Close
+          </button>
         </div>
       </div>
     </div>
-  </div>
+    <!--/.col-->
+  </form>
 </div>
-
-<simple-notifications [options]="notification_option"></simple-notifications>

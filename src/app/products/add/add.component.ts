@@ -39,7 +39,7 @@ export class AddComponent implements OnInit {
 
   images: Array<string> = [];
 
-  public notification_option = {
+  public notificationOption = {
     position: ["top", "right"],
     timeOut: 1000,
     lastOnBottom: true,
@@ -51,7 +51,7 @@ export class AddComponent implements OnInit {
     private zone: NgZone,
     private route: ActivatedRoute,
     private router: Router,
-    private _service: NotificationsService,
+    private notificationService: NotificationsService,
     private ref: ChangeDetectorRef,
     vcRef: ViewContainerRef
   ) {
@@ -100,7 +100,6 @@ export class AddComponent implements OnInit {
         this.items.push(item);
       });
     }
-    //alert(this.items[0]);
     this.ref.detectChanges();
   }
 
@@ -168,7 +167,6 @@ export class AddComponent implements OnInit {
       "stock": this.form.controls['stockInput'].value
     };
 
-    // alert(JSON.stringify(this.product));
     if (this.form.valid) {
       innoway2.api.module('product_product').update(this.id, this.product).then(data => {
         this.zone.run(() => {
@@ -194,8 +192,6 @@ export class AddComponent implements OnInit {
       "stock": this.form.controls['stockInput'].value
     };
 
-    // alert(JSON.stringify(this.product));
-
     innoway2.api.module('product_product').add(this.product).then(data => {
       this.zone.run(() => {
         this.createNotification(this.product.name, "Thêm " + this.product.name + " thành công!");
@@ -220,7 +216,7 @@ export class AddComponent implements OnInit {
   }
 
   createNotification(title, content) {
-    this._service.success(
+    this.notificationService.success(
       title.toString(),
       content.toString(),
       {
@@ -263,9 +259,7 @@ export class AddComponent implements OnInit {
 
   public selected(value: any): void {
     console.log('Selected value is: ', value);
-    // alert(JSON.stringify(value));
     this.addToppingValuesById(value.id);
-    //alert(this.toppings.length);
   }
 
   public removed(value: any): void {
@@ -281,13 +275,10 @@ export class AddComponent implements OnInit {
         this.toppingValues.forEach(toppingValue => {
           if (toppingValue[count].topping_id === id) {
             this.toppingValues[count] = this.toppingValues[count].filter(item => item.id !== id);
-            //throw Error();
           }
           count++;
         });
-        //this.toppings = this.toppings.filter(item => item.id !== id);
         this.countTopping--;
-        //throw Error();
         this.ref.detectChanges();
       }
     });
@@ -329,39 +320,5 @@ export class AddComponent implements OnInit {
       });
     });
   }
-
-  //  private addImage(){
-  //  	if(this.imageUrlsInput.length>0){
-  //  		let isAdd=true;
-  //   	for(let i = 0; i < this.imageUrlsInput.length; i++) {
-  // 	  if(this.imageUrlsInput.at(i).value==null||this.imageUrlsInput.at(i).value==''){
-  // 	  	alert("Error!");
-  // 	  	isAdd=false;
-  // 	  	break;
-  // 	  }
-  //     }
-  //     if(isAdd){
-  //     	// updateImageToUI
-  //     	this.imageUrlsInput.push(new FormControl());
-  //  			this.ref.detectChanges();
-  //     }
-  // }else{
-  // 	this.imageUrlsInput.push(new FormControl());
-  //  		this.ref.detectChanges();
-  // }
-  //  }
-
-  //  private updateImageToUI(data){
-  //  	this.images.push(data);
-  //  }
-
-  //  private deleteImage(index){
-  // 	this.imageUrlsInput.removeAt(index);
-  //  	this.ref.detectChanges();
-  //  }
-
-  //  updateImageUrl(event){
-  //  	alert(JSON.stringify(event));
-  //  }
 
 }

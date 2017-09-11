@@ -14,6 +14,9 @@ import { ToppingComponent } from './topping.component';
 import { AddComponent } from './add/add.component';
 import { DetailComponent } from './detail/detail.component';
 
+import { ModalModule as CustomModal} from '../modal/modal.module';
+import { LaddaModule } from 'angular2-ladda';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 @NgModule({
   imports: [
     CommonModule,
@@ -27,6 +30,9 @@ import { DetailComponent } from './detail/detail.component';
     TextMaskModule,
     SimpleNotificationsModule,
     PushNotificationsModule,
+    CustomModal,
+    LaddaModule,
+    DataTableModule
   ],
   declarations: [ToppingComponent, AddComponent, DetailComponent],
   exports: [

@@ -1,64 +1,76 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef, ViewContainerRef } from '@angular/core';
+import { PageService } from "app/chatbot/services/page.service";
+import { Modal } from "angular2-modal/plugins/bootstrap";
+import { NotificationsService } from "angular2-notifications";
+import { DetailPageInterface } from '../../interface/detailPageInterface';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { NgZone } from '@angular/core';
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { CustomValidators } from "ng2-validation/dist";
+import { InnowayService } from '../../services'
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-declare let innoway2:any;
+declare let swal: any;
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss']
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, DetailPageInterface {
 
-  id: string = "";
-  toppingValue: any = [];
-  topping: any = [];
+  toppingValueService: any;
+  id: string;
+  item: any;
+  itemFields: any = ["$all", {
+    topping: ["name"]
+  }];
 
-  constructor(private route: ActivatedRoute,
-  private router: Router,
-  private zone: NgZone) {
-  	
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    public innoway: InnowayService
+  ) {
+    this.toppingValueService = innoway.getService('topping_value');
   }
 
   ngOnInit() {
 
-   	this.id = this.route.snapshot.paramMap.get('id');
+    this.id = this.route.snapshot.params['id'];
 
-  	innoway2.api.module('topping_value').get(this.id).then(data =>{
-      this.zone.run(()=>{
-  		this.toppingValue=data;
-  		//alert(this.toppingValue.topping_id);
-  		this.loadTopping(this.toppingValue.topping_id);
-      });
-  	}).catch(err =>{
-  		console.error(err);
-  	})
+    if (this.id) {
+      this.setData()
+    } else {
+      this.alertItemNotFound()
+      this.backToList()
+    }
   }
 
-  loadTopping(topping_id){
-	innoway2.api.module('topping').get(topping_id).then(data =>{
-	  this.zone.run(()=>{
-	  	// alert(data.name);	
-		this.topping=data;
-	  });
-	}).catch(err =>{
-  		console.error(err);
-  		alert(err);
-  	});
+  async setData() {
+    try {
+      this.item = await this.toppingValueService.get(this.id, {
+        fields: this.itemFields
+      })
+    } catch (err) {
+      this.alertItemNotFound()
+      this.backToList()
+    }
   }
 
-  addItem(){
-	 this.router.navigate(['/topping/add']);
+  editItem() {
+    this.router.navigate(['/topping/add', this.id]);
   }
 
-  editItem(){
-  	 this.router.navigate(['/topping/add', this.id]);
+  backToList() {
+    this.router.navigate(['/topping/list'])
   }
 
-  deleteItem(){
-  	this.zone.runOutsideAngular(() => {
-    	location.reload();
-    });
+  alertItemNotFound() {
+    return swal({
+      title: 'Không còn tồn tại',
+      type: 'warning',
+      timer: 2000
+    })
   }
+
+
 }

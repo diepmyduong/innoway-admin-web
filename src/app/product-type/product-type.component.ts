@@ -1,82 +1,84 @@
-import { Component, OnInit, ChangeDetectorRef,ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { InnowayService } from '../services'
 
 import { DataTable } from 'angular-2-data-table-bootstrap4';
 
-declare let swal:any;
+import { ListPageInterface } from "./../interface/listPageInterface"
+
+declare let swal: any;
 
 @Component({
   selector: 'app-product-type',
   templateUrl: './product-type.component.html',
   styleUrls: ['./product-type.component.scss']
 })
-export class ProductTypeComponent implements OnInit {
+export class ProductTypeComponent implements OnInit, ListPageInterface {
 
   constructor(
-  	private router:Router,
+    private router: Router,
     public innoway: InnowayService,
     private ref: ChangeDetectorRef
-  ) { 
+  ) {
     this.categoryService = innoway.getService('product_category');
   }
 
-  categoryService:any;
-  items:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  itemCount = 0; // item total  count
-  thumbDefaultCategory: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
-  itemFields = ["$all"]; //Get All field
+  private categoryService: any;
+  public items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  public itemCount = 0; // item total  count
+  public thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
+  public itemFields = ["$all"]; //Get All field
 
   //Search bar
-  query:any = {} //query to search and paging items
-  searchTimeOut = 250; //milisecond
-  searchRef:any;  
+  public query: any = {} //query to search and paging items
+  public searchTimeOut = 250; //milisecond
+  public searchRef: any;
 
   @ViewChild(DataTable) itemsTable;
 
   ngOnInit() {
   }
 
-  async reloadItems(params){
-    let {limit, offset, sortBy, sortAsc} = params;
+  async reloadItems(params) {
+    let { limit, offset, sortBy, sortAsc } = params;
     this.query.limit = limit;
     this.query.offset = offset;
-    this.query.order = sortBy?[[sortBy,sortAsc?'ASC':'DESC']]:null;
+    this.query.order = sortBy ? [[sortBy, sortAsc ? 'ASC' : 'DESC']] : null;
     await this.getItems();
   }
 
-  async getItems(){
+  async getItems() {
     let query = Object.assign({
       fields: this.itemFields
-    },this.query);
-    this.items = await this.innoway.getAll('product_category',query);
+    }, this.query);
+    this.items = await this.innoway.getAll('product_category', query);
     this.itemCount = this.categoryService.currentPageCount;
     this.ref.detectChanges();
     return this.items;
   }
 
-  rowClick(event){
-    console.log('Row clicked',event);
+  rowClick(event) {
+    console.log('Row clicked', event);
   }
 
-  rowDoubleClick(event){
-    console.log('Row double click',event);
+  rowDoubleClick(event) {
+    console.log('Row double click', event);
   }
 
-  addItem(){
+  addItem() {
     this.router.navigate(['/product-type/add']);
   }
 
-  editItem(item){
+  editItem(item) {
     this.router.navigate(['/product-type/add', item.id]);
   }
 
-  viewItem(item){
+  viewItem(item) {
     this.router.navigate(['/product-type/detail', item.id]);
   }
 
-  async confirmDelete(){
+  async confirmDelete() {
     return await swal({
       title: 'Xoá',
       text: "Bạn có chắc la muốn xoá",
@@ -89,7 +91,7 @@ export class ProductTypeComponent implements OnInit {
     })
   }
 
-  async alertCannotDelete(){
+  async alertCannotDelete() {
     return await swal({
       title: 'Không thể xoá',
       type: 'warning',
@@ -97,7 +99,7 @@ export class ProductTypeComponent implements OnInit {
     });
   }
 
-  async alertDeleteSuccess(){
+  async alertDeleteSuccess() {
     return await swal({
       title: 'Xoá thành công',
       type: 'success',
@@ -105,55 +107,55 @@ export class ProductTypeComponent implements OnInit {
     });
   }
 
-  async deleteItem(item){
+  async deleteItem(item) {
     item.deleting = true;
     try {
-      try { await this.confirmDelete() } catch(err) { return };
+      try { await this.confirmDelete() } catch (err) { return };
       await this.categoryService.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
-    }catch(err){
+    } catch (err) {
       this.alertCannotDelete();
-    }finally{
+    } finally {
       item.deleting = false;
     }
   }
 
-  async deleteAll(){
+  async deleteAll() {
     let rows = this.itemsTable.selectedRows;
     let ids = [];
-    rows.forEach(row =>{
+    rows.forEach(row => {
       row.item.deleting = true;
       ids.push(row.item.id);
     });
     try {
-      try { await this.confirmDelete() } catch(err) { return };
+      try { await this.confirmDelete() } catch (err) { return };
       await this.categoryService.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
-    }catch(err){
+    } catch (err) {
       this.alertCannotDelete();
-    }finally{
-      rows.forEach(row =>{
+    } finally {
+      rows.forEach(row => {
         row.item.deleting = false;
       });
     }
-    
-    
+
+
   }
 
-  onSearch(e){
+  onSearch(e) {
     const key = e.target.value;
-    if(this.searchRef) clearTimeout(this.searchRef);
-    this.searchRef = setTimeout(()=>{
+    if (this.searchRef) clearTimeout(this.searchRef);
+    this.searchRef = setTimeout(() => {
       this.query.filter = {
         $or: {
-          name: { $iLike: `%${key}%`},
-          description: { $iLike: `%${key}%`},
+          name: { $iLike: `%${key}%` },
+          description: { $iLike: `%${key}%` },
         }
       }
       this.getItems();
-    },this.searchTimeOut);
+    }, this.searchTimeOut);
   }
 }

@@ -12,18 +12,9 @@ declare var swal:any;
 })
 export class AddComponent implements OnInit {
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private ref: ChangeDetectorRef,
-    public innoway: InnowayService
-  ) { 
-      this.categoryService = innoway.getService('product_category');
-  }
-
   id: any;
   isEdit: boolean = false;
-  
+
   submitting:boolean = false;
   categoryService:any;
 
@@ -32,6 +23,16 @@ export class AddComponent implements OnInit {
   image:string;
   status:number;
   
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private ref: ChangeDetectorRef,
+    public innoway: InnowayService
+  ) {
+      this.categoryService = innoway.getService('product_category');
+  }
+
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     if(this.id == null){

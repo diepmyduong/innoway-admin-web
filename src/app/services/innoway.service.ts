@@ -20,7 +20,12 @@ export class InnowayService {
     'customer',
     'topping',
     'basket',
-    'topping_value'
+    'topping_value',
+    'employee',
+    'bill',
+    'unit',
+    'attribute',
+    'catefory'
   ]
   service_items:any = {}
   services:any = {}
