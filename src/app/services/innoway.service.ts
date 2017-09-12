@@ -25,7 +25,7 @@ export class InnowayService {
     'bill',
     'unit',
     'attribute',
-    'catefory'
+    'category'
   ]
   service_items:any = {}
   services:any = {}

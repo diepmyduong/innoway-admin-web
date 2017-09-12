@@ -1,20 +1,10 @@
-import { Component, OnInit, NgZone, ViewChild, ChangeDetectorRef, ViewContainerRef } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { NotificationsService } from 'angular2-notifications';
-import { CustomValidators } from 'ng2-validation';
+import { Component, OnInit, ChangeDetectorRef , ViewChild} from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { NgForm,NgModel } from '@angular/forms';
+import { InnowayService } from '../../services';
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-import { ModalDirective } from 'ng2-bootstrap/modal/modal.component';
-import { UploadImageByUrlComponent, TextCardModalContext } from '../../modal/upload-image-by-url/upload-image-by-url.component';
-import { overlayConfigFactory } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap';
-import { PageService } from '../../chatbot/services/page.service';
-import { Observable } from 'rxjs/Observable';
-
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/filter';
-
-declare var innoway2: any;
+declare var swal, _: any;
 
 @Component({
   selector: 'app-add',
@@ -23,62 +13,55 @@ declare var innoway2: any;
 })
 export class AddComponent implements OnInit {
 
-  form: FormGroup = null;
-  id: any = [];
+  id: any;
   isEdit: boolean = false;
-  statuses: number[] = [1, 0];
-  indexSelectedStatus: number = 0;
-  indexSelectedCategory: number = 0;
-  thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
 
-  product: any = [];
-  categories: any[] = [{}];
-  toppings: any[] = [{}];
-  toppingValues: any[][] = [];
-  countTopping: number = 0;
+  submitting: boolean = false;
+  categoryService: any;
+  toppingService: any;
+  unitService: any;
+  attributeService: any;
 
-  images: Array<string> = [];
+  name: string;
+  description: string;
+  image: string;
+  category: string;
+  status: number = 1;
+  topping: string;
+  basePrice: string;
+  price: string;
+  images: any[];
+  unit: string;
+  attribute: string;
+  selectedToppingValue: string;
 
-  public notificationOption = {
-    position: ["top", "right"],
-    timeOut: 1000,
-    lastOnBottom: true,
-  };
+  toppingValues: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  categories: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  toppings: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  units: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  attributes: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
+  @ViewChild('categoryControl') categoryControl:NgModel;
 
   constructor(
-    private modal: Modal,
-    private pageService: PageService,
-    private zone: NgZone,
     private route: ActivatedRoute,
     private router: Router,
-    private notificationService: NotificationsService,
     private ref: ChangeDetectorRef,
-    vcRef: ViewContainerRef
+    public innoway: InnowayService
   ) {
-    this.form = new FormGroup({
-      nameInput: new FormControl(null, [Validators.required, Validators.minLength(6)]),
-      priceInput: new FormControl(null, [Validators.required, CustomValidators.min(1000)]),
-      basePriceInput: new FormControl(null),
-      descriptionInput: new FormControl(null),
-      toppingInput: new FormControl(null),
-      categoryInput: new FormControl(null),
-      unitInput: new FormControl(null),
-      attributeInput: new FormControl(null),
-      statusInput: new FormControl(null, Validators.required),
-      imageUrlsInput: new FormArray([])
-    });
-
-    modal.overlay.defaultViewContainer = vcRef;
+    this.categoryService = innoway.getService('product_category');
+    this.toppingService = innoway.getService('topping');
+    // this.unitService = innoway.getService('unit');
+    // this.attributeService = innoway.getService('attribute');
   }
 
-  ngOnInit() {
-
-    this.getCategories();
-    this.getToppings();
-
-    this.id = this.route.snapshot.paramMap.get('id');
+  async ngOnInit() {
+    this.id = this.route.snapshot.params['id'];
+    await this.loadCategoryData();
+    this.loadToppingData();
     if (this.id == null) {
       this.isEdit = false;
+      this.setDefaultData();
     } else {
       this.isEdit = true;
     }
@@ -86,239 +69,266 @@ export class AddComponent implements OnInit {
     if (this.isEdit) {
       this.setData();
     }
+
+
   }
 
-  async getToppings() {
-    this.toppings = await innoway2.api.module('topping').getAll();
-    if (this.toppings != null && this.toppings.length > 0) {
-      this.value = this.toppings[0].name;
-      this.toppings.forEach(topping => {
-        let item = {
-          text: topping.name,
-          id: topping.id
-        };
-        this.items.push(item);
-      });
+  setDefaultData() {
+    this.status = 1;
+    this.category = this.categories.getValue()[0].id;
+    return {
+      status : this.status,
+      category : this.category
     }
-    this.ref.detectChanges();
   }
 
-  async addToppingValuesById(id) {
-    this.toppingValues[this.countTopping] = [];
-    this.toppingValues[this.countTopping] = await innoway2.api.module('topping_value').getAllWithQuery({
-      topping_id: this.toppings[this.countTopping].id
+  async loadCategoryData() {
+    try {
+      this.categories = await this.innoway.getAll('product_category', {
+        fields: ["id", "name"]
+      });
+      this.ref.detectChanges();
+    } catch (err) {
+      console.log("error",err);
+      try { await this.alertItemNotFound() } catch (err) { }
+      this.router.navigate(['products'])
+    }
+  }
+
+  async loadToppingData() {
+    try {
+      this.toppings = await this.innoway.getAll('topping', {
+        fields: ["id", "name"]
+      });
+      alert(JSON.stringify(this.toppings));
+      this.toppings.subscribe(toppings => {
+        let items = toppings.map(topping => {
+          return {
+            text: topping.name,
+            id: topping.id
+          }
+        })
+        this.selectedToppingValues.next(items);
+        console.log("selectedToppingValues",items)
+        // let toppingValues = toppings.map(topping => {
+        //   return topping.values.name;
+        // })
+        //this.toppingValues.next(toppingValues);
+        //alert(JSON.stringify(toppings));
+        this.ref.detectChanges();
+      });
+    } catch (err) {
+      console.log("ERROR", err);
+      try { await this.alertItemNotFound() } catch (err) { }
+      // this.router.navigate(['products'])
+    }
+  }
+
+  async getToppingValues(topping_id: string) {
+    let topping = await this.toppingService.get(topping_id, {
+      fields: [{
+        values: ["$all"]
+      }]
     });
-    alert(this.toppingValues[this.countTopping].length);
-    this.countTopping++;
-    this.ref.detectChanges();
+    return topping.values;
   }
 
-  async getCategories() {
-    this.categories = await innoway2.api.module('product_category').getAll();
-    this.ref.detectChanges();
+  async loadToppingValueData(toppingId: string) {
+    // try {
+    //   let data = await this.innoway.getAll('topping_value', {
+    //     fields: ["id", "name"],
+    //     filter: ["toppingId"]
+    //   });
+    //   this.toppings = data._value;
+    //   this.topping = this.toppings[0].name;
+    //   alert(this.toppings);
+    //   // this.topping_id.value=this.toppings[0].name;
+    //   this.ref.detectChanges();
+    // } catch (err) {
+    //   try { await this.alertItemNotFound() } catch (err) { }
+    //   this.router.navigate(['products'])
+    // }
   }
 
   async setData() {
-    this.product = await innoway2.api.module('product').get(this.id);
-    console.log('Set Data', this.product);
-    this.form.controls['name'].setValue(this.product.name);
-    this.form.controls['description'].setValue(this.product.description);
-    this.form.controls['image'].setValue(this.product.image);
-    this.ref.detectChanges();
+    // try {
+    //   let category = await this.categoryService.get(this.id, {
+    //     fields: ["name", "description", "image", "status"]
+    //   });
+    //   this.name = category.name
+    //   this.image = category.image
+    //   this.description = category.description
+    //   this.status = category.status
+    // } catch (err) {
+    //   try { await this.alertItemNotFound() } catch (err) { }
+    //   this.router.navigate(['product-type'])
+    // }
   }
 
-  onChangeCategory(index) {
-    this.indexSelectedCategory = index;
-    alert(index);
+  backToList() {
+    this.router.navigate(['/product-type/list'])
   }
 
-  onChangeStatus(index) {
-    this.indexSelectedStatus = index;
+  alertItemNotFound() {
+    swal({
+      title: 'Không còn tồn tại',
+      type: 'warning',
+      timer: 2000
+    })
   }
 
-  submitAndNew() {
-    alert(this.form.controls['statusInput'].value + " - " + this.form.controls['categoryInput'].value);
-    if (this.form.valid) {
-      this.addToppingValue(false);
-    } else {
-      this.createNotification("Xảy ra lỗi", "Nội dung chưa hợp lệ!");
-    }
+  alertAddSuccess() {
+    return swal({
+      title: 'Đã thêm',
+      type: 'success',
+      timer: 2000,
+    })
   }
 
-  submitAndClose() {
-    if (this.form.valid) {
-      this.addToppingValue(true);
-    } else {
-      this.createNotification("Xảy ra lỗi", "Nội dung chưa hợp lệ!");
-    }
+  alertUpdateSuccess() {
+    return swal({
+      title: 'Đã cập nhật',
+      type: 'success',
+      timer: 2000,
+    })
   }
 
-  updateAndClose() {
-    this.product = {
-      "name": this.form.controls['nameInput'].value,
-      "price": this.form.controls['priceInput'].value,
-      "description": this.form.controls['descriptionInput'].value,
-      "category": this.form.controls['categoryInput'].value,
-      "base_price": this.form.controls['basePriceInput'].value,
-      "topping": this.form.controls['toppingInput'].value,
-      "unit": this.form.controls['unitInput'].value,
-      "attribute": this.form.controls['attributeInput'].value,
-      "status": this.form.controls['statusInput'].value,
-      "stock": this.form.controls['stockInput'].value
-    };
-
-    if (this.form.valid) {
-      innoway2.api.module('product_product').update(this.id, this.product).then(data => {
-        this.zone.run(() => {
-          this.createNotification(this.product.name, "Cập nhật " + this.product.name + " thành công!");
-        });
-      }).catch(err => {
-        console.error(err);
-      });
-    }
+  alertFormNotValid() {
+    return swal({
+      title: 'Nội dung nhập không hợp lệ',
+      type: 'warning',
+      timer: 2000,
+    })
   }
 
-  addToppingValue(isNagativeToDashboard) {
-    this.product = {
-      "name": this.form.controls['nameInput'].value,
-      "price": this.form.controls['priceInput'].value,
-      "description": this.form.controls['descriptionInput'].value,
-      "category": this.form.controls['categoryInput'].value,
-      "base_price": this.form.controls['basePriceInput'].value,
-      "topping": this.form.controls['toppingInput'].value,
-      "unit": this.form.controls['unitInput'].value,
-      "attribute": this.form.controls['attributeInput'].value,
-      "status": this.form.controls['statusInput'].value,
-      "stock": this.form.controls['stockInput'].value
-    };
+  alertAddFailed() {
+    return swal({
+      title: 'Thêm không thành công',
+      type: 'warning',
+      timer: 2000,
+    })
+  }
 
-    innoway2.api.module('product_product').add(this.product).then(data => {
-      this.zone.run(() => {
-        this.createNotification(this.product.name, "Thêm " + this.product.name + " thành công!");
-      });
-      if (isNagativeToDashboard) {
-        this.router.navigate(['/dashboard']);
+  alertUpdateFailed() {
+    return swal({
+      title: 'Cập nhật không thành công',
+      type: 'warning',
+      timer: 2000,
+    })
+  }
+
+  async addItem(form: NgForm) {
+
+
+  }
+
+  async updateItem(form: NgForm) {
+    // if (form.valid) {
+    //   let { name, description, image, status } = this;
+    //   await this.categoryService.update(this.id, { name, description, image, status })
+    //   this.alertUpdateSuccess();
+    //   form.reset();
+    // } else {
+    //   this.alertFormNotValid();
+    // }
+  }
+
+  async submitAndNew(form: NgForm) {
+    this.submitting = true;
+    try {
+      if (form.valid) {
+        let { name, description, image, price , basePrice, unit, status } = this;
+        let category_id = this.category;
+        let productService = this.innoway.getService('product');
+        let product = await productService.add({ name, description, image, price , basePrice, unit, status, category_id })
+
+        this.alertAddSuccess();
+        form.resetForm(this.setDefaultData());
       } else {
-        this.product = [];
-        this.form.controls['name'].setValue("");
-        this.form.controls['description'].setValue("");
-        this.form.controls['image'].setValue("");
+        this.alertFormNotValid();
       }
-    }).catch(err => {
-      console.error(err);
-    });
-  }
-
-  unmaskPrice(raw) {
-    let price = parseFloat(raw.replace(new RegExp("(,)|(Đồng)|(\ )", "g"), ""));
-    this.form.controls['price'].setValue(price);
-    return price;
-  }
-
-  createNotification(title, content) {
-    this.notificationService.success(
-      title.toString(),
-      content.toString(),
-      {
-        showProgressBar: true,
-        pauseOnHover: false,
-        clickToClose: false,
-      }
-    )
-  }
-
-  errorHandler(event) {
-
-  }
-
-  validateData(isEdit, data, field) {
-    let output;
-    if (isEdit) {
-      if (data == null) {
-        output = "";
-        this.product[field] = "";
-      } else {
-        output = data;
-        this.product[field] = data;
-      }
-    } else {
-      if (data == null) {
-        output = "";
-        this.product[field] = "";
-      } else {
-        output = data;
-        this.product[field] = data;
-      }
+    }catch(err){
+      console.log('error',err);
+    }finally{
+      this.submitting = false;
     }
-    return output;
   }
+
+  async submitAndClose(form: NgForm) {
+    // this.submitting = true;
+    // try {
+    //   await this.addItem(form);
+    //   this.backToList();
+    // } catch (err) {
+    //   this.alertAddFailed()
+    // } finally {
+    //   this.submitting = false;
+    // }
+  }
+
+  async updateAndClose(form: NgForm) {
+    // this.submitting = true;
+    // try {
+    //   await this.updateItem(form);
+    //   this.backToList();
+    // } catch (err) {
+    //   this.alertUpdateFailed();
+    // } finally {
+    //   this.submitting = false;
+    // }
+  }
+
+
+  public selectedToppingValues: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   private value: any = [];
+  private _disabledV: string = '0';
+  private disabled: boolean = false;
 
-  public items: Array<any> = [];
+  private get disabledV(): string {
+    return this._disabledV;
+  }
 
-  public selected(value: any): void {
+  private set disabledV(value: string) {
+    this._disabledV = value;
+    this.disabled = this._disabledV === '1';
+  }
+
+  async selected(value: any) {
     console.log('Selected value is: ', value);
-    this.addToppingValuesById(value.id);
+    let { id } = value;
+    let values = await this.getToppingValues(id);
+    console.log('topping values',values);
+    let toppings = this.toppings.getValue();
+    console.log('toppings',toppings);
+    let index = _.findIndex(toppings, { id });
+    console.log('index',index);
+    console.log('topping',toppings[index]);
+    toppings[index].values = values;
+    toppings[index].selected = true;
+    this.toppings.next(toppings);
+
   }
 
   public removed(value: any): void {
+    let { id } = value;
+    let toppings = this.toppings.getValue();
+    let index = _.findIndex(toppings, { id });
+    toppings[index].selected = false;
+    this.toppings.next(toppings);
     console.log('Removed value is: ', value);
-    this.removeTopping(value.id);
-    alert(this.toppings.length);
-  }
-
-  private removeTopping(id) {
-    this.toppings.forEach(topping => {
-      if (topping.id === id) {
-        let count = 0;
-        this.toppingValues.forEach(toppingValue => {
-          if (toppingValue[count].topping_id === id) {
-            this.toppingValues[count] = this.toppingValues[count].filter(item => item.id !== id);
-          }
-          count++;
-        });
-        this.countTopping--;
-        this.ref.detectChanges();
-      }
-    });
   }
 
   public refreshValue(value: any): void {
     this.value = value;
+    // alert(value);
   }
 
   public itemsToString(value: Array<any> = []): string {
+    //alert(JSON.stringify(value));
     return value
       .map((item: any) => {
         return item.text;
       }).join(',');
   }
-
-  showModal(type, option = {}) {
-    switch (type) {
-      case "text_card":
-        return this.modal.open(UploadImageByUrlComponent,
-          overlayConfigFactory(option, TextCardModalContext));
-      default:
-        break;
-    }
-  }
-
-  addImageModal() {
-    this.showModal("text_card", {
-      data: {
-        text: null
-      }
-    }).then(modal => {
-      modal.result.then(res => {
-        if (res) {
-          alert(JSON.stringify(res));
-          this.images.push(res.text);
-          this.ref.detectChanges();
-        }
-      });
-    });
-  }
-
 }
