@@ -32,6 +32,9 @@ import { ModalModule as CustomModal} from '../modal/modal.module';
 import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
+import { PipesModule } from '../pipes/pipes.module'
+import { SwiperModule } from 'angular2-useful-swiper';
+
 @NgModule({})
 export declare class Ng2UiSwitchModule extends UiSwitchModule {}
 
@@ -52,7 +55,9 @@ export declare class Ng2UiSwitchModule extends UiSwitchModule {}
     ModalModule.forRoot(),
     CustomModal,
     LaddaModule,
-    DataTableModule
+    DataTableModule,
+    PipesModule,
+    SwiperModule
     // UploadImageByUrlComponent
   ],
   declarations: [ProductsComponent, AddComponent, DetailComponent],  //UploadImageByUrlComponent

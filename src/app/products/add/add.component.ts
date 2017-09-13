@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm,NgModel } from '@angular/forms';
 import { InnowayService } from '../../services';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { SelectComponent } from 'ng2-select';
+import * as Ajv from 'ajv';
 
 declare var swal, _: any;
 
@@ -21,27 +23,41 @@ export class AddComponent implements OnInit {
   toppingService: any;
   unitService: any;
   attributeService: any;
+  productService:any;
 
   name: string;
   description: string;
-  image: string;
   category: string;
   status: number = 1;
   topping: string;
   basePrice: string;
   price: string;
-  images: any[];
+  list_image: any[] = [];
+  image_on_hover:number;
   unit: string;
   attribute: string;
-  selectedToppingValue: string;
+  thumb: string;
+  topping_items = new BehaviorSubject<any[]>([]);
 
-  toppingValues: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  categories: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  toppings: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  units: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  attributes: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  toppingValues = new BehaviorSubject<any[]>([]);
+  categories = new BehaviorSubject<any[]>([]);
+  toppings = new BehaviorSubject<any[]>([]);
+  units = new BehaviorSubject<any[]>([]);
+  attributes = new BehaviorSubject<any[]>([]);
 
   @ViewChild('categoryControl') categoryControl:NgModel;
+  @ViewChild('toppingSelecter') toppingSelecter:SelectComponent;
+  @ViewChild('imageSwiper') imageSwiper:any;
+
+  imageConfig  = {
+    pagination: '.swiper-pagination',
+    paginationClickable: true,
+    slidesPerView: 3,
+    centeredSlides: true,
+    nextButton: '.swiper-button-next',
+    prevButton: '.swiper-button-prev',
+    spaceBetween: 10
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -49,16 +65,16 @@ export class AddComponent implements OnInit {
     private ref: ChangeDetectorRef,
     public innoway: InnowayService
   ) {
+    //get Service
     this.categoryService = innoway.getService('product_category');
     this.toppingService = innoway.getService('topping');
-    // this.unitService = innoway.getService('unit');
-    // this.attributeService = innoway.getService('attribute');
+    this.productService = innoway.getService('product');
   }
 
   async ngOnInit() {
-    this.id = this.route.snapshot.params['id'];
-    await this.loadCategoryData();
-    this.loadToppingData();
+    this.id = this.route.snapshot.params['id']; //Get id params
+    await this.loadCategoryData(); //load categories
+    await this.loadToppingData(); //load toppings
     if (this.id == null) {
       this.isEdit = false;
       this.setDefaultData();
@@ -75,7 +91,17 @@ export class AddComponent implements OnInit {
 
   setDefaultData() {
     this.status = 1;
-    this.category = this.categories.getValue()[0].id;
+    if(this.categories.getValue()[0]){
+      this.category = this.categories.getValue()[0].id;
+    }
+    let toppings = this.toppings.getValue().map(topping =>{
+      topping.selected = false;
+      return topping;
+    });
+    this.toppingSelecter.active = []
+    this.toppings.next(toppings);
+    this.list_image = [];
+    this.thumb = null;
     return {
       status : this.status,
       category : this.category
@@ -87,11 +113,8 @@ export class AddComponent implements OnInit {
       this.categories = await this.innoway.getAll('product_category', {
         fields: ["id", "name"]
       });
-      this.ref.detectChanges();
     } catch (err) {
-      console.log("error",err);
-      try { await this.alertItemNotFound() } catch (err) { }
-      this.router.navigate(['products'])
+      console.error('Cannot load category',err);
     }
   }
 
@@ -100,7 +123,6 @@ export class AddComponent implements OnInit {
       this.toppings = await this.innoway.getAll('topping', {
         fields: ["id", "name"]
       });
-      alert(JSON.stringify(this.toppings));
       this.toppings.subscribe(toppings => {
         let items = toppings.map(topping => {
           return {
@@ -108,65 +130,67 @@ export class AddComponent implements OnInit {
             id: topping.id
           }
         })
-        this.selectedToppingValues.next(items);
-        console.log("selectedToppingValues",items)
-        // let toppingValues = toppings.map(topping => {
-        //   return topping.values.name;
-        // })
-        //this.toppingValues.next(toppingValues);
-        //alert(JSON.stringify(toppings));
-        this.ref.detectChanges();
+        this.topping_items.next(items);
       });
     } catch (err) {
-      console.log("ERROR", err);
-      try { await this.alertItemNotFound() } catch (err) { }
-      // this.router.navigate(['products'])
+      console.error("cannot load toppings",err);
     }
   }
 
   async getToppingValues(topping_id: string) {
-    let topping = await this.toppingService.get(topping_id, {
-      fields: [{
-        values: ["$all"]
-      }]
-    });
-    return topping.values;
-  }
-
-  async loadToppingValueData(toppingId: string) {
-    // try {
-    //   let data = await this.innoway.getAll('topping_value', {
-    //     fields: ["id", "name"],
-    //     filter: ["toppingId"]
-    //   });
-    //   this.toppings = data._value;
-    //   this.topping = this.toppings[0].name;
-    //   alert(this.toppings);
-    //   // this.topping_id.value=this.toppings[0].name;
-    //   this.ref.detectChanges();
-    // } catch (err) {
-    //   try { await this.alertItemNotFound() } catch (err) { }
-    //   this.router.navigate(['products'])
-    // }
+    try { 
+      let topping = await this.toppingService.get(topping_id, {
+        fields: [{
+          values: ["$all"]
+        }]
+      });
+      return topping.values;
+    }catch(err){
+      console.log('cannot load values',err)
+      return null
+    }
   }
 
   async setData() {
-    // try {
-    //   let category = await this.categoryService.get(this.id, {
-    //     fields: ["name", "description", "image", "status"]
-    //   });
-    //   this.name = category.name
-    //   this.image = category.image
-    //   this.description = category.description
-    //   this.status = category.status
-    // } catch (err) {
-    //   try { await this.alertItemNotFound() } catch (err) { }
-    //   this.router.navigate(['product-type'])
-    // }
+    try {
+      let product = await this.productService.get(this.id, {
+        fields: ["$all",{
+          toppings: ["id",{
+            topping: ["id","name",{
+              values: ["$all"]
+            }]
+          }]
+        }]
+      });
+      this.name = product.name
+      this.thumb = product.thumb
+      this.description = product.description
+      this.price = product.price
+      this.basePrice = product.basePrice
+      this.unit = product.unit
+      this.status = product.status
+      this.category = product.category_id
+      this.list_image = product.list_image
+      let toppings = this.toppings.getValue();
+      this.toppingSelecter.active =  product.toppings.map(product_topping =>{
+        let index = _.findIndex(toppings, { id: product_topping.topping.id });
+        toppings[index].values = product_topping.topping.values;
+        toppings[index].selected = true;
+        return {
+          id: product_topping.topping.id,
+          text: product_topping.topping.name
+        }
+      })
+      this.toppings.next(toppings);
+    } catch (err) {
+      console.log('ERROR',err);
+      try { await this.alertItemNotFound() } catch (err) { }
+      this.backToList()
+    }
   }
 
   backToList() {
-    this.router.navigate(['/product-type/list'])
+    this.router.navigate(['/products/list'])
   }
 
   alertItemNotFound() {
@@ -217,118 +241,149 @@ export class AddComponent implements OnInit {
     })
   }
 
-  async addItem(form: NgForm) {
-
-
+  async addImage(){
+    let image = await swal({
+      title: 'Nhập URL hình ảnh',
+      input: 'text',
+      showCancelButton: true,
+      cancelButtonText: 'Đóng',
+      confirmButtonText: 'Nhập',
+      showLoaderOnConfirm: true,
+      preConfirm: ((image)=> {
+        return new Promise((function (resolve, reject) {
+          let ajv = new Ajv();
+          let valid = ajv.validate({ type: "string", format: 'url' },image);
+          if(!valid){
+            reject("Yêu cầu nhập đúng định dạng URL");
+            return;
+          }
+          if(!(this.list_image.length < 5)){
+            reject("Chỉ có thể nhập tối đa 5 hình");
+            return;
+          }
+          resolve()
+        }).bind(this));
+      }).bind(this),
+      allowOutsideClick: false
+    });
+    
+    let result = await swal({
+      imageUrl: image,
+      showCancelButton: true,
+      cancelButtonText: 'Huỷ',
+      confirmButtonText: 'Lưu & Nhập tiếp',
+      imageWidth: 400,
+      imageHeight: 200,
+      animation: false
+    });
+    this.list_image.push(image);
+    this.addImage();
   }
 
-  async updateItem(form: NgForm) {
-    // if (form.valid) {
-    //   let { name, description, image, status } = this;
-    //   await this.categoryService.update(this.id, { name, description, image, status })
-    //   this.alertUpdateSuccess();
-    //   form.reset();
-    // } else {
-    //   this.alertFormNotValid();
-    // }
+  async removeImage(index){
+    _.pullAt(this.list_image,[index]);
+    // this.imageSwiper.Swiper.onResize();
+  }
+
+  async setThumbnail(index){
+    this.thumb = this.list_image[index];
   }
 
   async submitAndNew(form: NgForm) {
     this.submitting = true;
     try {
       if (form.valid) {
-        let { name, description, image, price , basePrice, unit, status } = this;
+        let { name, description, list_image, thumb , price , basePrice, unit, status } = this;
         let category_id = this.category;
-        let productService = this.innoway.getService('product');
-        let product = await productService.add({ name, description, image, price , basePrice, unit, status, category_id })
-
+        let product = await this.productService.add({ name, description, thumb, price , basePrice, unit, status, category_id ,list_image})
+        let toppings = this.toppingSelecter.active.map(item =>{
+          return item.id
+        })
+        if(toppings.length > 0){
+          await this.productService.addToppings(product.id,toppings);
+        }
         this.alertAddSuccess();
         form.resetForm(this.setDefaultData());
       } else {
         this.alertFormNotValid();
       }
     }catch(err){
-      console.log('error',err);
+      this.alertAddFailed()
+      console.log('submit has error',err);
     }finally{
       this.submitting = false;
     }
   }
 
   async submitAndClose(form: NgForm) {
-    // this.submitting = true;
-    // try {
-    //   await this.addItem(form);
-    //   this.backToList();
-    // } catch (err) {
-    //   this.alertAddFailed()
-    // } finally {
-    //   this.submitting = false;
-    // }
+    this.submitting = true;
+    try {
+      if (form.valid) {
+        let { name, description, list_image, thumb , price , basePrice, unit, status } = this;
+        let category_id = this.category;
+        let product = await this.productService.add({ name, description, thumb, price , basePrice, unit, status, category_id ,list_image})
+        let toppings = this.toppingSelecter.active.map(item =>{
+          return item.id
+        })
+        if(toppings.length > 0){
+          await this.productService.addToppings(product.id,toppings);
+        }
+        this.alertAddSuccess();
+        this.backToList();
+      } else {
+        this.alertFormNotValid();
+      }
+    }catch(err){
+      this.alertAddFailed();
+      console.log('submit has error',err);
+    }finally{
+      this.submitting = false;
+    }
   }
 
   async updateAndClose(form: NgForm) {
-    // this.submitting = true;
-    // try {
-    //   await this.updateItem(form);
-    //   this.backToList();
-    // } catch (err) {
-    //   this.alertUpdateFailed();
-    // } finally {
-    //   this.submitting = false;
-    // }
+    this.submitting = true;
+    try {
+      if (form.valid) {
+        let { name, description, list_image, thumb , price , basePrice, unit, status } = this;
+        let category_id = this.category;
+        let product = await this.productService.update(this.id,{ name, description, thumb, price , basePrice, unit, status, category_id ,list_image})
+        let toppings = this.toppingSelecter.active.map(item =>{
+          return item.id
+        })
+        if(toppings.length > 0){
+          await this.productService.updateToppings(this.id,toppings);
+        }
+        this.alertUpdateSuccess();
+        this.backToList();
+      } else {
+        this.alertFormNotValid();
+      }
+    }catch(err){
+      this.alertUpdateFailed();
+      console.log('submit has error',err);
+    }finally{
+      this.submitting = false;
+    }
   }
 
-
-  public selectedToppingValues: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-
-  private value: any = [];
-  private _disabledV: string = '0';
-  private disabled: boolean = false;
-
-  private get disabledV(): string {
-    return this._disabledV;
-  }
-
-  private set disabledV(value: string) {
-    this._disabledV = value;
-    this.disabled = this._disabledV === '1';
-  }
-
-  async selected(value: any) {
-    console.log('Selected value is: ', value);
+  async toppingSelected(value:any) {
     let { id } = value;
-    let values = await this.getToppingValues(id);
-    console.log('topping values',values);
     let toppings = this.toppings.getValue();
-    console.log('toppings',toppings);
     let index = _.findIndex(toppings, { id });
-    console.log('index',index);
-    console.log('topping',toppings[index]);
-    toppings[index].values = values;
+    if(!toppings[index].values){
+      toppings[index].values = await this.getToppingValues(id);
+    }
     toppings[index].selected = true;
     this.toppings.next(toppings);
 
   }
 
-  public removed(value: any): void {
+  async toppingRemoved(value:any) {
     let { id } = value;
     let toppings = this.toppings.getValue();
     let index = _.findIndex(toppings, { id });
     toppings[index].selected = false;
     this.toppings.next(toppings);
-    console.log('Removed value is: ', value);
-  }
-
-  public refreshValue(value: any): void {
-    this.value = value;
-    // alert(value);
-  }
-
-  public itemsToString(value: Array<any> = []): string {
-    //alert(JSON.stringify(value));
-    return value
-      .map((item: any) => {
-        return item.text;
-      }).join(',');
   }
 }

@@ -5,8 +5,6 @@ import { InnowayService } from '../services'
 
 import { DataTable } from 'angular-2-data-table-bootstrap4';
 
-import { ListPageInterface } from "./../interface/listPageInterface"
-
 declare let swal: any;
 
 @Component({
@@ -14,7 +12,7 @@ declare let swal: any;
   templateUrl: './product-type.component.html',
   styleUrls: ['./product-type.component.scss']
 })
-export class ProductTypeComponent implements OnInit, ListPageInterface {
+export class ProductTypeComponent implements OnInit {
 
   constructor(
     private router: Router,

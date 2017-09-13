@@ -274,3 +274,18 @@
         color: red !important;
         display: block;
     }
+#product-swiper{
+    .product-swiper-image {
+        width: 100%;
+        height: 100px;
+        background-position: center center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        &.default-image {
+            background-image: url('../assets/img/image-placeholder.png') !important;
+        }
+    }
+}
+    
