@@ -1,10 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { NgZone } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { InnowayService } from '../services';
+import { InnowayService } from '../services'
 
-declare let innoway2:any;
+import { DataTable } from 'angular-2-data-table-bootstrap4';
+
+declare let swal: any;
 
 @Component({
   selector: 'app-products',
@@ -13,118 +14,147 @@ declare let innoway2:any;
 })
 export class ProductsComponent implements OnInit {
 
-  service:any;
-  canLoadMore = true;
-  limit = 1;
-  isMultipleSelect: boolean = false;
-  seletectedItems: string[] = [];
-  searchName:string="";
-  numberOfItem:number=10;
-  numberOfPage:number=0;
-  pageOptions: number[] = [1,2,3,10,20,50,100,200];
-  currentPageOption: number;
-  products:BehaviorSubject<[any]> = null;
-  thumbDefaultCategory: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
-  productService:any;
-
-
   constructor(
-    private zone:NgZone,
-    private router:Router,
-    private innoway: InnowayService,
+    private router: Router,
+    public innoway: InnowayService,
     private ref: ChangeDetectorRef
   ) {
-
+    this.productService = innoway.getService('product');
   }
+
+  private productService: any;
+  public items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  public itemCount = 0; // item total  count
+  public thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
+  public itemFields = ["$all"]; //Get All field
+
+  //Search bar
+  public query: any = {} //query to search and paging items
+  public searchTimeOut = 250; //milisecond
+  public searchRef: any;
+
+  @ViewChild(DataTable) itemsTable;
 
   ngOnInit() {
-    this.getproducts({
-      limit: this.limit
-    });
-    this.productService = this.innoway.getService('products');
   }
 
-  async getproducts(...params){
-    console.log(params);
-    this.products = await this.innoway.getAll('products',params);
+  async reloadItems(params) {
+    let { limit, offset, sortBy, sortAsc } = params;
+    this.query.limit = limit;
+    this.query.offset = offset;
+    this.query.order = sortBy ? [[sortBy, sortAsc ? 'ASC' : 'DESC']] : null;
+    await this.getItems();
   }
 
-  selectItem(model){
-    alert("select "+model.id);
-    this.router.navigate(['/products/detail', model.id]);
+  async getItems() {
+    let query = Object.assign({
+      fields: this.itemFields
+    }, this.query);
+    this.items = await this.innoway.getAll('product', query);
+    this.itemCount = this.productService.currentPageCount;
+    this.ref.detectChanges();
+    return this.items;
   }
 
-  addItem(){
+  rowClick(event) {
+    console.log('Row clicked', event);
+  }
+
+  rowDoubleClick(event) {
+    console.log('Row double click', event);
+  }
+
+  addItem() {
     this.router.navigate(['/products/add']);
   }
 
-  editItem(model){
-    this.router.navigate(['/products/add', model.id]);
+  editItem(item) {
+    this.router.navigate(['/products/add', item.id]);
   }
 
-  viewItem(model){
-    this.router.navigate(['/products/detail', model.id]);
+  viewItem(item) {
+    this.router.navigate(['/products/detail', item.id]);
   }
 
-  async deleteItem(model){
-    await this.productService.delete(model.id);
-    this.ref.detectChanges();
+  async confirmDelete() {
+    return await swal({
+      title: 'Xoá',
+      text: "Bạn có chắc la muốn xoá",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Xoá',
+      cancelButtonText: 'Quay lại'
+    })
   }
 
-  reloadPage() { // click handler or similar
-    this.zone.runOutsideAngular(() => {
-        location.reload();
+  async alertCannotDelete() {
+    return await swal({
+      title: 'Không thể xoá',
+      type: 'warning',
+      timer: 1000,
     });
   }
 
-  switchModeSelectItem(event){
-    this.isMultipleSelect=event;
-  }
-
-  selectAllItems(){
-    this.seletectedItems=[];
-    this.products.forEach((item:any) => {
-      this.seletectedItems.push(item.id);
+  async alertDeleteSuccess() {
+    return await swal({
+      title: 'Xoá thành công',
+      type: 'success',
+      timer: 1000,
     });
   }
 
-  deselectAllItems(){
-    this.seletectedItems=[];
-  }
-
-  deleteSelectedItems(){
-    alert(this.seletectedItems);
-  }
-
-  queryName(event){
-    alert(event);
-  }
-
-  queryKeyDownFunction(event, data) {
-    if(event.keyCode == 13) {
-      alert(data);
+  async deleteItem(item) {
+    item.deleting = true;
+    try {
+      try { await this.confirmDelete() } catch (err) { return };
+      await this.productService.delete(item.id)
+      this.itemsTable.reloadItems();
+      this.alertDeleteSuccess();
+    } catch (err) {
+      this.alertCannotDelete();
+    } finally {
+      item.deleting = false;
     }
   }
 
-  onChangePageOption(data){
-    this.limit=data;
-    alert(data);
-  }
-
-  errorHandler(event) {
-    console.debug(event);
-    event.target.src = this.thumbDefaultCategory;
-  }
-
-  async loadMore(){
-    var items = await this.productService.getAllWithQuery({
-      page: this.service.pagination.next_page,
-      limit:this.limit
+  async deleteAll() {
+    let rows = this.itemsTable.selectedRows;
+    let ids = [];
+    rows.forEach(row => {
+      row.item.deleting = true;
+      ids.push(row.item.id);
     });
+    try {
+      try { await this.confirmDelete() } catch (err) { return };
+      await this.productService.deleteAll(ids)
+      this.itemsTable.selectAllCheckbox = false;
+      this.itemsTable.reloadItems();
+      this.alertDeleteSuccess();
+    } catch (err) {
+      this.alertCannotDelete();
+    } finally {
+      rows.forEach(row => {
+        row.item.deleting = false;
+      });
+    }
 
-    if(items.length == 0 || items.length < this.limit) this.canLoadMore = false;
 
-    this.ref.detectChanges();
+  }
+
+  onSearch(e) {
+    const key = e.target.value;
+    if (this.searchRef) clearTimeout(this.searchRef);
+    this.searchRef = setTimeout(() => {
+      this.query.filter = {
+        $or: {
+          name: { $iLike: `%${key}%` },
+          description: { $iLike: `%${key}%` },
+        }
+      }
+      this.getItems();
+    }, this.searchTimeOut);
   }
 
 }

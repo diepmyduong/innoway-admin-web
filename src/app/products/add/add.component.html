@@ -12,7 +12,12 @@
                 <div class="form-group row">
                   <label class="col-md-3 form-control-label" for="text-input">Tên sản phẩm</label>
                   <div class="col-md-9">
-                    <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Nhập tên sản phẩm'" required>
+                    <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" 
+                      class="form-control" [placeholder]="'Nhập tên sản phẩm'" required>
+                    <small *ngIf="nameControl.errors?.required"
+                    class="text-muted danger" >
+                      (Không được bỏ trống)
+                    </small>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -33,13 +38,23 @@
                 <div class="form-group row">
                   <label class="col-md-3 form-control-label" for="text-input">Giá sản phẩm</label>
                   <div class="col-md-9">
-                    <input type="text" #priceControl="ngModel" [(ngModel)]="price" name="price" class="form-control" [placeholder]="'Nhập giá sản phẩm'" required>
+                    <input type="number" step="1000"
+                      #priceControl="ngModel" [(ngModel)]="price" name="price" 
+                      class="form-control" [placeholder]="'Nhập giá sản phẩm'" required>
+                    <small class="text-muted" *ngIf="price">{{ price | accounting }}</small>
+                    <small *ngIf="priceControl.errors?.required"
+                    class="text-muted danger" >
+                      (Không được bỏ trống)
+                    </small>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label class="col-md-3 form-control-label" for="text-input">Giá gốc sản phẩm</label>
                   <div class="col-md-9">
-                    <input #basePriceControl="ngModel" [(ngModel)]="basePrice" name="basePrice" class="form-control" [placeholder]="'Nhập giá gốc sản phẩm'">
+                    <input type="number" step="1000"
+                      #basePriceControl="ngModel" [(ngModel)]="basePrice" name="basePrice" 
+                      class="form-control" [placeholder]="'Nhập giá gốc sản phẩm'">
+                      <small class="text-muted" *ngIf="basePrice">{{ basePrice | accounting }}</small>
                   </div>
                 </div>
               </div>
@@ -64,31 +79,35 @@
             <div class="card">
               <div class="card-header">
                 <strong>Hình ảnh</strong>
+                <button type="submit" class="btn btn-sm btn-primary" (click)="addImage()"> Thêm</button>
               </div>
               <div class="card-block">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                    </div>
-                    <div class="col-md-3">
-                      <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                    </div>
-                    <div class="col-md-3">
-                      <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                    </div>
-                    <div class="col-md-3">
-                      <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                    </div>
+                <swiper [config]="imageConfig" #imageSwiper id="product-swiper" >
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide" *ngFor="let image of list_image; let i = index"
+                      (mouseenter)="image_on_hover = i" (mouseleave)="image_on_hover = -1"
+                    >
+                        <div class="card">
+                          <div class="card-block p-0">
+                            <div class="product-swiper-image"
+                              [style.background-image]="'url('+image+')'">
+                              <div class="btn-group pull-right" *ngIf="image_on_hover == i">
+                                <button (click)="setThumbnail(i)"
+                                  class="btn btn-primary btn-sm"><i class="fa fa-star"></i></button>
+                                <button (click)="removeImage(i)"
+                                  class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                   </div>
-                </div>
-              </div>
-              <div class="card-footer">
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <input type="file" id="file-multiple-input" name="file-multiple-input" multiple>
-                  </div>
-                </div>
+                  <!-- Add Pagination -->
+                  <div class="swiper-pagination"></div>
+                  <!-- Add Arrows -->
+                  <div class="swiper-button-next"></div>
+                  <div class="swiper-button-prev"></div>
+                </swiper>
               </div>
             </div>
           </div>
@@ -102,7 +121,14 @@
               <div class="card-block">
                 <div class="form-group row">
                   <div class="col-md-12">
-                    <ng-select [multiple]="true" [items]="selectedToppingValues | async" (data)="refreshValue($event)" (selected)="selected($event)" (removed)="removed($event)" placeholder="No topping selected"></ng-select>
+                    <ng-select [multiple]="true" 
+                      #toppingSelecter
+                      [allowClear] = "true"
+                      [items]="topping_items | async" 
+                      (selected)="toppingSelected($event)" 
+                      (removed)="toppingRemoved($event)" 
+                      placeholder="No topping selected">
+                    </ng-select>
                   </div>
                 </div>
                   <div class="form-group row" *ngFor="let topping of toppings | async">
@@ -114,53 +140,10 @@
                                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" [value]="value.id"> {{value.name}}
                              </label>
                           </div>
-                          <!-- <div class="col-md-4">
-                            <label class="checkbox-inline" for="inline-checkbox2">
-                                 <input type="checkbox" id="inline-checkbox2" name="inline-checkbox2" value="option2"> M (+3.000đ)
-                             </label>
-                          </div>
-                          <div class="col-md-4">
-                            <label class="checkbox-inline" for="inline-checkbox3">
-                                 <input type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3"> L (+6.000đ)
-                             </label>
-                          </div> -->
                         </div>
                       </div>
                   </div>
-
                 <hr>
-                <!-- <div class="form-group row">
-                  <label class="col-md-12 form-control-label">Topping:</label>
-                  <div class="col-md-12">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <label class="checkbox-inline" for="inline-checkbox1">
-				                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Sương sáo (+5.000đ)
-				                </label>
-                      </div>
-                      <div class="col-md-4">
-                        <label class="checkbox-inline" for="inline-checkbox2">
-				                  <input type="checkbox" id="inline-checkbox2" name="inline-checkbox2" value="option2"> Pudding (+5.000đ)
-				                </label>
-                      </div>
-                      <div class="col-md-4">
-                        <label class="checkbox-inline" for="inline-checkbox3">
-				                  <input type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3"> Bánh plan (+10.000đ)
-				                </label>
-                      </div>
-                      <div class="col-md-4">
-                        <label class="checkbox-inline" for="inline-checkbox2">
-				                  <input type="checkbox" id="inline-checkbox2" name="inline-checkbox2" value="option2"> Trân châu trắng (+5.000đ)
-				                </label>
-                      </div>
-                      <div class="col-md-4">
-                        <label class="checkbox-inline" for="inline-checkbox3">
-				                  <input type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3"> Kem muối (+5.000đ)
-				                </label>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
@@ -178,15 +161,6 @@
                 <div class="form-group row">
                   <label class="col-md-4 form-control-label" for="select">Loại sản phẩm</label>
                   <div class="col-md-8">
-                    <!-- <select id="select" name="select" class="form-control" size="1">
-				                  	<option value="0">Chọn loại sản phẩm</option>
-				                  	<option value="1">Cafe sữa</option>
-				                 	<option value="2">Trà sữa</option>
-				                  	<option value="3">Yogurt</option>
-				                </select> -->
-                    <!-- <select id="select_category" formControlName="categoryInput" name="select_category" class="form-control" (change)="onChangeCategory(category.value)" #category >
-				                  <option *ngFor="let item of categories;let i = index" [value]="i" [attr.selected]="i == 0 ? true : null">{{item.name==null?'':item.name}}</option>
-				                </select> -->
                     <select id="categorySelect" #categoryControl="ngModel" [(ngModel)]="category" name="category" class="form-control">
                           <option *ngFor="let v of categories | async" [value]="v.id">
                             {{v.name}}
@@ -197,14 +171,6 @@
                 <div class="form-group row">
                   <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
                   <div class="col-md-8">
-                    <!-- <select id="select" formControlName="statusInput" name="select" class="form-control" [attr.selected]="i == 0 ? true : null" (change)="onChangeStatus(status.value)" #status>
-			                  <option *ngFor="let status of statuses;let i = index" [value]="i">{{status==1?'Hoạt động':'Không hoạt động'}}</option>
-			                </select> -->
-                    <!-- <select id="statusSelect" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
-                        <option *ngFor="let v of [0,1]" [value]="v">
-                          {{ v===1?"Hoạt động":"Không hoạt động"}}
-                        </option>
-                      </select> -->
                     <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
                         <option *ngFor="let v of [0,1]" [value]="v">
                           {{ v===1?"Hoạt động":"Không hoạt động"}}
@@ -237,42 +203,13 @@
             </div>
           </div>
 
-          <!-- <div class="col-md-12">
-		    	<div class="card">
-		    		<div class="card-header">
-			          <strong>Chọn topping</strong>
-			        </div>
-				   	<div class="card-block">
-			          <ng-select *ngIf="items.length > 0"
-			            [multiple]="true"
-			            [items]="items"
-			            (data)="refreshValue($event)"
-			            (selected)="selected($event)"
-			            (removed)="removed($event)"
-			            placeholder="Chọn topping">
-			          </ng-select>
-			          <br/>
-
-			          <div *ngIf="value.length > 0">
-			          	<p *ngFor="let toppingValue of toppingValues; let i = index">
-			          	{{i}}
-			          		<span *ngFor="let item of toppingValue; let j = index">{{item.name}},</span>
-			          	</p>
-			          </div>
-			        </div>
-		        </div>
-		    </div> -->
-
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <strong>Thêm sản phẩm</strong>
-                <!-- <button type="submit" class="btn btn-sm btn-primary" (click)="addImageModal()"> Add image</button> -->
+                <strong>Ảnh đại diện</strong>
               </div>
-              <div class="card-block">
-                <div class="row" *ngIf="images!=null">
-                  <!-- <img class="col-md-3" style="width: 100%; height: 80px; padding: 4px;" src={{image}} *ngFor="let image of images; let i = index" /> -->
-                </div>
+              <div class="card-block" style="text-align: center">
+                  <img style="width: 100px; height: 100px;" [src]="thumb" *ngIf="thumb" />
               </div>
             </div>
           </div>
