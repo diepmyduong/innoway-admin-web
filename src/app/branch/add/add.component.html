@@ -1,110 +1,134 @@
 <div class="animated fadeIn">
-  <div class="row">    
+  <div class="row">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
           <strong>Thông tin</strong>
         </div>
         <div class="card-block">
-          <form action="" method="post" enctype="multipart/form-data" class="form-horizontal ">
+          <form #itemFrm="ngForm">
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Tên chi nhánh</label>
               <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tên chi nhánh">
+                <input #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Nhập tên chi nhánh'" required>
               </div>
-            </div>        
+            </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="textarea-input">Mô tả</label>
               <div class="col-md-9">
-                <textarea id="textarea-input" name="textarea-input" rows="3" class="form-control" placeholder="Mô tả"></textarea>
+                <textarea id="textarea-input" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
               </div>
-   			</div> 
-   			<div class="form-group row">
+            </div>
+            <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Loại chi nhánh</label>
               <div class="col-md-9">
-                <select id="select" name="select" class="form-control" size="1">
-                  <option value="0">Chọn trạng thái</option>
-                  <option value="1">Thuộc chuỗi cửa hàng</option>
-                  <option value="2">Nhượng quyền</option>
+                <select id="typeSelect" #typeControl="ngModel" [(ngModel)]="type" name="type" class="form-control">
+                  <option *ngFor="let v of [0,1]" [value]="v">
+                    {{ v===1?"Sở hữu":"Nhượng quyền"}}
+                  </option>
                 </select>
               </div>
-            </div> 
-   			<div class="form-group row">
+            </div>
+            <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Địa chỉ</label>
               <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Địa chỉ">
+                <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control" [placeholder]="'Nhập địa chỉ'" required autocorrect="off" autocapitalize="off" spellcheck="off" #addressInput>
               </div>
-            </div>    
+              <div class="col-md-12 mt-1">
+                <agm-map [latitude]="latitudeMap" [longitude]="longitudeMap" [scrollwheel]="false" [zoom]="zoom">
+                  <agm-marker [latitude]="latitudeMap" [longitude]="longitudeMap"></agm-marker>
+                </agm-map>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Longitude</label>
+              <div class="col-md-9">
+                <input type="text" #longitudeControl="ngModel" [(ngModel)]="longitude" name="longitude" class="form-control" [placeholder]="longitudeMap==null?'Nhập longitude':longitudeMap" readonly>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Latitude</label>
+              <div class="col-md-9">
+                <input type="text" #latitudeControl="ngModel" [(ngModel)]="latitude" name="latitude" class="form-control" [placeholder]="latitudeMap==null?'Nhập latitude':latitudeMap" readonly>
+              </div>
+            </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Số điện thoại</label>
               <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tên chi nhánh">
+                <input type="text" #phoneControl="ngModel" [(ngModel)]="phone" name="phone" class="form-control" [placeholder]="'Nhập số điện thoại'" required>
               </div>
-            </div>  
+            </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Nhân viên quản lý</label>
               <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Nhân viên quản lý">
+                <input type="text" #employee_idControl="ngModel" [(ngModel)]="employee_id" name="employee_id" class="form-control" [placeholder]="'Nhập nhân viên quản lý'">
               </div>
-            </div>     
+            </div>
             <hr>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Giờ hoạt động</label>
               <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Giờ hoạt động">
+                <input type="text" #openHourControl="ngModel" [(ngModel)]="openHour" name="openHour" class="form-control" [placeholder]="'Nhập giờ hoạt động'">
               </div>
-            </div>    
+            </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Giờ đóng cửa</label>
               <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Giờ đóng cửa">
+                <input type="text" #closeHourControl="ngModel" [(ngModel)]="closeHour" name="closeHour" class="form-control" [placeholder]="'Nhập giờ đóng cửa'">
               </div>
-            </div>    
-            <hr>
+            </div>
             <div class="form-group row">
-	            <div class="col-md-12">
-	            	<div class="row">
-	            		<label class="col-md-3 form-control-label" for="text-input">Hình ảnh</label>
-	            	</div>
-		        	<div class="row">
-	        			<div class="col-md-3">
-	        				<img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-	        			</div>
-	        			<div class="col-md-3">
-	        				<img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-	        			</div>
-	        			<div class="col-md-3">
-	        				<img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-	        			</div>
-	        			<div class="col-md-3">
-	        				<img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-	        			</div>
-		        	</div>
-		         	<div class="form-group row mt-1">
-		              	<div class="col-md-12">
-		                	<input type="file" id="file-multiple-input" name="file-multiple-input" multiple>
-	              		</div>
-            		</div>
-			    </div>
-			</div>
-   			<div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
               <div class="col-md-9">
-                <select id="select" name="select" class="form-control" size="1">
-                  <option value="0">Chọn trạng thái</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="2">Không hoạt động</option>
+                <select id="statusSelect" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
+                  <option *ngFor="let v of [0,1]" [value]="v">
+                  {{ v===1?"Hoạt động":"Không hoạt động"}}
+                  </option>
                 </select>
               </div>
-            </div>             
+            </div>
+            <hr>
+            <div class="form-group row">
+              <div class="col-md-12">
+                <div class="row">
+                  <label class="col-md-3 form-control-label" for="text-input">Hình ảnh</label>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
+                  </div>
+                  <div class="col-md-3">
+                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
+                  </div>
+                  <div class="col-md-3">
+                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
+                  </div>
+                  <div class="col-md-3">
+                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
+                  </div>
+                </div>
+                <div class="form-group row mt-1">
+                  <div class="col-md-12">
+                    <input type="file" id="file-multiple-input" name="file-multiple-input" multiple>
+                  </div>
+                </div>
+              </div>
+            </div>
           </form>
         </div>
         <div class="card-footer">
-          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; New
+          </button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; Close
+          </button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Update &amp; Close
+          </button>
         </div>
       </div>
     </div>
     <!--/.col-->
   </div>
-</div>	
+</div>

@@ -37,6 +37,8 @@ import { ServicesModule } from './services';
 import { ModalModule } from 'ng2-bootstrap/modal';
 // import { ModalModule as CustomModal} from './modal/modal.module';
 
+// import { AgmCoreModule } from '@agm/core';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -53,7 +55,10 @@ import { ModalModule } from 'ng2-bootstrap/modal';
     PushNotificationsModule,
     ServicesModule,
     ModalModule.forRoot(),
-    // CustomModal
+    // AgmCoreModule.forRoot({
+    //   apiKey: "AIzaSyD60ceziJ8eJ3hmxlTeUzGuysXPnehQ4uM",
+    //   libraries: ["places"]
+    // }),
   ],
   declarations: [
     AppComponent,

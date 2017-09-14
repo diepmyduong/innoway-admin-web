@@ -25,6 +25,13 @@ const routes: Routes = [
         }
       },
       {
+        path: 'add/:id',
+        component: AddComponent,
+        data: {
+          title: "Cập nhật"
+        }
+      },
+      {
         path: 'list',
         component: BranchComponent,
         data: {
@@ -32,7 +39,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'detail',
+        path: 'detail/:id',
         component: DetailComponent,
         data: {
           title: "Chi tiết"
