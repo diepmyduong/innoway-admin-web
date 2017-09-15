@@ -15,16 +15,15 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  unitService: any;
+  employeeTypeService: any;
   name: string;
-  offset: string;
   status: number = 1;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
     public innoway: InnowayService) {
-    this.unitService = innoway.getService('unit');
+    this.employeeTypeService = innoway.getService('employee_type');
   }
 
   ngOnInit(): void {
@@ -43,25 +42,26 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   setDefaultData() {
     this.status = 1;
+    return {
+      status: this.status
+    }
   }
 
   async setData() {
     try {
-      let data = await this.unitService.get(this.id, {
+      let data = await this.employeeTypeService.get(this.id, {
         fields: ["$all"]
       });
       this.name = data.name
-      this.offset = data.offset
       this.status = data.status
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
-      // this.router.navigate(['unit'])
     }
   }
 
   backToList() {
-    this.router.navigate(['/unit/list'])
+    this.router.navigate(['/employee-type/list'])
   }
 
   alertItemNotFound() {
@@ -114,11 +114,11 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, offset, status } = this;
-      await this.unitService.add({ name, offset, status })
+      let { name, status } = this;
+      await this.employeeTypeService.add({ name, status })
       this.alertAddSuccess();
       form.reset();
-      form.controls["status"].setValue(1);
+      form.resetForm(this.setDefaultData());
     } else {
       this.alertFormNotValid();
     }
@@ -126,8 +126,8 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, offset, status } = this;
-      await this.unitService.update(this.id, { name, offset, status })
+      let { name, status } = this;
+      await this.employeeTypeService.update(this.id, { name, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {

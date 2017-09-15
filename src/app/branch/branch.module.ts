@@ -10,9 +10,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { InnowayServiceService } from "app/services/innoway-service.service";
-
-//noinspection TypeScriptCheckImport
-// import { Ng2MapModule } from 'ng2-map';
 import { AgmCoreModule } from '@agm/core';
 
 @NgModule({

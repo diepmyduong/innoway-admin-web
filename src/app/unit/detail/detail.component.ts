@@ -69,6 +69,4 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       timer: 2000
     })
   }
-
-
 }
