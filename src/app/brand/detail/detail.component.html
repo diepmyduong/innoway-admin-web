@@ -21,32 +21,44 @@
           <strong>Thông tin</strong>
         </div>
         <div class="card-block">
-          <form action="" method="post" enctype="multipart/form-data" class="form-horizontal ">
+          <form #itemFrm="ngForm">
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Tên dịch vụ</label>
               <div class="col-md-8">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tên dịch vụ">
+                <input type="text" #nameControl="ngModel" [(ngModel)]="name" [value]="item?.name" name="name" class="form-control" readonly>
               </div>
-            </div>      
+            </div>
             <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Logo</label>
+              <div class="col-md-8">
+                <input type="text" #logoControl="ngModel" [(ngModel)]="logo" [value]="item?.logo" name="logo" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #colorControl="ngModel" [(ngModel)]="color" [value]="item?.color" name="color" class="form-control" readonly>
+              </div>
+            </div>
+            <!-- <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Tên chủ dịch vụ</label>
               <div class="col-md-8">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tên chủ dịch vụ">
+                <input type="text" #ownerControl="ngModel" [(ngModel)]="owner" name="owner" class="form-control" [placeholder]="'Nhập tên chủ dịch vụ'">
               </div>
-            </div>  
-            <div class="form-group row">
+            </div> -->
+            <!-- <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Địa chỉ công ty</label>
               <div class="col-md-8">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Địa chỉ công ty">
+                <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control" [placeholder]="'Nhập địa chỉ công ty'">
               </div>
-            </div> 
+            </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Số điện thoại</label>
               <div class="col-md-8">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Số điện thoại">
+                <input type="text" #ownerControl="ngModel" [(ngModel)]="phone" name="phone" class="form-control" [placeholder]="'Nhập số điện thoại'">
               </div>
-            </div> 
-           	<div class="form-group row">
+            </div> -->
+           	<!-- <div class="form-group row">
               <label class="col-md-4 form-control-label" for="select">Nhóm kinh doanh</label>
               <div class="col-md-8">
                 <select id="select" name="select" class="form-control" size="1">
@@ -56,13 +68,13 @@
                   <option value="3">Khác</option>
                 </select>
               </div>
-            </div>     
-   			<div class="form-group row">
+            </div> -->
+   			    <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Thời gian trial</label>
               <div class="col-md-8">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Thời gian trial">
+                <input type="text" #trialControl="ngModel" [(ngModel)]="trial" [value]="item?.trail_expire" name="trial" class="form-control" readonly>
               </div>
-            </div> 
+            </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="select">Gói dịch vụ</label>
               <div class="col-md-8">
@@ -73,33 +85,31 @@
                   <option value="3">Gói C</option>
                 </select>
               </div>
-            </div>             
+            </div>
             <hr>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Hạn mức ký quỹ</label>
               <div class="col-md-8">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Hạn mức ký quỹ">
+                <input type="text" #depositControl="ngModel" [(ngModel)]="deposit" name="deposit" class="form-control" [placeholder]="'Nhập tiền ký quỹ'">
               </div>
-            </div> 
+            </div>
             <hr>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
               <div class="col-md-8">
-                <select id="select" name="select" class="form-control" size="1">
-                  <option value="0">Chọn trạng thái</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="2">Không hoạt động</option>
-                </select>
+                <input type="text" [value]="item?.status?'Hoạt động':'Không hoạt động'" name="status"
+                  class="form-control" readonly>
               </div>
-            </div>         
+            </div>
           </form>
         </div>
         <div class="card-footer">
-          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+          <button (click)="editItem()" class="btn btn-sm btn-primary" data-style="expand-right">
+            Cập nhật
+          </button>
         </div>
       </div>
     </div>
     <!--/.col-->
   </div>
-</div>	
+</div>

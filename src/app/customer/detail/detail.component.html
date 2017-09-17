@@ -1,428 +1,169 @@
 <div class="animated fadeIn">
-  	<div class="row mb-1">
-  		<div class="col-md-12">
-  			<tabset>
-	  			<tab>
-		        	<ng-template tabHeading><i class="icon-eye"></i> Thông tin cơ bản</ng-template>
-			  		<div class="row">
-					    <div class="col-md-12">
-					     	<div class="card">
-						  	  	<div class="card-header">
-						          	<strong>Thông tin cơ bản</strong>
-						      	</div>
-						  		<div class="card-block">
-							  		<div class="row">
-								  	  	<div class="col-md-2 text-center">
-								  	  		<img src="https://freeiconshop.com/wp-content/uploads/edd/person-flat.png" width="100%">
-								  	  	</div>
-								        <div class="col-md-10 mt-h">
-								            <form action="" method="post" enctype="multipart/form-data" class="form-horizontal ">
-									            <div class="form-group row">
-									              <label class="col-md-3 form-control-label" for="text-input">Họ và tên</label>
-									              <div class="col-md-9">
-									                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Uy Minh">
-									              </div>
-									            </div>
-									            <div class="form-group row">
-									              <label class="col-md-3 form-control-label" for="text-input">Số điện thoại</label>
-									              <div class="col-md-9">
-									                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="0901403819">
-									              </div>
-									            </div>
-									            <div class="form-group row">
-									              <label class="col-md-3 form-control-label" for="email-input">Email</label>
-									              <div class="col-md-9">
-									                <input type="email" id="email-input" name="email-input" class="form-control" placeholder="mduy.fr@gmail.com">
-									              </div>
-									            </div>
-									            <div class="form-group row">
-									              <label class="col-md-3 form-control-label" for="text-input">Tên đăng nhập</label>
-									              <div class="col-md-9">
-									                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="uyminh">
-									              </div>
-									            </div>							          
-									            <hr>
-									            <div class="form-group row">
-									              <label class="col-md-3 form-control-label" for="select">Loại khách hàng</label>
-									              <div class="col-md-9">
-									                <select id="select" name="select" class="form-control" size="1">
-									                  <option value="0">Chọn loại khách hàng</option>
-									                  <option value="1">Khách hàng thông thường</option>
-									                  <option value="2">Khách hàng thân thuộc</option>
-									                  <option value="3">Khách hàng cao cấp</option>
-									                </select>
-									              </div>
-									            </div>
-									            <div class="form-group row">
-									              <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
-									              <div class="col-md-9">
-									                <select id="select" name="select" class="form-control" size="1">
-									                  <option value="0">Chọn trạng thái</option>
-									                  <option value="1">Hoạt động</option>
-									                  <option value="2">Không hoạt động</option>
-									                </select>
-									              </div>
-									            </div>							           
-									          </form>
-								        </div>
-							        </div>
-						        </div>
-						    </div>
-					    </div>
-		  			</div>
-		  		</tab>
-		  		<tab>
-		          	<ng-template tabHeading><i class="icon-basket-loaded"></i> Thông tin bổ sung</ng-template>
-		          	<div class="col-md-12">
-				     	<div class="card">
-					  	  	<div class="card-header">
-					          	<strong>Thông tin bổ sung</strong>
-					      	</div>
-					  		<div class="card-block">
-						  	  	<div class="col-md-12">
-							  	  	<form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
-							  	  	 	<div class="form-group row">
-							              <label class="col-md-3 form-control-label" for="text-input">Địa chỉ</label>
-							              <div class="col-md-9">
-							                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Địa chỉ">
-							              </div>
-							            </div>
-							            <div class="form-group row">
-							              <label class="col-md-3 form-control-label" for="text-input">Ngày sinh</label>
-							              <div class="col-md-9">
-							                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Ngày sinh">
-							              </div>
-							            </div>
-							             <div class="form-group row">
-							              <label class="col-md-3 form-control-label" for="select">Giới tính</label>
-							              <div class="col-md-9">
-							                <select id="select" name="select" class="form-control" size="1">
-							                  <option value="0">Chọn giới tính</option>
-							                  <option value="1">Nam</option>
-							                  <option value="2">Nữ</option>
-							                </select>
-							              </div>
-							            </div>
-							            <hr>
-							            <div class="form-group row">
-							              <label class="col-md-3 form-control-label" for="text-input">Facebook</label>
-							              <div class="col-md-9">
-							                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Facebook">
-							              </div>
-							            </div>
-							            <hr>
-							  	  		<div class="form-group row">
-							              <label class="col-md-3 form-control-label" for="text-input">Tag</label>
-							              <div class="col-md-9">
-							                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tag">
-							              </div>
-							            </div>
-							            <div class="form-group row">
-							              <label class="col-md-3 form-control-label" for="textarea-input">Ghi chú</label>
-							              <div class="col-md-9">
-							                <textarea id="textarea-input" name="textarea-input" rows="9" class="form-control" placeholder="Ghi chú"></textarea>
-							              </div>
-					           			</div>
-						          	</form>
-						        </div>
-					        </div>
-					    </div>
-				    </div>
-		        </tab>
-  			</tabset>
-  		</div>
-  	</div>
-  	<div class="row">
-  		<div class="col-md-12">
-	  		<tabset>
-	  			<tab>
-		        	<ng-template tabHeading><i class="icon-eye"></i> Tổng quan</ng-template>
-						<div class="card">
-				  	  	<div class="card-header">
-				          	<strong>Tổng quan thông tin giao dịch</strong>
-				      	</div>
-				  		<div class="card-block">
-					  	  	<div class="col-md-12">
-						  	  	<form action="" method="post" enctype="multipart/form-data" class="form-horizontal ">
-						            <div class="form-group row">
-						              <label class="col-md-5 form-control-label" for="text-input">Tổng tiền</label>
-						              <div class="col-md-7">
-						                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tổng tiền" value="8.000.000đ">
-						              </div>
-						            </div>
-						            <div class="form-group row">
-						              <label class="col-md-5 form-control-label" for="text-input">Tổng đơn hàng</label>
-						              <div class="col-md-7">
-						                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tổng tiền" value="15 đơn hàng">
-						              </div>
-						            </div>
-						            <div class="form-group row">
-						              <label class="col-md-5 form-control-label" for="text-input">Tổng sản phẩm</label>
-						              <div class="col-md-7">
-						                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tổng tiền" value="158 sản phẩm">
-						              </div>
-						            </div>
-						            <div class="form-group row">
-						              <label class="col-md-5 form-control-label" for="text-input">Tổng điểm thưởng</label>
-						              <div class="col-md-7">
-						                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tổng tiền" value="150 điểm">
-						              </div>
-						            </div>
-						            <div class="form-group row">
-						              <label class="col-md-5 form-control-label" for="text-input">Điểm uy tín</label>
-						              <div class="col-md-7">
-						                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Điểm uy tín" value="10">
-						              </div>
-						            </div>
-						            <hr>
-						            <div class="form-group row">
-						              <label class="col-md-5 form-control-label" for="text-input">Kênh facebook</label>
-						              <div class="col-md-7">
-						                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Số lượng đơn hàng" value="100 đơn hàng">
-						              </div>
-						            </div>
-						            <div class="form-group row">
-						              <label class="col-md-5 form-control-label" for="text-input">Kênh hotline</label>
-						              <div class="col-md-7">
-						                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Số lượng đơn hàng" value="50 đơn hàng">
-						              </div>
-						            </div>
-						            <div class="form-group row">
-						              <label class="col-md-5 form-control-label" for="text-input">Kênh website</label>
-						              <div class="col-md-7">
-						                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Số lượng đơn hàng" value="10 đơn hàng">
-						              </div>
-						            </div>
-						            <div class="form-group row">
-						              <label class="col-md-5 form-control-label" for="text-input">Kênh ứng dụng</label>
-						              <div class="col-md-7">
-						                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Số lượng đơn hàng" value="10 đơn hàng">
-						              </div>
-						            </div>
-						            <hr>
-						            <div class="form-group row">
-						              <label class="col-md-5 form-control-label" for="text-input">Đơn hàng đã thanh toán</label>
-						              <div class="col-md-7">
-						                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Số lượng đơn hàng" value="100 đơn hàng">
-						              </div>
-						            </div>
-						            <div class="form-group row">
-						              <label class="col-md-5 form-control-label" for="text-input">Đơn hàng đã hủy</label>
-						              <div class="col-md-7">
-						                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Số lượng đơn hàng" value="50 đơn hàng">
-						              </div>
-						            </div>						          
-					            </form>
-					        </div>
-				        </div>
-				    </div>
-		        </tab>		     
-		        <tab>
-		          <ng-template tabHeading><i class="icon-calculator"></i> Lịch sử giao dịch</ng-template>
-		          <div class="row">
-					    <div class="col-lg-12">
-					      <div class="card">
-					        <div class="card-header">
-					        	<div class="row">
-						        	<div class="col-lg-4 mt-h">
-						        		<span><i class="fa fa-align-justify px-1 mt-h"></i> Lịch sử giao dịch</span>
-						        	</div>
-						        	<div class="col-lg-8 col-xs-12 mt-h">	          	
+  <form #itemFrm="ngForm">
+    <div class="row">
+      <div class="col-md-5">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <strong>Ảnh đại diện</strong>
+              </div>
+              <div class="card-block">
+                <!-- <div class="col-md-12 text-center">
+                <img src="https://freeiconshop.com/wp-content/uploads/edd/person-flat.png" width="200px" height="200px">
+              </div>
+              <div class="col-md-12 mt-h">
+                <input type="file" id="file-input" name="file-input">
+              </div> -->
+                <div class="col-md-12">
+                  <input type="text" #avatarControl="ngModel" [(ngModel)]="avatar" [value]="item?.avatar" name="avatar" class="form-control" readonly>
+                  <img *ngIf="avatarControl.value && avatarControl.valid" style="width:100%;" [src]="avatarControl.value" />
+                </div>
+              </div>
+            </div>
+          </div>
 
-						          		<form class="form-inline float-right px-2">
-						          		 	<label class="form-control-label mr-1" for="text-input">Số lượng:  </label>
-								            <select class="form-control input-sm">
-												<option value="10">10</option>
-												<option value="25">25</option>
-												<option value="50">50</option>
-												<option value="100">100</option>
-											</select> 
-								            <i class="fa fa-search px-1"></i>
-								            <input class="form-control" type="text" placeholder="Search...">
-								        </form>
-					                    
-									</div>
-					        	</div>
-					        </div>
-					        <div class="card-block">
-					          <table class="table table-bordered">
-					            <thead>
-					              <tr>
-					                <th class="text-center">Mã đơn hàng</th>
-					                <th class="text-center">Người đặt</th>
-					                <th class="text-center">Người giao</th>
-					                <th class="text-center">Địa chỉ</th>
-					                <th class="text-center">Thời gian</th>
-					                <th class="text-center">Kênh</th>
-					                <th class="text-center">Trạng thái</th>
-					                <th class="text-center">Action</th>
-					              </tr>
-					            </thead>
-					            <tbody>
-					              <tr>
-					                <td class="text-center">DH1496132427</td>
-					                <td class="text-center">Uy Minh</td>
-					                <td class="text-center">Khoi Tran</td>
-					                <td class="text-center">400 Lê Hồng Phong, Quận 10, Phường 1, TP.HCM</td>
-					                <td class="text-center">15:00:00 04/11/2017</td>
-					                <td class="text-center">Facebook</td>
-					                <td class="text-center">
-					                  	<span class="badge badge-success p-h">Active</span>
-					                </td>
-					                <td class="text-center">
-					                	<span class="badge badge-default"><i class="icon-eye icons font-xl p-q d-block"></i></span>
-					                </td>
-					              </tr>
-					            </tbody>
-					          </table>
-					          <ul class="pagination">
-					            <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-					            <li class="page-item active">
-					              <a class="page-link" href="#">1</a>
-					            </li>
-					            <li class="page-item"><a class="page-link" href="#">2</a></li>
-					            <li class="page-item"><a class="page-link" href="#">3</a></li>
-					            <li class="page-item"><a class="page-link" href="#">4</a></li>
-					            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-					          </ul>
-					        </div>
-					      </div>
-						</div>
-					</div>
-		        </tab>
-		        <tab>
-		          	<ng-template tabHeading><i class="icon-pie-chart"></i> Lịch sử khuyến mãi</ng-template>
-		          	<div class="row">
-					    <div class="col-lg-12">
-					      <div class="card">
-					        <div class="card-header">
-					        	<div class="row">
-						        	<div class="col-lg-4 mt-h">
-						        		<span><i class="fa fa-align-justify px-1 mt-h"></i> Lịch sử khuyến mãi</span>
-						        	</div>
-						        	<div class="col-lg-8 col-xs-12 mt-h">	          	
-						          		
-						          		<form class="form-inline float-right px-2">
-						          		 	<label class="form-control-label mr-1" for="text-input">Số lượng:  </label>
-								            <select class="form-control input-sm">
-												<option value="10">10</option>
-												<option value="25">25</option>
-												<option value="50">50</option>
-												<option value="100">100</option>
-											</select> 
-								            <i class="fa fa-search px-1"></i>
-								            <input class="form-control" type="text" placeholder="Search...">
-								        </form>
-					                    
-									</div>
-					        	</div>
-					        </div>
-					        <div class="card-block">
-					          <table class="table table-bordered">
-					            <thead>
-					              <tr>
-					                <th class="text-center">Mã đơn hàng</th>
-					                <th class="text-center">Chương trình khuyến mãi</th>
-					                <th class="text-center">Quà tặng</th>
-					                <th class="text-center">Thời gian</th>
-					                <th class="text-center">Action</th>
-					              </tr>
-					            </thead>
-					            <tbody>
-					              <tr>
-					                <td class="text-center">DH1496132427</td>
-					                <td class="text-center">Hạ nhiệt mùa hè</td>
-					                <td class="text-center">Giảm giá 20%</td>
-					                <td class="text-center">15:00:00 04/11/2017</td>                
-					                <td class="text-center">
-					                	<span class="badge badge-default"><i class="icon-eye icons font-xl p-q d-block"></i></span>
-					                </td>
-					              </tr>
-					            </tbody>
-					          </table>
-					          <ul class="pagination">
-					            <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-					            <li class="page-item active">
-					              <a class="page-link" href="#">1</a>
-					            </li>
-					            <li class="page-item"><a class="page-link" href="#">2</a></li>
-					            <li class="page-item"><a class="page-link" href="#">3</a></li>
-					            <li class="page-item"><a class="page-link" href="#">4</a></li>
-					            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-					          </ul>
-					        </div>
-					      </div>
-						</div>
-					</div>
-		        </tab>
-		        <tab>
-		          	<ng-template tabHeading><i class="icon-pie-chart"></i> Lịch sử đánh giá</ng-template>
-		          	<div class="row">
-					    <div class="col-lg-12">
-					      <div class="card">
-					        <div class="card-header">
-					        	<div class="row">
-						        	<div class="col-lg-4 mt-h">
-						        		<span><i class="fa fa-align-justify px-1 mt-h"></i> Lịch sử đánh giá</span>
-						        	</div>
-						        	<div class="col-lg-8 col-xs-12 mt-h">							
-						          		
-						          		<form class="form-inline float-right px-2">
-						          		 	<label class="form-control-label mr-1" for="text-input">Số lượng:  </label>
-								            <select class="form-control input-sm">
-												<option value="10">10</option>
-												<option value="25">25</option>
-												<option value="50">50</option>
-												<option value="100">100</option>
-											</select> 
-								            <i class="fa fa-search px-1"></i>
-								            <input class="form-control" type="text" placeholder="Search...">
-								        </form>
-					                    
-									</div>
-					        	</div>
-					        </div>
-					        <div class="card-block">
-					          <table class="table table-bordered">
-					            <thead>
-					              <tr>
-					                <th class="text-center">Mã đơn hàng</th>
-					                <th class="text-center">Nhân viên</th>
-					                <th class="text-center">Phản hồi</th>
-					                <th class="text-center">Rating</th>
-					                <th class="text-center">Thời gian</th>
-					                <th class="text-center">Action</th>
-					              </tr>
-					            </thead>
-					            <tbody>
-					              <tr>
-					                <td class="text-center">DH1496132427</td>
-					                <td class="text-center">Khoi Tran</td>
-					                <td class="text-center">Phục vụ tốt</td>
-					                <td class="text-center">5.0</td>  
-					                <td class="text-center">15:00:00 04/11/2017</td>                 
-					                <td class="text-center">
-					                	<span class="badge badge-default"><i class="icon-eye icons font-xl p-q d-block"></i></span>
-					                </td>
-					              </tr>
-					            </tbody>
-					          </table>
-					          <ul class="pagination">
-					            <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-					            <li class="page-item active">
-					              <a class="page-link" href="#">1</a>
-					            </li>
-					            <li class="page-item"><a class="page-link" href="#">2</a></li>
-					            <li class="page-item"><a class="page-link" href="#">3</a></li>
-					            <li class="page-item"><a class="page-link" href="#">4</a></li>
-					            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-					          </ul>
-					        </div>
-					      </div>
-						</div>
-					</div>
-		        </tab>
-	      	</tabset>  		
-  		</div>
-	</div>
-</div>	
+          <!-- <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <strong>Tag</strong>
+              </div>
+              <div class="card-block">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <label class="col-md-3 form-control-label" for="text-input">Tag</label>
+                    <div class="col-md-9">
+                      <input type="text" #tagControl="ngModel" [(ngModel)]="tag" name="tag" class="form-control" [placeholder]="'Nhập tag'">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="col-md-12">
+            <!-- <div class="card">
+              <div class="card-header">
+                <strong>Note</strong>
+              </div>
+              <div class="card-block">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <label class="col-md-3 form-control-label" for="textarea-input">Ghi chú</label>
+                    <div class="col-md-9">
+                      <textarea type="textarea-input" #noteControl="ngModel" [(ngModel)]="note" [value]="item?.note" name="note" class="form-control" readonly>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <div class="card">
+          <div class="card-header">
+            <strong>Thông tin</strong>
+          </div>
+          <div class="card-block">
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Họ và tên</label>
+              <div class="col-md-9">
+                <input type="text" #fullnameControl="ngModel" [(ngModel)]="fullname" [value]="item?.fullname" name="fullname"
+                  class="form-control" readonly>
+                </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Số điện thoại</label>
+              <div class="col-md-9">
+                <input type="text" #phoneControl="ngModel" [(ngModel)]="phone" [value]="item?.phone" name="phone"
+                  class="form-control" readonly>
+                </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input">Email</label>
+              <div class="col-md-9">
+                <input type="email" #emailControl="ngModel" [(ngModel)]="email" [value]="item?.email" name="email"
+                  class="form-control" readonly>
+                  </div>
+            </div>
+            <!-- <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Tên đăng nhập</label>
+              <div class="col-md-9">
+                <input type="text" #usernameControl="ngModel" [(ngModel)]="username" [value]="item?.username" name="username"
+                  class="form-control" readonly>
+                    </div>
+            </div> -->
+            <!-- <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="password-input">Password</label>
+              <div class="col-md-9">
+                <input type="password" #passwordControl="ngModel" [(ngModel)]="password" [value]="item?.password" name="password"
+                  class="form-control" readonly>
+                </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="password-input">Xác nhận password</label>
+              <div class="col-md-9">
+                <input type="password" #repasswordControl="ngModel" [(ngModel)]="repassword" [value]="item?.repassword" name="repassword"
+                  class="form-control" readonly>
+                </div>
+            </div> -->
+            <!-- <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Địa chỉ</label>
+              <div class="col-md-9">
+                <input type="text" #addressControl="ngModel" [(ngModel)]="address" [value]="item?.address" name="address">
+              </div>
+            </div> -->
+            <!-- <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Ngày sinh</label>
+              <div class="col-md-9">
+                <input type="text" #birthdayControl="ngModel" [(ngModel)]="birthday" [value]="item?.birthday" name="birthday">
+              </div>
+            </div> -->
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Giới tính</label>
+              <div class="col-md-9">
+                <input type="text" [value]="item?.sex?'Name':'Nữ'" name="sex"
+                  class="form-control" readonly>
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Loại khách hàng</label>
+              <div class="col-md-9">
+                <input type="text" [value]="item?.customerType?'Thường':'VIP'" name="customerType"
+                  class="form-control" readonly>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
+              <div class="col-md-9">
+                <input type="text" [value]="item?.status?'Hoạt động':'Không hoạt động'" name="status"
+                  class="form-control" readonly>
+              </div>
+            </div>
+            <!-- <hr>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Điểm uy tín</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Điểm uy tín">
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Facebook</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Facebook">
+              </div>
+            </div> -->
+          </div>
+          <div class="card-footer">
+            <button (click)="editItem()" class="btn btn-sm btn-primary" data-style="expand-right">
+              Cập nhật
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -12,7 +12,7 @@
                 <div class="form-group row">
                   <label class="col-md-3 form-control-label" for="text-input">Tên sản phẩm</label>
                   <div class="col-md-9">
-                    <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" 
+                    <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name"
                       class="form-control" [placeholder]="'Nhập tên sản phẩm'" required>
                     <small *ngIf="nameControl.errors?.required"
                     class="text-muted danger" >
@@ -39,7 +39,7 @@
                   <label class="col-md-3 form-control-label" for="text-input">Giá sản phẩm</label>
                   <div class="col-md-9">
                     <input type="number" step="1000"
-                      #priceControl="ngModel" [(ngModel)]="price" name="price" 
+                      #priceControl="ngModel" [(ngModel)]="price" name="price"
                       class="form-control" [placeholder]="'Nhập giá sản phẩm'" required>
                     <small class="text-muted" *ngIf="price">{{ price | accounting }}</small>
                     <small *ngIf="priceControl.errors?.required"
@@ -52,7 +52,7 @@
                   <label class="col-md-3 form-control-label" for="text-input">Giá gốc sản phẩm</label>
                   <div class="col-md-9">
                     <input type="number" step="1000"
-                      #basePriceControl="ngModel" [(ngModel)]="basePrice" name="basePrice" 
+                      #basePriceControl="ngModel" [(ngModel)]="basePrice" name="basePrice"
                       class="form-control" [placeholder]="'Nhập giá gốc sản phẩm'">
                       <small class="text-muted" *ngIf="basePrice">{{ basePrice | accounting }}</small>
                   </div>
@@ -121,12 +121,12 @@
               <div class="card-block">
                 <div class="form-group row">
                   <div class="col-md-12">
-                    <ng-select [multiple]="true" 
+                    <ng-select [multiple]="true"
                       #toppingSelecter
                       [allowClear] = "true"
-                      [items]="topping_items | async" 
-                      (selected)="toppingSelected($event)" 
-                      (removed)="toppingRemoved($event)" 
+                      [items]="topping_items | async"
+                      (selected)="toppingSelected($event)"
+                      (removed)="toppingRemoved($event)"
                       placeholder="No topping selected">
                     </ng-select>
                   </div>
@@ -137,7 +137,7 @@
                         <div class="row">
                           <div class="col-md-4" *ngFor="let value of topping.values">
                             <label class="checkbox-inline" for="inline-checkbox1">
-                                 <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" [value]="value.id"> {{value.name}}
+                                 <i class="icon-check icons mr-h"></i> {{value.name}}
                              </label>
                           </div>
                         </div>
