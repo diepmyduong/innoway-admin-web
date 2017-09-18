@@ -18,6 +18,7 @@ import { AppRoutingModule } from './app.routing';
 //Layouts
 import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
+import { LauncherLayoutComponent } from './layouts/launcher-layout/launcher-layout.component';
 
 //Modal
 // import { ModalModule } from 'ng2-bootstrap/modal';
@@ -51,6 +52,7 @@ import { ChatbotModule } from './chatbot/chatbot.module';
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
     ChatbotLayoutComponent,
+    LauncherLayoutComponent,
   ],
   providers: [{
     provide: LocationStrategy,
