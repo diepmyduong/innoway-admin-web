@@ -1,68 +1,81 @@
 <div class="animated fadeIn">
   <div class="row">
-    <div class="col-lg-12">
-      <div class="card">
-        <div class="card-header">
-        	<div class="row">
-	        	<div class="col-lg-4 mt-h">
-	        		<span><i class="fa fa-align-justify px-1 mt-h"></i> Danh sách loại dịch vụ</span>
-	        	</div>
-	        	<div class="col-lg-8 col-xs-12 mt-h">	          	
-
-	          		<button type="button" class="btn btn-outline-success mt-0 px-2 float-right">Thêm</button>
-	          		
-	          		<form class="form-inline float-right px-2">
-	          		 	<label class="form-control-label mr-1" for="text-input">Số lượng:  </label>
-			            <select class="form-control input-sm">
-							<option value="10">10</option>
-							<option value="25">25</option>
-							<option value="50">50</option>
-							<option value="100">100</option>
-						</select> 
-			            <i class="fa fa-search px-1"></i>
-			            <input class="form-control" type="text" placeholder="Search...">
-			        </form>
-                    
-				</div>
-        	</div>
-        </div>
-        <div class="card-block">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th class="text-center">Topping</th>
-                <th class="text-center">Loại topping</th>
-                <th class="text-center">Trạng thái</th>
-                <th class="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="text-center"><a class="nav-link" routerLinkActive="active" [routerLink]="['/topping/detail']">M</a></td>
-                <td class="text-center">Size</td>
-                <td class="text-center">
-                  	<span class="badge badge-success p-h">Active</span>
-                </td>
-                <td class="text-center">
-                	<span class="badge badge-default"><i class="icon-eye icons font-xl p-q d-block"></i></span>
-                 	<span class="badge badge-success"><i class="icon-pencil icons font-xl p-q d-block"></i></span>
-                 	<span class="badge badge-danger"><i class="icon-trash icons font-xl p-q d-block"></i></span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-            <li class="page-item active">
-              <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">4</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
+      <fieldset class="form-group col-sm-12">
+          <div class="input-group">
+              <span class="input-group-addon"> Tìm kiếm </span>
+              <input type="text" class="form-control" (keyup)="onSearch($event)">
+              <span (click)="deleteAll()" *ngIf="itemsTable.selectedRows && itemsTable.selectedRows.length > 0"
+                class="input-group-addon btn-danger"><i class="fa fa-trash"></i> Xoá tất cả</span>
+              <span (click)="addItem()"
+                class="input-group-addon btn-success"><i class="fa fa-plus"></i> Thêm</span>
+          </div>
+      </fieldset>
+  </div>
+  <div style="margin: auto; max-width: 1000px; margin-bottom: 50px;">
+    <data-table id="persons-grid" #itemsTable
+        headerTitle="Danh sách"
+        indexColumnHeader="STT"
+        [items]="items | async"
+        [itemCount]="itemCount"
+        (reload)="reloadItems($event)"
+        [pagination]="true"
+        [indexColumn]="true"
+        [selectColumn]="true"
+        [multiSelect]="true"
+        [substituteRows]="false"
+        [selectOnRowClick]="false"
+        [showReloading]="true"
+        (rowClick)="rowClick($event)"
+        (rowDoubleClick)="rowDoubleClick($event)"
+        >
+        <data-table-column
+            property="name"
+            header="Tên"
+            [sortable]="true">
+        </data-table-column>
+        <data-table-column
+            property="topping"
+            header="Topping"
+            [resizable]="true"
+            [sortable]="true">
+            <template #dataTableCell let-item="item">
+              {{item.topping.name}}
+            </template>
+        </data-table-column>
+        <data-table-column
+            property="price"
+            header="Price"
+            [resizable]="true"
+            [sortable]="true">
+        </data-table-column>
+        <data-table-column
+            property="description"
+            header="Mô tả"
+            [visible]="false"
+            [resizable]="true">
+        </data-table-column>
+        <data-table-column
+            property="status"
+            header="Trạng thái"
+            [sortable]="true">
+            <template #dataTableCell let-item="item">
+              <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>
+            </template>
+        </data-table-column>
+        <data-table-column
+        header="Actions">
+            <template #dataTableCell let-item="item">
+                <span class="btn-group">
+                    <button (click)="viewItem(item)"
+                        type="button" class="btn btn-sm"><i class="icon-eye icons font-xl p-q d-block"></i></button>
+                    <button (click)="editItem(item)"
+                        type="button" class="btn btn-sm btn-info"><i class="icon-pencil icons font-xl p-q d-block"></i></button>
+                    <button (click)="deleteItem(item)"
+                        type="button" class="btn btn-sm btn-danger btn-ladda"
+                        data-style="expand-right" [ladda]='item.deleting?true:false'><i class="icon-trash icons font-xl p-q d-block"></i></button>
+                </span>
+            </template>
+        </data-table-column>
+    </data-table>
   </div>
 </div>

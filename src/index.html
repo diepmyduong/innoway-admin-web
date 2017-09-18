@@ -12,7 +12,7 @@
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,AngularJS,Angular,Angular2,jQuery,CSS,HTML,RWD,Dashboard,Vue,Vue.js,React,React.js">
 
     <title>Innoway - Admin Dashboard</title>
-    
+
     <!-- Icons -->
     <link href="../node_modules/ng2-tree/styles.css" rel="stylesheet">
     <link href="../node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet">
@@ -23,8 +23,15 @@
     <link href="assets/css/glyphicons.css" rel="stylesheet">
     <link href="assets/css/glyphicons-filetypes.css" rel="stylesheet">
     <link href="assets/css/glyphicons-social.css" rel="stylesheet">
+    <!-- Sweet Alert 2 -->
+    <link rel="stylesheet" href="https://npmcdn.com/sweetalert2@4.0.15/dist/sweetalert2.min.css">
+    <script src="https://npmcdn.com/sweetalert2@4.0.15/dist/sweetalert2.min.js"></script>
+    <!-- Swiper -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.js"></script>
+    <!-- Lodash -->
+    <script src="assets/js/lodash.min.js"></script>
+    <script src="assets/js/accounting.min.js"></script>
 </head>
 
 <!-- BODY options, add following classes to body to change options
@@ -61,8 +68,16 @@
 
     </div>
     <script src="assets/js/jquery.min.js"></script>
+    <script src="https://rawgit.com/diepmyduong/innoway2-web-sdk/dev/dist/innoway2.min.js"></script>
+    <script type="text/javascript">
+        innoway2.init({
+            // host: "https://innoway2.herokuapp.com/",
+            host: 'http://localhost:3000/',
+            brand_id: "3791cbd0-8eeb-11e7-9619-576bbea02309"
+        })
+    </script>
     <script src="https://rawgit.com/diepmyduong/innoway-chatbot-client/master/dist/innoway_chatbot.min.js"></script>
-    
+
 </body>
 
 </html>

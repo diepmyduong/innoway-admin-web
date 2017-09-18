@@ -23,6 +23,12 @@ const routes: Routes = [
         data: {
           title: "Thêm"
         }
+      },{
+        path: 'add/:id',
+        component: AddComponent,
+        data: {
+          title: "Cập nhật"
+        }
       },
       {
         path: 'list',
@@ -32,7 +38,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'detail',
+        path: 'detail/:id',
         component: DetailComponent,
         data: {
           title: "Chi tiết"
