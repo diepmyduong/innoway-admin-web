@@ -1,70 +1,77 @@
 <div class="animated fadeIn">
-  <div class="row">    
+  <div class="row">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
           <strong>Thông tin</strong>
         </div>
         <div class="card-block">
-          <form action="" method="post" enctype="multipart/form-data" class="form-horizontal ">
+          <form #itemFrm="ngForm">
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Loại khách hàng</label>
               <div class="col-md-8">
-                <input type="input" id="text-input" name="text-input" class="form-control" placeholder="Loại khách hàng">
+                <input type="input" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Nhập loại khách hàng'" required>
               </div>
-            </div>           
+            </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
               <div class="col-md-8">
-                <textarea id="textarea-input" name="textarea-input" rows="3" class="form-control" placeholder="Mô tả"></textarea>
+                <textarea id="textarea-input" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
               </div>
-   			</div>
-   			<div class="form-group row">
+            </div>
+            <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Tổng tiền thanh toán</label>
               <div class="col-md-8">
-                <input type="input" id="text-input" name="text-input" class="form-control" placeholder="Tổng tiền thanh toán">
+                <input type="input" #amountOfPurchaseControl="ngModel" [(ngModel)]="amount_of_purchase" name="amount_of_purchase" class="form-control" [placeholder]="'Nhập tổng tiền'">
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Tổng đơn hàng</label>
               <div class="col-md-8">
-                <input type="input" id="text-input" name="text-input" class="form-control" placeholder="Tổng đơn hàng">
+                <input type="input" #numberOfBillControl="ngModel" [(ngModel)]="number_of_bill" name="number_of_bill" class="form-control" [placeholder]="'Nhập tổng đơn hàng'" required>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Tổng sản phẩm</label>
+              <label class="col-md-4 form-control-label" for="text-input">Ngày mua gần nhất</label>
               <div class="col-md-8">
-                <input type="input" id="text-input" name="text-input" class="form-control" placeholder="Tổng sản phẩm">
+                <input type="input" #lastDateOrderControl="ngModel" [(ngModel)]="last_date_order" name="last_date_order" class="form-control" [placeholder]="'Nhập loại khách hàng'" required>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="select">Giới tính</label>
               <div class="col-md-8">
-                <select id="select" name="select" class="form-control" size="1">
-                  <option value="0">Chọn giới tính</option>
-                  <option value="1">Nam</option>
-                  <option value="2">Nữ</option>
-                </select>
+                <select id="genderSelect" #sexControl="ngModel" [(ngModel)]="sex" name="sex" class="form-control">
+                    <option *ngFor="let v of [0,1]" [value]="v">
+                      {{ v===1?"Nam":"Nữ"}}
+                    </option>
+                  </select>
               </div>
-            </div> 
+            </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
               <div class="col-md-8">
-                <select id="select" name="select" class="form-control" size="1">
-                  <option value="0">Chọn trạng thái</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="2">Không hoạt động</option>
-                </select>
+                <select id="genderSelect" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
+                    <option *ngFor="let v of [0,1]" [value]="v">
+                      {{ v===1?"Hoạt động":"Không hoạt đồng"}}
+                    </option>
+                  </select>
               </div>
-            </div>         
+            </div>
           </form>
         </div>
         <div class="card-footer">
-          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; New
+          </button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; Close
+          </button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Update &amp; Close
+          </button>
         </div>
       </div>
     </div>
     <!--/.col-->
   </div>
-</div>	
+</div>
