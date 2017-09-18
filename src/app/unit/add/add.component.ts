@@ -9,6 +9,7 @@ import { CustomValidators } from "ng2-validation/dist";
 import { InnowayService } from '../../services'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
+
 declare var swal: any;
 
 @Component({

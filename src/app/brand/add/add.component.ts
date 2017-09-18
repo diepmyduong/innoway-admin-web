@@ -4,6 +4,8 @@ import { AddPageInterface } from "app/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
 
+import { ColorPickerService } from 'angular2-color-picker';
+
 declare var swal: any;
 
 @Component({
@@ -19,14 +21,26 @@ export class AddComponent implements OnInit, AddPageInterface {
   brandService: any;
 
   name: string;
-  color: string;
+  color: string = "#127bdc";
   logo: string;
   trail_expire: string;
   status: number = 1;
 
+  pickerColor: string = "#127bdc";
+
+
+  // Angular 2 Input Mask
+
+  // Angular 2 Input Mask
+
+ dateModel:string;
+ dateMask:any = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
+    private cpService: ColorPickerService,
     public innoway: InnowayService) {
     this.brandService = innoway.getService('brand');
   }
@@ -43,13 +57,21 @@ export class AddComponent implements OnInit, AddPageInterface {
     if (this.isEdit) {
       this.setData();
     }
+
   }
 
   setDefaultData() {
     this.status = 1;
+    this.color = "#127bdc";
     return {
-      status: this.status
+      status: this.status,
+      color: this.color
     }
+  }
+
+  onChangeColorHex8(event) {
+    this.color = event;
+    this.ref.detectChanges();
   }
 
   async setData() {

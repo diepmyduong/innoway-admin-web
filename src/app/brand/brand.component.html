@@ -21,6 +21,10 @@
       </data-table-column>
       <data-table-column property="name" header="Tên công ty" [sortable]="true">
       </data-table-column>
+      <data-table-column property="color" header="Màu sắc" [sortable]="true" [visible]="false">
+      </data-table-column>
+      <data-table-column property="trail_expire" header="Thời gian trail" [sortable]="true" [visible]="false">
+      </data-table-column>
       <data-table-column property="status" header="Trạng thái" [sortable]="true">
         <template #dataTableCell let-item="item">
               <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>

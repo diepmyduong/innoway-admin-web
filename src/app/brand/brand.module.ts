@@ -14,6 +14,11 @@ import { InnowayServiceService } from "app/services/innoway-service.service";
 import { TimepickerModule } from 'ng2-bootstrap/timepicker';
 import { DatepickerModule } from 'ng2-bootstrap/datepicker';
 
+import {ColorPickerModule} from 'angular2-color-picker';
+import { CustomFormsModule } from 'ng2-validation';
+// Angular 2 Input Mask
+import { TextMaskModule } from 'angular2-text-mask';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -24,8 +29,9 @@ import { DatepickerModule } from 'ng2-bootstrap/datepicker';
     LaddaModule,
     DataTableModule,
 
-    TimepickerModule.forRoot(),
-    DatepickerModule.forRoot(),
+    ColorPickerModule,
+    CustomFormsModule,
+    TextMaskModule
   ],
   declarations: [BrandComponent, AddComponent, DetailComponent],
   providers: [InnowayServiceService]
