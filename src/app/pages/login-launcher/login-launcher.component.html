@@ -1,0 +1,21 @@
+<div id="fundo">
+  <form #loginForm="ngForm" (keyup)="keyDownFunction($event,loginForm)" id="login">
+      <div id="logo"></div>
+      <h1 id="login-title">Đăng nhập</h1>
+
+      <div class="input">
+        <input #emailControl="ngModel"
+        placeholder="Email" 
+        [(ngModel)]="email" 
+        placeholder="Email"
+        name="email" maxlength="70" email required>
+      </div>
+      <div class="input">
+        <input #passwordControl="ngModel"
+        placeholder="Password" 
+        [(ngModel)]="password" 
+        name="password" maxlength="70" type="password" required>
+        <div class="btn" (click)="signIn(loginForm)"></div>
+      </div>
+  </form>
+</div>

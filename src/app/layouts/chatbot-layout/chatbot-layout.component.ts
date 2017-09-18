@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { PageService } from '../../chatbot/services/page.service';
+import { PageService } from 'app/apps/chatbot/services/page.service';
 
 @Component({
   selector: 'app-chatbot-layout',

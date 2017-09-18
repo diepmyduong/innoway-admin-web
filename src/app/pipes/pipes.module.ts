@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { AccountingPipe } from './../pipes/accounting/accounting';
-import { LoopPipe } from './../pipes/loop/loop';
+import { AccountingPipe } from './accounting/accounting';
+import { LoopPipe } from './loop/loop';
 @NgModule({
 	declarations: [AccountingPipe,
     LoopPipe],

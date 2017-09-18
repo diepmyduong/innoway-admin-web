@@ -25,10 +25,10 @@ import { LauncherLayoutComponent } from './layouts/launcher-layout/launcher-layo
 import { ModalModule as Ng2ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 
-import { ModalCardTypesComponent } from './chatbot/modals/modal-card-types/modal-card-types.component';
+import { ModalCardTypesComponent } from './apps/chatbot/modals/modal-card-types/modal-card-types.component';
 import { ChatbotLayoutComponent } from './layouts/chatbot-layout/chatbot-layout.component';
 
-import { ChatbotModule } from './chatbot/chatbot.module';
+import { ChatbotModule } from './apps/chatbot/chatbot.module';
 
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 
