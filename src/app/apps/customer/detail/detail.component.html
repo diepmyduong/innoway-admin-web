@@ -1,0 +1,169 @@
+<div class="animated fadeIn">
+  <form #itemFrm="ngForm">
+    <div class="row">
+      <div class="col-md-5">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <strong>Ảnh đại diện</strong>
+              </div>
+              <div class="card-block">
+                <!-- <div class="col-md-12 text-center">
+                <img src="https://freeiconshop.com/wp-content/uploads/edd/person-flat.png" width="200px" height="200px">
+              </div>
+              <div class="col-md-12 mt-h">
+                <input type="file" id="file-input" name="file-input">
+              </div> -->
+                <div class="col-md-12">
+                  <input type="text" #avatarControl="ngModel" [(ngModel)]="avatar" [value]="item?.avatar" name="avatar" class="form-control" readonly>
+                  <img *ngIf="avatarControl.value && avatarControl.valid" style="width:100%;" [src]="avatarControl.value" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <strong>Tag</strong>
+              </div>
+              <div class="card-block">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <label class="col-md-3 form-control-label" for="text-input">Tag</label>
+                    <div class="col-md-9">
+                      <input type="text" #tagControl="ngModel" [(ngModel)]="tag" name="tag" class="form-control" [placeholder]="'Nhập tag'">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="col-md-12">
+            <!-- <div class="card">
+              <div class="card-header">
+                <strong>Note</strong>
+              </div>
+              <div class="card-block">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <label class="col-md-3 form-control-label" for="textarea-input">Ghi chú</label>
+                    <div class="col-md-9">
+                      <textarea type="textarea-input" #noteControl="ngModel" [(ngModel)]="note" [value]="item?.note" name="note" class="form-control" readonly>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <div class="card">
+          <div class="card-header">
+            <strong>Thông tin</strong>
+          </div>
+          <div class="card-block">
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Họ và tên</label>
+              <div class="col-md-9">
+                <input type="text" #fullnameControl="ngModel" [(ngModel)]="fullname" [value]="item?.fullname" name="fullname"
+                  class="form-control" readonly>
+                </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Số điện thoại</label>
+              <div class="col-md-9">
+                <input type="text" #phoneControl="ngModel" [(ngModel)]="phone" [value]="item?.phone" name="phone"
+                  class="form-control" readonly>
+                </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input">Email</label>
+              <div class="col-md-9">
+                <input type="email" #emailControl="ngModel" [(ngModel)]="email" [value]="item?.email" name="email"
+                  class="form-control" readonly>
+                  </div>
+            </div>
+            <!-- <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Tên đăng nhập</label>
+              <div class="col-md-9">
+                <input type="text" #usernameControl="ngModel" [(ngModel)]="username" [value]="item?.username" name="username"
+                  class="form-control" readonly>
+                    </div>
+            </div> -->
+            <!-- <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="password-input">Password</label>
+              <div class="col-md-9">
+                <input type="password" #passwordControl="ngModel" [(ngModel)]="password" [value]="item?.password" name="password"
+                  class="form-control" readonly>
+                </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="password-input">Xác nhận password</label>
+              <div class="col-md-9">
+                <input type="password" #repasswordControl="ngModel" [(ngModel)]="repassword" [value]="item?.repassword" name="repassword"
+                  class="form-control" readonly>
+                </div>
+            </div> -->
+            <!-- <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Địa chỉ</label>
+              <div class="col-md-9">
+                <input type="text" #addressControl="ngModel" [(ngModel)]="address" [value]="item?.address" name="address">
+              </div>
+            </div> -->
+            <!-- <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Ngày sinh</label>
+              <div class="col-md-9">
+                <input type="text" #birthdayControl="ngModel" [(ngModel)]="birthday" [value]="item?.birthday" name="birthday">
+              </div>
+            </div> -->
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Giới tính</label>
+              <div class="col-md-9">
+                <input type="text" [value]="item?.sex?'Name':'Nữ'" name="sex"
+                  class="form-control" readonly>
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Loại khách hàng</label>
+              <div class="col-md-9">
+                <input type="text" [value]="item?.customerType?'Thường':'VIP'" name="customerType"
+                  class="form-control" readonly>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
+              <div class="col-md-9">
+                <input type="text" [value]="item?.status?'Hoạt động':'Không hoạt động'" name="status"
+                  class="form-control" readonly>
+              </div>
+            </div>
+            <!-- <hr>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Điểm uy tín</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Điểm uy tín">
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Facebook</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Facebook">
+              </div>
+            </div> -->
+          </div>
+          <div class="card-footer">
+            <button (click)="editItem()" class="btn btn-sm btn-primary" data-style="expand-right">
+              Cập nhật
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

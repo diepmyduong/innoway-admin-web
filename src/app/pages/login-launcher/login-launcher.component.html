@@ -1,0 +1,36 @@
+<div id="fundo">
+  <form #loginForm="ngForm" (keyup)="keyDownFunction($event,loginForm)" id="login">
+      <div id="logo"></div>
+      <h1 id="login-title">Đăng nhập</h1>
+      <div class="card-block spinner" *ngIf="submitting">
+        <div class="sk-circle" >
+          <div class="sk-circle1 sk-child"></div>
+          <div class="sk-circle2 sk-child"></div>
+          <div class="sk-circle3 sk-child"></div>
+          <div class="sk-circle4 sk-child"></div>
+          <div class="sk-circle5 sk-child"></div>
+          <div class="sk-circle6 sk-child"></div>
+          <div class="sk-circle7 sk-child"></div>
+          <div class="sk-circle8 sk-child"></div>
+          <div class="sk-circle9 sk-child"></div>
+          <div class="sk-circle10 sk-child"></div>
+          <div class="sk-circle11 sk-child"></div>
+          <div class="sk-circle12 sk-child"></div>
+        </div>
+      </div>
+      <div class="input">
+        <input #emailControl="ngModel"
+        placeholder="Email" 
+        [(ngModel)]="email" 
+        placeholder="Email"
+        name="email" maxlength="70" email required>
+      </div>
+      <div class="input">
+        <input #passwordControl="ngModel"
+        placeholder="Password" 
+        [(ngModel)]="password" 
+        name="password" maxlength="70" type="password" required>
+        <div class="btn" (click)="signIn(loginForm)"></div>
+      </div>
+  </form>
+</div>

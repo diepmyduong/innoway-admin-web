@@ -1,0 +1,152 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Thông tin</strong>
+        </div>
+        <div class="card-block">
+          <form #itemFrm="ngForm">
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Loại nhân viên</label>
+              <div class="col-md-9">
+                <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Nhập loại nhân viên'" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
+              <div class="col-md-9">
+                <select id="statusSelect" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
+                    <option *ngFor="let v of [0,1]" [value]="v">
+                      {{ v===1?"Hoạt động":"Không hoạt động"}}
+                    </option>
+                  </select>
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <label class="col-md-12 form-control-label">Quản lý</label>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox1">
+			                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Quản lý chi nhánh
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox1">
+			                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Quản lý nhân viên
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox2">
+			                  <input type="checkbox" id="inline-checkbox2" name="inline-checkbox2" value="option2"> Quản lý sản phẩm
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox3">
+			                  <input type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3"> Quản lý đơn hàng
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox2">
+			                  <input type="checkbox" id="inline-checkbox2" name="inline-checkbox2" value="option2"> Quản lý khuyến mãi
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox3">
+			                  <input type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3"> Thiết lập hệ thống
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox3">
+			                  <input type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3"> Thiết lập notification
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox3">
+			                  <input type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3"> Thống kê
+			                </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <label class="col-md-12 form-control-label">Tính năng</label>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox1">
+			                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Xem danh sách đơn hàng
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox1">
+			                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Thêm đơn hàng
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox1">
+			                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Chỉnh sửa đơn hàng
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox1">
+			                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Xóa đơn hàng
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox1">
+			                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Trực callcenter
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox1">
+			                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Kiểm tra đơn hàng thành công
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox1">
+			                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Giao hàng
+			                </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <label class="col-md-12 form-control-label">Nền tảng</label>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox1">
+			                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Admin Dashboard
+			                </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="inline-checkbox1">
+			                  <input type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"> Ứng dụng nhân viên
+			                </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; New
+          </button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; Close
+          </button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Update &amp; Close
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+</div>

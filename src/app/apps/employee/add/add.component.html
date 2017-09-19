@@ -1,0 +1,159 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <strong>Ảnh đại diện</strong>
+        </div>
+        <div class="card-block">
+          <!-- <div class="col-md-12">
+            <img src="https://freeiconshop.com/wp-content/uploads/edd/person-flat.png" width="100%">
+          </div>
+          <div class="col-md-12 mt-h">
+            <input type="file" id="file-input" name="file-input">
+          </div> -->
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="text-input">Nhập avatar</label>
+            <div class="col-md-9">
+              <input type="text" #avatarControl="ngModel" [(ngModel)]="avatar" name="avatar" class="form-control" [placeholder]="'Nhập avatar'" required>
+              <small *ngIf="avatarControl.errors?.url"
+              class="text-muted danger" >
+                (Link không hợp lệ)
+              </small>
+              <img *ngIf="avatarControl.value && avatarControl.valid" style="width:100%;"
+                [src]="avatarControl.value" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <strong>Thông tin</strong>
+        </div>
+        <div class="card-block">
+          <form #itemFrm="ngForm">
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Họ và tên</label>
+              <div class="col-md-9">
+                <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Nhập họ và tên'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Số điện thoại</label>
+              <div class="col-md-9">
+                <input type="text" #phoneControl="ngModel" [(ngModel)]="phone" name="phone" class="form-control" [placeholder]="'Nhập số điện thoại'" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input">Email</label>
+              <div class="col-md-9">
+                <input type="email" #emailControl="ngModel" [(ngModel)]="email" name="email" class="form-control" [placeholder]="'Nhập email'" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Tên đầy đủ</label>
+              <div class="col-md-9">
+                <input type="text" #fullnameControl="ngModel" [(ngModel)]="fullname" name="fullname" class="form-control" [placeholder]="'Nhập tên đăng nhập'" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Tên đăng nhập</label>
+              <div class="col-md-9">
+                <input type="text" #usernameControl="ngModel" [(ngModel)]="username" name="username" class="form-control" [placeholder]="'Nhập tên đăng nhập'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="password-input">Password</label>
+              <div class="col-md-9">
+                <input type="password" #nameControl="ngModel" [(ngModel)]="password" name="password" class="form-control" [placeholder]="'Nhập password'" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="password-input">Xác nhận password</label>
+              <div class="col-md-9">
+                <input type="password" #repasswordControl="ngModel" [(ngModel)]="repassword" name="repassword" class="form-control" [placeholder]="'Xác nhận password'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Địa chỉ</label>
+              <div class="col-md-9">
+                <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control" [placeholder]="'Nhập địa chỉ'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input">Ngày sinh</label>
+              <div class="col-md-9">
+              <input type="text" #birthdayControl="ngModel" [(ngModel)]="birthday" name="birthday" class="form-control" [placeholder]="'Nhập ngày sinh'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Giới tính</label>
+              <div class="col-md-9">
+                <select id="genderSelect" #statusControl="ngModel" [(ngModel)]="gender" name="gender" class="form-control">
+                    <option *ngFor="let v of [0,1]" [value]="v">
+                      {{ v===1?"Nam":"Nữ"}}
+                    </option>
+                  </select>
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Phân quyền</label>
+              <div class="col-md-9">
+                <select id="employeeTypeSelect" #employeeTypeControl="ngModel" [(ngModel)]="employee_type_id" name="employee_type_id" class="form-control">
+                    <option *ngFor="let v of employeeTypeData | async" [value]="v.id">
+                      {{v.name}}
+                    </option>
+                  </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
+              <div class="col-md-9">
+                <select id="statusSelect" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
+                    <option *ngFor="let v of [0,1]" [value]="v">
+                      {{ v===1?"Hoạt động":"Không hoạt động"}}
+                    </option>
+                  </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Khu vực hoạt động</label>
+              <div class="col-md-9">
+                <select id="select" #areaControl="ngModel" [(ngModel)]="area" name="area" class="form-control">
+                    <option *ngFor="let v of areas" [value]="v.id">
+                      {{v.name}}
+                    </option>
+                  </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="select">Chi nhánh</label>
+              <div class="col-md-9">
+                <select id="branchSelect" #branchControl="ngModel" [(ngModel)]="branch_id" name="branch_id" class="form-control">
+                    <option *ngFor="let v of branchData | async" [value]="v.id">
+                      {{v.name}}
+                    </option>
+                  </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; New
+          </button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; Close
+          </button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Update &amp; Close
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+</div>

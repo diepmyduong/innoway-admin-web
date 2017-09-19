@@ -6,54 +6,43 @@ import { p500Component } from './500.component';
 import { LoginComponent } from './login.component';
 import { RegisterComponent } from './register.component';
 import { ChatbotLoginComponent } from './chatbot-login.component';
-import { UnAuthGuard } from '../chatbot/services/auth.guard';
+import { LoginLauncherComponent } from './login-launcher/login-launcher.component';
+
+import { UnAuthGuard } from '../apps/chatbot/services/auth.guard';
+import { AnonymousGuard, AuthGuard } from 'app/services';
 
 const routes: Routes = [
   {
     path:'',
-    redirectTo: '404',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
-    path: '',
+    path: '404',
     data: {
-      title: 'Example Pages'
+      title: 'Page 404'
     },
-    children: [
-      {
-        path: '404',
-        component: p404Component,
-        data: {
-          title: 'Page 404'
-        }
-      },
-      {
-        path: '500',
-        component: p500Component,
-        data: {
-          title: 'Page 500'
-        }
-      },
-      {
-        path: 'login',
-        component: LoginComponent,
-        data: {
-          title: 'Login Page'
-        }
-      },
-      {
-        path: 'chatbot-login',
-        component: ChatbotLoginComponent,
-        canActivate: [UnAuthGuard]
-      }
-      // {
-      //   path: 'register',
-      //   component: RegisterComponent,
-      //   data: {
-      //     title: 'Register Page'
-      //   }
-      // }
-    ]
+    component: p404Component
+  },
+  {
+    path: '500',
+    component: p500Component,
+    data: {
+      title: 'Page 500'
+    }
+  },
+  {
+    path: 'login',
+    component: LoginLauncherComponent,
+    data: {
+      title: 'Login Page'
+    },
+    canActivate: [AnonymousGuard]
+  },
+  {
+    path: 'chatbot-login',
+    component: ChatbotLoginComponent,
+    canActivate: [AuthGuard,UnAuthGuard]
   }
 ];
 

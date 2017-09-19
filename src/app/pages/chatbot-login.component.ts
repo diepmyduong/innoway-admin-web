@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../chatbot/services/auth.service';
+import { AuthService } from 'app/apps/chatbot/services/auth.service';
 import { Router} from '@angular/router';
 @Component({
   templateUrl: 'chatbot-login.component.html'
