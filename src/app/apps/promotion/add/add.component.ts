@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CustomValidators } from "ng2-validation/dist";
-import { InnowayService } from '../../services'
+import { InnowayService } from 'app/services'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Router, ActivatedRoute } from "@angular/router";
-import { AddPageInterface } from "app/interface/addPageInterface";
+import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { NgForm } from "@angular/forms";
 
 declare var swal: any;

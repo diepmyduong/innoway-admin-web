@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { ListPageInterface } from "app/interface/listPageInterface";
+import { ListPageInterface } from "app/apps/interface/listPageInterface";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router } from "@angular/router";

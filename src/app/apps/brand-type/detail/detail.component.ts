@@ -3,7 +3,7 @@ import { DetailPageInterface } from '../../interface/detailPageInterface';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from "ng2-validation/dist";
-import { InnowayService } from '../../services'
+import { InnowayService } from 'app/services'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { MapsAPILoader } from "@agm/core";
 
