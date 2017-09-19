@@ -1,18 +1,18 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import { ListPageInterface } from "app/apps/interface/listPageInterface";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayService } from "app/services";
+import { ListPageInterface } from "app/apps/interface/listPageInterface";
 
-declare var swal: any;
+declare let swal:any;
 
 @Component({
-  selector: 'app-promotion',
-  templateUrl: './promotion.component.html',
-  styleUrls: ['./promotion.component.scss']
+  selector: 'app-promotion-type',
+  templateUrl: './promotion-type.component.html',
+  styleUrls: ['./promotion-type.component.scss']
 })
-export class PromotionComponent implements OnInit, ListPageInterface {
+export class PromotionTypeComponent implements OnInit, ListPageInterface {
   items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   itemCount: number = 0;
   thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";;
@@ -21,16 +21,17 @@ export class PromotionComponent implements OnInit, ListPageInterface {
   searchTimeOut: number = 250;
   searchRef: any;
 
-  employeeTypeService: any;
+  promotionTypeService: any;
 
   @ViewChild(DataTable) itemsTable;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     public innoway: InnowayService,
     private ref: ChangeDetectorRef
   ) {
-    this.employeeTypeService = innoway.getService('promotion');
+    this.promotionTypeService = innoway.getService('promotion_type');
   }
 
   ngOnInit() {
@@ -48,8 +49,8 @@ export class PromotionComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('promotion', query);
-    this.itemCount = this.employeeTypeService.currentPageCount;
+    this.items = await this.innoway.getAll('promotion_type', query);
+    this.itemCount = this.promotionTypeService.currentPageCount;
     this.ref.detectChanges();
     return this.items;
   }
@@ -63,15 +64,15 @@ export class PromotionComponent implements OnInit, ListPageInterface {
   }
 
   addItem() {
-    this.router.navigate(['/promotion/add']);
+  this.router.navigate(['../add'], { relativeTo : this.route});
   }
 
   editItem(item) {
-    this.router.navigate(['/promotion/add', item.id]);
+    this.router.navigate(['../add', item.id], { relativeTo : this.route});
   }
 
   viewItem(item) {
-    this.router.navigate(['/promotion/detail', item.id]);
+    this.router.navigate(['../detail', item.id], { relativeTo : this.route});
   }
 
   async confirmDelete() {
@@ -107,7 +108,7 @@ export class PromotionComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.employeeTypeService.delete(item.id)
+      await this.promotionTypeService.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -126,7 +127,7 @@ export class PromotionComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.employeeTypeService.deleteAll(ids)
+      await this.promotionTypeService.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();

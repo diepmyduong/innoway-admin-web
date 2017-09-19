@@ -56,6 +56,10 @@ export const FullLayoutRouting = {
         loadChildren: 'app/apps/promotion/promotion.module#PromotionModule'
       },
       {
+        path: 'promotion-type',
+        loadChildren: 'app/apps/promotion-type/promotion-type.module#PromotionTypeModule'
+      },
+      {
         path: 'notification',
         loadChildren: 'app/apps/notification/notification.module#NotificationModule'
       },
@@ -144,5 +148,5 @@ export const FullLayoutRouting = {
         loadChildren: 'app/apps/area/area.module#AreaModule'
       },
     ],
-    
+
 }

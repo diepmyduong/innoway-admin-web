@@ -7,7 +7,6 @@ import { SettingsComponent } from './settings.component';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
-import { InnowayServiceService } from "app/services/innoway-service.service";
 
 import { TimepickerModule } from 'ng2-bootstrap/timepicker';
 import { DatepickerModule } from 'ng2-bootstrap/datepicker';
@@ -32,6 +31,5 @@ import { TextMaskModule } from 'angular2-text-mask';
     TextMaskModule
   ],
   declarations: [SettingsComponent],
-  providers: [InnowayServiceService]
 })
 export class SettingsModule { }

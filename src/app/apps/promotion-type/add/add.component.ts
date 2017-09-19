@@ -3,7 +3,6 @@ import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
 import { NgForm } from "@angular/forms";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 declare var swal: any;
 
@@ -16,31 +15,16 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  promotionService: any;
-  customerTypeService: any;
   promotionTypeService: any;
-
   name: string;
-  amount: string;
-  code: string;
-  customer_type_id: number = 1;
-  customer_types = new BehaviorSubject<any[]>([]);
-  description: string;
-  end_date: string;
-  start_date: string;
-  limit: string;
-  promotion_type_id: number = 1;
-  promotion_types = new BehaviorSubject<any[]>([]);
-  value: string;
+  offset: string;
   status: number = 1;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
     public innoway: InnowayService) {
-    this.promotionService = innoway.getService('promotion');
     this.promotionTypeService = innoway.getService('promotion_type');
-    this.customerTypeService = innoway.getService('customer_type');
   }
 
   ngOnInit(): void {
@@ -63,21 +47,12 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.promotionService.get(this.id, {
+      let data = await this.promotionTypeService.get(this.id, {
         fields: ["$all"]
       });
       this.name = data.name
-      this.amount = data.amount
-      this.code = data.code
-      this.customer_type_id = data.customer_type_id
-      this.description = data.description
-      this.end_date = data.end_date
-      this.start_date = data.start_date
-      this.limit = data.limit
-      this.promotion_type_id = data.promotion_type_id
-      this.value = data.value
+      this.offset = data.offset
       this.status = data.status
-
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -85,16 +60,8 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
-  async loadPromotionTypeData(){
-
-  }
-
-  async loadCustomerTypeData(){
-
-  }
-
   backToList() {
-    this.router.navigate(['/promotion/list'])
+    this.router.navigate(['/promotion-type/list'])
   }
 
   alertItemNotFound() {
@@ -147,8 +114,8 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, amount, code, customer_type_id, description, end_date, start_date, limit, promotion_type_id, value, status } = this;
-      await this.promotionService.add({ name, amount, code, customer_type_id, description, end_date, start_date, limit, promotion_type_id, value, status })
+      let { name, offset, status } = this;
+      await this.promotionTypeService.add({ name, offset, status })
       this.alertAddSuccess();
       form.reset();
       form.controls["status"].setValue(1);
@@ -159,8 +126,8 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, amount, code, customer_type_id, description, end_date, start_date, limit, promotion_type_id, value, status } = this;
-      await this.promotionService.update(this.id, { name, amount, code, customer_type_id, description, end_date, start_date, limit, promotion_type_id, value, status })
+      let { name, offset, status } = this;
+      await this.promotionTypeService.update(this.id, { name, offset, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {

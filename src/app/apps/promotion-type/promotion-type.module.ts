@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { CustomerTypeRoutingModule } from './customer-type-routing.module';
-import { CustomerTypeComponent } from './customer-type.component';
+import { PromotionTypeRoutingModule } from './promotion-type-routing.module';
+import { PromotionTypeComponent } from './promotion-type.component';
 import { AddComponent } from './add/add.component';
 import { DetailComponent } from './detail/detail.component';
 
@@ -10,17 +10,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
+
 @NgModule({
   imports: [
     CommonModule,
-    CustomerTypeRoutingModule,
+    PromotionTypeRoutingModule,
 
     FormsModule,
     ReactiveFormsModule,
     LaddaModule,
-    DataTableModule
+    DataTableModule,
   ],
-  declarations: [CustomerTypeComponent, AddComponent, DetailComponent],
+  declarations: [PromotionTypeComponent, AddComponent, DetailComponent],
   providers: []
 })
-export class CustomerTypeModule { }
+export class PromotionTypeModule { }

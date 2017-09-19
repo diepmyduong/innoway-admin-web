@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { PromotionComponent } from './promotion.component';
+import { PromotionTypeComponent } from './promotion-type.component';
 import { AddComponent } from './add/add.component';
 import { DetailComponent } from './detail/detail.component';
 
@@ -32,7 +32,7 @@ const routes: Routes = [
       },
       {
         path: 'list',
-        component: PromotionComponent,
+        component: PromotionTypeComponent,
         data: {
           title: "Danh sách"
         }
@@ -52,4 +52,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PromotionRoutingModule { }
+export class PromotionTypeRoutingModule { }

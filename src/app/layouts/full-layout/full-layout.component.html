@@ -5,7 +5,7 @@
       <li class="nav-item">
           <a class="nav-link navbar-toggler sidebar-toggler" href="javascript:;">&#9776;</a>
       </li>
-      
+
   </ul>
   <ul class="nav navbar-nav ml-auto">
       <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
@@ -17,15 +17,15 @@
               <div class="dropdown-header text-center"><strong>Thông báo</strong></div>
 
               <a href="javascript:;" class="dropdown-item">
-                  <i class="icon-basket-loaded text-primary"></i> Đơn hàng chờ duyệt 
+                  <i class="icon-basket-loaded text-primary"></i> Đơn hàng chờ duyệt
                   <span class="badge badge-pill badge-primary">5</span>
               </a>
               <a href="javascript:;" class="dropdown-item">
-                  <i class="glyphicons glyphicons-coins text-success"></i> Đơn hàng chờ thu phí 
+                  <i class="glyphicons glyphicons-coins text-success"></i> Đơn hàng chờ thu phí
                   <span class="badge badge-pill badge-success">5</span>
               </a>
               <a href="javascript:;" class="dropdown-item">
-                  <i class="glyphicons glyphicons-exclamation-sign text-warning"></i> Đơn hàng báo huỷ 
+                  <i class="glyphicons glyphicons-exclamation-sign text-warning"></i> Đơn hàng báo huỷ
                   <span class="badge badge-pill badge-warning">5</span>
               </a>
           </div>
@@ -266,6 +266,17 @@
                 </ul>
               </li>
               <li class="nav-item nav-dropdown" routerLinkActive="open">
+                <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i>Loại khuyến mãi</a>
+                <ul class="nav-dropdown-items">
+                  <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['./promotion-type/add']"><i class="icon-star"></i> Thêm</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['./promotion-type/list']"><i class="icon-star"></i> Danh sách</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item nav-dropdown" routerLinkActive="open">
                 <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Notification</a>
                 <ul class="nav-dropdown-items">
                   <li class="nav-item">
@@ -356,23 +367,23 @@
               <li class="nav-item nav-dropdown" routerLinkActive="open">
                 <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Thống kê</a>
                 <ul class="nav-dropdown-items">
-                  <li class="nav-item"><i class="icon-star"></i>Chi phí</li>    
-                  <li class="nav-item"><i class="icon-star"></i>Đơn hàng</li>    
-                  <li class="nav-item"><i class="icon-star"></i>Sản phẩm</li>    
-                  <li class="nav-item"><i class="icon-star"></i>Nhân viên</li>    
-                  <li class="nav-item"><i class="icon-star"></i>Hoạt động</li>                 
+                  <li class="nav-item"><i class="icon-star"></i>Chi phí</li>
+                  <li class="nav-item"><i class="icon-star"></i>Đơn hàng</li>
+                  <li class="nav-item"><i class="icon-star"></i>Sản phẩm</li>
+                  <li class="nav-item"><i class="icon-star"></i>Nhân viên</li>
+                  <li class="nav-item"><i class="icon-star"></i>Hoạt động</li>
                 </ul>
               </li>
               <li class="nav-item nav-dropdown" routerLinkActive="open">
                 <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Báo cáo</a>
                 <ul class="nav-dropdown-items">
-                  <li class="nav-item"><i class="icon-star"></i>Chi phí</li>    
-                  <li class="nav-item"><i class="icon-star"></i>Đơn hàng</li>    
-                  <li class="nav-item"><i class="icon-star"></i>Sản phẩm</li>    
-                  <li class="nav-item"><i class="icon-star"></i>Nhân viên</li>    
-                  <li class="nav-item"><i class="icon-star"></i>Hoạt động</li>                 
+                  <li class="nav-item"><i class="icon-star"></i>Chi phí</li>
+                  <li class="nav-item"><i class="icon-star"></i>Đơn hàng</li>
+                  <li class="nav-item"><i class="icon-star"></i>Sản phẩm</li>
+                  <li class="nav-item"><i class="icon-star"></i>Nhân viên</li>
+                  <li class="nav-item"><i class="icon-star"></i>Hoạt động</li>
                 </ul>
-              </li>              
+              </li>
               <li class="nav-title text-center">
                   <span>Tiện ích</span>
               </li>
@@ -435,7 +446,7 @@
       </div>
       <!-- /.conainer-fluid -->
 
-      
+
   </main>
 
   <aside class="aside-menu">
@@ -518,6 +529,3 @@
 </footer>
 
 <!--<span defaultOverlayTarget></span>-->
-
-
-

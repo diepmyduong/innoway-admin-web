@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 //Layouts
-import { 
+import {
   FullLayoutRouting,
   SimpleLayoutRouting,
   ChatbotLayoutRouting,
@@ -20,7 +20,7 @@ export const routes: Routes = [
   ChatbotLayoutRouting,
   LauncherLayoutRouting
   // {
-  //   path: '**', 
+  //   path: '**',
   //   redirectTo: '404'
   // }
 ];

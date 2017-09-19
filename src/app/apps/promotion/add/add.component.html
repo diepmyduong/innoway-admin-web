@@ -25,19 +25,19 @@
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Tên khuyến mãi</label>
               <div class="col-md-8">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tên khuyến mãi">
+                <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Tên thông tin khuyến mãi'" required>
               </div>
-            </div>       
+            </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
               <div class="col-md-8">
-                <textarea id="textarea-input" name="textarea-input" rows="5" class="form-control" placeholder="Mô tả"></textarea>
+                <textarea id="textarea-input" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
               </div>
    			</div>
    			<div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Mã code</label>
               <div class="col-md-8">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Mã code">
+                <input type="text" #employeeControl="ngModel" [(ngModel)]="employee" name="employee" class="form-control" [placeholder]="'Uy Minh'" required>
               </div>
             </div>
             <div class="form-group row">
@@ -62,7 +62,7 @@
                   <option value="2">Quà tặng</option>
                 </select>
               </div>
-            </div> 
+            </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Giá trị</label>
               <div class="col-md-8">
@@ -90,7 +90,7 @@
                   <option value="2">Không hoạt động</option>
                 </select>
               </div>
-            </div>  
+            </div>
             <div class="form-group row">
 	            <div class="col-md-12">
 	            	<div class="row">
@@ -116,7 +116,7 @@
 	              		</div>
             		</div>
 			    </div>
-			</div>       
+			</div>
           </form>
         </div>
         <div class="card-footer">
@@ -127,4 +127,4 @@
     </div>
     <!--/.col-->
   </div>
-</div>	
+</div>
