@@ -1,6 +1,5 @@
 import { InnowayService } from './innoway.service'
 import { ServicesModule } from './services.module'
-<<<<<<< HEAD
 import { AuthService } from './auth.service'
 import { AuthGuard } from './guards/auth.guard'
 import { AnonymousGuard } from './guards/anonymous.guard';
@@ -11,9 +10,5 @@ export {
 	AuthGuard,
 	AnonymousGuard,
 
-=======
-export {
-	InnowayService,
->>>>>>> master
 	ServicesModule
 }

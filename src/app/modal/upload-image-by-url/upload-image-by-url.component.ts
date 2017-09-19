@@ -2,11 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DialogRef, ModalComponent, CloseGuard } from 'angular2-modal';
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap/index';
 import { FormBuilder , FormGroup, Validators} from '@angular/forms';
-<<<<<<< HEAD
 import { TextCardFormGroup, TextCardValidateMessages } from 'app/apps/chatbot/forms/text-card.groups';
-=======
-import { TextCardFormGroup, TextCardValidateMessages } from '../../chatbot/forms/text-card.groups';
->>>>>>> master
 import { CustomValidators } from 'ng2-validation';
 
 export class TextCardModalContext extends BSModalContext {
