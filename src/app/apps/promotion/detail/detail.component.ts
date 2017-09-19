@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
+
 declare var swal: any;
+
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
@@ -13,8 +15,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   employeeTypeService: any;
   id: string;
   item: any;
-  itemFields: any = ['$all', {
-    type: ["id", "name"], branch: ["id", "name"]
+  itemFields: any = ['$all',{
+    promotion_type: ["name"], customer_type: ["name"]
   }];
 
   constructor(
@@ -22,7 +24,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     private router: Router,
     public innoway: InnowayService
   ) {
-    this.employeeTypeService = innoway.getService('employee');
+    this.employeeTypeService = innoway.getService('promotion');
   }
 
   ngOnInit() {
@@ -49,11 +51,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   editItem() {
-    this.router.navigate(['/employee/add', this.id]);
+    this.router.navigate(['../add', this.id], { relativeTo: this.route});
   }
 
   backToList() {
-    this.router.navigate(['/employee/list'])
+    this.router.navigate(['../../list'], { relativeTo: this.route});
   }
 
   alertItemNotFound() {

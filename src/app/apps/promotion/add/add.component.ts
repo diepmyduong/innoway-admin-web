@@ -18,69 +18,38 @@ export class AddComponent implements OnInit, AddPageInterface {
   isEdit: boolean = false;
   submitting: boolean = false;
 
-  employeeService: any;
-  employeeTypeService: any;
-  branchService: any;
+  promotionService: any;
+  customerTypeService: any;
+  promotionTypeService: any;
 
   name: string;
-  phone: string;
-  email: string;
-  address: string;
-  birthday: string;
-  sex: number = 1;
-  fullname: string;
-  username: string;
-  password: string;
-  repassword: string;
-  avatar: string;
-  area: number = 1;
-  areas: any[] = [
-    {
-      id: 0,
-      name: "Quận 1"
-    }, {
-      id: 1,
-      name: "Quận 3"
-    }, {
-      id: 2,
-      name: "Quận 4"
-    }, {
-      id: 3,
-      name: "Quận 5"
-    }, {
-      id: 4,
-      name: "Quận 7"
-    }, {
-      id: 5,
-      name: "Quận 10"
-    }, {
-      id: 6,
-      name: "Quận Phú Nhuận"
-    }, {
-      id: 7,
-      name: "Quận Bình Thạnh"
-    }
-  ];
-
-  gender: number = 1;
+  amount: string;
+  code: string;
+  limit: string;
+  description: string;
+  start_date: string;
+  end_date: string;
+  value: string;
+  customer_type_id: string;
+  promotion_type_id: string;
   status: number = 1;
-  branchData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  employeeType: number = 1;
-  branch_id: string;
-  employee_type_id: string;
-  employeeTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  customerTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  promotionTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
     public innoway: InnowayService) {
-    this.employeeService = innoway.getService('employee');
-    this.employeeTypeService = innoway.getService('employee_type');
-    this.branchService = innoway.getService('branch');
+    this.promotionService = innoway.getService('promotion');
+    this.customerTypeService = innoway.getService('customer_type');
+    this.promotionTypeService = innoway.getService('promotion_type');
   }
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
+    await this.loadPromotionTypeData();
+    await this.loadCustomerTypeData();
+
     if (this.id == null) {
       this.isEdit = false;
       this.setDefaultData();
@@ -91,53 +60,55 @@ export class AddComponent implements OnInit, AddPageInterface {
     if (this.isEdit) {
       this.setData();
     }
-
-    await this.loadBranchData();
-    await this.loadEmployeeTypeData();
   }
 
   setDefaultData() {
     this.status = 1;
-    if (this.branchData.getValue()[0]) {
-      this.branch_id = this.branchData.getValue()[0].id;
+    this.start_date = null;
+    this.end_date = null;
+    this.value = null;
+    this.limit = null;
+    if (this.promotionTypeData.getValue()[0]) {
+      this.promotion_type_id = this.promotionTypeData.getValue()[0].id;
     }
-    if (this.employeeTypeData.getValue()[0]) {
-      this.employee_type_id = this.employeeTypeData.getValue()[0].id;
+    if (this.customerTypeData.getValue()[0]) {
+      this.customer_type_id = this.customerTypeData.getValue()[0].id;
     }
     return {
       status: this.status,
-      branch_id: this.branch_id,
-      employee_type_id: this.employee_type_id
+      promotion_type_id: this.promotion_type_id,
+      customer_type_id: this.customer_type_id
     }
   }
 
   async setData() {
     try {
-      let data = await this.employeeService.get(this.id, {
+      let data = await this.promotionService.get(this.id, {
         fields: ["$all", {
-          type: ["id", "name"], branch: ["id", "name"]
+          promotion_type: ["id", "name"], customer_type: ["id", "name"]
         }]
       });
       this.name = data.name
-      this.fullname = data.fullname
-      this.username = data.username
-      this.password = data.password
-      this.phone = data.phone
-      this.email = data.email
-      this.address = data.address
-      this.avatar = data.avatar
-      this.branch_id = data.branch_id
-      this.employee_type_id = data.employee_type_id
+      this.amount = data.amount
+      this.code = data.code
+      this.limit = data.limit
+      this.description = data.description
+      this.start_date = data.start_date
+      this.end_date = data.end_date
+      this.value = data.value
+      this.customer_type_id = data.customer_type_id
+      this.promotion_type_id = data.promotion_type_id
       this.status = data.status
+
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
     }
   }
 
-  async loadBranchData() {
+  async loadPromotionTypeData() {
     try {
-      this.branchData = await this.innoway.getAll('branch', {
+      this.promotionTypeData = await this.innoway.getAll('promotion_type', {
         fields: ["id", "name"]
       });
     } catch (err) {
@@ -146,9 +117,9 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
-  async loadEmployeeTypeData() {
+  async loadCustomerTypeData() {
     try {
-      this.employeeTypeData = await this.innoway.getAll('employee_type', {
+      this.customerTypeData = await this.innoway.getAll('customer_type', {
         fields: ["id", "name"]
       });
     } catch (err) {
@@ -158,7 +129,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   backToList() {
-    this.router.navigate(['/employee/list'])
+    this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -211,11 +182,11 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, phone, email, branch_id, fullname, password, address, avatar, employee_type_id, status } = this;
-      await this.employeeService.add({ name, phone, email, branch_id, fullname, password, address, avatar, employee_type_id, status })
+      let { name, amount, code, limit, description, start_date, end_date, value, customer_type_id, promotion_type_id, status } = this;
+      await this.promotionService.add({ name, amount, code, limit, description, start_date, end_date, value, customer_type_id, promotion_type_id, status })
       this.alertAddSuccess();
       form.reset();
-      form.controls["status"].setValue(1);
+      form.resetForm(this.setDefaultData());
     } else {
       this.alertFormNotValid();
     }
@@ -223,10 +194,11 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, phone, email, branch_id, fullname, password, address, avatar, employee_type_id, status } = this;
-      await this.employeeService.update(this.id, { name, phone, email, branch_id, fullname, password, address, avatar, employee_type_id, status })
+      let { name, amount, code, limit, description, start_date, end_date, value, customer_type_id, promotion_type_id, status } = this;
+      await this.promotionService.update(this.id, { name, amount, code, limit, description, start_date, end_date, value, customer_type_id, promotion_type_id, status })
       this.alertUpdateSuccess();
       form.reset();
+      form.resetForm(this.setDefaultData());
     } else {
       this.alertFormNotValid();
     }
