@@ -15,6 +15,9 @@ import {ColorPickerModule} from 'angular2-color-picker';
 import { CustomFormsModule } from 'ng2-validation';
 // Angular 2 Input Mask
 import { TextMaskModule } from 'angular2-text-mask';
+import { AreaComponent } from './area/area.component';
+import { ScheduleComponent } from './schedule/schedule.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
 
 @NgModule({
   imports: [
@@ -30,6 +33,6 @@ import { TextMaskModule } from 'angular2-text-mask';
     CustomFormsModule,
     TextMaskModule
   ],
-  declarations: [SettingsComponent],
+  declarations: [SettingsComponent, AreaComponent, ScheduleComponent, ChatbotComponent],
 })
 export class SettingsModule { }
