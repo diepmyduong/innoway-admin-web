@@ -18,6 +18,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { AreaComponent } from './area/area.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
+import { SellComponent } from './sell/sell.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,6 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
     CustomFormsModule,
     TextMaskModule
   ],
-  declarations: [SettingsComponent, AreaComponent, ScheduleComponent, ChatbotComponent],
+  declarations: [SettingsComponent, AreaComponent, ScheduleComponent, ChatbotComponent, SellComponent],
 })
 export class SettingsModule { }

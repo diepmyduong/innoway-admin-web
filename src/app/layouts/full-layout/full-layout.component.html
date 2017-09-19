@@ -393,8 +393,22 @@
               <li class="nav-title text-center">
                   <span>Hệ thống</span>
               </li>
-              <li class="nav-item">
-                  <a class="nav-link" routerLinkActive="active" [routerLink]="['./settings']"><i class="icon-social-reddit"></i> Cài đặt </a>
+              <li class="nav-item nav-dropdown" routerLinkActive="open">
+                <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Thiết lập</a>
+                <ul class="nav-dropdown-items">
+                  <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['./settings/sell']"><i class="icon-star"></i> Bán hàng</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['./settings/area']"><i class="icon-star"></i> Khu vực hoạt động</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['./settings/schedule']"><i class="icon-star"></i> Thời gian hoạt động</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['./settings/chatbot']"><i class="icon-star"></i> Chatbot</a>
+                  </li>
+                </ul>
               </li>
               <li class="nav-item nav-dropdown" routerLinkActive="open">
                 <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Thời khóa biểu</a>
