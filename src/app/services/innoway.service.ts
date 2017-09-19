@@ -31,7 +31,7 @@ export class InnowayService {
     'branch',
     'brand',
     'promotion',
-    'promotion-type'
+    'promotion_type'
   ]
   service_items:any = {}
   services:any = {}

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { InnowayService } from 'app/services'
+
+declare let swal:any;
 
 @Component({
   selector: 'app-detail',
@@ -6,10 +10,55 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit {
+  promotionTypeService:any;
+  id:string;
+  item:any;
+  itemFields = ['$all']
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    public innoway:InnowayService
+  ) {
+  	this.promotionTypeService = innoway.getService('promotion_type');
   }
 
+  ngOnInit() {
+
+   	this.id = this.route.snapshot.params['id'];
+
+    if(this.id){
+      this.setData()
+    }else{
+      this.alertItemNotFound()
+      this.backToList()
+    }
+  }
+
+  async setData(){
+    try {
+      this.item = await this.promotionTypeService.get(this.id,{
+        fields: this.itemFields
+      })
+    }catch(err){
+      this.alertItemNotFound()
+      this.backToList()
+    }
+  }
+
+  editItem(){
+    this.router.navigate(['../add', this.id], { relativeTo: this.route});
+  }
+
+  backToList(){
+    this.router.navigate(['../../list'], { relativeTo: this.route});
+  }
+
+  alertItemNotFound(){
+    return swal({
+      title: 'Không còn tồn tại',
+      type: 'warning',
+      timer: 2000
+    })
+  }
 }

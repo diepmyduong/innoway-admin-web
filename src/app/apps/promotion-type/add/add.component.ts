@@ -16,8 +16,9 @@ export class AddComponent implements OnInit, AddPageInterface {
   isEdit: boolean = false;
   submitting: boolean = false;
   promotionTypeService: any;
+
   name: string;
-  offset: string;
+  description: string;
   status: number = 1;
 
   constructor(private route: ActivatedRoute,
@@ -51,7 +52,7 @@ export class AddComponent implements OnInit, AddPageInterface {
         fields: ["$all"]
       });
       this.name = data.name
-      this.offset = data.offset
+      this.description = data.description
       this.status = data.status
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
@@ -114,8 +115,8 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, offset, status } = this;
-      await this.promotionTypeService.add({ name, offset, status })
+      let { name, description, status } = this;
+      await this.promotionTypeService.add({ name, description, status })
       this.alertAddSuccess();
       form.reset();
       form.controls["status"].setValue(1);
@@ -126,8 +127,8 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, offset, status } = this;
-      await this.promotionTypeService.update(this.id, { name, offset, status })
+      let { name, description, status } = this;
+      await this.promotionTypeService.update(this.id, { name, description, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {
