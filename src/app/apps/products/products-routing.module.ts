@@ -14,7 +14,7 @@ const routes: Routes = [
   	{
     path: '',
     data: {
-      title: 'Sản phẩm'
+      title: 'Loại sản phẩm'
     },
     children:[
     	{

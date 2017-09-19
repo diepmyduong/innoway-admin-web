@@ -25,11 +25,15 @@ export class InnowayService {
     'bill',
     'unit',
     'attribute',
+<<<<<<< HEAD
     'category',
     'employee_type',
     'customer_type',
     'branch',
     'brand'
+=======
+    'category'
+>>>>>>> master
   ]
   service_items:any = {}
   services:any = {}

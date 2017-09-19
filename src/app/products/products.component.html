@@ -1,0 +1,74 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-lg-4 mt-h">
+              <span><i class="fa fa-align-justify px-1 mt-h"></i> Danh sách loại sản phẩm</span>
+            </div>
+            <div class="col-lg-8 col-xs-12 mt-h">             
+
+              <button type="button" class="btn btn-outline-success mt-0 px-2 float-right" (click)="addItem()">Thêm</button>
+                
+              <form class="form-inline float-right px-2">
+                  <label class="form-control-label mr-1" for="text-input">Số lượng:  </label>
+                  <select class="form-control input-sm" [attr.selected]="i == 0 ? true : null" (change)="onChangePageOption(pageOptionSelect.value)" #pageOptionSelect>
+                    <option *ngFor="let pageOption of pageOptions;let i = index" [value]="pageOption" [selected]="limit === pageOption">{{pageOption}}</option>
+                  </select> 
+                <i class="fa fa-search px-1" (click)="queryName(search.value)"></i>
+                <input class="form-control" #search type="text" placeholder="Search..." value="{{searchName}}" (keydown)="queryKeyDownFunction($event, search.value)">
+              </form>       
+            </div>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="row text-center m-h">
+            <div class="p-h"><div class="float-left mr-h">Chọn nhiều đối tượng</div><ui-switch size="small" [(ngModel)]="enable" (change)="switchModeSelectItem($event)"></ui-switch></div>
+            <button type="button" class="btn btn-outline-success mt-0 p-h float-right mr-h" *ngIf="isMultipleSelect" (click)="selectAllItems()">Chọn tất cả</button>
+            <button type="button" class="btn btn-outline-success mt-0 p-h float-right mr-h" *ngIf="isMultipleSelect" (click)="deselectAllItems()">Hủy chọn tất cả</button>
+            <button type="button" class="btn btn-outline-danger mt-0 p-h float-right mr-h" *ngIf="isMultipleSelect" (click)="deleteSelectedItems()">Xóa</button>
+          </div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th class="text-center" *ngIf="isMultipleSelect">Chọn</th>
+                <th class="text-center">Hình ảnh</th>
+                <th class="text-center">Tên loại sản phẩm</th>
+                <th class="text-center">Trạng thái</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="products">
+              <tr *ngFor="let item of products | async">
+                <td class="text-center" *ngIf="isMultipleSelect">
+                  <input type="checkbox" [value]="item.id" [checklist]="seletectedItems"/>                   
+                </td>
+                <td class="text-center"><img height="50px" src="{{item.thumb==null?thumbDefaultCategory:item.thumb}}" (error)="errorHandler($event)"></td>
+                <td class="text-center"><a class="nav-link" routerLinkActive="active" [routerLink]="['/product/detail']">{{item.name}}</a></td>
+                <td class="text-center">
+                    <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>
+                </td>
+                <td class="text-center">
+                  <span class="badge badge-default" (click)="viewItem(item)"><i class="icon-eye icons font-xl p-q d-block"></i></span>
+                  <span class="badge badge-success" (click)="editItem(item)"><i class="icon-pencil icons font-xl p-q d-block"></i></span>
+                  <span class="badge badge-danger" (click)="deleteItem(item)"><i class="icon-trash icons font-xl p-q d-block"></i></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="pagination" *ngIf="canLoadMore">
+            <li class="page-item"><a class="page-link" href="javascript:;" (click)="loadMore()">Load more</a></li>
+            <!-- <li class="page-item active">
+              <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">4</a></li> -->
+            <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  <!--/.row-->
+</div>
