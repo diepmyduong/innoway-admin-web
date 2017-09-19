@@ -26,7 +26,7 @@ export class ModalSendStoryComponent implements OnInit,CloseGuard, ModalComponen
     public dialog: DialogRef<SendStoryModalContext>,
     private fb: FormBuilder,
     private pageService:PageService,
-    private activatedRoute:ActivatedRoute
+    private route:ActivatedRoute
   ) { 
     this.context = dialog.context;
     dialog.setCloseGuard(this);
@@ -34,7 +34,7 @@ export class ModalSendStoryComponent implements OnInit,CloseGuard, ModalComponen
 
   ngOnInit() {
     this.frmSend = SendStoryFormGroup(this.fb);
-    var pid = this.activatedRoute.snapshot.params.pid;
+    var pid = this.route.snapshot.params.pid;
     this.page = this.pageService._pages[pid];
     this.frmSend.controls['type'].setValue(this.context.type);
     this.pageService.getStories(this.page).subscribe(stories =>{

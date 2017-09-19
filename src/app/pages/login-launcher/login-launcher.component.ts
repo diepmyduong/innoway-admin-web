@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { AuthService } from 'app/services';
 
 declare var swal:any;
 
@@ -10,25 +11,44 @@ declare var swal:any;
 })
 export class LoginLauncherComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private auth: AuthService
+  ) { }
 
   email:string;
   password:string;
+  submitting = false;
 
   ngOnInit() {
   }
 
   async signIn(form:NgForm){
+    this.submitting = true;
     if(form.valid){
-
+      try {
+        let { email, password} = this;
+        let user = await this.auth.loginWithEmailAndPassword(email,password);
+      }catch(err){
+        console.error("ERROR",err);
+      }
     }else{
-      await this.alertFormNotValid()
+      this.alertFormNotValid()
     }
+    this.submitting = false;
   }
 
   async alertFormNotValid() {
     return await swal({
       title: 'Nội dung nhập không hợp lệ',
+      type: 'warning',
+      showConfirmButton: false,
+      timer: 1000,
+    })
+  }
+
+  async alertAuthError(message = ""){
+    return await swal({
+      title: message,
       type: 'warning',
       showConfirmButton: false,
       timer: 1000,

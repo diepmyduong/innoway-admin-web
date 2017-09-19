@@ -12,7 +12,7 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private activatedRoute : ActivatedRoute
+    private route : ActivatedRoute
   ) { 
     
     // const parentActivatedRoute = router.routerState.root.parent(activatedRoute);

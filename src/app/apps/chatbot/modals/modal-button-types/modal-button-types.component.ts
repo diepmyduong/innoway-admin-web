@@ -28,7 +28,7 @@ export class ModalButtonTypesComponent implements OnInit,CloseGuard, ModalCompon
     private fb: FormBuilder,
     private pageService:PageService,
     private zone:NgZone,
-    private activatedRoute:ActivatedRoute
+    private route:ActivatedRoute
   ) { 
     this.context = dialog.context;
     dialog.setCloseGuard(this);
@@ -36,7 +36,7 @@ export class ModalButtonTypesComponent implements OnInit,CloseGuard, ModalCompon
 
   ngOnInit() {
     this.frmButton = MenuItemFormGroup(this.fb);
-    var pid = this.activatedRoute.snapshot.params.pid;
+    var pid = this.route.snapshot.params.pid;
     this.page = this.pageService._pages[pid];
     this.frmButton.controls['type'].setValue(this.context.type);
     this.frmButton.controls['title'].setValue(this.context.data.title);

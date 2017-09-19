@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';  
 import { FormsModule ,ReactiveFormsModule} from '@angular/forms'
 import { CustomFormsModule } from 'ng2-validation'
 
@@ -15,6 +16,7 @@ import { LoginLauncherComponent } from './login-launcher/login-launcher.componen
 
 @NgModule({
   imports: [ 
+    CommonModule,
     PagesRoutingModule,
     FormsModule,
     CustomFormsModule

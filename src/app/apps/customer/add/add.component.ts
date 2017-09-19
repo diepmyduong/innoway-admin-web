@@ -76,12 +76,12 @@ export class AddComponent implements OnInit, AddPageInterface {
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
-      // this.router.navigate(['unit'])
+      this.backToList()
     }
   }
 
   backToList() {
-    this.router.navigate(['/customer/list'])
+    this.router.navigate(['../../list'], { relativeTo: this.route});
   }
 
   alertItemNotFound() {

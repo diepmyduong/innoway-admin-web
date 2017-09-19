@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayService } from "app/services";
 import { ListPageInterface } from "app/apps/interface/listPageInterface";
 
@@ -27,6 +27,7 @@ export class CustomerComponent implements OnInit, ListPageInterface {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     public innoway: InnowayService,
     private ref: ChangeDetectorRef
   ) {
@@ -63,15 +64,15 @@ export class CustomerComponent implements OnInit, ListPageInterface {
   }
 
   addItem() {
-    this.router.navigate(['/customer/add']);
+    this.router.navigate(['../add'], { relativeTo : this.route});
   }
 
   editItem(item) {
-    this.router.navigate(['/customer/add', item.id]);
+    this.router.navigate(['../add', item.id], { relativeTo : this.route});
   }
 
   viewItem(item) {
-    this.router.navigate(['/customer/detail', item.id]);
+    this.router.navigate(['../detail', item.id], { relativeTo : this.route});
   }
 
   async confirmDelete() {

@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from "@angular/router";
 import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService, 
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -22,7 +26,7 @@ export class AuthGuard implements CanActivate {
           ob.next(true);
         }else if(authenticated != undefined){
           localStorage.setItem('innoway-chatbot.url.previous-state',state.url);
-          this.router.navigate(['/pages/chatbot-login']);
+          this.router.navigate(['/chatbot-login']);
           ob.next(false);
         }
       })
@@ -33,7 +37,11 @@ export class AuthGuard implements CanActivate {
 @Injectable()
 export class UnAuthGuard implements CanActivate {
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService, 
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
   canActivate(): Observable<boolean> {
     return new Observable<boolean>((ob)=>{

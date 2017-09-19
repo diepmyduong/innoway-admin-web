@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-full-layout',
   templateUrl: './full-layout.component.html',
-  styleUrls: ['./full-layout.component.css']
+  styleUrls: ['./full-layout.component.scss']
 })
 export class FullLayoutComponent implements OnInit {
 
   constructor() { }
 
+  prefix = '/super-admin'
+  
   public disabled:boolean = false;
   public status:{isopen:boolean} = {isopen: false};
 
@@ -23,4 +25,5 @@ export class FullLayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
 }

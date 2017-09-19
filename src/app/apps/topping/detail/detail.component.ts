@@ -57,11 +57,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   editItem() {
-    this.router.navigate(['/topping/add', this.id]);
+    this.router.navigate(['../add', this.id], { relativeTo: this.route});
   }
 
   backToList() {
-    this.router.navigate(['/topping/list'])
+    this.router.navigate(['../../list'], { relativeTo: this.route});
   }
 
   alertItemNotFound() {

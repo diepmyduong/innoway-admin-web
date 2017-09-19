@@ -60,12 +60,12 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.status = category.status
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
-      this.router.navigate(['topping-type'])
+      this.backToList()
     }
   }
 
   backToList() {
-    this.router.navigate(['/topping-type/list'])
+    this.router.navigate(['../../list'], { relativeTo: this.route});
   }
 
   alertItemNotFound() {
@@ -256,7 +256,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   //     this.ref.detectChanges();
   //   } catch (err) {
   //     this.pushNotification("Error!", "Cập nhật dữ liệu bị lỗi", -1);
-  //     this.router.navigate(['/topping-type/list']);
+  //     this.router.navigate(['../../list'], { relativeTo: this.route});;
   //   }
   // }
   //
@@ -296,7 +296,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   //     });
   //
   //     if (isNagativeToDashboard) {
-  //       this.router.navigate(['/topping-type/list']);
+  //       this.router.navigate(['../../list'], { relativeTo: this.route});;
   //     }
   //   } catch (err) {
   //     this.pushNotification("Error!", "Thêm dữ liệu bị lỗi", -1);
@@ -318,7 +318,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   //     //push notification
   //     this.pushNotification(topping.name, "Cập nhật " + topping.name + " thành công!", 0);
   //     this.ref.detectChanges();
-  //     this.router.navigate(['/topping-type/list']);
+  //     this.router.navigate(['../../list'], { relativeTo: this.route});;
   //   } catch (err) {
   //     this.pushNotification("Error!", "Cập nhật dữ liệu bị lỗi", -1);
   //   }
@@ -332,7 +332,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   //     //push notification
   //     this.pushNotification("Success", "Xóa thành công!", 0);
   //     this.ref.detectChanges();
-  //     this.router.navigate(['/topping-type/list']);
+  //     this.router.navigate(['../../list'], { relativeTo: this.route});;
   //   } catch (err) {
   //     this.pushNotification("Error!", "Xóa dữ liệu bị lỗi", -1);
   //   }

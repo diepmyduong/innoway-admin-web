@@ -190,7 +190,7 @@ export class AddComponent implements OnInit {
   }
 
   backToList() {
-    this.router.navigate(['/products/list'])
+    this.router.navigate(['../../list'], { relativeTo: this.route});
   }
 
   alertItemNotFound() {

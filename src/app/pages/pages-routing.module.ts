@@ -9,6 +9,7 @@ import { ChatbotLoginComponent } from './chatbot-login.component';
 import { LoginLauncherComponent } from './login-launcher/login-launcher.component';
 
 import { UnAuthGuard } from '../apps/chatbot/services/auth.guard';
+import { AnonymousGuard, AuthGuard } from 'app/services';
 
 const routes: Routes = [
   {
@@ -35,12 +36,13 @@ const routes: Routes = [
     component: LoginLauncherComponent,
     data: {
       title: 'Login Page'
-    }
+    },
+    canActivate: [AnonymousGuard]
   },
   {
     path: 'chatbot-login',
     component: ChatbotLoginComponent,
-    canActivate: [UnAuthGuard]
+    canActivate: [AuthGuard,UnAuthGuard]
   }
 ];
 

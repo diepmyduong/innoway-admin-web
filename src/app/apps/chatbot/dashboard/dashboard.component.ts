@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
   public pageObject:any;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private pageService: PageService,
     private router: Router
   ) { 
@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(params =>{
+    this.route.params.subscribe(params =>{
       this.pid = params.pid;
       if(this.pageService._pages[this.pid]){
         this.pageObject = this.pageService._pages[this.pid];

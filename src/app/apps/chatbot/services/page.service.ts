@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from "@angular/router";
 declare var innoway_chatbot:any,$:any;
 
 @Injectable()

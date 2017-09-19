@@ -62,12 +62,12 @@ export class AddComponent implements OnInit {
       this.status = category.status
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
-      this.router.navigate(['product-type'])
+      this.backToList()
     }
   }
 
   backToList() {
-    this.router.navigate(['/product-type/list'])
+    this.router.navigate(['../../list'], { relativeTo: this.route});
   }
 
   alertItemNotFound() {

@@ -1,7 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { PageService } from './services/page.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from "@angular/router";
 @Component({
   selector: 'app-chatbot',
   templateUrl: './chatbot.component.html',
@@ -16,7 +16,8 @@ export class ChatbotComponent implements OnInit {
     public auth: AuthService,
     public pageService: PageService,
     public zone: NgZone,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) { 
     var self = this;
     this.auth.user.getInfo((err,user)=>{

@@ -12,18 +12,17 @@ export class BillDetailComponent implements OnInit {
   id:string
 
   constructor(
-    private activateRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private router: Router
   ) { 
-    var params = (activateRoute.params as BehaviorSubject<any>).getValue();
-    this.id = params.id;
+    this.id = route.snapshot.params.id;
   }
 
   ngOnInit() {
   }
 
   backToList(){
-    this.router.navigate(['/dashboard/bills']);
+    this.router.navigate(['./bills'],{ relativeTo: this.route.parent});
   }
 
 }

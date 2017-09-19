@@ -141,7 +141,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   backToList() {
-    this.router.navigate(['/branch/list'])
+    this.router.navigate(['../list'],{ relativeTo : this.route});
   }
 
   alertItemNotFound() {

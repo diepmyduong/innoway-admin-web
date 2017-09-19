@@ -28,7 +28,7 @@ export class ModalQuickRepliesItemComponent implements OnInit,CloseGuard, ModalC
     private fb: FormBuilder,
     private pageService:PageService,
     private zone:NgZone,
-    private activatedRoute:ActivatedRoute
+    private route:ActivatedRoute
   ) { 
     this.context = dialog.context;
     dialog.setCloseGuard(this);
@@ -37,7 +37,7 @@ export class ModalQuickRepliesItemComponent implements OnInit,CloseGuard, ModalC
   ngOnInit() {
     console.log("QUICK REPLY MODAL",this.context);
     this.frmQuickReply = QuickRepliesItemFormGroup(this.fb);
-    var pid = this.activatedRoute.snapshot.params.pid;
+    var pid = this.route.snapshot.params.pid;
     this.page = this.pageService._pages[pid];
     this.frmQuickReply.controls['content_type'].setValue(this.context.type);
     if(this.context.type === 'text'){

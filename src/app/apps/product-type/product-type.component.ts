@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from "@angular/router";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { InnowayService } from 'app/services'
 
@@ -16,6 +16,7 @@ export class ProductTypeComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     public innoway: InnowayService,
     private ref: ChangeDetectorRef
   ) {
@@ -65,15 +66,15 @@ export class ProductTypeComponent implements OnInit {
   }
 
   addItem() {
-    this.router.navigate(['/product-type/add']);
+    this.router.navigate(['../add'], { relativeTo : this.route});
   }
 
   editItem(item) {
-    this.router.navigate(['/product-type/add', item.id]);
+    this.router.navigate(['../add', item.id], { relativeTo : this.route});
   }
 
   viewItem(item) {
-    this.router.navigate(['/product-type/detail', item.id]);
+    this.router.navigate(['../detail', item.id], { relativeTo : this.route});
   }
 
   async confirmDelete() {

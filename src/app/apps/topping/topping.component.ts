@@ -35,6 +35,7 @@ export class ToppingComponent implements OnInit, ListPageInterface {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     public innoway: InnowayService,
     private ref: ChangeDetectorRef
   ) {
@@ -72,15 +73,15 @@ export class ToppingComponent implements OnInit, ListPageInterface {
   }
 
   addItem() {
-    this.router.navigate(['/topping/add']);
+    this.router.navigate(['../add'], { relativeTo : this.route});
   }
 
   editItem(item) {
-    this.router.navigate(['/topping/add', item.id]);
+    this.router.navigate(['../add', item.id], { relativeTo : this.route});
   }
 
   viewItem(item) {
-    this.router.navigate(['/topping/detail', item.id]);
+    this.router.navigate(['../detail', item.id], { relativeTo : this.route});
   }
 
   async confirmDelete() {

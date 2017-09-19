@@ -32,6 +32,7 @@ export class ToppingTypeComponent implements OnInit, ListPageInterface {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     public innoway: InnowayService,
     private ref: ChangeDetectorRef
   ) {
@@ -68,15 +69,15 @@ export class ToppingTypeComponent implements OnInit, ListPageInterface {
   }
 
   addItem() {
-    this.router.navigate(['/topping-type/add']);
+    this.router.navigate(['../add'], { relativeTo : this.route});
   }
 
   editItem(item) {
-    this.router.navigate(['/topping-type/add', item.id]);
+    this.router.navigate(['../add', item.id], { relativeTo : this.route});
   }
 
   viewItem(item) {
-    this.router.navigate(['/topping-type/detail', item.id]);
+    this.router.navigate(['../detail', item.id], { relativeTo : this.route});
   }
 
   async confirmDelete() {
@@ -244,20 +245,20 @@ export class ToppingTypeComponent implements OnInit, ListPageInterface {
   //   } catch (err) {
   //     console.log("error: " + err);
   //     this.pushNotification("Error!", "Cập nhật dữ liệu bị lỗi", -1);
-  //     this.router.navigate(['/dashboard']);
+  //     this.router.navigate(['../dashboard']);
   //   }
   // }
   //
   // addItem() {
-  //   this.router.navigate(['/topping-type/add']);
+  //   this.router.navigate(['../add'], { relativeTo : this.route});
   // }
   //
   // editItem(id: string) {
-  //   this.router.navigate(['/topping-type/add', id]);
+  //   this.router.navigate(['../add', id]);
   // }
   //
   // viewItem(id: string) {
-  //   this.router.navigate(['/topping-type/detail', id]);
+  //   this.router.navigate(['../detail', id]);
   // }
   //
   // deleteOneItem(id: string) {

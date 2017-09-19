@@ -54,11 +54,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   editItem(){
-    this.router.navigate(['/topping-type/add', this.id]);
+    this.router.navigate(['../add', this.id], { relativeTo: this.route});
   }
 
   backToList(){
-    this.router.navigate(['/topping-type/list'])
+    this.router.navigate(['../../list'], { relativeTo: this.route});
   }
 
   alertItemNotFound(){
@@ -115,7 +115,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   //     this.zone.run(() => {
   //       this.pushNotification("Error", "Không cập nhật được dữ liệu", -1);
   //     });
-  //     this.router.navigate(['/dashboard']);
+  //     this.router.navigate(['../dashboard']);
   //   } else {
   //     this.updateUIFollowDataId(this.dataId);
   //   }
@@ -137,16 +137,16 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   //     this.ref.detectChanges();
   //   } catch (err) {
   //     this.pushNotification("Error!", "Cập nhật dữ liệu bị lỗi", -1);
-  //     this.router.navigate(['/topping-type/list']);
+  //     this.router.navigate(['../../list'], { relativeTo: this.route});;
   //   }
   // }
   //
   // addItem() {
-  //   this.router.navigate(['/topping-type/add']);
+  //   this.router.navigate(['../add'], { relativeTo : this.route});
   // }
   //
   // editItem() {
-  //   this.router.navigate(['/topping-type/add', this.dataId]);
+  //   this.router.navigate(['../add', this.dataId]);
   // }
   //
   // async deleteItem() {
@@ -156,7 +156,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   //
   //     //push notification
   //     this.pushNotification("Success", "Xóa thành công!", 0);
-  //     this.router.navigate(['/topping-type/list']);
+  //     this.router.navigate(['../../list'], { relativeTo: this.route});;
   //   } catch (err) {
   //     this.pushNotification("Error!", "Xóa dữ liệu bị lỗi", -1);
   //   }

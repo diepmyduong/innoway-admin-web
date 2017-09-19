@@ -8,6 +8,7 @@ import { StoryComponent } from './story/story.component';
 import { SubscribersComponent } from './subscribers/subscribers.component';
 import { NotificationComponent } from './notification/notification.component';
 import { AuthGuard } from './services/auth.guard';
+import { AuthGuard as InnowayAuthGuard } from 'app/services';
 const routes: Routes = [
   {
     path: '',
@@ -19,6 +20,7 @@ const routes: Routes = [
     data: {
       title: 'Điều hướng'
     },
+    canActivate: [InnowayAuthGuard],
     children: [
       {
         path: 'login',
@@ -75,10 +77,6 @@ const routes: Routes = [
               title: "Thông báo"
             },
             canActivate: [AuthGuard]
-          },
-          {
-            path: '**', 
-            redirectTo: '/pages/404'
           }
         ]
       }

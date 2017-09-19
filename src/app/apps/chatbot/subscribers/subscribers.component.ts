@@ -24,13 +24,13 @@ export class SubscribersComponent implements OnInit {
 
   constructor(
     private router:Router,
-    private activatedRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private modal: Modal,
     private pageService: PageService
   ) { }
 
   ngOnInit() {
-    this.activatedRoute.parent.params.subscribe(params =>{
+    this.route.parent.params.subscribe(params =>{
       this.pid = params.pid;
       if(this.pageService._pages[this.pid]){
         this.pageObject = this.pageService._pages[this.pid];

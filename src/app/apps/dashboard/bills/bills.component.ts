@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-bills',
@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
 export class BillsComponent implements OnInit {
 
   constructor(
-    private router: Router
+    private router: Router,
+    private route:ActivatedRoute
   ) { 
     
   }
@@ -18,7 +19,7 @@ export class BillsComponent implements OnInit {
   }
 
   viewDetail(id){
-    this.router.navigate(['/dashboard/bills/',id]);
+    this.router.navigate(['../bills/',id],{ relativeTo: this.route});
   }
 
 }

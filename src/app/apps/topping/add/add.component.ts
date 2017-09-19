@@ -71,7 +71,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.ref.detectChanges();
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
-      this.router.navigate(['topping'])
+      this.backToList()
     }
   }
 
@@ -87,12 +87,12 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.status = data.status;
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
-      this.router.navigate(['topping'])
+      this.backToList()
     }
   }
 
   backToList() {
-    this.router.navigate(['/topping/list'])
+    this.router.navigate(['../../list'], { relativeTo: this.route});
   }
 
   alertItemNotFound() {

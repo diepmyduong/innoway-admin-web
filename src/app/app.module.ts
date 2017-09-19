@@ -14,31 +14,20 @@ import { AsideToggleDirective } from './shared/aside.directive';
 import { BreadcrumbsComponent } from './shared/breadcrumb.component';
 // Routing Module
 import { AppRoutingModule } from './app.routing';
-
-//Layouts
-import { FullLayoutComponent } from './layouts/full-layout.component';
-import { SimpleLayoutComponent } from './layouts/simple-layout.component';
-import { LauncherLayoutComponent } from './layouts/launcher-layout/launcher-layout.component';
-
-//Modal
-// import { ModalModule } from 'ng2-bootstrap/modal';
 import { ModalModule as Ng2ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 
 import { ModalCardTypesComponent } from './apps/chatbot/modals/modal-card-types/modal-card-types.component';
-import { ChatbotLayoutComponent } from './layouts/chatbot-layout/chatbot-layout.component';
 
 import { ChatbotModule } from './apps/chatbot/chatbot.module';
 
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 
 import { ServicesModule } from './services';
-// import { ModalComponent } from './modal/modal.component';
 
 import { ModalModule } from 'ng2-bootstrap/modal';
-// import { ModalModule as CustomModal} from './modal/modal.module';
-
-// import { AgmCoreModule } from '@agm/core';
+import { SharedModule} from './shared/shared.module'
+import { LayoutsModule } from './layouts/layouts.module'
 
 @NgModule({
   imports: [
@@ -47,7 +36,6 @@ import { ModalModule } from 'ng2-bootstrap/modal';
     AppRoutingModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
-    // ModalModule.forRoot(),
     Ng2ModalModule.forRoot(),
     BootstrapModalModule,
     ChartsModule,
@@ -56,21 +44,11 @@ import { ModalModule } from 'ng2-bootstrap/modal';
     PushNotificationsModule,
     ServicesModule,
     ModalModule.forRoot(),
-    // AgmCoreModule.forRoot({
-    //   apiKey: "AIzaSyD60ceziJ8eJ3hmxlTeUzGuysXPnehQ4uM",
-    //   libraries: ["places"]
-    // }),
+    SharedModule,
+    LayoutsModule
   ],
   declarations: [
     AppComponent,
-    FullLayoutComponent,
-    SimpleLayoutComponent,
-    NAV_DROPDOWN_DIRECTIVES,
-    BreadcrumbsComponent,
-    SIDEBAR_TOGGLE_DIRECTIVES,
-    AsideToggleDirective,
-    ChatbotLayoutComponent,
-    LauncherLayoutComponent,
   ],
   providers: [{
     provide: LocationStrategy,

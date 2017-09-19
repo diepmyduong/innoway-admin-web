@@ -35,7 +35,7 @@ export class StoryPortalComponent implements OnInit {
   constructor(
     private modal : Modal,
     private pageService: PageService,
-    private activatedRoute:ActivatedRoute
+    private route:ActivatedRoute
   ) {
     
   }
