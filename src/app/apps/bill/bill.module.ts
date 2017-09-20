@@ -8,11 +8,20 @@ import { AddComponent } from './add/add.component';
 
 import { TabsModule } from 'ng2-bootstrap/tabs';
 
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import { LaddaModule } from 'angular2-ladda';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+
 @NgModule({
   imports: [
     CommonModule,
     BillRoutingModule,
-    TabsModule
+    TabsModule,
+
+    FormsModule,
+    ReactiveFormsModule,
+    LaddaModule,
+    DataTableModule
   ],
   declarations: [BillComponent, DetailComponent, AddComponent]
 })
