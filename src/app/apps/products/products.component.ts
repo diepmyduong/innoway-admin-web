@@ -27,7 +27,9 @@ export class ProductsComponent implements OnInit {
   public items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   public itemCount = 0; // item total  count
   public thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
-  public itemFields = ["$all"]; //Get All field
+  public itemFields = ["$all", {
+    category: ["name"]
+  }]; //Get All field
 
   //Search bar
   public query: any = {} //query to search and paging items
@@ -66,15 +68,15 @@ export class ProductsComponent implements OnInit {
   }
 
   addItem() {
-    this.router.navigate(['../add'], { relativeTo : this.route});
+    this.router.navigate(['../add'], { relativeTo: this.route });
   }
 
   editItem(item) {
-    this.router.navigate(['../add', item.id], { relativeTo : this.route});
+    this.router.navigate(['../add', item.id], { relativeTo: this.route });
   }
 
   viewItem(item) {
-    this.router.navigate(['../detail', item.id], { relativeTo : this.route});
+    this.router.navigate(['../detail', item.id], { relativeTo: this.route });
   }
 
   async confirmDelete() {

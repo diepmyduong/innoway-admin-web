@@ -69,7 +69,11 @@
                 <div class="form-group row">
                   <label class="col-md-3 form-control-label" for="text-input">Đơn vị</label>
                   <div class="col-md-9">
-                    <input type="text" #unitControl="ngModel" [(ngModel)]="unit" name="unit" class="form-control" [placeholder]="'Nhập đơn vị'">
+                    <select id="unitSelect" #unitControl="ngModel" [(ngModel)]="unit" name="unit" class="form-control">
+                          <option *ngFor="let v of units | async" [value]="v.id">
+                            {{v.name}}
+                          </option>
+                        </select>
                   </div>
                 </div>
               </div>
@@ -203,13 +207,13 @@
             </div>
           </div>
 
-          <div class="col-md-12">
+          <div class="col-md-12" *ngIf="thumb">
             <div class="card">
               <div class="card-header">
                 <strong>Ảnh đại diện</strong>
               </div>
               <div class="card-block" style="text-align: center">
-                  <img style="width: 100px; height: 100px;" [src]="thumb" *ngIf="thumb" />
+                  <img style="width: 100px; height: 100px;" [src]="thumb"/>
               </div>
             </div>
           </div>
