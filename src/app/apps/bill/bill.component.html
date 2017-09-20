@@ -12,13 +12,18 @@
   <div style="margin: auto; max-width: 1000px; margin-bottom: 50px;">
     <data-table id="persons-grid" #itemsTable headerTitle="Danh sách" indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true"
       [substituteRows]="false" [selectOnRowClick]="false" [showReloading]="true" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
-      <data-table-column property="address" header="Địa điểm" [sortable]="true">
+      <data-table-column property="address" header="Địa điểm" [sortable]="true" [visible]="false">
       </data-table-column>
 			<data-table-column property="total_price" header="Tổng tiền" [sortable]="true">
       </data-table-column>
 			<data-table-column property="phone" header="Khách hàng" [resizable]="true" [sortable]="true">
         <template #dataTableCell let-item="item">
             {{item.customer?.phone?item.customer.phone:""}}
+          </template>
+      </data-table-column>
+      <data-table-column property="action" header="Tình trạng" [resizable]="true" [sortable]="true">
+        <template #dataTableCell let-item="item">
+            {{item.activities?.action?item.activities.action:""}}
           </template>
       </data-table-column>
 			<data-table-column property="fee" header="Phí ship" [resizable]="true" [sortable]="true">

@@ -47,7 +47,7 @@ export class DetailComponent implements OnInit {
   }
 
   editItem(){
-    this.router.navigate(['../add', this.id], { relativeTo: this.route});
+        this.router.navigate(['../../add', this.id], { relativeTo: this.route});
   }
 
   backToList(){

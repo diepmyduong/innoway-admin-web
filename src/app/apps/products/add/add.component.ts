@@ -97,8 +97,13 @@ export class AddComponent implements OnInit {
 
   setDefaultData() {
     this.status = 1;
+    this.price = '0';
+    this.base_price = '0';
     if (this.categories.getValue()[0]) {
       this.category = this.categories.getValue()[0].id;
+    }
+    if (this.units.getValue()[0]) {
+      this.unit = this.units.getValue()[0].id;
     }
     let toppings = this.toppings.getValue().map(topping => {
       topping.selected = false;
@@ -186,7 +191,7 @@ export class AddComponent implements OnInit {
       this.description = product.description
       this.price = product.price
       this.base_price = product.base_price
-      this.unit = product.unit
+      this.unit = product.unit_id
       this.status = product.status
       this.category = product.category_id
       this.list_image = product.list_image
@@ -311,14 +316,15 @@ export class AddComponent implements OnInit {
   async submitAndNew(form: NgForm) {
     this.submitting = true;
     this.price = this.price.toString().replace(/[^\d]/g, '');
-    if (this.base_price != null){
+    if (this.base_price != null) {
       this.base_price = this.base_price.toString().replace(/[^\d]/g, '');
     }
     try {
       if (form.valid) {
         let { name, description, list_image, thumb, price, base_price, unit, status } = this;
         let category_id = this.category;
-        let product = await this.productService.add({ name, description, thumb, price, base_price, unit, status, category_id, list_image })
+        let unit_id = this.unit;
+        let product = await this.productService.add({ name, description, thumb, price, base_price, unit, status, category_id, unit_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -366,8 +372,8 @@ export class AddComponent implements OnInit {
 
   async updateAndClose(form: NgForm) {
     this.submitting = true;
-    this.price = this.price.toString().replace(/[^\d]/g,'');
-    if (this.base_price != null){
+    this.price = this.price.toString().replace(/[^\d]/g, '');
+    if (this.base_price != null) {
       this.base_price = this.base_price.toString().replace(/[^\d]/g, '');
     }
     try {

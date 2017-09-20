@@ -18,6 +18,7 @@ export class BillComponent implements OnInit, ListPageInterface {
   thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";;
   itemFields: any = ["$all",{
     customer:["phone"],
+    activities:["action"],
     // promotion:["$all"],
     bill_ship_detail:["fee"]
   }];

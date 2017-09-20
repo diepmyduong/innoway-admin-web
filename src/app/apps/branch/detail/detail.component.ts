@@ -62,7 +62,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   editItem() {
-    this.router.navigate(['../add', this.id], { relativeTo: this.route});
+        this.router.navigate(['../../add', this.id], { relativeTo: this.route});
   }
 
   backToList() {
