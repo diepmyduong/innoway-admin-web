@@ -1,48 +1,62 @@
 <div class="animated fadeIn">
-  <div class="row">    
+  <form class="row" #itemFrm="ngForm">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <strong>Thông tin</strong>
+          <strong>{{isEdit?"Cập nhật":"Thêm"}} khu vực</strong>
         </div>
         <div class="card-block">
-          <form action="" method="post" enctype="multipart/form-data" class="form-horizontal ">
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Khu vực</label>
-              <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Khu vực">
-              </div>
-            </div>        
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="textarea-input">Mô tả</label>
-              <div class="col-md-9">
-                <textarea id="textarea-input" name="textarea-input" rows="3" class="form-control" placeholder="Mô tả"></textarea>
-              </div>
-   			</div> 
-   			<div class="form-group row">
-              <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
-              <div class="col-md-9">
-                <select id="select" name="select" class="form-control" size="1">
-                  <option value="0">Chọn trạng thái</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="2">Không hoạt động</option>
+          <div class="form-group row">
+            <label class="col-md-4 form-control-label" for="text-input">Tên</label>
+            <div class="col-md-8">
+              <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Nhập tên'" required/>
+              <small *ngIf="nameControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-4 form-control-label" for="text-input">Phí</label>
+            <div class="col-md-8">
+              <input type="text" #feeControl="ngModel" [(ngModel)]="fee" name="fee" class="form-control" [placeholder]="'Nhập phí'" required/>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-4 form-control-label" for="text-input">Khu vực</label>
+            <div class="col-md-8">
+              <input type="text" #areaControl="ngModel" [(ngModel)]="area" name="area" class="form-control" [placeholder]="'Nhập khu vực'" required/>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-4 form-control-label" for="text-input">Thành phố</label>
+            <div class="col-md-8">
+              <input type="text" #cityControl="ngModel" [(ngModel)]="city" name="city" class="form-control" [placeholder]="'Nhập thành phố'" required/>            
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
+            <div class="col-md-8">
+              <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
+                  <option *ngFor="let v of [0,1]" [value]="v">
+                    {{ v===1?"Hoạt động":"Không hoạt động"}}
+                  </option>
                 </select>
-              </div>
-            </div>     
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Tag</label>
-              <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Khu vực">
-              </div>
-            </div> 
-          </form>
+            </div>
+          </div>
         </div>
         <div class="card-footer">
-          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; New
+          </button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; Close
+          </button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Update &amp; Close
+          </button>
         </div>
       </div>
     </div>
     <!--/.col-->
-  </div>
-</div>	
+  </form>
+</div>

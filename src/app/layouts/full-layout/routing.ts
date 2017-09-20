@@ -100,8 +100,8 @@ export const FullLayoutRouting = {
         loadChildren: 'app/apps/feedback-rule/feedback-rule.module#FeedbackRuleModule'
       },
       {
-        path: 'ship-fee',
-        loadChildren: 'app/apps/ship-fee/ship-fee.module#ShipFeeModule'
+        path: 'ship',
+        loadChildren: 'app/apps/ship/ship.module#ShipModule'
       },
       {
         path: 'schedule',

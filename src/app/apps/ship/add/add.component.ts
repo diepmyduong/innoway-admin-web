@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
 import { NgForm } from "@angular/forms";
 
+declare var innoway2: any;
 declare var swal: any;
 
 @Component({
@@ -13,25 +14,27 @@ declare var swal: any;
 })
 export class AddComponent implements OnInit, AddPageInterface {
   id: any;
+  brand_ship_id: string;
   isEdit: boolean = false;
   submitting: boolean = false;
-  customerService: any;
+  brandService: any;
+  brandShipService: any;
 
-  name: string;
-  fee: string;
-  city: string;
-  area: string;
-  status: number = 1;
+  allow_pick_at_store: number = 0;
+  allow_ship: number = 0;
+  ship_method: number = 0;
+  ship_fee_per_km: string;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
     public innoway: InnowayService) {
-    this.customerService = innoway.getService('ship_area');
+    this.brandService = innoway.getService('brand');
+    this.brandShipService = innoway.getService('brand_ship');
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
+    this.id = innoway2.config.get("brand_id");
     if (this.id == null) {
       this.isEdit = false;
       this.setDefaultData();
@@ -45,22 +48,30 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   setDefaultData() {
-    this.status = 1;
-    return {
-      status: this.status
-    }
+
   }
 
   async setData() {
     try {
-      let data = await this.customerService.get(this.id, {
-        fields: ["$all"]
+      let data = await this.brandService.get(this.id, {
+        fields: ["$all", {
+          brand_ship: ["$all"]
+        }]
       });
-      this.name = data.name
-      this.fee = data.fee
-      this.city = data.city
-      this.area = data.area
-      this.status = data.status
+      this.brand_ship_id = data.brand_ship.id
+      if (data.brand_ship.allow_pick_at_store == null) {
+        data.brand_ship.allow_pick_at_store = false;
+      }
+      this.allow_pick_at_store = data.brand_ship.allow_pick_at_store
+      if (data.brand_ship.allow_ship == null) {
+        data.brand_ship.allow_ship = false;
+      }
+      this.allow_ship = data.brand_ship.allow_ship
+      this.ship_method = data.brand_ship.ship_method
+      if (data.brand_ship.ship_fee_per_km == null) {
+        data.brand_ship.ship_fee_per_km = 0;
+      }
+      this.ship_fee_per_km = data.brand_ship.ship_fee_per_km
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -69,7 +80,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route });
+    this.router.navigate(['../../'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -122,11 +133,11 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, fee, city, area, status } = this;
-      await this.customerService.add({ name, fee, city, area, status })
+      let { allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km } = this;
+      await this.brandService.add({ name, allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km })
       this.alertAddSuccess();
       form.reset();
-      form.resetForm(this.setDefaultData());
+      form.controls["status"].setValue(1);
     } else {
       this.alertFormNotValid();
     }
@@ -134,10 +145,10 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, fee, city, area, status } = this;
-      await this.customerService.update(this.id, { name, fee, city, area, status })
+      let { allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km } = this;
+      await this.brandShipService.update(this.brand_ship_id, { allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km })
       this.alertUpdateSuccess();
-      form.reset();
+      // form.reset();
     } else {
       this.alertFormNotValid();
     }
