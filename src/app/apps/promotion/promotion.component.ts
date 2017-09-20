@@ -16,12 +16,14 @@ export class PromotionComponent implements OnInit, ListPageInterface {
   items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   itemCount: number = 0;
   thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";;
-  itemFields: any = ["$all"];
+  itemFields: any = ["$all",{
+    promotion_type:["name"]
+  }];
   query: any = {};
   searchTimeOut: number = 250;
   searchRef: any;
 
-  employeeTypeService: any;
+  promotionService: any;
 
   @ViewChild(DataTable) itemsTable;
 
@@ -31,7 +33,7 @@ export class PromotionComponent implements OnInit, ListPageInterface {
     public innoway: InnowayService,
     private ref: ChangeDetectorRef
   ) {
-    this.employeeTypeService = innoway.getService('promotion');
+    this.promotionService = innoway.getService('promotion');
   }
 
   ngOnInit() {
@@ -50,7 +52,8 @@ export class PromotionComponent implements OnInit, ListPageInterface {
       fields: this.itemFields
     }, this.query);
     this.items = await this.innoway.getAll('promotion', query);
-    this.itemCount = this.employeeTypeService.currentPageCount;
+    alert(JSON.stringify(this.items));
+    this.itemCount = this.promotionService.currentPageCount;
     this.ref.detectChanges();
     return this.items;
   }
@@ -108,7 +111,7 @@ export class PromotionComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.employeeTypeService.delete(item.id)
+      await this.promotionService.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -127,7 +130,7 @@ export class PromotionComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.employeeTypeService.deleteAll(ids)
+      await this.promotionService.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
