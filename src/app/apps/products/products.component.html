@@ -14,7 +14,7 @@
       [substituteRows]="false" [selectOnRowClick]="false" [showReloading]="true" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
       <data-table-column property="thumb" header="Hình ảnh">
         <template #dataTableCell let-item="item">
-                  <img height="50px" [src]="item.thumb?item.thumb:thumbDefaultCategory">
+                  <img height="50px" [src]="item.thumb?item.thumb:thumbDefault">
               </template>
       </data-table-column>
       <data-table-column property="name" header="Tên" [sortable]="true">

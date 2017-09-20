@@ -5,6 +5,7 @@ import { InnowayService } from 'app/services';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { SelectComponent } from 'ng2-select';
 import * as Ajv from 'ajv';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 declare var swal, _: any;
 
@@ -30,7 +31,7 @@ export class AddComponent implements OnInit {
   category: string;
   status: number = 1;
   topping: string;
-  basePrice: string;
+  base_price: string;
   price: string;
   list_image: any[] = [];
   image_on_hover: number;
@@ -44,6 +45,11 @@ export class AddComponent implements OnInit {
   toppings = new BehaviorSubject<any[]>([]);
   units = new BehaviorSubject<any[]>([]);
   attributes = new BehaviorSubject<any[]>([]);
+
+  numberMask = createNumberMask({
+    prefix: '',
+    suffix: ' đ'
+  })
 
   @ViewChild('categoryControl') categoryControl: NgModel;
   @ViewChild('toppingSelecter') toppingSelecter: SelectComponent;
@@ -87,8 +93,6 @@ export class AddComponent implements OnInit {
     if (this.isEdit) {
       this.setData();
     }
-
-
   }
 
   setDefaultData() {
@@ -104,9 +108,12 @@ export class AddComponent implements OnInit {
     this.toppings.next(toppings);
     this.list_image = [];
     this.thumb = null;
+
     return {
       status: this.status,
-      category: this.category
+      category: this.category,
+      price: this.price,
+      base_price: this.base_price
     }
   }
 
@@ -178,7 +185,7 @@ export class AddComponent implements OnInit {
       this.thumb = product.thumb
       this.description = product.description
       this.price = product.price
-      this.basePrice = product.basePrice
+      this.base_price = product.base_price
       this.unit = product.unit
       this.status = product.status
       this.category = product.category_id
@@ -303,11 +310,15 @@ export class AddComponent implements OnInit {
 
   async submitAndNew(form: NgForm) {
     this.submitting = true;
+    this.price = this.price.toString().replace(/[^\d]/g, '');
+    if (this.base_price != null){
+      this.base_price = this.base_price.toString().replace(/[^\d]/g, '');
+    }
     try {
       if (form.valid) {
-        let { name, description, list_image, thumb, price, basePrice, unit, status } = this;
+        let { name, description, list_image, thumb, price, base_price, unit, status } = this;
         let category_id = this.category;
-        let product = await this.productService.add({ name, description, thumb, price, basePrice, unit, status, category_id, list_image })
+        let product = await this.productService.add({ name, description, thumb, price, base_price, unit, status, category_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -331,9 +342,9 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       if (form.valid) {
-        let { name, description, list_image, thumb, price, basePrice, unit, status } = this;
+        let { name, description, list_image, thumb, price, base_price, unit, status } = this;
         let category_id = this.category;
-        let product = await this.productService.add({ name, description, thumb, price, basePrice, unit, status, category_id, list_image })
+        let product = await this.productService.add({ name, description, thumb, price, base_price, unit, status, category_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -355,11 +366,15 @@ export class AddComponent implements OnInit {
 
   async updateAndClose(form: NgForm) {
     this.submitting = true;
+    this.price = this.price.toString().replace(/[^\d]/g,'');
+    if (this.base_price != null){
+      this.base_price = this.base_price.toString().replace(/[^\d]/g, '');
+    }
     try {
       if (form.valid) {
-        let { name, description, list_image, thumb, price, basePrice, unit, status } = this;
+        let { name, description, list_image, thumb, price, base_price, unit, status } = this;
         let category_id = this.category;
-        let product = await this.productService.update(this.id, { name, description, thumb, price, basePrice, unit, status, category_id, list_image })
+        let product = await this.productService.update(this.id, { name, description, thumb, price, base_price, unit, status, category_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })

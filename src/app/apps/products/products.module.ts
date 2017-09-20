@@ -20,10 +20,6 @@ import { ModalModule } from 'ng2-bootstrap/modal';
 // Ng2-select
 import { SelectModule } from 'ng2-select';
 
-//Provider
-
-
-
 import { UploadImageByUrlComponent } from 'app/modal/upload-image-by-url/upload-image-by-url.component';
 
 import { ModalModule as Ng2ModalModule } from 'angular2-modal';
@@ -57,7 +53,8 @@ export declare class Ng2UiSwitchModule extends UiSwitchModule {}
     LaddaModule,
     DataTableModule,
     PipesModule,
-    SwiperModule
+    SwiperModule,
+    TextMaskModule
     // UploadImageByUrlComponent
   ],
   declarations: [ProductsComponent, AddComponent, DetailComponent],  //UploadImageByUrlComponent
