@@ -3,6 +3,7 @@ import { NgForm } from "@angular/forms";
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
+import { ColorPickerService } from "angular2-color-picker";
 
 declare var swal: any;
 
@@ -19,13 +20,16 @@ export class AddComponent implements OnInit, AddPageInterface {
   brandService: any;
 
   name: string;
-  color: string;
+  color: string = "#127bdc";
   logo: string;
   trail_expire: string;
   status: number = 1;
 
+  public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+
   constructor(private route: ActivatedRoute,
     private router: Router,
+    private cpService: ColorPickerService,
     private ref: ChangeDetectorRef,
     public innoway: InnowayService) {
     this.brandService = innoway.getService('brand');
@@ -70,7 +74,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route});
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -181,4 +185,8 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
+  onChangeColorHex8(color: string) {
+    //  return this.cpService.outputFormat(this.cpService.stringToHsva(color, true), 'rgba', null);
+    this.color = color;
+  }
 }

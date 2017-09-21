@@ -35,7 +35,7 @@
                 <small *ngIf="logoControl.errors?.url" class="text-muted danger">
                     (Link không hợp lệ)
                   </small>
-                <img *ngIf="logoControl.value && logoControl.valid" style="width:100%;height:80px;" [src]="logoControl.value" />
+                <img *ngIf="logoControl.value && logoControl.valid" style="width:auto;height:80px;" [src]="logoControl.value" />
               </div>
             </div>
             <div class="form-group row">
@@ -43,6 +43,7 @@
               <div class="col-md-8">
                 <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control" [placeholder]="'Nhập mã màu'">
                 <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <!-- <input [colorPicker]="color" (colorPickerChange)="color=$event" [style.background]="color" /> -->
               </div>
             </div>
             <div class="form-group row">
