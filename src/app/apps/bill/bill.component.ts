@@ -5,7 +5,7 @@ import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
 
-declare var swal:any;
+declare var swal: any;
 
 @Component({
   selector: 'app-bill',
@@ -16,11 +16,11 @@ export class BillComponent implements OnInit, ListPageInterface {
   items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   itemCount: number = 0;
   thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";;
-  itemFields: any = ["$all",{
-    customer:["phone"],
-    activities:["action"],
+  itemFields: any = ["$all", {
+    customer: ["phone"],
+    activities: ["action"],
     // promotion:["$all"],
-    bill_ship_detail:["fee"]
+    bill_ship_detail: ["fee"]
   }];
   query: any = {};
   searchTimeOut: number = 250;
@@ -55,10 +55,56 @@ export class BillComponent implements OnInit, ListPageInterface {
       fields: this.itemFields
     }, this.query);
     this.items = await this.innoway.getAll('bill', query);
-    // alert(JSON.stringify(this.items.activites));
     this.itemCount = this.billService.currentPageCount;
     this.ref.detectChanges();
     return this.items;
+  }
+
+  detectActionName(action): string {
+    let result = "";
+    switch (action) {
+      case -2: {
+        result = "Chỉnh sửa";
+        break;
+      }
+      case -1: {
+        result = "Đã hủy";
+        break;
+      }
+      case 0: {
+        result = "Đặt hàng thành công";
+        break;
+      }
+      case 1: {
+        result = "Đang điều phối";
+        break;
+      }
+      case 2: {
+        result = "Đang xử lý";
+        break;
+      }
+      case 3: {
+        result = "Đã chuẩn bị";
+        break;
+      }
+      case 4: {
+        result = "Đã chuyển cho giao hàng";
+        break;
+      }
+      case 5: {
+        result = "Đang giao";
+        break;
+      }
+      case 6: {
+        result = "Đã thanh toán";
+        break;
+      }
+      case 7: {
+        result = "Đã thu tiền";
+        break;
+      }
+    }
+    return result;
   }
 
   rowClick(event) {
@@ -70,15 +116,15 @@ export class BillComponent implements OnInit, ListPageInterface {
   }
 
   addItem() {
-    this.router.navigate(['../add'], { relativeTo : this.route});
+    this.router.navigate(['../add'], { relativeTo: this.route });
   }
 
   editItem(item) {
-    this.router.navigate(['../add', item.id], { relativeTo : this.route});
+    this.router.navigate(['../add', item.id], { relativeTo: this.route });
   }
 
   viewItem(item) {
-    this.router.navigate(['../detail', item.id], { relativeTo : this.route});
+    this.router.navigate(['../detail', item.id], { relativeTo: this.route });
   }
 
   async confirmDelete() {

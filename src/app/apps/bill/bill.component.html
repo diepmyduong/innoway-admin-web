@@ -15,6 +15,9 @@
       <data-table-column property="address" header="Địa điểm" [sortable]="true" [visible]="false">
       </data-table-column>
 			<data-table-column property="total_price" header="Tổng tiền" [sortable]="true">
+        <template #dataTableCell let-item="item">
+            {{item.total_price | accounting}}
+          </template>
       </data-table-column>
 			<data-table-column property="phone" header="Khách hàng" [resizable]="true" [sortable]="true">
         <template #dataTableCell let-item="item">
@@ -23,12 +26,12 @@
       </data-table-column>
       <data-table-column property="action" header="Tình trạng" [resizable]="true" [sortable]="true">
         <template #dataTableCell let-item="item">
-              {{item.activities?.action?item.activities.action:""}}
+              {{detectActionName(item.activities?(item.activities[0].action):"")}}
           </template>
       </data-table-column>
 			<data-table-column property="fee" header="Phí ship" [resizable]="true" [sortable]="true">
         <template #dataTableCell let-item="item">
-            {{item.bill_ship_detail?.fee?item.bill_ship_detail.fee:""}}
+            {{item.bill_ship_detail?.fee?(item.bill_ship_detail.fee | accounting):""}}
           </template>
       </data-table-column>
       <!-- <data-table-column property="status" header="Trạng thái" [sortable]="true">

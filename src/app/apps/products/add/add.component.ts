@@ -83,7 +83,7 @@ export class AddComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    
+
     await this.loadCategoryData();
     await this.loadToppingData();
     await this.loadUnitData();
