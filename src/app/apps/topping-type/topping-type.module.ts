@@ -8,7 +8,6 @@ import { DetailComponent } from './detail/detail.component';
 
 import { TabsModule } from 'ng2-bootstrap/tabs';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
-import { UiSwitchModule } from 'angular2-ui-switch'
 import { VSChecklistModule } from 'ng2-vs-checklist';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 import { TextMaskModule } from 'angular2-text-mask';
@@ -22,9 +21,6 @@ import { ModalModule as CustomModal} from 'app/modal/modal.module';
 import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
-@NgModule({})
-export declare class Ng2UiSwitchModule extends UiSwitchModule {}
-
 // @NgModule({})
 // export declare class Ng2UploadImageByUrlComponent extends UploadImageByUrlComponent {}
 
@@ -35,7 +31,6 @@ export declare class Ng2UiSwitchModule extends UiSwitchModule {}
     ToppingTypeRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    UiSwitchModule,
     VSChecklistModule,
     AngularMultiSelectModule,
     TextMaskModule,

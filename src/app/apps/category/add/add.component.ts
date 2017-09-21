@@ -16,10 +16,11 @@ export class AddComponent implements OnInit {
   isEdit: boolean = false;
 
   submitting: boolean = false;
-  productTypeService: any;
+  categoryService: any;
 
   name: string;
   description: string;
+  image: string;
   status: number;
 
 
@@ -29,7 +30,7 @@ export class AddComponent implements OnInit {
     private ref: ChangeDetectorRef,
     public innoway: InnowayService
   ) {
-    this.productTypeService = innoway.getService('product_type');
+    this.categoryService = innoway.getService('product_category');
   }
 
   ngOnInit() {
@@ -55,12 +56,13 @@ export class AddComponent implements OnInit {
 
   async setData() {
     try {
-      let product_type = await this.productTypeService.get(this.id, {
-        fields: ["name", "description", "status"]
+      let category = await this.categoryService.get(this.id, {
+        fields: ["name", "description", "image", "status"]
       });
-      this.name = product_type.name
-      this.description = product_type.description
-      this.status = product_type.status
+      this.name = category.name
+      this.image = category.image
+      this.description = category.description
+      this.status = category.status
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       this.backToList()
@@ -121,8 +123,8 @@ export class AddComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, status } = this;
-      await this.productTypeService.add({ name, description, status })
+      let { name, description, image, status } = this;
+      await this.categoryService.add({ name, description, image, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -133,8 +135,8 @@ export class AddComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, status } = this;
-      await this.productTypeService.update(this.id, { name, description, status })
+      let { name, description, image, status } = this;
+      await this.categoryService.update(this.id, { name, description, image, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {

@@ -17,6 +17,7 @@ export class InnowayService {
   modules = [
     'product_category',
     'product',
+    'product_type',
     'customer',
     'topping',
     'basket',

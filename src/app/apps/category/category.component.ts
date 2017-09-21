@@ -8,11 +8,11 @@ import { DataTable } from 'angular-2-data-table-bootstrap4';
 declare let swal: any;
 
 @Component({
-  selector: 'app-product-type',
-  templateUrl: './product-type.component.html',
-  styleUrls: ['./product-type.component.scss']
+  selector: 'app-category',
+  templateUrl: './category.component.html',
+  styleUrls: ['./category.component.scss']
 })
-export class ProductTypeComponent implements OnInit {
+export class CategoryComponent implements OnInit {
 
   constructor(
     private router: Router,
@@ -20,10 +20,10 @@ export class ProductTypeComponent implements OnInit {
     public innoway: InnowayService,
     private ref: ChangeDetectorRef
   ) {
-    this.productTypeService = innoway.getService('product_type');
+    this.categoryService = innoway.getService('product_category');
   }
 
-  private productTypeService: any;
+  private categoryService: any;
   public items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   public itemCount = 0; // item total  count
   public thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
@@ -51,8 +51,8 @@ export class ProductTypeComponent implements OnInit {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('product_type', query);
-    this.itemCount = this.productTypeService.currentPageCount;
+    this.items = await this.innoway.getAll('product_category', query);
+    this.itemCount = this.categoryService.currentPageCount;
     this.ref.detectChanges();
     return this.items;
   }
@@ -110,7 +110,7 @@ export class ProductTypeComponent implements OnInit {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.productTypeService.delete(item.id)
+      await this.categoryService.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -129,7 +129,7 @@ export class ProductTypeComponent implements OnInit {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.productTypeService.deleteAll(ids)
+      await this.categoryService.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();

@@ -44,6 +44,10 @@ export const FullLayoutRouting = {
         loadChildren: 'app/apps/product-type/product-type.module#ProductTypeModule'
       },
       {
+        path: 'category',
+        loadChildren: 'app/apps/category/category.module#CategoryModule'
+      },
+      {
         path: 'bill',
         loadChildren: 'app/apps/bill/bill.module#BillModule'
       },

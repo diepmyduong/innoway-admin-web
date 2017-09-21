@@ -55,6 +55,7 @@ export class BillComponent implements OnInit, ListPageInterface {
       fields: this.itemFields
     }, this.query);
     this.items = await this.innoway.getAll('bill', query);
+    // alert(JSON.stringify(this.items.activites));
     this.itemCount = this.billService.currentPageCount;
     this.ref.detectChanges();
     return this.items;

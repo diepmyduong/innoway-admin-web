@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InnowayService } from 'app/services'
 
-declare let swal:any;
+declare let swal: any;
 
 @Component({
   selector: 'app-detail',
@@ -10,51 +10,51 @@ declare let swal:any;
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit {
-  productTypeService:any;
-  id:string;
-  item:any;
+  categoryService: any;
+  id: string;
+  item: any;
   itemFields = ['$all']
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public innoway:InnowayService
+    public innoway: InnowayService
   ) {
-  	this.productTypeService = innoway.getService('product_type');
+    this.categoryService = innoway.getService('product_category');
   }
 
   ngOnInit() {
 
-   	this.id = this.route.snapshot.params['id'];
+    this.id = this.route.snapshot.params['id'];
 
-    if(this.id){
+    if (this.id) {
       this.setData()
-    }else{
+    } else {
       this.alertItemNotFound()
       this.backToList()
     }
   }
 
-  async setData(){
+  async setData() {
     try {
-      this.item = await this.productTypeService.get(this.id,{
+      this.item = await this.categoryService.get(this.id, {
         fields: this.itemFields
       })
-    }catch(err){
+    } catch (err) {
       this.alertItemNotFound()
       this.backToList()
     }
   }
 
-  editItem(){
-        this.router.navigate(['../../add', this.id], { relativeTo: this.route});
+  editItem() {
+    this.router.navigate(['../../add', this.id], { relativeTo: this.route });
   }
 
-  backToList(){
-    this.router.navigate(['../../list'], { relativeTo: this.route});
+  backToList() {
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
-  alertItemNotFound(){
+  alertItemNotFound() {
     return swal({
       title: 'Không còn tồn tại',
       type: 'warning',

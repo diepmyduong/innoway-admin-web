@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
-import { UiSwitchModule } from 'angular2-ui-switch'
 import { VSChecklistModule } from 'ng2-vs-checklist';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 import { TextMaskModule } from 'angular2-text-mask';
@@ -22,7 +21,6 @@ import { DataTableModule } from 'angular-2-data-table-bootstrap4';
     CommonModule,
     ToppingRoutingModule,
     FormsModule,
-    UiSwitchModule,
     VSChecklistModule,
     AngularMultiSelectModule,
     CustomFormsModule,

@@ -3,15 +3,14 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <strong>{{isEdit?"Cập nhật":"Thêm"}} trạng thái sản phẩm</strong>
+          <strong>{{isEdit?"Cập nhật":"Thêm"}} loại sản phẩm</strong>
         </div>
         <div class="card-block">
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Loại trạng thái</label>
+              <label class="col-md-4 form-control-label" for="text-input">Loại sản phẩm</label>
               <div class="col-md-8">
-
                 <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name"
-                  class="form-control" [placeholder]="'Nhập tên trạng thái'" required/>
+                  class="form-control" [placeholder]="'Nhập tên category'" required/>
                 <small *ngIf="nameControl.errors?.required"
                 class="text-muted danger" >
                   (Không được bỏ trống)
@@ -25,6 +24,19 @@
                   class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
               </div>
    			    </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="textarea-input">Hình ảnh</label>
+              <div class="col-md-8">
+                <input type="text" #imageControl="ngModel" [(ngModel)]="image" name="image" url
+                  class="form-control" [placeholder]="image?'':'Nhập url'"/>
+                  <small *ngIf="imageControl.errors?.url"
+                  class="text-muted danger" >
+                    (Link không hợp lệ)
+                  </small>
+                  <img *ngIf="imageControl.value && imageControl.valid" style="width:auto;height:80px;"
+                    [src]="imageControl.value" />
+              </div>
+            </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
               <div class="col-md-8">
