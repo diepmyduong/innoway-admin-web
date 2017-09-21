@@ -18,17 +18,19 @@ export class AddComponent implements OnInit {
 
   id: any;
   isEdit: boolean = false;
-
   submitting: boolean = false;
+
   categoryService: any;
   toppingService: any;
   unitService: any;
   attributeService: any;
   productService: any;
+  productTypeService: any;
 
   name: string;
   description: string;
   category: string;
+  product_type: string;
   status: number = 1;
   topping: string;
   base_price: string;
@@ -45,6 +47,7 @@ export class AddComponent implements OnInit {
   toppings = new BehaviorSubject<any[]>([]);
   units = new BehaviorSubject<any[]>([]);
   attributes = new BehaviorSubject<any[]>([]);
+  productTypes = new BehaviorSubject<any[]>([]);
 
   numberMask = createNumberMask({
     prefix: '',
@@ -76,6 +79,7 @@ export class AddComponent implements OnInit {
     this.toppingService = innoway.getService('topping');
     this.productService = innoway.getService('product');
     this.unitService = innoway.getService('unit');
+    this.productTypeService = innoway.getService('product_type')
   }
 
   async ngOnInit() {
@@ -83,6 +87,7 @@ export class AddComponent implements OnInit {
     await this.loadCategoryData(); //load categories
     await this.loadToppingData(); //load toppings
     await this.loadUnitData();
+    await this.loadProductTypeData();
     if (this.id == null) {
       this.isEdit = false;
       this.setDefaultData();
@@ -104,6 +109,9 @@ export class AddComponent implements OnInit {
     }
     if (this.units.getValue()[0]) {
       this.unit = this.units.getValue()[0].id;
+    }
+    if (this.productTypes.getValue()[0]) {
+      this.product_type = this.productTypes.getValue()[0].id;
     }
     let toppings = this.toppings.getValue().map(topping => {
       topping.selected = false;
@@ -129,6 +137,16 @@ export class AddComponent implements OnInit {
       });
     } catch (err) {
       console.error('Cannot load category', err);
+    }
+  }
+
+  async loadProductTypeData() {
+    try {
+      this.productTypes = await this.innoway.getAll('product_type', {
+        fields: ["id", "name"]
+      });
+    } catch (err) {
+      console.error('Cannot load product_type', err);
     }
   }
 
@@ -195,6 +213,7 @@ export class AddComponent implements OnInit {
       this.status = product.status
       this.category = product.category_id
       this.list_image = product.list_image
+      this.product_type = product.product_type_id
       let toppings = this.toppings.getValue();
       this.toppingSelecter.active = product.toppings.map(product_topping => {
         let index = _.findIndex(toppings, { id: product_topping.topping.id });
@@ -324,7 +343,8 @@ export class AddComponent implements OnInit {
         let { name, description, list_image, thumb, price, base_price, unit, status } = this;
         let category_id = this.category;
         let unit_id = this.unit;
-        let product = await this.productService.add({ name, description, thumb, price, base_price, unit, status, category_id, unit_id, list_image })
+        let product_type_id = this.product_type;
+        let product = await this.productService.add({ name, description, thumb, price, base_price, unit, status, category_id, unit_id, product_type_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -350,7 +370,9 @@ export class AddComponent implements OnInit {
       if (form.valid) {
         let { name, description, list_image, thumb, price, base_price, unit, status } = this;
         let category_id = this.category;
-        let product = await this.productService.add({ name, description, thumb, price, base_price, unit, status, category_id, list_image })
+        let unit_id = this.unit;
+        let product_type_id = this.product_type;
+        let product = await this.productService.add({ name, description, thumb, price, base_price, unit, status, category_id, unit_id, product_type_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -380,7 +402,9 @@ export class AddComponent implements OnInit {
       if (form.valid) {
         let { name, description, list_image, thumb, price, base_price, unit, status } = this;
         let category_id = this.category;
-        let product = await this.productService.update(this.id, { name, description, thumb, price, base_price, unit, status, category_id, list_image })
+        let unit_id = this.unit;
+        let product_type_id = this.product_type;
+        let product = await this.productService.update(this.id, { name, description, thumb, price, base_price, unit, status, category_id, unit_id, product_type_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })

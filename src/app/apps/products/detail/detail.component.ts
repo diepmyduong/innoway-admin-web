@@ -41,6 +41,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   unit: string;
   attribute: string;
   thumb: string;
+  product_type: string;
   topping_items = new BehaviorSubject<any[]>([]);
 
   toppingValues = new BehaviorSubject<any[]>([]);
@@ -100,7 +101,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
             }]
           }],
           unit: ["name"],
-          category: ["name"]
+          category: ["name"],
+          product_type: ["name"]
         }]
       });
 
@@ -109,9 +111,10 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       this.description = product.description;
       this.price = product.price;
       this.base_price = product.base_price;
-      this.unit = product.unit == null ? "" : product.unit.name;
-      this.status = product.status == 1?"Hoạt động":"Không hoạt động";
+      this.unit = product.unit == null ? "Không có" : product.unit.name;
+      this.status = product.status == 1 ? "Hoạt động" : "Không hoạt động";
       this.category = product.category.name;
+      this.product_type = product.product_type == null ? "Không có" : product.product_type.name;
       this.list_image = product.list_image;
       let toppings = this.toppings.getValue();
       if (toppings != null) {

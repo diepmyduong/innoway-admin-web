@@ -24,9 +24,19 @@
               {{item.price | accounting}}
             </template>
       </data-table-column>
-      <data-table-column property="category" header="Loại sản phẩm" [resizable]="true" [sortable]="true">
+      <data-table-column property="category" header="Loại sản phẩm" [resizable]="true">
         <template #dataTableCell let-item="item">
             {{item.category?.name?item.category.name:""}}
+          </template>
+      </data-table-column>
+      <data-table-column property="product_type" header="Trạng thái sản phẩm" [visible]="false" [resizable]="true">
+        <template #dataTableCell let-item="item">
+            {{item.product_type?.name?item.product_type.name:""}}
+          </template>
+      </data-table-column>
+      <data-table-column property="unit" header="Đơn vị" [resizable]="true" [visible]="false">
+        <template #dataTableCell let-item="item">
+            {{item.unit?.name?item.unit.name:""}}
           </template>
       </data-table-column>
       <data-table-column property="description" header="Mô tả" [visible]="false" [resizable]="true">

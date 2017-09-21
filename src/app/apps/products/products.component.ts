@@ -28,12 +28,13 @@ export class ProductsComponent implements OnInit {
   public itemCount = 0; // item total  count
   public thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
   public itemFields = ["$all", {
-    category: ["name"]
-  }]; //Get All field
+    category: ["name"],
+    product_type: ["name"],
+    unit: ["name"]
+  }];
 
-  //Search bar
-  public query: any = {} //query to search and paging items
-  public searchTimeOut = 250; //milisecond
+  public query: any = {}
+  public searchTimeOut = 250;
   public searchRef: any;
 
   @ViewChild(DataTable) itemsTable;

@@ -56,6 +56,21 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
+                <strong>Trạng thái sản phẩm</strong>
+              </div>
+              <div class="card-block">
+                <div class="form-group row">
+                  <label class="col-md-3 form-control-label" for="text-input">Trạng thái sản phẩm</label>
+                  <div class="col-md-9">
+                    <input type="text" #unitControl="ngModel" [(ngModel)]="product_type" name="product_type" class="form-control" readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
                 <strong>Đơn vị tính</strong>
               </div>
               <div class="card-block">

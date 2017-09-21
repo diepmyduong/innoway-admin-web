@@ -47,7 +47,25 @@
                   <label class="col-md-3 form-control-label" for="text-input">Giá gốc sản phẩm</label>
                   <div class="col-md-9">
                     <input type="text" step="1000" #basePriceControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="base_price" name="base_price" class="form-control" [placeholder]="'Nhập giá gốc sản phẩm'">
-                    <!-- <small class="text-muted" *ngIf="basePrice">{{ basePrice | accounting }}</small> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <strong>Trạng thái sản phẩm</strong>
+              </div>
+              <div class="card-block">
+                <div class="form-group row">
+                  <label class="col-md-3 form-control-label" for="text-input">Trạng thái sản phẩm</label>
+                  <div class="col-md-9">
+                    <select id="productTypeSelect" #productTypeControl="ngModel" [(ngModel)]="product_type" name="product_type" class="form-control">
+                          <option *ngFor="let v of productTypes | async" [value]="v.id">
+                            {{v.name}}
+                          </option>
+                        </select>
                   </div>
                 </div>
               </div>
