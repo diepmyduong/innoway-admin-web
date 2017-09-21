@@ -8,6 +8,7 @@ import { FormGroup, FormControl, Validators, NgForm } from "@angular/forms";
 import { CustomValidators } from "ng2-validation/dist";
 import { InnowayService } from 'app/services'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 declare var swal: any;
 
@@ -29,7 +30,11 @@ export class AddComponent implements OnInit, AddPageInterface {
   status: number = 1;
   topping_id: string;
   toppings: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  toppingDefault: any;
+
+  numberMask = createNumberMask({
+    prefix: '',
+    suffix: ' đ'
+  })
 
   constructor(
     private route: ActivatedRoute,
@@ -40,8 +45,11 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.toppingValueService = innoway.getService('topping_value');
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
+
+    await this.loadToppingData();
+
     if (this.id == null) {
       this.isEdit = false;
       this.setDefaultData();
@@ -52,23 +60,26 @@ export class AddComponent implements OnInit, AddPageInterface {
     if (this.isEdit) {
       this.setData();
     }
-
-    this.loadToppingData();
   }
 
   setDefaultData() {
     this.status = 1;
+    this.price = "0";
+    if (this.toppings.getValue()[0]) {
+      this.topping_id = this.toppings.getValue()[0].id;
+    }
+    return {
+      status: this.status,
+      price: this.price,
+      topping_id: this.topping_id
+    }
   }
 
   async loadToppingData() {
     try {
-      let data = await this.innoway.getAll('topping', {
+      this.toppings = await this.innoway.getAll('topping', {
         fields: ["id", "name"]
       });
-      this.toppings = data._value;
-      this.topping_id = this.toppings[0].name;
-      // this.topping_id.value=this.toppings[0].name;
-      this.ref.detectChanges();
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       this.backToList()
@@ -81,7 +92,10 @@ export class AddComponent implements OnInit, AddPageInterface {
         fields: ["name", "topping_id", "description", "price", "status"]
       });
       this.name = data.name;
-      this.topping_id = data.topping;
+      if (data.topping_id == null) {
+        data.topping_id = this.toppings.getValue()[0].id;
+      }
+      this.topping_id = data.topping_id;
       this.description = data.description;
       this.price = data.price;
       this.status = data.status;
@@ -92,7 +106,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route});
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -145,11 +159,12 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid) {
+      this.price = this.price.toString().replace(/[^\d]/g, '');
       let { name, topping_id, description, price, status } = this;
       await this.toppingValueService.add({ name, topping_id, description, price, status })
       this.alertAddSuccess();
       form.reset();
-      form.controls["status"].setValue(1);
+      form.resetForm(this.setDefaultData());
     } else {
       this.alertFormNotValid();
     }
@@ -157,6 +172,7 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
+      this.price = this.price.toString().replace(/[^\d]/g, '');
       let { name, topping_id, description, price, status } = this;
       await this.toppingValueService.update(this.id, { name, topping_id, description, price, status })
       this.alertUpdateSuccess();

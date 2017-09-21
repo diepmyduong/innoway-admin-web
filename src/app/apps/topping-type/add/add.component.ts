@@ -48,6 +48,9 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   setDefaultData() {
     this.status = 1;
+    return {
+      status: this.status
+    }
   }
 
   async setData() {
@@ -122,7 +125,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       await this.toppingTypeService.add({ name, description, status })
       this.alertAddSuccess();
       form.reset();
-      form.controls["status"].setValue(1);
+      form.resetForm(this.setDefaultData());
     } else {
       this.alertFormNotValid();
     }

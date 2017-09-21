@@ -43,7 +43,7 @@ export class ToppingComponent implements OnInit, ListPageInterface {
   }
 
   ngOnInit() {
-    
+
   }
 
   async reloadItems(params) {

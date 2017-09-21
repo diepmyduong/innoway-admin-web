@@ -9,6 +9,8 @@ import { CustomValidators } from "ng2-validation/dist";
 import { InnowayService } from 'app/services'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+
 declare let swal: any;
 
 @Component({
@@ -24,6 +26,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   itemFields: any = ["$all", {
     topping: ["name"]
   }];
+
+  numberMask = createNumberMask({
+    prefix: '',
+    suffix: ' đ'
+  })
 
   constructor(
     private route: ActivatedRoute,
@@ -57,11 +64,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   editItem() {
-        this.router.navigate(['../../add', this.id], { relativeTo: this.route});
+    this.router.navigate(['../../add', this.id], { relativeTo: this.route });
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route});
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {

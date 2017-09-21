@@ -49,7 +49,6 @@ import { SwiperModule } from 'angular2-useful-swiper';
     DataTableModule,
     PipesModule,
     SwiperModule,
-    TextMaskModule
     // UploadImageByUrlComponent
   ],
   declarations: [ProductsComponent, AddComponent, DetailComponent],  //UploadImageByUrlComponent

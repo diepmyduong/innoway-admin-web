@@ -74,7 +74,6 @@ export class AddComponent implements OnInit {
     private ref: ChangeDetectorRef,
     public innoway: InnowayService
   ) {
-    //get Service
     this.categoryService = innoway.getService('product_category');
     this.toppingService = innoway.getService('topping');
     this.productService = innoway.getService('product');
@@ -83,9 +82,10 @@ export class AddComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.id = this.route.snapshot.params['id']; //Get id params
-    await this.loadCategoryData(); //load categories
-    await this.loadToppingData(); //load toppings
+    this.id = this.route.snapshot.params['id'];
+    
+    await this.loadCategoryData();
+    await this.loadToppingData();
     await this.loadUnitData();
     await this.loadProductTypeData();
     if (this.id == null) {
