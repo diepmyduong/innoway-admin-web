@@ -24,6 +24,7 @@ export class InnowayService {
     'topping_value',
     'employee',
     'bill',
+    'bill_activity',
     'unit',
     'attribute',
     'category',

@@ -18,7 +18,7 @@ const routes: Routes = [
     },
     children:[
       {
-        path: 'add',
+        path: 'add/:id',
         component: AddComponent,
         data: {
           title: "Thêm"

@@ -1,3 +1,105 @@
-<p>
-  add works!
-</p>
+<div class="animated fadeIn">
+  <form class="row" #itemFrm="ngForm">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>{{isEdit?"Cập nhật":"Thêm"}} loại sản phẩm</strong>
+        </div>
+        <div class="card-block">
+            <!-- <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Loại sản phẩm</label>
+              <div class="col-md-8">
+                <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name"
+                  class="form-control" [placeholder]="'Nhập tên category'" required/>
+                <small *ngIf="nameControl.errors?.required"
+                class="text-muted danger" >
+                  (Không được bỏ trống)
+                </small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
+              <div class="col-md-8">
+                <textarea id="textarea-input" #descriptionControl="ngModel" rows="5" [(ngModel)]="description" name="description"
+                  class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
+              </div>
+   			    </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="textarea-input">Hình ảnh</label>
+              <div class="col-md-8">
+                <input type="text" #imageControl="ngModel" [(ngModel)]="image" name="image" url
+                  class="form-control" [placeholder]="image?'':'Nhập url'"/>
+                  <small *ngIf="imageControl.errors?.url"
+                  class="text-muted danger" >
+                    (Link không hợp lệ)
+                  </small>
+                  <img *ngIf="imageControl.value && imageControl.valid" style="width:auto;height:80px;"
+                    [src]="imageControl.value" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
+              <div class="col-md-8">
+                <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
+                  <option *ngFor="let v of [0,1]" [value]="v">
+                    {{ v===1?"Hoạt động":"Không hoạt động"}}
+                  </option>
+                </select>
+              </div>
+            </div> -->
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="textarea-input">Trạng thái</label>
+              <div class="col-md-8">
+                <select id="actionSelect" #actionControl="ngModel" [(ngModel)]="action" name="action" class="form-control">
+                  <option *ngFor="let v of avaiable_actions" [value]="v.action">
+                    <!-- <span *ngIf="checkAction(v)">{{v.name}}</span> -->
+                    {{v.name}}
+                  </option>
+                </select>
+              </div>
+   			    </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="select">Nhân viên</label>
+              <div class="col-md-8">
+                <select id="employeeSelect" #employeeControl="ngModel" [(ngModel)]="employee" name="employee" class="form-control">
+                  <option *ngFor="let v of employees | async" [value]="v.id">
+                    {{v.fullname}}
+                  </option>
+                </select>
+              </div>
+            </div>
+        </div>
+        <div class="card-footer">
+          <!-- <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit"
+            class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; New
+          </button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit"
+            class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; Close
+          </button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit"
+            class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Update &amp; Close
+          </button> -->
+
+          <button (click)="addAction(itemFrm)"
+            class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Add Action
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-block">
+          <div class="row">
+            <div class="col-md-12" *ngFor="let v of bill_actions">
+              <p>{{v.id}} - {{v.action}} - {{v.employee_id}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
