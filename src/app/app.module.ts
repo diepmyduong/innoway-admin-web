@@ -29,7 +29,8 @@ import { ModalModule } from 'ng2-bootstrap/modal';
 import { SharedModule} from './shared/shared.module'
 import { LayoutsModule } from './layouts/layouts.module'
 
-// import { AgmCoreModule } from '@agm/core';
+// import { AgmCoreModule } from "@agm/core";
+
 
 @NgModule({
   imports: [
@@ -47,7 +48,11 @@ import { LayoutsModule } from './layouts/layouts.module'
     ServicesModule,
     ModalModule.forRoot(),
     SharedModule,
-    LayoutsModule
+    LayoutsModule,
+    // AgmCoreModule.forRoot({
+    //   apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
+    //   libraries: ["places,drawing"]
+    // }),
   ],
   declarations: [
     AppComponent,

@@ -278,7 +278,6 @@ export class AddComponent implements OnInit {
   }
 
   checkAction(v): boolean {
-    // alert(JSON.stringify(this.bill_actions));
     if (Number.parseInt(v.action) > 3) {
       return true;
     }

@@ -1,5 +1,5 @@
 <div class="toolbar">
-    <span class="btn-group">
+  <span class="btn-group">
         <button type="button" class="btn btn-default">0</button>
         <button type="button" class="btn btn-info">1</button>
         <button type="button" class="btn btn-warning">2</button>
@@ -9,7 +9,7 @@
     </span>
 </div>
 <div class="content">
-  <div class="callout callout-success m-0 py-1" (click)="viewDetail('1000003')">
+  <!-- <div class="callout callout-success m-0 py-1" (click)="viewDetail('1000003')">
       <div class="avatar float-right employee-avatar row">
         <div class="col-md-12">
               Minh Đức Uy
@@ -31,11 +31,42 @@
       <div>Mã đơn hàng: <strong>1000003</strong></div>
       <small class="mr-1"><i class="fa fa-usd"></i> 550,000 VND </small>
       <small class="mr-1"><i class="icon-calendar"></i> 3:00</small>
-      <small class="mr-1"><i class="icon-location-pin"></i> Quận 1 </small>    
+      <small class="mr-1"><i class="icon-location-pin"></i> Quận 1 </small>
       <small class="mr-1"><i class="fa fa-cog fa-lg"></i> facebook</small>
       <small class="mr-1"><i class="fa fa-user fa-lg"></i> Nguyễn Văn A</small>
+  </div> -->
+  <!-- *ngFor="let v of bills" -->
+  <div class="row">
+    <div class="col-md-12" *ngFor="let bill of bills | async; let i = index">
+      <div class="callout callout-success m-0 py-1">
+
+        <div class="avatar float-right employee-avatar row">
+          <div class="col-md-12">
+            {{bill.customer?.phone?bill.customer.phone:''}}
+            <img src="{{bill.customer?.avatar?.url?bill.customer.avatar:thumbDefault}}" class="img-avatar float-right">
+          </div>
+          <div class="col-md-12 m-h" formArrayName="billStatusInput">
+            <select [hidden]="true" id="actionSelect" class="form-control">
+              <option *ngFor="let v of actions" [value]="v.action">
+                {{v.name}}
+              </option>
+            </select>
+            <button (click)="changeStatusBill(bill)" class="btn btn-sm btn-success btn-ladda" data-style="expand-right">
+              Cập nhật trạng thái
+            </button>
+          </div>
+        </div>
+        <div (click)="viewDetail(bill)">Mã đơn hàng: <strong>{{bill.id}}</strong></div>
+        <small class="mr-1"><i class="fa fa-usd"></i> {{bill.total_price | accounting}} </small>
+        <small class="mr-1"><i class="icon-calendar"></i> {{bill.updated_at | date:'dd/MM/yyyy hh:mm:ss'}}</small>
+        <small class="mr-1"><i class="icon-location-pin"></i> {{bill.address}} </small>
+        <small class="mr-1"><i class="fa fa-cog fa-lg"></i> {{bill.channel?bill.channel:'chatbot'}}</small>
+        <small class="mr-1"><i class="fa fa-user fa-lg"></i> {{bill.activities?(detectActionName(bill.activities[0].action)):""}}</small>
+      </div>
+      <hr class="mx-1 my-0">
+    </div>
   </div>
-  <hr class="mx-1 my-0">
+  <!-- <hr class="mx-1 my-0"> -->
   <!-- <div class="callout callout-info m-0 py-1" (click)="viewDetail('1000003')">
       <div class="avatar float-right employee-avatar">
           <div>
@@ -78,4 +109,3 @@
   </div>
   <hr class="mx-1 my-0"> -->
 </div>
-

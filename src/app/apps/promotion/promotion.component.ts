@@ -52,7 +52,6 @@ export class PromotionComponent implements OnInit, ListPageInterface {
       fields: this.itemFields
     }, this.query);
     this.items = await this.innoway.getAll('promotion', query);
-    alert(JSON.stringify(this.items));
     this.itemCount = this.promotionService.currentPageCount;
     this.ref.detectChanges();
     return this.items;

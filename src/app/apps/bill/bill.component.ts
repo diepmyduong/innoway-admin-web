@@ -19,7 +19,6 @@ export class BillComponent implements OnInit, ListPageInterface {
   itemFields: any = ["$all", {
     customer: ["phone"],
     activities: ["action"],
-    // promotion:["$all"],
     bill_ship_detail: ["fee"]
   }];
   query: any = {};

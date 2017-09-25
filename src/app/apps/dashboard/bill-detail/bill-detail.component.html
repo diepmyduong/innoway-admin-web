@@ -1,65 +1,74 @@
 <div class="toolbar">
-    <button type="button" class="btn btn-secondary"><span class="fa fa-reply" (click)="backToList()"></span></button>
-    <span class="btn-group">
-        <button type="button" class="btn btn-secondary"><span class="fa fa-map-marker"></span></button>
-        <button type="button" class="btn btn-secondary"><span class="fa fa-phone"></span></button>
-    </span>
-    <span class="btn-group pull-right">
-        <button type="button" class="btn btn-secondary"><span class="fa fa-chevron-left"></span></button>
-        <button type="button" class="btn btn-secondary"><span class="fa fa-chevron-right"></span></button>
-    </span>
+  <button type="button" class="btn btn-secondary"><span class="fa fa-reply" (click)="backToList()"></span></button>
+  <span class="btn-group">
+        <button type="button" class="btn btn-secondary" (click)="viewLocationBillDetail()"><span class="fa fa-map-marker"></span></button>
+  <button type="button" class="btn btn-secondary"><span class="fa fa-phone"></span></button>
+  </span>
+  <span class="btn-group pull-right">
+        <!-- <button type="button" class="btn btn-secondary"><span class="fa fa-chevron-left"></span></button>
+  <button type="button" class="btn btn-secondary"><span class="fa fa-chevron-right"></span></button> -->
+  <button (click)="editBill()" class="btn btn-sm btn-primary btn-ladda mr-h">Chỉnh sửa</button>
+  <button (click)="changeStatusBill(item)" class="btn btn-sm btn-primary btn-ladda">Cập nhật trạng thái</button>
+  </span>
 </div>
 <div class="content animated fadeIn">
-    <h4>Thông tin đơn hàng <span class="badge badge-warning pull-right">Đang giao</span></h4>
-    <table class="table">
-        <tbody>
-            <tr>
-                <td style="width:120px">Đơn hàng</td>
-                <td>: {{id}}</td>
-            </tr>
-            <tr>
-                <td>Khách hàng</td>
-                <td>: bambi</td>
-            </tr>
-            <tr>
-                <td>Điện thoại</td>
-                <td>: 01225697181</td>
-            </tr>
-            <tr>
-                <td>Địa chỉ</td>
-                <td>: 1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA</td>
-            </tr>
-            <tr>
-                <td>Kệnh</td>
-                <td>: Chatbot</td>
-            </tr>
-        </tbody>
-    </table>
-    <h4>Lịch sử hoạt động</h4>
-    <table class="table">
-        <tbody>           
-            <tr>
-                <td>Đơn hàng đặt hàng thành công</td>
-                <td>18:30:00 17/10/2017</td>
-                <td>Nguyễn Nhựt Tân</td>
-            </tr>
-        </tbody>
-    </table>
-    <h4>Sản phẩm</h4>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Tên</th>
-                <th>Số lượng</th>
-                <th>Thành tiền (VNĐ)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Giặt phơi</td>
-                <td>1</td>
-                <td>8,000</td>
-            </tr>
-        </tbody>
-    </table>
+  <h4>Thông tin đơn hàng <span class="badge badge-warning pull-right">{{item.activities?detectActionName(item.activities[item.activities.length-1].action):''}}</span></h4>
+  <table class="table">
+    <tbody>
+      <tr>
+        <td style="width:120px">Đơn hàng</td>
+        <td>: {{item.id}}</td>
+      </tr>
+      <tr>
+        <td>Khách hàng</td>
+        <td>: {{item.customer?item.customer.fullname:''}}</td>
+      </tr>
+      <tr>
+        <td>Điện thoại</td>
+        <td>: {{item.customer?item.customer.phone:''}}</td>
+      </tr>
+      <tr>
+        <td>Địa chỉ</td>
+        <td>: {{item.address}}</td>
+      </tr>
+      <tr>
+        <td>Kênh</td>
+        <td>: {{item.channel}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4>Lịch sử hoạt động</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Trạng thái</th>
+        <th>Thời gian</th>
+        <th>Nhân viên</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let v of item.activities">
+        <td>{{detectActionName(v.action)}}</td>
+        <td>{{v.updated_at | date:'dd/MM/yyyy hh:mm:ss'}}</td>
+        <td>{{v.employee?v.employee.fullname:employee_id}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4>Sản phẩm</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Tên</th>
+        <th>Số lượng</th>
+        <th>Thành tiền (VNĐ)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let v of item.items">
+        <td>{{v.product?v.product.name:v.id}}</td>
+        <td>{{v.amount}}</td>
+        <td>{{v.total_price}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

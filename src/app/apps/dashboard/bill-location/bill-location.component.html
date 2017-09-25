@@ -1,0 +1,48 @@
+<!-- <div class="form-group row">
+  <label class="col-md-3 form-control-label" for="text-input">Địa chỉ</label>
+  <div class="col-md-9">
+    <input type="text" [value]="item?.address" name="address" class="form-control" readonly/>
+  </div>
+  <div class="col-md-12 mt-1">
+    <agm-map [latitude]="latitudeMap" [longitude]="longitudeMap" [scrollwheel]="false" [zoom]="zoomMap">
+      <agm-marker [latitude]="latitudeMap" [longitude]="longitudeMap"></agm-marker>
+    </agm-map>
+  </div>
+</div> -->
+<div class="toolbar">
+  <button type="button" class="btn btn-secondary"><span class="fa fa-reply" (click)="backToList()"></span></button>
+  <span class="btn-group">
+        <button type="button" class="btn btn-secondary"><span class="fa fa-map-marker"></span></button>
+  <button type="button" class="btn btn-secondary"><span class="fa fa-phone"></span></button>
+  </span>
+  <span class="btn-group pull-right">
+        <!-- <button type="button" class="btn btn-secondary btn-success"><span class="fa fa-chevron-left"></span></button>
+  <button type="button" class="btn btn-secondary" (click)="viewLocationBillDetail()"><span class="fa fa-chevron-right"></span></button> -->
+  <!-- <button (click)="editBill(item.id)" class="btn btn-sm btn-primary btn-ladda">Chỉnh sửa</button> -->
+  </span>
+</div>
+<div class="content animated fadeIn row">
+  <div class="col-md-12">
+    <div class="form-group row">
+      <h5 class="col-md-12"><strong>Đơn hàng</strong></h5>
+      <label class="col-md-3 form-control-label" for="text-input">Địa điểm</label>
+      <div class="col-md-9">
+        <input type="text" name="address" class="form-control" [value]="item?.address" readonly>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="form-group row">
+      <h5 class="col-md-12"><strong>Nhân viên</strong></h5>
+      <label class="col-md-3 form-control-label" for="text-input">Nhân viên</label>
+      <div class="col-md-9">
+        <input type="text" name="employee" class="form-control" [value]="item.bill_ship_detail?(item.bill_ship_detail.employee?item.bill_ship_detail.employee.fullname:''):''" readonly>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 mt-1">
+    <agm-map [latitude]="latitudeMap" [longitude]="longitudeMap" [scrollwheel]="false" [zoom]="zoom">
+      <agm-marker [latitude]="latitudeMap" [longitude]="longitudeMap"></agm-marker>
+    </agm-map>
+  </div>
+</div>
