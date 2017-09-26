@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import { InnowayService } from "app/services";
+import { InnowayService, AuthService } from "app/services";
 import * as Ajv from 'ajv';
 
 declare var swal: any;
@@ -67,20 +67,74 @@ export class BillsComponent implements OnInit {
   billActitivyService: any;
   bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
-  thumbDefault: string="https://s11.favim.com/mini/160421/snowball-movie-the-secret-life-of-pets-cute-Favim.com-4234326.jpeg";
+  employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
+  thumbDefault: string = "https://s11.favim.com/mini/160421/snowball-movie-the-secret-life-of-pets-cute-Favim.com-4234326.jpeg";
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     public innoway: InnowayService,
-    private ref: ChangeDetectorRef
+    private ref: ChangeDetectorRef,
+    public auth: AuthService
   ) {
+
     this.billService = innoway.getService('bill');
     this.billActitivyService = innoway.getService('bill_activity');
   }
 
   async ngOnInit() {
     this.loadBillData();
+    // alert(JSON.stringify(this.auth.service.userInfo,null,2))
+  }
+
+  print(): void {
+    let printContents, popupWin;
+    printContents = document.getElementById('printSection').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+            <html>
+                <head>
+                    <title>Print tab</title>
+                    <style>
+                        //........Customized style.......
+                    </style>
+                </head>
+                <body onload="window.print();window.close()">${printContents}
+                </body>
+            </html>`
+    );
+    popupWin.document.close();
+  }
+
+  async loadEmployeeData() {
+    try {
+      this.bills = await this.innoway.getAll('bill', {
+        fields: ["$all", {
+          activities: ["$all", {
+            employee: ["$all"]
+          }],
+          customer: ["$all"]
+        }]
+      });
+    } catch (err) {
+      try { await this.alertItemNotFound() } catch (err) { }
+      console.log("ERRRR", err);
+    }
+  }
+
+  async loadBranchData() {
+
+  }
+
+  async loadAreaData() {
+
+  }
+
+  async queryBill(query: string) {
+
   }
 
   async loadBillData() {

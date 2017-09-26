@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayService, AuthService } from "app/services";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 declare var swal: any;
@@ -14,8 +14,10 @@ export class DashboardComponent implements OnInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     public innoway: InnowayService,
-    private ref: ChangeDetectorRef) {
+    private ref: ChangeDetectorRef,
+    public auth: AuthService) {
     this.billService = innoway.getService('bill');
+    this.employee=this.auth.service.userInfo;
   }
 
 
@@ -29,6 +31,8 @@ export class DashboardComponent implements OnInit {
   branchService: any;
   customerService: any;
   billService: any;
+
+  employee: any;
 
   summary: any;
   filter: any;
