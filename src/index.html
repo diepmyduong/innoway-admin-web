@@ -81,6 +81,20 @@
     </script>
     <script src="https://rawgit.com/diepmyduong/innoway-chatbot-client/master/dist/innoway_chatbot.min.js"></script>
 
+    <!-- init firebase cloud message -->
+    <script src="https://www.gstatic.com/firebasejs/4.4.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDLAq1cs8FX3uAL8yBrkBU8tn4_AzcyjqA",
+        authDomain: "m-commerce-cloud-service.firebaseapp.com",
+        databaseURL: "https://m-commerce-cloud-service.firebaseio.com",
+        projectId: "m-commerce-cloud-service",
+        storageBucket: "m-commerce-cloud-service.appspot.com",
+        messagingSenderId: "904045487192"
+      };
+      firebase.initializeApp(config);
+    </script>
 </body>
 
 </html>
