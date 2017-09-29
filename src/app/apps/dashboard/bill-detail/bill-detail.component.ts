@@ -24,8 +24,8 @@ export class BillDetailComponent implements OnInit {
     }],
     bill_ship_detail: ['$all'],
     items: ['$all', {
-      product: ['$all'],
-      topping_values: ['$all']
+      product: ['$all','$paranoid'],
+      topping_values: ['$all','$paranoid']
     }],
     customer: ['$all']
   }];
@@ -41,9 +41,9 @@ export class BillDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    
     this.id = this.route.snapshot.params['id'];
-
+    console.log('bill detail',this.id)
     if (this.id) {
       this.setData()
     } else {

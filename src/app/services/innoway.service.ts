@@ -50,7 +50,7 @@ export class InnowayService {
         this.service_items[m].next(data.items);
       })
     })
-    this.runAuthService();
+    // this.runAuthService();
 
   }
 
@@ -92,4 +92,6 @@ export class InnowayService {
   setAccessToken(token){
     return innoway2.api.setAccessToken(token);
   }
+
+  
 }

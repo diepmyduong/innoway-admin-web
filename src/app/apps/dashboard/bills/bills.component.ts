@@ -1,8 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef,NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Observable } from 'rxjs/Observable'
+import { Subscription  } from 'rxjs/Subscription'
 import { InnowayService, AuthService } from "app/services";
 import * as Ajv from 'ajv';
+import * as _ from 'lodash';
 
 declare var swal: any;
 
@@ -18,6 +21,8 @@ export class BillsComponent implements OnInit {
     activities: ["action"],
     bill_ship_detail: ["fee"]
   }];
+
+  subscribers:any = {}
 
   action: number = 1;
   actions: any[] = [
@@ -65,6 +70,7 @@ export class BillsComponent implements OnInit {
 
   billService: any;
   billActitivyService: any;
+  BillChangeObservable:Observable<any>;
   bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
@@ -77,16 +83,46 @@ export class BillsComponent implements OnInit {
     private route: ActivatedRoute,
     public innoway: InnowayService,
     private ref: ChangeDetectorRef,
-    public auth: AuthService
+    public auth: AuthService,
+    public zone: NgZone
   ) {
 
     this.billService = innoway.getService('bill');
     this.billActitivyService = innoway.getService('bill_activity');
+    
   }
 
   async ngOnInit() {
     this.loadBillData();
     // alert(JSON.stringify(this.auth.service.userInfo,null,2))
+    console.log('on init')
+    this.BillChangeObservable = await this.billService.subscribe()
+    this.subscribers.bill = this.BillChangeObservable.subscribe(this.onBillChange.bind(this))
+  }
+
+  async ngOnDestroy(){
+    console.log('on destroy')
+    _.forEach(this.subscribers,(subscription:Subscription) =>{
+      subscription.unsubscribe()
+    })
+  }
+
+  async onBillChange(bill){
+    let item = await this.billService.get(bill.id,{
+      fields: ["$all", {
+        activities: ["$all", {
+          employee: ["$all"]
+        }],
+        customer: ["$all"]
+      }]
+    })
+    console.log('on bill change',item)
+    let bills = this.bills.getValue()
+    bills.unshift(item)
+    this.zone.run(()=>{
+      this.bills.next(bills)
+    })
+    
   }
 
   print(): void {
@@ -145,7 +181,8 @@ export class BillsComponent implements OnInit {
             employee: ["$all"]
           }],
           customer: ["$all"]
-        }]
+        }],
+        order:[["updated_at","desc"]] 
       });
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }

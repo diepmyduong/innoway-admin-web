@@ -53,5 +53,8 @@
   "defaults": {
     "styleExt": "scss",
     "prefixInterfaces": false
-  }
+  },
+  "assets": [
+    "firebase-messaging-sw.js"
+  ]
 }
