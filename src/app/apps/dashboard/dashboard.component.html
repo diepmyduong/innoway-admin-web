@@ -1,140 +1,172 @@
 <div class="animated fadeIn">
-    <div class="card-group">
-        <div class="card">
-            <div class="card-block">
-            <h4>CHI NHÁNH NGUYỄN VĂN CỪ - HOTLINE: 1900 1288</h4>
-            <h6>Nhân viên: Nguyễn Nhựt Tân</h6>
-            <h6>Thời gian: 8h00 - 18h00</h6>
-            </div>
-        </div>
+  <div class="card-group">
+    <div class="card">
+      <div class="card-block" (click)="showSuccess()">
+        <h5>Chi nhánh: {{branch.address}}</h5>
+        <h5>Hotline: {{branch.phone}}</h5>
+        <h5>Nhân viên phụ trách: {{employee.fullname}}</h5>
+      </div>
     </div>
-    <div class="card-group">
-        <div class="card">
-            <div class="card-block text-center">
-                <div class="h1 text-muted text-center mb-2">
-                    <i class="icon-bubbles"></i>
-                </div>
-                <div class="h5 mb-0">23</div>
-                <small class="text-muted text-uppercase font-weight-bold">Phản hồi</small>
-            </div>
+  </div>
+  <div class="card-group">
+    <div class="card">
+      <div class="card-block text-center">
+        <div class="h1 text-muted text-center mb-2">
+          <i class="icon-bubbles"></i>
         </div>
-        <div class="card">
-            <div class="card-block text-center">
-                <div class="h1 text-muted text-center mb-2">
-                    <i class="icon-people"></i>
-                </div>
-                <div class="h5 mb-0">42</div>
-                <small class="text-muted text-uppercase font-weight-bold">Khách đã đặt</small>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-block text-center">
-                <div class="h1 text-muted text-center mb-2">
-                    <i class="icon-basket-loaded"></i>
-                </div>
-                <div class="h5 mb-0">16</div>
-                <small class="text-muted text-uppercase font-weight-bold">Đơn đặt hàng</small>
-                <div class="progress progress-xs mt-1 mb-0">
-                <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-block text-center">
-                <div class="h1 text-muted text-center mb-2">
-                    <i class="fa fa-usd"></i>
-                </div>
-                <div class="h5 mb-0">5,632,000đ</div>
-                <small class="text-muted text-uppercase font-weight-bold">Doanh thu trong ngày</small>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-block text-center">
-                <div class="h1 text-muted text-center mb-2">
-                    <i class="icon-globe"></i>
-                </div>
-                <div class="h5 mb-0">68</div>
-                <small class="text-muted text-uppercase font-weight-bold">Lượng truy cập</small>
-            </div>
-        </div>
+        <div class="h5 mb-0">23</div>
+        <small class="text-muted text-uppercase font-weight-bold pt-h">Phản hồi</small>
+      </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-        <div class="card email-app">
-            <nav>
-                <div class="input-group">
-                    <input type="text" class="form-control" formControlName="billNameInput" placeholder="Tìm kiếm đơn hàng"/>
-                </div>
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:;"><i class="icon-direction"></i> Trạng thái</a>
-                    </li>
-                    <li class="nav-item">
-                        <div class="form-group">
-                            <select id="select" name="select" class="form-control" size="1">
-                                <option value="0">Tất cả</option>
-                                <option value="1" selected>Đã gửi</option>
-                                <option value="2">Đang xử lý</option>
-                                <option value="3">Đang điều phối</option>
-                                <option value="3">Đã điều phối</option>
-                                <option value="3">Đang giao</option>
-                                <option value="3">Đã thanh toán</option>
-                                <option value="3">Đã thu tiền</option>
+    <div class="card">
+      <div class="card-block text-center">
+        <div class="h1 text-muted text-center mb-2">
+          <i class="icon-people"></i>
+        </div>
+        <div class="h5 mb-0">42</div>
+        <small class="text-muted text-uppercase font-weight-bold pt-h">Khách đã đặt</small>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-block text-center">
+        <div class="h1 text-muted text-center mb-2">
+          <i class="icon-basket-loaded"></i>
+        </div>
+        <div class="h5 mb-0">16</div>
+        <small class="text-muted text-uppercase font-weight-bold pt-h">Đơn đặt hàng</small>
+        <div class="progress progress-xs mt-1 mb-0">
+          <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-block text-center">
+        <div class="h1 text-muted text-center mb-2">
+          <i class="fa fa-usd"></i>
+        </div>
+        <div class="h5 mb-0">5,632,000đ</div>
+        <small class="text-muted text-uppercase font-weight-bold pt-h">Doanh thu trong ngày</small>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-block text-center">
+        <div class="h1 text-muted text-center mb-2">
+          <i class="icon-globe"></i>
+        </div>
+        <div class="h5 mb-0">68</div>
+        <small class="text-muted text-uppercase font-weight-bold pt-h">Lượng truy cập</small>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2 col-sm-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="text-muted small text-uppercase font-weight-bold pt-h">Thành công</div>
+          <div class="h2">1,123</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="text-muted small text-uppercase font-weight-bold pt-h">Đang xử lý</div>
+          <div class="h2">1,123</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="text-muted small text-uppercase font-weight-bold pt-h">Đã chuẩn bị</div>
+          <div class="h2">1,123</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="text-muted small text-uppercase font-weight-bold pt-h">Đang giao</div>
+          <div class="h2">1,123</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="text-muted small text-uppercase font-weight-bold pt-h">Thanh toán</div>
+          <div class="h2">1,123</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="text-muted small text-uppercase font-weight-bold pt-h">Đã hủy</div>
+          <div class="h2">1,123</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card email-app">
+        <nav>
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:;"><i class="icon-direction"></i> Mã đơn hàng</a>
+              <div class="form-group">
+                <input type="text" class="form-control" formControlName="addressInput" placeholder="Tìm kiếm đơn hàng"  #bill (keydown.enter)="onChangeBill(bill.value)"/>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:;"><i class="icon-direction"></i> Trạng thái</a>
+            </li>
+            <li class="nav-item">
+              <div class="form-group">
+                <select id="actionSelect" name="select" class="form-control" size="1" #action (change)="onChangeAction(action.value)">
+                  <option *ngFor="let v of actions" [value]="v.action">
+                    {{v.name}}
+                  </option>
                             </select>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:;"><i class="icon-user"></i> Khách hàng</a>
-                    </li>
-                    <li class="nav-item">
-                        <div class="form-group">
-                            <input type="text" class="form-control" formControlName="phoneInput" placeholder="Số điện thoại"/>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:;"><i class="glyphicons glyphicons-bike-park"></i> Nhân viên</a>
-                    </li>
-                    <li class="nav-item">
-                        <div class="form-group">
-                            <input type="text" class="form-control" formControlName="employeeInput" placeholder="Tên nhân viên"/>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:;"><i class="glyphicons glyphicons-map"></i> Khu vực</a>
-                    </li>
-                    <li class="nav-item">
-                        <div class="form-group">
-                            <select id="select" name="select" formControlName="districtInput" class="form-control" size="1">
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:;"><i class="icon-user"></i> Khách hàng</a>
+            </li>
+            <li class="nav-item">
+              <div class="form-group">
+                <input type="text" class="form-control" formControlName="phoneInput" placeholder="Số điện thoại" #customer (keydown.enter)="onChangeCustomer(customer.value)"/>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:;"><i class="glyphicons glyphicons-bike-park"></i> Nhân viên</a>
+              <div class="form-group">
+                <select id="employeeSelect" name="select" formControlName="districtInput" class="form-control" size="1" #employee (change)="onChangeEmployee(employee.value)">
+                  <option *ngFor="let v of employees | async" [value]="v.id">
+                    {{v.fullname}}
+                  </option>
+                                </select>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:;"><i class="glyphicons glyphicons-map"></i> Khu vực</a>
+              <div class="form-group">
+                <select id="areaSelect" name="select" formControlName="districtInput" class="form-control" size="1" #area (change)="onChangeArea(area.value)">
                                 <option value="0" selected>Tất cả</option>
-                                <option value="1">Quận 1</option>
-                                <option value="1">Quận 2</option>
-                                <option value="1">Quận 3</option>
-                                <option value="1">Quận 4</option>
-                                <option value="1">Quận 5</option>
-                                <option value="1">Quận 6</option>
-                                <option value="1">Quận 7</option>
-                                <option value="1">Quận 8</option>
-                                <option value="1">Quận 9</option>
-                                <option value="1">Quận 10</option>
-                                <option value="1">Quận 11</option>
-                                <option value="1">Quận 12</option>
+                                <option *ngFor="let v of areas | async" [value]="v.id">
+                                  {{v.name}}
+                                </option>
                             </select>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:;"><i class="glyphicons glyphicons-map-marker"></i> Nơi giao</a>
-                    </li>
-                    <li class="nav-item">
-                        <div class="form-group">
-                            <input type="text" class="form-control" formControlName="addressInput" placeholder="Địa chỉ"/>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-            <main>
-                <router-outlet></router-outlet>
-            </main>
-        </div>
-        </div>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <main>
+          <router-outlet></router-outlet>
+        </main>
+      </div>
     </div>
+  </div>
 </div>
+<toaster-container [toasterconfig]="toasterconfig"></toaster-container>

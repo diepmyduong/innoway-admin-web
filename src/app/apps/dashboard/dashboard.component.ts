@@ -2,6 +2,9 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayService, AuthService } from "app/services";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { ToasterModule, ToasterService, ToasterConfig } from 'angular2-toaster/angular2-toaster';
+import { Subscription } from "rxjs/Subscription";
+import { DashboardService } from "app/apps/dashboard/DashboardService";
 
 declare var swal: any;
 
@@ -10,16 +13,6 @@ declare var swal: any;
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-
-  constructor(private router: Router,
-    private route: ActivatedRoute,
-    public innoway: InnowayService,
-    private ref: ChangeDetectorRef,
-    public auth: AuthService) {
-    this.billService = innoway.getService('bill');
-    this.employee=this.auth.service.userInfo;
-  }
-
 
   public brandPrimary: string = '#20a8d8';
   public brandSuccess: string = '#4dbd74';
@@ -31,12 +24,135 @@ export class DashboardComponent implements OnInit {
   branchService: any;
   customerService: any;
   billService: any;
+  shipAreaService: any;
 
   employee: any;
+  branch: any = {};
 
   summary: any;
   filter: any;
   area: any;
+  areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
+  action: number = 1;
+  actions: any[] = [
+    {
+      action: -2,
+      name: "Chỉnh sửa"
+    },
+    {
+      action: -1,
+      name: "Đã hủy"
+    },
+    {
+      action: 0,
+      name: "Đặt hàng thành công"
+    },
+    {
+      action: 1,
+      name: "Đang điều phối"
+    },
+    {
+      action: 2,
+      name: "Đang xử lý"
+    },
+    {
+      action: 3,
+      name: "Đã chuẩn bị"
+    },
+    {
+      action: 4,
+      name: "Đã chuyển cho giao hàng"
+    },
+    {
+      action: 5,
+      name: "Đang giao"
+    },
+    {
+      action: 6,
+      name: "Đã thanh toán"
+    },
+    {
+      action: 7,
+      name: "Đã thu tiền"
+    },
+  ];
+
+  private toasterService: ToasterService;
+
+  public toasterconfig: ToasterConfig =
+  new ToasterConfig({
+    tapToDismiss: true,
+    timeout: 5000
+  });
+
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    public innoway: InnowayService,
+    private ref: ChangeDetectorRef,
+    toasterService: ToasterService,
+    private dashboardService: DashboardService,
+    public auth: AuthService) {
+    this.billService = innoway.getService('bill');
+    this.branchService = innoway.getService('branch');
+    this.shipAreaService = innoway.getService('brand_ship');
+
+    this.employee = this.auth.service.userInfo;
+    this.toasterService = toasterService;
+  }
+
+  showSuccess() {
+    this.toasterService.pop('success', 'Success Toaster', 'This is toaster description');
+  }
+
+  async ngOnInit() {
+    //generate random values for mainChart
+    for (var i = 0; i <= this.mainChartElements; i++) {
+      this.mainChartData1.push(this.random(50, 200));
+      this.mainChartData2.push(this.random(80, 100));
+      this.mainChartData3.push(65);
+    }
+
+    // this.dashboardService.detectSelectedAction(5);
+
+    this.loadAreaData();
+    this.loadEmployeeDataByBranchData();
+    this.loadBranchByEmployeeData(this.employee.branch_id);
+  }
+
+  async loadEmployeeDataByBranchData() {
+    try {
+      this.employees = await this.innoway.getAll('employee', {
+        fields: ["$all"]
+      });
+    } catch (err) {
+      // try { await this.alertItemNotFound() } catch (err) { }
+      console.log("ERRRR", err);
+    }
+  }
+
+  async loadAreaData() {
+    try {
+      this.areas = await this.innoway.getAll('ship_area', {
+        fields: ["$all"]
+      });
+    } catch (err) {
+      // try { await this.alertItemNotFound() } catch (err) { }
+      console.log("ERRRR", err);
+    }
+  }
+
+  async loadBranchByEmployeeData(branchId: string) {
+    try {
+      this.branch = await this.branchService.get(branchId, {
+        fields: ["$all"]
+      })
+      this.ref.detectChanges();
+    } catch (err) {
+
+    }
+  }
 
   // dropdown buttons
   public status: { isopen: boolean } = { isopen: false };
@@ -400,8 +516,6 @@ export class DashboardComponent implements OnInit {
   public socialChartLegend: boolean = false;
   public socialChartType: string = 'line';
 
-  // sparkline charts
-
   public sparklineChartData1: Array<any> = [
     {
       data: [35, 23, 56, 22, 97, 23, 64],
@@ -483,15 +597,24 @@ export class DashboardComponent implements OnInit {
   public sparklineChartLegend: boolean = false;
   public sparklineChartType: string = 'line';
 
+  onChangeAction(value) {
+    this.dashboardService.updateAction(value);
+  }
 
-  async ngOnInit() {
-    //generate random values for mainChart
-    for (var i = 0; i <= this.mainChartElements; i++) {
-      this.mainChartData1.push(this.random(50, 200));
-      this.mainChartData2.push(this.random(80, 100));
-      this.mainChartData3.push(65);
-    }
+  onChangeEmployee(value) {
+    this.dashboardService.updateEmployee(value);
+  }
 
+  onChangeArea(value) {
+    this.dashboardService.updateArea(value);
+  }
+
+  onChangeCustomer(value) {
+    this.dashboardService.updateCustomer(value);
+  }
+
+  onChangeBill(value) {
+    this.dashboardService.updateBill(value);
   }
 
 }

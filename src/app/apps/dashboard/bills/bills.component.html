@@ -1,11 +1,15 @@
 <div class="toolbar">
   <span class="btn-group">
-        <button type="button" class="btn btn-default">0</button>
-        <button type="button" class="btn btn-info">1</button>
-        <button type="button" class="btn btn-warning">2</button>
-        <button type="button" class="btn btn-primary">2</button>
-        <button type="button" class="btn btn-success">2</button>
-        <button type="button" class="btn btn-danger">2</button>
+      <!-- <button type="button" class="btn btn-danger" (click)="filter()">All</button>
+      <button type="button" class="btn btn-danger" (click)="filter(-1)">2</button>
+        <button type="button" class="btn btn-default" (click)="filter(0)">0</button>
+        <button type="button" class="btn btn-info" (click)="filter(1)">1</button>
+        <button type="button" class="btn btn-warning" (click)="filter(2)">2</button>
+        <button type="button" class="btn btn-primary" (click)="filter(3)">2</button>
+        <button type="button" class="btn btn-success" (click)="filter(4)">2</button>
+        <button type="button" class="btn btn-danger" (click)="filter(5)">2</button>
+          <button type="button" class="btn btn-danger" (click)="filter(6)">2</button>
+            <button type="button" class="btn btn-danger" (click)="filter(7)">2</button> -->
     </span>
 
   <button class="btn btn-sm btn-primary btn-ladda mr-h float-right">Xem tổng quan</button>
@@ -47,7 +51,7 @@
 
         <div class="avatar float-right employee-avatar row">
           <div class="col-md-12">
-            {{bill.customer?.phone?bill.customer.phone:''}}
+            {{selectedAction}} ---- {{bill.customer?.phone?bill.customer.phone:''}}
             <img src="{{bill.customer?.avatar?.url?bill.customer.avatar:thumbDefault}}" class="img-avatar float-right">
           </div>
           <div class="col-md-12 m-h" formArrayName="billStatusInput">
@@ -71,46 +75,4 @@
       <hr class="mx-1 my-0">
     </div>
   </div>
-  <!-- <hr class="mx-1 my-0"> -->
-  <!-- <div class="callout callout-info m-0 py-1" (click)="viewDetail('1000003')">
-      <div class="avatar float-right employee-avatar">
-          <div>
-              Diệp Mỹ Dương
-              <img src="https://scontent.fsgn3-1.fna.fbcdn.net/v/t31.0-8/20728672_1370176209767061_5660167700182237227_o.jpg?oh=68796ec45ef5eb6c2b029197736d8b46&oe=5A33F3BB" class="img-avatar" alt="admin@bootstrapmaster.com">
-          </div>
-      </div>
-      <div>Mã đơn hàng: <strong>1000004</strong></div>
-      <small class="mr-1"><i class="icon-calendar"></i> 3:15</small>
-      <small class="mr-1"><i class="icon-location-pin"></i> Quận 10 </small>
-      <small class="mr-1"><i class="glyphicons glyphicons-channel"></i> Đặt hàng tại quán </small>
-      <small class="mr-1"><i class="fa fa-usd"></i> 430,000 VND </small>
-  </div>
-  <hr class="mx-1 my-0">
-  <div class="callout callout-danger m-0 py-1" (click)="viewDetail('1000003')">
-      <div class="avatar float-right employee-avatar">
-          <div>
-              Trần Anh Khôi
-              <img src="https://scontent.fsgn3-1.fna.fbcdn.net/v/t1.0-1/p320x320/16115038_1204019559694850_1816007978734027767_n.jpg?oh=bc452f92bc8998255b02222dacb61f5e&oe=5A310C66" class="img-avatar" alt="admin@bootstrapmaster.com">
-          </div>
-      </div>
-      <div>Mã đơn hàng: <strong>1000005</strong></div>
-      <small class="mr-1"><i class="icon-calendar"></i> 4:10</small>
-      <small class="mr-1"><i class="icon-location-pin"></i> Quận 4 </small>
-      <small class="mr-1"><i class="fa fa-usd"></i> 310,000 VND </small>
-  </div>
-  <hr class="mx-1 my-0">
-  <div class="callout callout-yahoo m-0 py-1" (click)="viewDetail('1000003')">
-      <div class="avatar float-right employee-avatar">
-          <div>
-              Lê Quốc Vũ
-              <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-          </div>
-      </div>
-      <div>Mã đơn hàng: <strong>1000006</strong></div>
-      <small class="mr-1"><i class="icon-calendar"></i> 4:30</small>
-      <small class="mr-1"><i class="icon-location-pin"></i> Quận 1 </small>
-      <small class="mr-1"><i class="glyphicons glyphicons-heart"></i> 10 </small>
-      <small class="mr-1"><i class="fa fa-usd"></i> 200,000 VND </small>
-  </div>
-  <hr class="mx-1 my-0"> -->
 </div>

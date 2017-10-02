@@ -1,11 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef,NgZone } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Observable } from 'rxjs/Observable'
-import { Subscription  } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs/Subscription'
 import { InnowayService, AuthService } from "app/services";
 import * as Ajv from 'ajv';
 import * as _ from 'lodash';
+import { DashboardService } from "app/apps/dashboard/DashboardService";
 
 declare var swal: any;
 
@@ -22,7 +23,7 @@ export class BillsComponent implements OnInit {
     bill_ship_detail: ["fee"]
   }];
 
-  subscribers:any = {}
+  subscribers: any = {}
 
   action: number = 1;
   actions: any[] = [
@@ -70,45 +71,84 @@ export class BillsComponent implements OnInit {
 
   billService: any;
   billActitivyService: any;
-  BillChangeObservable:Observable<any>;
+  billChangeObservable: Observable<any>;
   bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   thumbDefault: string = "https://s11.favim.com/mini/160421/snowball-movie-the-secret-life-of-pets-cute-Favim.com-4234326.jpeg";
+  actionSubscription: Subscription;
+  selectedAction: number = -1;
+  selectedEmployee: string;
+  selectedArea: number = 0;
+  selectedCustomer: string;
+  selectedBill: string;
 
   constructor(
     private router: Router,
+    private dashboardService: DashboardService,
     private route: ActivatedRoute,
     public innoway: InnowayService,
     private ref: ChangeDetectorRef,
     public auth: AuthService,
     public zone: NgZone
   ) {
-
     this.billService = innoway.getService('bill');
     this.billActitivyService = innoway.getService('bill_activity');
-    
+
+    this.subscribeDashboardParent();
   }
 
   async ngOnInit() {
     this.loadBillData();
-    // alert(JSON.stringify(this.auth.service.userInfo,null,2))
-    console.log('on init')
-    this.BillChangeObservable = await this.billService.subscribe()
-    this.subscribers.bill = this.BillChangeObservable.subscribe(this.onBillChange.bind(this))
+    this.subscribeTopicByFCM();
   }
 
-  async ngOnDestroy(){
+  private subscribeDashboardParent() {
+    this.dashboardService.selectedAction.subscribe(
+      data => {
+        this.selectedAction = data;
+      });
+
+    this.dashboardService.selectedEmployee.subscribe(
+      data => {
+        this.selectedEmployee = data;
+      });
+
+    this.dashboardService.selectedArea.subscribe(
+      data => {
+        this.selectedArea = data;
+      });
+
+    this.dashboardService.selectedCustomer.subscribe(
+      data => {
+        this.selectedCustomer = data;
+      });
+
+    this.dashboardService.selectedBill.subscribe(
+      data => {
+        this.selectedBill = data;
+      });
+
+  }
+
+  async subscribeTopicByFCM() {
+    this.billChangeObservable = await this.billService.subscribe();
+    this.subscribers.bill = this.billChangeObservable.subscribe(data => {
+      this.onBillChange.bind(this)
+    });
+  }
+
+  async ngOnDestroy() {
     console.log('on destroy')
-    _.forEach(this.subscribers,(subscription:Subscription) =>{
+    _.forEach(this.subscribers, (subscription: Subscription) => {
       subscription.unsubscribe()
     })
   }
 
-  async onBillChange(bill){
-    let item = await this.billService.get(bill.id,{
+  async onBillChange(bill) {
+    let item = await this.billService.get(bill.id, {
       fields: ["$all", {
         activities: ["$all", {
           employee: ["$all"]
@@ -116,13 +156,13 @@ export class BillsComponent implements OnInit {
         customer: ["$all"]
       }]
     })
-    console.log('on bill change',item)
+    console.log('on bill change', item)
     let bills = this.bills.getValue()
     bills.unshift(item)
-    this.zone.run(()=>{
+    this.zone.run(() => {
       this.bills.next(bills)
     })
-    
+
   }
 
   print(): void {
@@ -180,10 +220,12 @@ export class BillsComponent implements OnInit {
           activities: ["$all", {
             employee: ["$all"]
           }],
-          customer: ["$all"]
+          customer: ["$all"],
+          activity: ["$all"]
         }],
-        order:[["updated_at","desc"]] 
+        order: [["updated_at", "desc"]]
       });
+      console.log('bills', this.bills.getValue())
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -379,6 +421,34 @@ export class BillsComponent implements OnInit {
       type: 'warning',
       timer: 2000,
     })
+  }
+
+  async filter(action) {
+    try {
+      console.log('action', action)
+      this.bills = new BehaviorSubject<any[]>([]);
+      let query = {
+        fields: ["$all", {
+          // activities: ["action",
+          //   // {
+          //   //   employee: ["$all"]
+          //   // }
+          // ],
+          customer: ["$all"],
+          activity: ["action"]
+        }],
+        filter: {
+          "$activity.action$": action
+        }
+      }
+      console.log('query', query)
+      this.bills = await this.innoway.getAll('bill', query);
+      console.log('bills', this.bills.getValue())
+      alert(JSON.stringify(this.bills));
+    } catch (err) {
+      try { await this.alertItemNotFound() } catch (err) { }
+      console.log("ERRRR", err);
+    }
   }
 
 }

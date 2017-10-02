@@ -38,16 +38,16 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   async setData() {
-    try {
-      this.item = await this.customerService.get(this.id, {
-        fields: this.itemFields
-      })
-      this.ref.detectChanges();
-    } catch (err) {
-      this.alertItemNotFound()
-      this.backToList()
-    }
+  try {
+    this.item = await this.customerService.get(this.id, {
+      fields: this.itemFields
+    })
+    this.ref.detectChanges();
+  } catch (err) {
+    this.alertItemNotFound()
+    this.backToList()
   }
+}
 
   editItem() {
         this.router.navigate(['../../add', this.id], { relativeTo: this.route});

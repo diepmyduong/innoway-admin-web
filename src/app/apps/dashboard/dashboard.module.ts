@@ -20,6 +20,9 @@ import { SwiperModule } from 'angular2-useful-swiper';
 import { BillLocationComponent } from './bill-location/bill-location.component';
 
 import { AgmCoreModule } from '@agm/core';
+// Notifications
+import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster';
+import { DashboardService } from "app/apps/dashboard/DashboardService";
 
 @NgModule({
   imports: [
@@ -44,7 +47,10 @@ import { AgmCoreModule } from '@agm/core';
       apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
       libraries: ["places,drawing"]
     }),
+
+    ToasterModule
   ],
+  providers: [DashboardService],
   bootstrap: [DashboardComponent, BillsComponent, BillDetailComponent, BillLocationComponent],
   declarations: [DashboardComponent, BillsComponent, BillDetailComponent, BillLocationComponent]
 })

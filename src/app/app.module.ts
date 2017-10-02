@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { LocationStrategy, HashLocationStrategy,PathLocationStrategy } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
 
 import { AppComponent } from './app.component';
-import { BsDropdownModule } from 'ng2-bootstrap/dropdown';
+import { BsDropdownModule } from 'ng2-bootstrap';
 import { TabsModule } from 'ng2-bootstrap/tabs';
 import { NAV_DROPDOWN_DIRECTIVES } from './shared/nav-dropdown.directive';
 
@@ -26,10 +26,9 @@ import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-not
 import { ServicesModule } from './services';
 
 import { ModalModule } from 'ng2-bootstrap/modal';
-import { SharedModule} from './shared/shared.module'
+import { SharedModule } from './shared/shared.module'
 import { LayoutsModule } from './layouts/layouts.module'
 
-// import { AgmCoreModule } from "@agm/core";
 
 
 @NgModule({
@@ -37,7 +36,6 @@ import { LayoutsModule } from './layouts/layouts.module'
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     Ng2ModalModule.forRoot(),
     BootstrapModalModule,
@@ -49,10 +47,7 @@ import { LayoutsModule } from './layouts/layouts.module'
     ModalModule.forRoot(),
     SharedModule,
     LayoutsModule,
-    // AgmCoreModule.forRoot({
-    //   apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
-    //   libraries: ["places,drawing"]
-    // }),
+    BsDropdownModule.forRoot(),
   ],
   declarations: [
     AppComponent,
@@ -61,6 +56,6 @@ import { LayoutsModule } from './layouts/layouts.module'
     provide: LocationStrategy,
     useClass: PathLocationStrategy
   }],
-  bootstrap: [ AppComponent ]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

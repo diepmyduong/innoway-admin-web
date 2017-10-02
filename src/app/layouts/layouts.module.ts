@@ -8,11 +8,14 @@ import { FullLayoutComponent } from './full-layout/full-layout.component';
 import { ChatbotLayoutComponent } from './chatbot-layout/chatbot-layout.component';
 import { LauncherLayoutComponent } from './launcher-layout/launcher-layout.component';
 
+import { BsDropdownModule } from 'ng2-bs-dropdown';
+
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+    BsDropdownModule
   ],
   declarations: [SimpleLayoutComponent, FullLayoutComponent, ChatbotLayoutComponent, LauncherLayoutComponent]
 })
