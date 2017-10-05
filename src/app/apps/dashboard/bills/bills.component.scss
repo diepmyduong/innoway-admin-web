@@ -1,19 +1,36 @@
 .bill-progress {
-    margin-left:-16px;
-    margin-bottom:-16px !important;
+  margin-left: -16px !important;
+  margin-bottom: -16px !important;
 }
+
 .callout {
-    cursor: pointer;
-    height: 120px;
+  cursor: pointer;
+  height: 120px;
 }
+
 .employee-avatar {
-    width: 30%;
+  width: 30%;
 }
-.employee-avatar>div {
-    float:right;
+
+.employee-avatar > div {
+  float: right;
 }
+
 .content {
-    height: 450px;
-    max-height: 450px;
-    overflow: scroll;
+  height: 450px;
+  max-height: 450px;
+  overflow: scroll;
+}
+
+.my-btn {
+  font-size: 1.7em;
+}
+
+.extraclass {
+  background: black;
+  color: white;
+}
+
+.anotherclass {
+  font-weight: bold;
 }

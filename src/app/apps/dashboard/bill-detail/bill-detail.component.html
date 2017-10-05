@@ -12,7 +12,7 @@
   </span>
 </div>
 <div class="content animated fadeIn">
-  <h4>Thông tin đơn hàng <span class="badge badge-warning pull-right">{{item.activities?detectActionName(item.activities[item.activities.length-1].action):''}}</span></h4>
+  <h4>Thông tin đơn hàng <span class="badge badge-warning pull-right">{{item.activity?detectActionName(item.activitiy.action):''}}</span></h4>
   <table class="table">
     <tbody>
       <tr>
@@ -33,7 +33,7 @@
       </tr>
       <tr>
         <td>Kênh</td>
-        <td>: {{item.channel}}</td>
+        <td>: {{detectChannelName(item.channel)}}</td>
       </tr>
     </tbody>
   </table>

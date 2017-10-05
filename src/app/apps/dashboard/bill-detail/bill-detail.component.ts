@@ -4,10 +4,12 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { InnowayService } from "app/services";
 import * as moment from 'moment';
 
+import { Globals } from './../../../globals';
 declare var swal: any;
 
 @Component({
   selector: 'app-bill-detail',
+  providers: [Globals],
   templateUrl: './bill-detail.component.html',
   styleUrls: ['./bill-detail.component.scss']
 })
@@ -34,14 +36,15 @@ export class BillDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService
+    public innoway: InnowayService,
+    private globals: Globals,
   ) {
     this.billService = innoway.getService('bill');
     this.billActitivyService = innoway.getService('bill_activity');
   }
 
   ngOnInit() {
-    
+
     this.id = this.route.snapshot.params['id'];
     console.log('bill detail',this.id)
     if (this.id) {
@@ -81,83 +84,13 @@ export class BillDetailComponent implements OnInit {
 
   detectChannelName(channel): string {
     let result = "";
-    switch (Number.parseInt(channel)) {
-      case 0: {
-        result = "Tại chi nhánh"
-        break;
-      }
-      case 1: {
-        result = "Callcenter"
-        break;
-      }
-      case 2: {
-        result = "Facebook"
-        break;
-      }
-      case 3: {
-        result = "Chatbot"
-        break;
-      }
-      case 4: {
-        result = "Website"
-        break;
-      }
-      case 5: {
-        result = "Ứng dụng di động"
-        break;
-      }
-      case 6: {
-        result = "Thirdparty"
-        break;
-      }
-    }
+    result=this.globals.detectChannelByCode(channel);
     return result;
   }
 
   detectActionName(action): string {
     let result = "";
-    switch (Number.parseInt(action)) {
-      case -2: {
-        result = "Chỉnh sửa";
-        break;
-      }
-      case -1: {
-        result = "Đã hủy";
-        break;
-      }
-      case 0: {
-        result = "Đặt hàng thành công";
-        break;
-      }
-      case 1: {
-        result = "Đang điều phối";
-        break;
-      }
-      case 2: {
-        result = "Đang xử lý";
-        break;
-      }
-      case 3: {
-        result = "Đã chuẩn bị";
-        break;
-      }
-      case 4: {
-        result = "Đã chuyển cho giao hàng";
-        break;
-      }
-      case 5: {
-        result = "Đang giao";
-        break;
-      }
-      case 6: {
-        result = "Đã thanh toán";
-        break;
-      }
-      case 7: {
-        result = "Đã thu tiền";
-        break;
-      }
-    }
+    result=this.globals.detectBillActivityByCode(action);
     return result;
   }
 

@@ -8,11 +8,13 @@ import * as Ajv from 'ajv';
 import * as _ from 'lodash';
 import { DashboardService } from "app/apps/dashboard/DashboardService";
 
+import { Globals } from './../../../globals';
 declare var swal: any;
 
 @Component({
   selector: 'app-bills',
   templateUrl: './bills.component.html',
+  providers: [Globals],
   styleUrls: ['./bills.component.scss']
 })
 export class BillsComponent implements OnInit {
@@ -26,48 +28,10 @@ export class BillsComponent implements OnInit {
   subscribers: any = {}
 
   action: number = 1;
-  actions: any[] = [
-    {
-      action: -2,
-      name: "Chỉnh sửa"
-    },
-    {
-      action: -1,
-      name: "Đã hủy"
-    },
-    {
-      action: 0,
-      name: "Đặt hàng thành công"
-    },
-    {
-      action: 1,
-      name: "Đang điều phối"
-    },
-    {
-      action: 2,
-      name: "Đang xử lý"
-    },
-    {
-      action: 3,
-      name: "Đã chuẩn bị"
-    },
-    {
-      action: 4,
-      name: "Đã chuyển cho giao hàng"
-    },
-    {
-      action: 5,
-      name: "Đang giao"
-    },
-    {
-      action: 6,
-      name: "Đã thanh toán"
-    },
-    {
-      action: 7,
-      name: "Đã thu tiền"
-    },
-  ];
+
+  processColor: string = "#3498db";
+  successColor: string = "#2ecc71";
+  cancelColor: string = "#e74c3c";
 
   billService: any;
   billActitivyService: any;
@@ -86,6 +50,7 @@ export class BillsComponent implements OnInit {
   selectedBill: string;
 
   constructor(
+    private globals: Globals,
     private router: Router,
     private dashboardService: DashboardService,
     private route: ActivatedRoute,
@@ -97,12 +62,12 @@ export class BillsComponent implements OnInit {
     this.billService = innoway.getService('bill');
     this.billActitivyService = innoway.getService('bill_activity');
 
-    this.subscribeDashboardParent();
+    // this.subscribeDashboardParent();
   }
 
   async ngOnInit() {
     this.loadBillData();
-    this.subscribeTopicByFCM();
+    // this.subscribeTopicByFCM();
   }
 
   private subscribeDashboardParent() {
@@ -130,13 +95,12 @@ export class BillsComponent implements OnInit {
       data => {
         this.selectedBill = data;
       });
-
   }
 
   async subscribeTopicByFCM() {
     this.billChangeObservable = await this.billService.subscribe();
     this.subscribers.bill = this.billChangeObservable.subscribe(data => {
-      this.onBillChange.bind(this)
+      // this.onBillChange.bind(this)
     });
   }
 
@@ -165,11 +129,47 @@ export class BillsComponent implements OnInit {
 
   }
 
-  print(): void {
-    let printContents, popupWin;
-    printContents = document.getElementById('printSection').innerHTML;
+  async print(bill) {
+    let popupWin;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
     popupWin.document.open();
+    this.loadDetailedBill(bill.id, true, popupWin);
+
+  }
+
+  async loadDetailedBill(id: string, isPrint: boolean, popupWin: any) {
+    try {
+      let data = await this.billService.get(id, {
+        fields: ["$all", {
+          items: ['$all', {
+            product: ['$all', '$paranoid'],
+            topping_values: ['$all', '$paranoid']
+          }],
+        }]
+      });
+      if (isPrint && data.items != null) {
+        this.printBill(data, popupWin);
+      }
+    } catch (err) {
+      this.alertItemNotFound()
+      // alert(err);
+    }
+  }
+
+  async printBill(data: any, popupWin: any) {
+    let printContents, billContent;
+    printContents = "";
+    printContents =
+      '<div> Mã đơn hàng: ' + data.id + '</div>'
+      ;
+    billContent = '';
+
+    data.items.forEach(item => {
+      billContent += '<p>' + item.product.name + ' --- ' + item.amount + '</p>'
+    });
+
+    printContents += billContent;
+
     popupWin.document.write(`
             <html>
                 <head>
@@ -225,6 +225,7 @@ export class BillsComponent implements OnInit {
         }],
         order: [["updated_at", "desc"]]
       });
+      // alert(JSON.stringify(this.bills));
       console.log('bills', this.bills.getValue())
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
@@ -238,109 +239,25 @@ export class BillsComponent implements OnInit {
 
   detectChannelName(channel): string {
     let result = "";
-    switch (Number.parseInt(channel)) {
-      case 0: {
-        result = "Tại chi nhánh"
-        break;
-      }
-      case 1: {
-        result = "Callcenter"
-        break;
-      }
-      case 2: {
-        result = "Facebook"
-        break;
-      }
-      case 3: {
-        result = "Chatbot"
-        break;
-      }
-      case 4: {
-        result = "Website"
-        break;
-      }
-      case 5: {
-        result = "Ứng dụng di động"
-        break;
-      }
-      case 6: {
-        result = "Thirdparty"
-        break;
-      }
-    }
+    result = this.globals.detectChannelByCode(channel);
     return result;
   }
 
   detectActionName(action): string {
     let result = "";
-    switch (Number.parseInt(action)) {
-      case -2: {
-        result = "Chỉnh sửa";
-        break;
-      }
-      case -1: {
-        result = "Đã hủy";
-        break;
-      }
-      case 0: {
-        result = "Đặt hàng thành công";
-        break;
-      }
-      case 1: {
-        result = "Đang điều phối";
-        break;
-      }
-      case 2: {
-        result = "Đang xử lý";
-        break;
-      }
-      case 3: {
-        result = "Đã chuẩn bị";
-        break;
-      }
-      case 4: {
-        result = "Đã chuyển cho giao hàng";
-        break;
-      }
-      case 5: {
-        result = "Đang giao";
-        break;
-      }
-      case 6: {
-        result = "Đã thanh toán";
-        break;
-      }
-      case 7: {
-        result = "Đã thu tiền";
-        break;
-      }
-    }
+    result = this.globals.detectBillActivityByCode(action);
     return result;
   }
 
   async changeStatusBill(bill) {
-
-    let options = [
-      { '-2': 'Chỉnh sửa' },
-      { '-1': ' Đã hủy' },
-      { '0': 'Đặt hàng thành công' },
-      { '1': 'Đang điều phối' },
-      { '2': 'Đang xử lý' },
-      { '3': 'Đã chuẩn bị' },
-      { '4': 'Đã chuyển cho giao hàng' },
-      { '5': 'Đang giao' },
-      { '6': 'Đã thanh toán' },
-      { '7': 'Đã thu tiền' }
-    ];
-
     let avaiavle_options = {};
+    let options = this.globals.avaibleBillActivityOption(bill.activity ? bill.activity.action : '');
 
     options.forEach(option => {
-      if (Object.keys(option) > bill.activities[bill.activities.length - 1].action) {
-        avaiavle_options = $.extend(avaiavle_options, option);
-      }
+      avaiavle_options = $.extend(avaiavle_options, option);
     });
 
+    let action;
     let result = await swal({
       title: 'Chọn trạng thái',
       input: 'select',
@@ -349,6 +266,7 @@ export class BillsComponent implements OnInit {
       showCancelButton: true,
       inputValidator: function(value) {
         return new Promise(function(resolve, reject) {
+          action = value;
           resolve();
         })
       }
@@ -358,19 +276,25 @@ export class BillsComponent implements OnInit {
       type: 'success',
       html: 'Cập nhật trạng thái: ' + this.detectActionName(result)
     })
-    this.updateAction(bill, Number.parseInt(result));
+    this.updateAction(bill, action);
   }
 
-  async updateAction(bill, action: number) {
+  async updateAction(bill, action) {
+    console.log("bambi: updateAction " + bill.id + " ---- " + action);
     try {
       let bill_id = bill.id;
-      let employee_id;
-      await this.billActitivyService.add({ bill_id, action })
+      let data = {
+        activity: action,
+        note: '',
+      };
+      // await this.billActitivyService.add({ bill_id, action });
+      await this.billService.changeActivity(bill_id, data);
       this.alertAddSuccess();
       this.bills = new BehaviorSubject<any[]>([]);
       this.loadBillData();
     }
     catch (err) {
+      console.log("bambi: " + err.toString());
       this.alertAddFailed();
     }
   }
@@ -444,11 +368,51 @@ export class BillsComponent implements OnInit {
       console.log('query', query)
       this.bills = await this.innoway.getAll('bill', query);
       console.log('bills', this.bills.getValue())
-      alert(JSON.stringify(this.bills));
+      // alert(JSON.stringify(this.bills));
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
     }
+  }
+
+  //set a property that holds a random color for our style.
+  randomcolor = this.getRandomColor();
+
+  //function to get random colors
+  public getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  //function to set a new random color
+  setColor() {
+    this.randomcolor = this.getRandomColor();
+  }
+
+  someProperty = true;
+  anotherProperty = true;
+
+  setClasses(index: number) {
+    let classes1 = {
+      extraclass: this.someProperty,
+    };
+    let classes2 = {
+      anotherclass: this.anotherProperty,
+    };
+    return index % 2 == 0 ? classes1 : classes2;
+  }
+
+  setStyles() {
+    let styles = {
+      // CSS property names
+      'font-style': this.someProperty ? 'italic' : 'normal',     // italic
+      'font-weight': this.anotherProperty ? 'bold' : 'normal',  // normal
+    };
+    return styles;
   }
 
 }
