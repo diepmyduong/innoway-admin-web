@@ -1,91 +1,52 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { NgForm } from '@angular/forms';
-import { InnowayService } from 'app/services';
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Globals } from './../../../globals';
+import { InnowayService, AuthService } from "app/services";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NgForm } from "@angular/forms";
+
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 declare var swal: any;
 
 @Component({
-  selector: 'app-add',
+  selector: 'app-paid',
   providers: [Globals],
-  templateUrl: './add.component.html',
-  styleUrls: ['./add.component.scss']
+  templateUrl: './paid.component.html',
+  styleUrls: ['./paid.component.scss']
 })
-export class AddComponent implements OnInit {
+export class PaidComponent implements OnInit {
 
-  id: any;
-  isEdit: boolean = false;
+  private id: string;
+  private isEdit: boolean;
+  private submitting: boolean = false;
 
-  submitting: boolean = false;
+  private PaidHistoryService: any;
+  private transaction_time: string = "1";
+  private total_amount: string = "10000000";
+  private receive_amount: string = "0";
+  private pay_amount: string = "0";
+  private return_amount: string = "0";
+  private remain_amount: string = "0";
+  private employee_id: string;
+  private bill_id: string;
+  private type: string = "partical";
+  private types: any[] = [];
+  private employee: any;
 
-  billService: any;
-  billActitivyService: any;
-  employeeService: any;
-
-  employee: string;
-  employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  // bill_actions: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  bill_actions: any[];
-
-  name: string;
-  action: number = 1;
-  actions: any[] = [
-    {
-      action: -2,
-      name: "Chỉnh sửa"
-    },
-    {
-      action: -1,
-      name: "Đã hủy"
-    },
-    {
-      action: 0,
-      name: "Đặt hàng thành công"
-    },
-    {
-      action: 1,
-      name: "Đang điều phối"
-    },
-    {
-      action: 2,
-      name: "Đang xử lý"
-    },
-    {
-      action: 3,
-      name: "Đã chuẩn bị"
-    },
-    {
-      action: 4,
-      name: "Đã chuyển cho giao hàng"
-    },
-    {
-      action: 5,
-      name: "Đang giao"
-    },
-    {
-      action: 6,
-      name: "Đã thanh toán"
-    },
-    {
-      action: 7,
-      name: "Đã thu tiền"
-    },
-  ];
-  avaiable_actions: any[];
-  status: number = 1;
+  private numberMask = createNumberMask({
+    prefix: '',
+    suffix: ' đ'
+  })
 
   constructor(
     private globals: Globals,
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService
-  ) {
-    this.billService = innoway.getService('bill');
-    this.employeeService = innoway.getService('employee');
-    this.billActitivyService = innoway.getService('bill_activity');
+    private innoway: InnowayService,
+    private auth: AuthService) {
+    this.PaidHistoryService = innoway.getService('paid_history');
+    this.employee = this.auth.service.userInfo;
   }
 
   async ngOnInit() {
@@ -105,38 +66,62 @@ export class AddComponent implements OnInit {
     }
   }
 
-  setDefaultData() {
-    this.action = 1;
-    if (this.employees.getValue()[0]) {
-      this.employee = this.employees.getValue()[0].id;
+  private calculateRemainAndReturnAmount(event) {
+    let totalAmount = this.globals.convertStringToPrice(this.total_amount);
+    let receiveAmount = this.globals.convertStringToPrice(this.receive_amount);
+    let payAmount = this.globals.convertStringToPrice(this.pay_amount);
+    this.remain_amount = (totalAmount - payAmount).toString();
+    this.return_amount = (receiveAmount - payAmount).toString();
+    if (totalAmount == payAmount) {
+      this.type = this.globals.PAID_HISTORY_TYPES[1].name;
+    } else {
+      this.type = this.globals.PAID_HISTORY_TYPES[0].name;
     }
-    this.status = 1;
+  }
+
+  // private calculateReturnAmount(event) {
+  //   let receiveAmount = this.globals.convertStringToPrice(this.receive_amount);
+  //   let payAmount = this.globals.convertStringToPrice(this.pay_amount);
+  //   this.return_amount = (receiveAmount - payAmount).toString();
+  // }
+
+  setDefaultData() {
+    this.transaction_time = "1";
+    this.total_amount = "10000000";
+    this.receive_amount = "0";
+    this.pay_amount = "0";
+    this.return_amount = "0";
+    this.remain_amount = "0";
+
     return {
-      status: this.status,
-      action: this.action,
-      employee: this.employee
+      transaction_time: this.transaction_time,
+      total_amount: this.total_amount,
+      receive_amount: this.receive_amount,
+      pay_amount: this.pay_amount,
+      return_amount: this.return_amount,
+      remain_amount: this.remain_amount,
     }
   }
 
   async setData() {
     try {
-      let bill = await this.billService.get(this.id, {
-        fields: ["$all", {
-          activities: ["$all"]
-        }]
-      });
-      this.bill_actions = bill.activities;
-      let activity = bill.activities;
-      this.avaiable_actions = [];
-      this.actions.forEach(action => {
-        if (action.action > activity[activity.length - 1].action) {
-          let data = {
-            action: action.action,
-            name: action.name
-          };
-          this.avaiable_actions.push(data);
-        }
-      });
+      // let bill = await this.billService.get(this.id, {
+      //   fields: ["$all", {
+      //     activities: ["$all"]
+      //   }]
+      // });
+      // this.bill_actions = bill.activities;
+      // let activity = bill.activities;
+      // this.avaiable_actions = [];
+      // this.actions.forEach(action => {
+      //   if (action.action > activity[activity.length - 1].action) {
+      //     let data = {
+      //       action: action.action,
+      //       name: action.name
+      //     };
+      //     this.avaiable_actions.push(data);
+      //   }
+      // });
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       this.backToList()
@@ -145,9 +130,9 @@ export class AddComponent implements OnInit {
 
   async loadEmployeeData() {
     try {
-      this.employees = await this.innoway.getAll('employee', {
-        fields: ["id", "fullname", "phone", "email"]
-      });
+      // this.employees = await this.innoway.getAll('employee', {
+      //   fields: ["id", "fullname", "phone", "email"]
+      // });
     } catch (err) {
       console.error("cannot load employees", err);
     }
@@ -265,16 +250,13 @@ export class AddComponent implements OnInit {
   }
 
   async addAction(form: NgForm) {
-    if (form.valid) {
-      let { action, employee } = this;
-      let employee_id = employee;
+    if (form.valid && this.globals.convertStringToPrice(this.pay_amount) != 0) {
+      let { transaction_time, total_amount, pay_amount, return_amount, remain_amount } = this;
+      let employee_id = this.employee.id;
       let bill_id = this.id;
-      await this.billActitivyService.add({ bill_id, action, employee_id })
+      await this.PaidHistoryService.add({ employee_id, bill_id, transaction_time, total_amount, pay_amount, return_amount, remain_amount })
       this.alertAddSuccess();
-      form.reset();
       form.resetForm(this.setDefaultData());
-      this.bill_actions = null;
-      this.setData();
     } else {
       this.alertFormNotValid();
     }
@@ -286,4 +268,5 @@ export class AddComponent implements OnInit {
     }
     return false;
   }
+
 }

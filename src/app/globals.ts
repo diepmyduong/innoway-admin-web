@@ -549,4 +549,32 @@ export class Globals {
     });
     return result;
   }
+
+  PAID_HISTORY_TYPES = [
+    {
+      code: 'Partical',
+      name: 'partical',
+    },
+    {
+      code: 'Full',
+      name: 'full'
+    }
+  ]
+
+  public detectPaidHistoryTypeByCode(code: string): any {
+    let result = null;
+    if (code == null || code == '') {
+      result = null;
+    }
+    this.PAID_HISTORY_TYPES.forEach(type => {
+      if (type.code == code) {
+        result = type.name;
+      }
+    });
+    return result;
+  }
+
+  public convertStringToPrice(input: string): number {
+    return Number.parseInt(input.toString().replace(/[^\d]/g, ''));
+  }
 }

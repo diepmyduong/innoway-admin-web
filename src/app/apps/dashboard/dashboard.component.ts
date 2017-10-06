@@ -36,48 +36,6 @@ export class DashboardComponent implements OnInit {
   employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   action: number = 1;
-  actions: any[] = [
-    {
-      action: -2,
-      name: "Chỉnh sửa"
-    },
-    {
-      action: -1,
-      name: "Đã hủy"
-    },
-    {
-      action: 0,
-      name: "Đặt hàng thành công"
-    },
-    {
-      action: 1,
-      name: "Đang điều phối"
-    },
-    {
-      action: 2,
-      name: "Đang xử lý"
-    },
-    {
-      action: 3,
-      name: "Đã chuẩn bị"
-    },
-    {
-      action: 4,
-      name: "Đã chuyển cho giao hàng"
-    },
-    {
-      action: 5,
-      name: "Đang giao"
-    },
-    {
-      action: 6,
-      name: "Đã thanh toán"
-    },
-    {
-      action: 7,
-      name: "Đã thu tiền"
-    },
-  ];
 
   private toasterService: ToasterService;
 

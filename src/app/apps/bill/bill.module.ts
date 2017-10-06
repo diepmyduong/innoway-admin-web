@@ -11,8 +11,11 @@ import { TabsModule } from 'ng2-bootstrap/tabs';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { TextMaskModule } from 'angular2-text-mask';
 
-import { PipesModule } from 'app/pipes/pipes.module'
+import { PipesModule } from 'app/pipes/pipes.module';
+import { PaidComponent } from './paid/paid.component';
+import { PaidListComponent } from './paid-list/paid-list.component'
 
 @NgModule({
   imports: [
@@ -24,8 +27,10 @@ import { PipesModule } from 'app/pipes/pipes.module'
     ReactiveFormsModule,
     LaddaModule,
     DataTableModule,
+    TextMaskModule,
+    
     PipesModule
   ],
-  declarations: [BillComponent, DetailComponent, AddComponent]
+  declarations: [BillComponent, DetailComponent, AddComponent, PaidComponent, PaidListComponent]
 })
 export class BillModule { }

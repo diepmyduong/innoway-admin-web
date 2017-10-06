@@ -4,31 +4,28 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
-import { Globals } from './../../globals';
+import { Globals } from './../../../globals';
+
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 declare var swal: any;
 
 @Component({
-  selector: 'app-bill',
+  selector: 'app-paid-list',
   providers: [Globals],
-  templateUrl: './bill.component.html',
-  styleUrls: ['./bill.component.scss']
+  templateUrl: './paid-list.component.html',
+  styleUrls: ['./paid-list.component.scss']
 })
-export class BillComponent implements OnInit, ListPageInterface {
+export class PaidListComponent implements OnInit, ListPageInterface {
   items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   itemCount: number = 0;
-  thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
-  itemFields: any = ["$all", {
-    customer: ["phone"],
-    activities: ["action"],
-    bill_ship_detail: ["fee"],
-    activity: ["action"]
-  }];
+  thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";;
+  itemFields: any = ["$all"];
   query: any = {};
   searchTimeOut: number = 250;
   searchRef: any;
 
-  billService: any;
+  paidHistoryService: any;
 
   @ViewChild(DataTable) itemsTable;
 
@@ -39,7 +36,7 @@ export class BillComponent implements OnInit, ListPageInterface {
     public innoway: InnowayService,
     private ref: ChangeDetectorRef
   ) {
-    this.billService = innoway.getService('bill');
+    this.paidHistoryService = innoway.getService('paid_history');
   }
 
   ngOnInit() {
@@ -57,8 +54,8 @@ export class BillComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('bill', query);
-    this.itemCount = this.billService.currentPageCount;
+    this.items = await this.innoway.getAll('paid_history', query);
+    this.itemCount = this.paidHistoryService.currentPageCount;
     this.ref.detectChanges();
     return this.items;
   }
@@ -82,7 +79,7 @@ export class BillComponent implements OnInit, ListPageInterface {
   }
 
   paidHistoryAction(item) {
-    this.router.navigate(['../paid-list', item.id], { relativeTo: this.route });
+    this.router.navigate(['../paid', item.id], { relativeTo: this.route });
   }
 
   editItem(item) {
@@ -130,7 +127,7 @@ export class BillComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.billService.delete(item.id)
+      await this.paidHistoryService.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -149,7 +146,7 @@ export class BillComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.billService.deleteAll(ids)
+      await this.paidHistoryService.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();

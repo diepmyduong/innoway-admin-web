@@ -35,7 +35,8 @@ export class InnowayService {
     'promotion',
     'promotion_type',
     'brand_ship',
-    'ship_area'
+    'ship_area',
+    'paid_history'
   ]
   service_items:any = {}
   services:any = {}
@@ -50,8 +51,6 @@ export class InnowayService {
         this.service_items[m].next(data.items);
       })
     })
-    // this.runAuthService();
-
   }
 
   async getAll(module,options = {}){
@@ -93,5 +92,5 @@ export class InnowayService {
     return innoway2.api.setAccessToken(token);
   }
 
-  
+
 }

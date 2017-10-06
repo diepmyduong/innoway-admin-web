@@ -1,0 +1,61 @@
+<div class="animated fadeIn">
+  <form class="row" #itemFrm="ngForm">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>{{isEdit?"Cập nhật":"Thêm"}} loại sản phẩm</strong>
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="text-input">Transaction Time</label>
+            <div class="col-md-9">
+              <input type="text" #transactionTimeControl="ngModel" [(ngModel)]="transaction_time" name="transaction_time" class="form-control" [placeholder]="'Lần trả thứ'" readonly>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="text-input">Total Amount</label>
+            <div class="col-md-9">
+              <input type="text" #totalAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="total_amount" name="total_amount" class="form-control" [placeholder]="'Tổng tiền phải trả'" readonly>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="text-input">Receive Amount</label>
+            <div class="col-md-9">
+              <input type="text" #receiveAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="receive_amount" name="receive_amount" class="form-control" [placeholder]="'Nhập tiền khách gửi'">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="text-input">Pay Amount</label>
+            <div class="col-md-9">
+              <input type="text" #payAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="pay_amount" name="pay_amount" (ngModelChange)="calculateRemainAndReturnAmount($event)" class="form-control" [placeholder]="'Nhập tiền trả'">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="text-input">Return Amount</label>
+            <div class="col-md-9">
+              <input type="text" #returnAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="return_amount" name="return_amount" class="form-control" [placeholder]="'Nhập tiền thối'" readonly>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="text-input">Remain Amount</label>
+            <div class="col-md-9">
+              <input type="text" #remainAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="remain_amount" name="remain_amount" class="form-control" [placeholder]="'Nhập tiền còn lại'" readonly>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="text-input">Type</label>
+            <div class="col-md-9">
+              <input type="text" #typeControl="ngModel" [(ngModel)]="type" name="type" class="form-control" readonly>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button (click)="addAction(itemFrm)"
+            class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Add Action
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
