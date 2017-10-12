@@ -5,3 +5,9 @@ export const SimpleLayoutRouting = {
     component: SimpleLayoutComponent,
     loadChildren: 'app/pages/pages.module#PagesModule'
 }
+
+export const PosLayoutRouting = {
+    path: 'pos',
+    component: SimpleLayoutComponent,
+    loadChildren: 'app/apps/pos/pos.module#PosModule'
+}

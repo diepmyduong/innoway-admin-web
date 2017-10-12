@@ -2,12 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 //Layouts
-import {
-  FullLayoutRouting,
-  SimpleLayoutRouting,
-  ChatbotLayoutRouting,
-  LauncherLayoutRouting
-} from './layouts'
+import * as layout from './layouts'
 
 export const routes: Routes = [
   {
@@ -15,10 +10,11 @@ export const routes: Routes = [
     redirectTo: 'app',
     pathMatch: 'full',
   },
-  SimpleLayoutRouting,
-  FullLayoutRouting,
-  ChatbotLayoutRouting,
-  LauncherLayoutRouting
+  layout.SimpleLayoutRouting,
+  layout.FullLayoutRouting,
+  layout.ChatbotLayoutRouting,
+  layout.LauncherLayoutRouting,
+  layout.PosLayoutRouting,
   // {
   //   path: '**',
   //   redirectTo: '404'

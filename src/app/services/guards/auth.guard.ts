@@ -8,7 +8,7 @@ export class AuthGuard implements CanActivate {
 
   constructor(
     public auth:AuthService,
-    public router: Router,
+    public router: Router
   ){
     
   }
@@ -20,7 +20,6 @@ export class AuthGuard implements CanActivate {
       this.auth.getAuthState().then(obState =>{
         obState.subscribe(state =>{
           if(state){
-            
           }else{
             this.router.navigate(['/login'])
           }

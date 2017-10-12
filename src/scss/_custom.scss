@@ -1,3 +1,5 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~bootstrap-material-design/dist/css/bootstrap-material-design.min.css";
 // Here you can add other styles
 .navbar {
   .form-inline {
@@ -105,4 +107,10 @@
 
 .modal-backdrop.in {
   opacity: 0.5;
+}
+
+.ng-sidebar--bottom {
+  height: 300px !important;
+  background-color: #eee !important;
+  /* box-shadow:  0px -10px 1px  #aaaaaa; */
 }

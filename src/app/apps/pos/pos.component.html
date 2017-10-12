@@ -1,0 +1,99 @@
+<mat-toolbar color="primary">
+  <span>Innoway POS</span>
+</mat-toolbar>
+<mat-sidenav-container class="pos-container">
+  <mat-sidenav class="pos-right-side" mode="side" opened="true" align="end" >
+    <mat-toolbar>
+      <span>Customer Info</span>
+    </mat-toolbar>
+  </mat-sidenav>
+  <ng-sidebar-container>
+    <ng-sidebar class="pos-bottom-side" #posBottomSidebar style="backgroud-color:white"
+      [opened]="true" position="bottom" mode="over" [dock]="true" dockedSize="20px">
+      <div class="pos-bottom-dock-bar">
+          <mat-icon (click)="posBottomSidebar.opened?posBottomSidebar.close():posBottomSidebar.open()">call_to_action</mat-icon>
+      </div>
+      <swiper class="pos-bottom-container" [config]="swiperOptions">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">Slide 1</div>
+                <div class="swiper-slide">Slide 2</div>
+                <div class="swiper-slide">Slide 3</div>
+                <div class="swiper-slide">Slide 4</div>
+                <div class="swiper-slide">Slide 5</div>
+                <div class="swiper-slide">Slide 6</div>
+                <div class="swiper-slide">Slide 7</div>
+                <div class="swiper-slide">Slide 8</div>
+                <div class="swiper-slide">Slide 9</div>
+                <div class="swiper-slide">Slide 10</div>
+                <div class="swiper-slide">Slide 2</div>
+                <div class="swiper-slide">Slide 3</div>
+                <div class="swiper-slide">Slide 4</div>
+                <div class="swiper-slide">Slide 5</div>
+                <div class="swiper-slide">Slide 6</div>
+                <div class="swiper-slide">Slide 7</div>
+                <div class="swiper-slide">Slide 8</div>
+                <div class="swiper-slide">Slide 9</div>
+                <div class="swiper-slide">Slide 10</div>
+            </div>
+            <!-- Add Pagination -->
+            <!-- <div class="swiper-pagination"></div> -->
+            <!-- Add Arrows -->
+            <!-- <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div> -->
+        </swiper>
+      
+    </ng-sidebar>
+    <div ng-sidebar-content >
+      <data-table #itemsTable class="order-item-table"
+      [header]="false"
+      indexColumnHeader="STT" 
+      [items]="itemsChange | async"
+      [pagination]="false" 
+      [indexColumn]="true" 
+      [selectColumn]="true" 
+      [multiSelect]="true"
+      [substituteRows]="false" 
+      [selectOnRowClick]="false"
+      [expandableRows]="true">
+        <template #dataTableExpand let-item="item" class="order-item-expand">
+            Content
+        </template>
+        <data-table-column header="Mã sản phẩm" width="120px">
+          <template #dataTableCell let-item="item">
+            Mã sản phẩm
+          </template>
+        </data-table-column>
+        <data-table-column header="Thông tin">
+          <template #dataTableCell let-item="item">
+            <p class="item-name">Tên sản phẩm</p>
+            <p><small class="text-muted">Size: M</small><p>
+            <p><small class="text-muted">Topping: Bla bla; bla bla bla; </small></p>
+            <!-- <mat-form-field>
+              <textarea matInput placeholder="Address">1600 Amphitheatre Pkwy</textarea>
+            </mat-form-field> -->
+          </template>
+        </data-table-column>
+        <data-table-column header="Số lượng" width="100px">
+          <template #dataTableCell let-item="item">
+            <div class="cell-input">
+              <mat-form-field>
+                <input matInput type="number">
+              </mat-form-field>
+            </div>
+          </template>
+        </data-table-column>
+        <data-table-column header="Đơn giá" width="120px">
+          <template #dataTableCell let-item="item">
+            100,000,000
+          </template>
+        </data-table-column>
+        <data-table-column header="Thành tiền" width="120px">
+          <template #dataTableCell let-item="item">
+            200,000,000
+          </template>
+        </data-table-column>
+      </data-table>
+    </div>
+    
+  </ng-sidebar-container>
+</mat-sidenav-container>
