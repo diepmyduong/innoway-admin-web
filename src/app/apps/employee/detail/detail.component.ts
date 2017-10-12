@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
+import { Globals } from "./../../../globals";
 declare var swal: any;
 @Component({
   selector: 'app-detail',
+  providers: [Globals],
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss']
 })
@@ -14,12 +16,13 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   id: string;
   item: any;
   itemFields: any = ['$all', {
-    type: ["id", "name"], branch: ["id", "name"]
+    branch: ["id", "name"]
   }];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private globals: Globals,
     public innoway: InnowayService
   ) {
     this.employeeTypeService = innoway.getService('employee');
@@ -49,11 +52,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   editItem() {
-        this.router.navigate(['../../add', this.id], { relativeTo: this.route});
+    this.router.navigate(['../../add', this.id], { relativeTo: this.route });
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route});
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -62,5 +65,10 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       type: 'warning',
       timer: 2000
     })
+  }
+
+  detectEmployeeType(code: string): string {
+    let result: any = this.globals.detectEmployeeByCode(code);
+    return result;
   }
 }

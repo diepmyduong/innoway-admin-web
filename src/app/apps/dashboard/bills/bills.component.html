@@ -55,7 +55,7 @@
               <div class="col-md-12">
                 {{bill.customer?.phone?bill.customer.phone:''}}
                 <!-- {{selectedAction}} ----  -->
-                <img src="{{bill.customer?.avatar?.url?bill.customer.avatar:thumbDefault}}" class="img-avatar float-right">
+                <img src="{{bill.customer?.avatar?bill.customer.avatar:thumbDefault}}" class="img-avatar float-right">
               </div>
               <div class="col-md-12 m-h" formArrayName="billStatusInput">
                 <select [hidden]="true" id="actionSelect" class="form-control">
@@ -67,7 +67,7 @@
             </div>
             <div (click)="viewDetail(bill)">Mã đơn hàng: <strong>{{bill.id}}</strong></div>
             <small class="mr-1"><i class="fa fa-usd"></i> {{bill.total_price | accounting}} </small>
-            <small class="mr-1"><i class="icon-calendar"></i> {{bill.updated_at | date:'dd/MM/yyyy hh:mm:ss'}}</small>
+            <small class="mr-1"><i class="icon-calendar"></i> {{bill.updated_at | date:'dd/MM/yyyy hh:mm:ss Z'}}</small>
             <small class="mr-1"><i class="icon-location-pin"></i> {{bill.address}} </small>
             <small class="mr-1"><i class="fa fa-cog fa-lg"></i> {{detectChannelName(bill.channel)}}</small>
             <small class="mr-1" [ngStyle]="setStyles()"><i class="fa fa-user fa-lg"></i> {{bill.activity?(detectActionName(bill.activity.action)):""}}</small>

@@ -22,6 +22,7 @@ import { BillLocationComponent } from './bill-location/bill-location.component';
 import { AgmCoreModule } from '@agm/core';
 // Notifications
 import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster';
+
 import { DashboardService } from "app/apps/dashboard/DashboardService";
 
 @NgModule({

@@ -1,10 +1,10 @@
 <div class="animated fadeIn">
   <div class="card-group">
     <div class="card">
-      <div class="card-block" (click)="showSuccess()">
+      <div class="card-block">
         <h5>Chi nhánh: {{branch.address}}</h5>
         <h5>Hotline: {{branch.phone}}</h5>
-        <h5>Nhân viên phụ trách: {{employee.fullname}}</h5>
+        <h5>Nhân viên phụ trách: {{employeeData.fullname}}</h5>
       </div>
     </div>
   </div>
@@ -63,7 +63,7 @@
       <div class="card">
         <div class="card-body text-center">
           <div class="text-muted small text-uppercase font-weight-bold pt-h">Thành công</div>
-          <div class="h2">1,123</div>
+          <div class="h2">56</div>
         </div>
       </div>
     </div>
@@ -71,7 +71,7 @@
       <div class="card">
         <div class="card-body text-center">
           <div class="text-muted small text-uppercase font-weight-bold pt-h">Đang xử lý</div>
-          <div class="h2">1,123</div>
+          <div class="h2">32</div>
         </div>
       </div>
     </div>
@@ -79,7 +79,7 @@
       <div class="card">
         <div class="card-body text-center">
           <div class="text-muted small text-uppercase font-weight-bold pt-h">Đã chuẩn bị</div>
-          <div class="h2">1,123</div>
+          <div class="h2">12</div>
         </div>
       </div>
     </div>
@@ -87,7 +87,7 @@
       <div class="card">
         <div class="card-body text-center">
           <div class="text-muted small text-uppercase font-weight-bold pt-h">Đang giao</div>
-          <div class="h2">1,123</div>
+          <div class="h2">5</div>
         </div>
       </div>
     </div>
@@ -95,7 +95,7 @@
       <div class="card">
         <div class="card-body text-center">
           <div class="text-muted small text-uppercase font-weight-bold pt-h">Thanh toán</div>
-          <div class="h2">1,123</div>
+          <div class="h2">45</div>
         </div>
       </div>
     </div>
@@ -103,7 +103,7 @@
       <div class="card">
         <div class="card-body text-center">
           <div class="text-muted small text-uppercase font-weight-bold pt-h">Đã hủy</div>
-          <div class="h2">1,123</div>
+          <div class="h2">0</div>
         </div>
       </div>
     </div>
@@ -116,7 +116,7 @@
             <li class="nav-item">
               <a class="nav-link" href="javascript:;"><i class="icon-direction"></i> Mã đơn hàng</a>
               <div class="form-group">
-                <input type="text" class="form-control" formControlName="addressInput" placeholder="Tìm kiếm đơn hàng"  #bill (keydown.enter)="onChangeBill(bill.value)"/>
+                <input type="text" class="form-control" formControlName="addressInput" placeholder="Tìm kiếm đơn hàng" #bill (keydown.enter)="onChangeBill(bill.value)" />
               </div>
             </li>
             <li class="nav-item">
@@ -136,7 +136,7 @@
             </li>
             <li class="nav-item">
               <div class="form-group">
-                <input type="text" class="form-control" formControlName="phoneInput" placeholder="Số điện thoại" #customer (keydown.enter)="onChangeCustomer(customer.value)"/>
+                <input type="text" class="form-control" formControlName="phoneInput" placeholder="Số điện thoại" #customer (keydown.enter)="onChangeCustomer(customer.value)" />
               </div>
             </li>
             <li class="nav-item">

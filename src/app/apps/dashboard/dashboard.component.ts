@@ -5,11 +5,13 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { ToasterModule, ToasterService, ToasterConfig } from 'angular2-toaster/angular2-toaster';
 import { Subscription } from "rxjs/Subscription";
 import { DashboardService } from "app/apps/dashboard/DashboardService";
+import { Globals } from "./../../globals"
 
 declare var swal: any;
 
 @Component({
   templateUrl: 'dashboard.component.html',
+  providers: [Globals],
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
@@ -27,6 +29,7 @@ export class DashboardComponent implements OnInit {
   shipAreaService: any;
 
   employee: any;
+  employeeData: any;
   branch: any = {};
 
   summary: any;
@@ -35,7 +38,7 @@ export class DashboardComponent implements OnInit {
   areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
-  action: number = 1;
+  actions: any;
 
   private toasterService: ToasterService;
 
@@ -49,6 +52,7 @@ export class DashboardComponent implements OnInit {
     private route: ActivatedRoute,
     public innoway: InnowayService,
     private ref: ChangeDetectorRef,
+    private globals: Globals,
     toasterService: ToasterService,
     private dashboardService: DashboardService,
     public auth: AuthService) {
@@ -56,8 +60,11 @@ export class DashboardComponent implements OnInit {
     this.branchService = innoway.getService('branch');
     this.shipAreaService = innoway.getService('brand_ship');
 
-    this.employee = this.auth.service.userInfo;
+    this.employeeData = this.auth.service.userInfo;
     this.toasterService = toasterService;
+
+    //init actions
+    this.actions = this.globals.getBillActivitiesOnDashboardLayout();
   }
 
   showSuccess() {
@@ -73,10 +80,11 @@ export class DashboardComponent implements OnInit {
     }
 
     // this.dashboardService.detectSelectedAction(5);
-
+    console.log("bambi: employee " + this.employeeData.fullname);
     this.loadAreaData();
     this.loadEmployeeDataByBranchData();
-    this.loadBranchByEmployeeData(this.employee.branch_id);
+    this.loadBranchByEmployeeData(this.employeeData.branch_id);
+
   }
 
   async loadEmployeeDataByBranchData() {
@@ -557,6 +565,34 @@ export class DashboardComponent implements OnInit {
 
   onChangeAction(value) {
     this.dashboardService.updateAction(value);
+  }
+
+  query: any = {};
+  searchTimeOut: number = 250;
+  searchRef: any;
+
+  onSearch(e) {
+    const key = e.target.value;
+    if (this.searchRef) clearTimeout(this.searchRef);
+    this.searchRef = setTimeout(() => {
+      this.query.filter = {
+        $or: {
+          name: { $iLike: `%${key}%` },
+          description: { $iLike: `%${key}%` },
+        }
+      }
+      this.getItems();
+    }, this.searchTimeOut);
+  }
+
+  async getItems() {
+    // let query = Object.assign({
+    //   fields: this.itemFields
+    // }, this.query);
+    // this.items = await this.innoway.getAll('bill', query);
+    // this.itemCount = this.billService.currentPageCount;
+    // this.ref.detectChanges();
+    // return this.items;
   }
 
   onChangeEmployee(value) {

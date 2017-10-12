@@ -3,6 +3,28 @@ import { Injectable } from '@angular/core';
 Injectable()
 export class Globals {
 
+  BRAND_CATEGORIES = [
+    {
+      code: 'BAKERY',
+      name: 'BAKERY'
+    },
+    {
+      code: 'BEVERAGE',
+      name: 'BEVERAGE'
+    },
+    {
+      code: 'LAUNDRY',
+      name: 'LAUNDRY'
+    }
+  ]
+
+  SERVICES = [
+    {
+      code: '',
+      name: ''
+    }
+  ]
+
   ACTORS = [
     {
       code: 'anonymous',
@@ -39,14 +61,24 @@ export class Globals {
   ];
 
   public detectActorByCode(code: string): any {
+    let result = null;
     this.ACTORS.forEach(actor => {
-      if (actor.code === code) {
-        return actor;
+      if (actor.code == code) {
+        result = actor;
       }
     });
-    return null;
+    return result;
   }
 
+  public detectEmployeeByCode(code: string): string {
+    let result = null;
+    this.ACTORS.forEach(actor => {
+      if (actor.code == code) {
+        result = actor.name;
+      }
+    });
+    return result;
+  }
 
   //channel
   CHANNELS = [
@@ -107,11 +139,9 @@ export class Globals {
     {
       'BILL_WAITING_FOR_CONFIRMATION': 'chờ xác nhận'
     },
-
     {
       'BILL_CONFIRMED': 'đã xác nhận'
     },
-
     {
       'BILL_PICKING_UP': 'đang lấy hàng'
     },
@@ -155,8 +185,8 @@ export class Globals {
             this.BILL_ACTIVITY_OPTIONS[1],
             this.BILL_ACTIVITY_OPTIONS[2],
             this.BILL_ACTIVITY_OPTIONS[3],
-            this.BILL_ACTIVITY_OPTIONS[4],
-            this.BILL_ACTIVITY_OPTIONS[5],
+            // this.BILL_ACTIVITY_OPTIONS[4],
+            // this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -170,8 +200,8 @@ export class Globals {
           subRules = [
             this.BILL_ACTIVITY_OPTIONS[2],
             this.BILL_ACTIVITY_OPTIONS[3],
-            this.BILL_ACTIVITY_OPTIONS[4],
-            this.BILL_ACTIVITY_OPTIONS[5],
+            // this.BILL_ACTIVITY_OPTIONS[4],
+            // this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -184,8 +214,8 @@ export class Globals {
         case 'BILL_WAITING_FOR_CONFIRMATION': {
           subRules = [
             this.BILL_ACTIVITY_OPTIONS[3],
-            this.BILL_ACTIVITY_OPTIONS[4],
-            this.BILL_ACTIVITY_OPTIONS[5],
+            // this.BILL_ACTIVITY_OPTIONS[4],
+            // this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -198,8 +228,8 @@ export class Globals {
         case 'BILL_MODIFIED_AT_WAITING_FOR_CONFIRMATION': {
           subRules = [
             this.BILL_ACTIVITY_OPTIONS[3],
-            this.BILL_ACTIVITY_OPTIONS[4],
-            this.BILL_ACTIVITY_OPTIONS[5],
+            // this.BILL_ACTIVITY_OPTIONS[4],
+            // this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -214,8 +244,8 @@ export class Globals {
         }
         case 'BILL_CONFIRMED': {
           subRules = [
-            this.BILL_ACTIVITY_OPTIONS[4],
-            this.BILL_ACTIVITY_OPTIONS[5],
+            // this.BILL_ACTIVITY_OPTIONS[4],
+            // this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -227,8 +257,8 @@ export class Globals {
         }
         case 'BILL_MODIFIED_AT_BILL_CONFIRMED': {
           subRules = [
-            this.BILL_ACTIVITY_OPTIONS[4],
-            this.BILL_ACTIVITY_OPTIONS[5],
+            // this.BILL_ACTIVITY_OPTIONS[4],
+            // this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -243,7 +273,7 @@ export class Globals {
         }
         case 'BILL_PICKING_UP': {
           subRules = [
-            this.BILL_ACTIVITY_OPTIONS[5],
+            // this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -255,7 +285,7 @@ export class Globals {
         }
         case 'BILL_MODIFIED_AT_PICKING_UP': {
           subRules = [
-            this.BILL_ACTIVITY_OPTIONS[5],
+            // this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -535,15 +565,119 @@ export class Globals {
     }
   ];
 
+  public getBillActivitiesOnDashboardLayout(): any {
+    let activities: Array<any> = new Array<any>();
+    activities.push(this.BILL_ACTIVITIES[0]);
+    activities.push(this.BILL_ACTIVITIES[1]);
+    activities.push(this.BILL_ACTIVITIES[2]);
+    activities.push(this.BILL_ACTIVITIES[5]);
+    // activities.push(this.BILL_ACTIVITIES[8]);
+    // activities.push(this.BILL_ACTIVITIES[11]);
+    activities.push(this.BILL_ACTIVITIES[14]);
+    activities.push(this.BILL_ACTIVITIES[17]);
+    activities.push(this.BILL_ACTIVITIES[20]);
+    activities.push(this.BILL_ACTIVITIES[23]);
+    activities.push(this.BILL_ACTIVITIES[27]);
+    activities.push(this.BILL_ACTIVITIES[29]);
+    return activities;
+  }
+
+  public detectNameCurrentActivityOnBill(code: string): string {
+    let result;
+    switch (code) {
+      case
+        this.BILL_ACTIVITIES[0].code: {
+          result = this.BILL_ACTIVITIES[0].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[1].code: {
+          result = this.BILL_ACTIVITIES[1].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[2].code,
+        this.BILL_ACTIVITIES[3].code: {
+          result = this.BILL_ACTIVITIES[2].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[5].code,
+        this.BILL_ACTIVITIES[6].code: {
+          result = this.BILL_ACTIVITIES[5].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[8].code,
+        this.BILL_ACTIVITIES[9].code: {
+          result = this.BILL_ACTIVITIES[8].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[11].code,
+        this.BILL_ACTIVITIES[12].code: {
+          result = this.BILL_ACTIVITIES[11].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[15].code,
+        this.BILL_ACTIVITIES[16].code: {
+          result = this.BILL_ACTIVITIES[15].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[18].code,
+        this.BILL_ACTIVITIES[19].code: {
+          result = this.BILL_ACTIVITIES[18].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[21].code,
+        this.BILL_ACTIVITIES[22].code: {
+          result = this.BILL_ACTIVITIES[21].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[24].code,
+        this.BILL_ACTIVITIES[25].code: {
+          result = this.BILL_ACTIVITIES[24].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[27].code,
+        this.BILL_ACTIVITIES[28].code: {
+          result = this.BILL_ACTIVITIES[27].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[29].code,
+        this.BILL_ACTIVITIES[30].code: {
+          result = this.BILL_ACTIVITIES[29].name;
+          break;
+        }
+      case
+        this.BILL_ACTIVITIES[4].code,
+        this.BILL_ACTIVITIES[7].code,
+        this.BILL_ACTIVITIES[10].code,
+        this.BILL_ACTIVITIES[13].code,
+        this.BILL_ACTIVITIES[16].code,
+        this.BILL_ACTIVITIES[19].code,
+        this.BILL_ACTIVITIES[22].code,
+        this.BILL_ACTIVITIES[25].code: {
+          result = "đã hủy";
+          break;
+        }
+    }
+    return result;
+  }
+
   public detectBillActivityByCode(code: string): any {
     let result = null;
     if (code == null || code == '') {
       result = null;
     }
     this.BILL_ACTIVITIES.forEach(activity => {
-      // console.log("bambi: " + activity.code);
       if (activity.code == code) {
-        // console.log("bambi: " + activity.name);
         result = activity.name;
       }
     });

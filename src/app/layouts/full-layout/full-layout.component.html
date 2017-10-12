@@ -1,7 +1,7 @@
 <header class="app-header navbar">
   <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">&#9776;</button>
   <a class="navbar-brand" [routerLink]="['./dashboard']">
-    <p>MCommerce</p>
+    <p>M-Commerce</p>
   </a>
   <ul class="nav navbar-nav hidden-md-down">
     <li class="nav-item">
@@ -34,7 +34,7 @@
     </li>
     <li class="nav-item dropdown" dropdown placement="bottom right">
       <a class="nav-link nav-pill avatar dropdown-toggle" data-toggle="dropdown" id="accountDropdownMenu" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <img src="{{employee?.avatar?.url?employee.avatar:'https://s11.favim.com/mini/160421/snowball-movie-the-secret-life-of-pets-cute-Favim.com-4234326.jpeg'}}" class="img-avatar" alt="admin@bootstrapmaster.com">
+              <img src="{{employee.avatar?employee.avatar:'https://s11.favim.com/mini/160421/snowball-movie-the-secret-life-of-pets-cute-Favim.com-4234326.jpeg'}}" class="img-avatar" alt="admin@bootstrapmaster.com" url>
           </a>
           <div class="dropdown-menu" aria-labelledby="accountDropdownMenu">
             <a class="dropdown-item"><i class="fa fa-user"></i> Thông tin tài khoản</a>
@@ -550,10 +550,10 @@
   </aside>
 </div>
 
-<footer class="app-footer">
+<footer class="app-footer" (click)="showSuccess()">
   <a href="#">Innoway</a> &copy; 2017
   <span class="float-right">Powered by <a href="#">Innoway</a>
   </span>
 </footer>
 
-<!--<span defaultOverlayTarget></span>-->
+<toaster-container [toasterconfig]="toasterconfig"></toaster-container>

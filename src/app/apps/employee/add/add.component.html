@@ -37,7 +37,7 @@
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Họ và tên</label>
               <div class="col-md-9">
-                <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Nhập họ và tên'">
+                <input type="text" #fullnameControl="ngModel" [(ngModel)]="fullname" name="fullname" class="form-control" [placeholder]="'Nhập tên đăng nhập'" required>
               </div>
             </div>
             <div class="form-group row">
@@ -53,36 +53,30 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Tên đầy đủ</label>
-              <div class="col-md-9">
-                <input type="text" #fullnameControl="ngModel" [(ngModel)]="fullname" name="fullname" class="form-control" [placeholder]="'Nhập tên đăng nhập'" required>
-              </div>
-            </div>
-            <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Tên đăng nhập</label>
               <div class="col-md-9">
-                <input type="text" #usernameControl="ngModel" [(ngModel)]="username" name="username" class="form-control" [placeholder]="'Nhập tên đăng nhập'">
+                <input type="text" #usernameControl="ngModel" [(ngModel)]="username" name="username" class="form-control" [placeholder]="'Nhập tên đăng nhập'" required>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row" *ngIf="!isEdit">
               <label class="col-md-3 form-control-label" for="password-input">Password</label>
               <div class="col-md-9">
                 <input type="password" #nameControl="ngModel" [(ngModel)]="password" name="password" class="form-control" [placeholder]="'Nhập password'" required>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row" *ngIf="!isEdit">
               <label class="col-md-3 form-control-label" for="password-input">Xác nhận password</label>
               <div class="col-md-9">
-                <input type="password" #repasswordControl="ngModel" [(ngModel)]="repassword" name="repassword" class="form-control" [placeholder]="'Xác nhận password'">
+                <input type="password" #repasswordControl="ngModel" [(ngModel)]="repassword" name="repassword" class="form-control" [placeholder]="'Xác nhận password'" required>
               </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Địa chỉ</label>
               <div class="col-md-9">
                 <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control" [placeholder]="'Nhập địa chỉ'">
               </div>
-            </div>
-            <div class="form-group row">
+            </div> -->
+            <!-- <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Ngày sinh</label>
               <div class="col-md-9">
               <input type="text" #birthdayControl="ngModel" [(ngModel)]="birthday" name="birthday" class="form-control" [placeholder]="'Nhập ngày sinh'">
@@ -97,18 +91,25 @@
                     </option>
                   </select>
               </div>
-            </div>
+            </div> -->
             <hr>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Phân quyền</label>
               <div class="col-md-9">
-                <select id="employeeTypeSelect" #employeeTypeControl="ngModel" [(ngModel)]="employee_type_id" name="employee_type_id" class="form-control">
-                    <option *ngFor="let v of employeeTypeData | async" [value]="v.id">
+                <select id="employeeTypeSelect" #employeeTypeControl="ngModel" [(ngModel)]="employeeType" name="employeeType" class="form-control">
+                    <option *ngFor="let v of employeeTypeData" [value]="v.code">
                       {{v.name}}
                     </option>
                   </select>
               </div>
             </div>
+            <!-- <div class="form-group">
+              <select id="actionSelect" name="select" class="form-control" size="1" #action (change)="onChangeAction(action.value)">
+                <option *ngFor="let v of actions" [value]="v.action">
+                  {{v.name}}
+                </option>
+                          </select>
+            </div> -->
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
               <div class="col-md-9">
@@ -119,7 +120,7 @@
                   </select>
               </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Khu vực hoạt động</label>
               <div class="col-md-9">
                 <select id="select" #areaControl="ngModel" [(ngModel)]="area" name="area" class="form-control">
@@ -128,11 +129,11 @@
                     </option>
                   </select>
               </div>
-            </div>
+            </div> -->
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Chi nhánh</label>
               <div class="col-md-9">
-                <select id="branchSelect" #branchControl="ngModel" [(ngModel)]="branch_id" name="branch_id" class="form-control">
+                <select id="branchSelect" #branchControl="ngModel" [(ngModel)]="branch" name="branch" class="form-control">
                     <option *ngFor="let v of branchData | async" [value]="v.id">
                       {{v.name}}
                     </option>

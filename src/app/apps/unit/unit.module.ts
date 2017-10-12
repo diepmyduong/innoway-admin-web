@@ -9,7 +9,8 @@ import { DetailComponent } from './detail/detail.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
-import {BrowserModule} from "@angular/platform-browser";
+import { BrowserModule } from "@angular/platform-browser";
+import { TabsModule } from 'ng2-bootstrap/tabs';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import {BrowserModule} from "@angular/platform-browser";
     ReactiveFormsModule,
     LaddaModule,
     DataTableModule,
+    TabsModule
   ],
   declarations: [UnitComponent, AddComponent, DetailComponent],
   providers: []

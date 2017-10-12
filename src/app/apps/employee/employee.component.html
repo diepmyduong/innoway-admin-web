@@ -27,12 +27,7 @@
         <template #dataTableCell let-item="item" >
             {{item.branch?.name}}
         </template>
-      </data-table-column>
-      <data-table-column property="type" header="Loại nhân viên" [resizable]="true">
-        <template #dataTableCell let-item="item">
-            {{item.type?.name}}
-          </template>
-      </data-table-column>
+      </data-table-column>      
       <data-table-column property="status" header="Trạng thái" [sortable]="true">
         <template #dataTableCell let-item="item">
               <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>

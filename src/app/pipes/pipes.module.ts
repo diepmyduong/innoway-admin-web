@@ -8,4 +8,7 @@ import { LoopPipe } from './loop/loop';
 	exports: [AccountingPipe,
     LoopPipe]
 })
-export class PipesModule {}
+export class PipesModule {
+
+	
+}

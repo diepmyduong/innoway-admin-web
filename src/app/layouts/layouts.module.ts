@@ -9,13 +9,16 @@ import { ChatbotLayoutComponent } from './chatbot-layout/chatbot-layout.componen
 import { LauncherLayoutComponent } from './launcher-layout/launcher-layout.component';
 
 import { BsDropdownModule } from 'ng2-bs-dropdown';
+// Notifications
+import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     SharedModule,
-    BsDropdownModule
+    BsDropdownModule,
+    ToasterModule
   ],
   declarations: [SimpleLayoutComponent, FullLayoutComponent, ChatbotLayoutComponent, LauncherLayoutComponent]
 })

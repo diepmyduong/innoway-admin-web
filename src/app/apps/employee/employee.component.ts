@@ -17,7 +17,7 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
   itemCount: number = 0;
   thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";;
   itemFields: any = ["$all", {
-    type: ["name"],branch: ["name"]
+    branch: ["name"]
   }];
   query: any = {};
   searchTimeOut: number = 250;

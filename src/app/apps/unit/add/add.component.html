@@ -6,11 +6,11 @@
           <input type="text" class="form-control" [placeholder]="'Tìm sản phẩm'" />
         </div>
         <div class="col-md-6 text-center">
-          <i class="icon-speedometer float-right ml-h"></i>
-          <i class="icon-speedometer float-right ml-h"></i>
-          <i class="icon-speedometer float-right ml-h"></i>
-          <i class="icon-speedometer float-right ml-h"></i>
-          <i class="icon-speedometer float-right ml-h"></i>
+          <span class="float-right ml-h"><i class="icon-speedometer mr-h"></i>abc</span>
+          <span class="float-right ml-h"><i class="icon-speedometer mr-h"></i>def</span>
+          <span class="float-right ml-h"><i class="icon-speedometer mr-h"></i>ghi</span>
+          <span class="float-right ml-h"><i class="icon-speedometer mr-h"></i>mno</span>
+          <span class="float-right ml-h"><i class="icon-speedometer mr-h"></i>xyz</span>
         </div>
       </div>
       <span>tìm kiếm</span>
@@ -88,25 +88,101 @@
           </div>
         </div>
         <div class="col-md-4">
-          <div class="row">
-            <div class="col-md-12">
-              <p>nhân viên</p>
-              <p>khách hàng</p>
-              <p>chi phí</p>
-              <p>giao hàng</p>
-              <p>phí khác</p>
-              <p>channel</p>
-              <div class="form-group row">
-                <label class="col-md-4 form-control-label" for="text-input">Nhân viên</label>
-                <div class="col-md-8">
-                  <input type="text" #nameControl="ngModel" [(ngModel)]="employee" name="employee" class="form-control" [placeholder]="'Uy Minh'" required/>
-                  <small class="text-muted success">
+          <tabset>
+            <tab>
+              <ng-template tabHeading><i class="icon-eye"></i> Thông tin đơn hàng
+              </ng-template>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <label class="col-md-4 form-control-label" for="text-input">Nhân viên</label>
+                    <div class="col-md-8">
+                      <input type="text" #employeeControl="ngModel" [(ngModel)]="employee" name="employee" class="form-control" [placeholder]="'Uy Minh'" required/>
+                      <small class="text-muted success">
                       Nhân viên quản lý - Chi nhánh 1
                     </small>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-4 form-control-label" for="text-input">Khách hàng</label>
+                    <div class="col-md-8">
+                      <input type="text" #customerControl="ngModel" [(ngModel)]="customer" name="customer" class="form-control" [placeholder]="'Uy Minh'" required/>
+                      <small class="text-muted success">
+                    Trần Anh Khôi
+                    </small>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-4 form-control-label" for="text-input">Total amount</label>
+                    <div class="col-md-8">
+                      <input type="text" #totalAmountControl="ngModel" [(ngModel)]="total_amount" name="total_amount" class="form-control" [placeholder]="'Uy Minh'" required/>
+                      <small class="text-muted success">
+                    100.000 đ
+                    </small>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-4 form-control-label" for="text-input">Receive amount</label>
+                    <div class="col-md-8">
+                      <input type="text" #receiveAmountControl="ngModel" [(ngModel)]="receive_amount" name="receive_amount" class="form-control" [placeholder]="'Uy Minh'" required/>
+                      <small class="text-muted success">
+                    100.000 đ
+                    </small>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-4 form-control-label" for="text-input">Pay amount</label>
+                    <div class="col-md-8">
+                      <input type="text" #payAmountControl="ngModel" [(ngModel)]="pay_amount" name="pay_amount" class="form-control" [placeholder]="'Uy Minh'" required/>
+                      <small class="text-muted success">
+                    10.000 đ
+                    </small>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-4 form-control-label" for="text-input">Return amount</label>
+                    <div class="col-md-8">
+                      <input type="text" #returnAmountControl="ngModel" [(ngModel)]="return_amount" name="return_amount" class="form-control" [placeholder]="'Uy Minh'" required/>
+                      <small class="text-muted success">
+                    10.000 đ
+                    </small>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-4 form-control-label" for="text-input">Remain amount</label>
+                    <div class="col-md-8">
+                      <input type="text" #remainAmountControl="ngModel" [(ngModel)]="remain_amount" name="remain_amount" class="form-control" [placeholder]="'Uy Minh'" required/>
+                      <small class="text-muted success">
+                    10.000 đ
+                    </small>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-4 form-control-label" for="text-input">Giao hàng</label>
+                    <div class="col-md-8">
+                      <input type="text" #shipFeeControl="ngModel" [(ngModel)]="ship_fee" name="ship_fee" class="form-control" [placeholder]="'Uy Minh'" required/>
+                      <small class="text-muted success">
+                    10.000 đ
+                    </small>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-4 form-control-label" for="text-input">Kênh</label>
+                    <div class="col-md-8">
+                      <input type="text" #channelControl="ngModel" [(ngModel)]="channel" name="channel" class="form-control" [placeholder]="'Uy Minh'" required/>
+                      <small class="text-muted success">
+                    Hotline
+                    </small>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </tab>
+            <tab>
+              <ng-template tabHeading><i class="icon-eye"></i> Thông tin đơn hàng
+              </ng-template>
+            </tab>
+          </tabset>
         </div>
       </div>
     </div>
