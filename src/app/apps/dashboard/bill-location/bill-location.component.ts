@@ -4,7 +4,7 @@ import { MapsAPILoader } from '@agm/core';
 import { InnowayService } from "app/services";
 import { Router, ActivatedRoute } from "@angular/router";
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-bill-location',

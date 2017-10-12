@@ -6,7 +6,7 @@ import { InnowayService } from "app/services";
 
 import { ColorPickerService } from 'angular2-color-picker';
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-add',

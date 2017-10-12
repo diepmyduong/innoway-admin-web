@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayService } from "app/services";
 import { ListPageInterface } from "app/apps/interface/listPageInterface";
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-employee-type',

@@ -5,7 +5,7 @@ import { InnowayService } from "app/services";
 import { NgForm } from "@angular/forms";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-add',

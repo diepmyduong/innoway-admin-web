@@ -8,7 +8,7 @@ import { FormControl } from '@angular/forms';
 import { } from 'googlemaps';
 import { MapsAPILoader } from '@agm/core';
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-add',

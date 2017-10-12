@@ -9,7 +9,7 @@ import { InnowayService } from 'app/services'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-add',

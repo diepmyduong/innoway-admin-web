@@ -3,11 +3,13 @@ import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
 import { NgForm } from "@angular/forms";
-
-declare var swal: any;
+import { Globals } from "./../../../globals";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+declare let swal:any
 
 @Component({
   selector: 'app-add',
+  providers: [Globals],
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
@@ -15,7 +17,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  customerService: any;
 
   name: string;
   account_type: string;
@@ -29,15 +30,25 @@ export class AddComponent implements OnInit, AddPageInterface {
   sex: number = 1;
   status: number = 1;
 
+  customerType: string;
+  customerTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  customerTypeService: any;
+  customerService: any;
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
+    private globals: Globals,
     public innoway: InnowayService) {
     this.customerService = innoway.getService('customer');
+    this.customerTypeService = innoway.getService('customer_type');
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
+
+    await this.getCustomerTypeData();
+
     if (this.id == null) {
       this.isEdit = false;
       this.setDefaultData();
@@ -52,8 +63,12 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   setDefaultData() {
     this.status = 1;
+    if (this.customerTypeData.getValue()[0]) {
+      this.customerType = this.customerTypeData.getValue()[0].id;
+    }
     return {
-      status: this.status
+      status: this.status,
+      customerType: this.customerType
     }
   }
 
@@ -80,8 +95,18 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
+  async getCustomerTypeData() {
+    try {
+      this.customerTypeData = await this.innoway.getAll('customer_type', {
+        fields: ["id", "name"]
+      });
+    } catch (err) {
+      console.error('Cannot load category', err);
+    }
+  }
+
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route});
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {

@@ -5,7 +5,7 @@ import { InnowayService } from "app/services";
 import * as moment from 'moment';
 
 import { Globals } from './../../../globals';
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-bill-detail',
@@ -122,12 +122,7 @@ export class BillDetailComponent implements OnInit {
       input: 'select',
       inputOptions: avaiavle_options,
       inputPlaceholder: 'Chọn trạng thái',
-      showCancelButton: true,
-      inputValidator: function(value) {
-        return new Promise(function(resolve, reject) {
-          resolve();
-        })
-      }
+      showCancelButton: true
     })
 
     await swal({

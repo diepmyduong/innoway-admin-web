@@ -5,7 +5,7 @@ import { Globals } from './../../../globals';
 import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-declare let swal: any;
+declare let swal:any;
 
 @Component({
   selector: 'app-detail',
@@ -18,11 +18,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   elRef: ElementRef;
   billService: any;
   id: string;
-  item: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);;
+  item: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   itemFields: any = ['$all'];
   employee: any;
   employeeType: any;
-  thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";;
+  thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
 
   constructor(
     private globals: Globals,

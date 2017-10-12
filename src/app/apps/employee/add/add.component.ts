@@ -7,7 +7,7 @@ import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { NgForm } from "@angular/forms";
 import { Globals } from "./../../../globals";
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-add',
@@ -91,13 +91,11 @@ export class AddComponent implements OnInit, AddPageInterface {
           branch: ["id", "name"]
         }]
       });
-      // this.name = data.name
       this.fullname = data.fullname
       this.username = data.username
       this.password = data.password
       this.phone = data.phone
       this.email = data.email
-      // this.address = data.address
       this.avatar = data.avatar
       this.branch = data.branch_id
       this.status = data.status

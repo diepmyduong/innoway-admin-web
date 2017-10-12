@@ -10,7 +10,7 @@ import { InnowayService } from 'app/services'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4";
 
-declare let swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-topping',

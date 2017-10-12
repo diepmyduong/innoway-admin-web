@@ -8,7 +8,7 @@ import { Globals } from './../../../globals';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-paid-list',

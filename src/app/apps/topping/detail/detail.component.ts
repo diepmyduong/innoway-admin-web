@@ -11,7 +11,7 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
-declare let swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-detail',

@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 import { DashboardService } from "app/apps/dashboard/DashboardService";
 
 import { Globals } from './../../../globals';
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-bills',
@@ -271,6 +271,7 @@ export class BillsComponent implements OnInit {
         })
       }
     })
+    console.log("result",result)
 
     await swal({
       type: 'success',

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InnowayService } from 'app/services'
 
-declare let swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-detail',

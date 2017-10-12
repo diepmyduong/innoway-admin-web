@@ -3,7 +3,7 @@ import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
 
-declare var swal: any;
+declare let swal:any
 declare var innoway2: any;
 
 @Component({

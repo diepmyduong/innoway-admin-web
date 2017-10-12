@@ -7,7 +7,7 @@ import { Subscription } from "rxjs/Subscription";
 import { DashboardService } from "app/apps/dashboard/DashboardService";
 import { Globals } from "./../../globals"
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   templateUrl: 'dashboard.component.html',

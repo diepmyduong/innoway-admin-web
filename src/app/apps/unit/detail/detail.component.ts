@@ -8,7 +8,7 @@ import { CustomValidators } from "ng2-validation/dist";
 import { InnowayService } from 'app/services'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-declare let swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-detail',

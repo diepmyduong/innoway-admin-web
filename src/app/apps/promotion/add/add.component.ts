@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { NgForm } from "@angular/forms";
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-add',

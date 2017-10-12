@@ -7,7 +7,7 @@ import { InnowayService } from 'app/services'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { MapsAPILoader } from "@agm/core";
 
-declare let swal: any;
+declare let swal:any
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { InnowayService } from 'app/services';
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-add',

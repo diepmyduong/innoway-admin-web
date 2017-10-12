@@ -3,7 +3,7 @@ import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
 import { Globals } from "./../../../globals";
-declare var swal: any;
+declare let swal:any
 @Component({
   selector: 'app-detail',
   providers: [Globals],

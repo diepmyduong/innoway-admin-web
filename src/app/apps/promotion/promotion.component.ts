@@ -5,7 +5,7 @@ import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayService } from "app/services";
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-promotion',

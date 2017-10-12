@@ -5,7 +5,7 @@ import { InnowayService } from 'app/services';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Globals } from './../../../globals';
 
-declare var swal: any;
+declare let swal:any
 
 @Component({
   selector: 'app-add',

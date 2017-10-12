@@ -1,11 +1,12 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "~bootstrap-material-design/dist/css/bootstrap-material-design.min.css";
-// Here you can add other styles
+@import "~bootstrap-material-design/dist/css/bootstrap-material-design.min.css"; // Here you can add other styles
+
 .navbar {
   .form-inline {
     i {
       color: $navbar-color;
     }
+
     .form-control {
       margin-top: -3px;
       color: $navbar-color;
@@ -15,13 +16,25 @@
         color: $navbar-color;
       }
     }
-    .form-control::-webkit-input-placeholder { color: $navbar-color; }
-    .form-control:-moz-placeholder { color: $navbar-color; }
-    .form-control::-moz-placeholder { color: $navbar-color; }
-    .form-control:-ms-input-placeholder { color: $navbar-color; }
-  }
-  .nav-item {
 
+    .form-control::-webkit-input-placeholder {
+      color: $navbar-color;
+    }
+
+    .form-control:-moz-placeholder {
+      color: $navbar-color;
+    }
+
+    .form-control::-moz-placeholder {
+      color: $navbar-color;
+    }
+
+    .form-control:-ms-input-placeholder {
+      color: $navbar-color;
+    }
+  }
+
+  .nav-item {
     .nav-link.nav-pill {
       width: 32px;
       height: 32px;
@@ -65,14 +78,14 @@
   }
 }
 
-
 .sidebar .sidebar-nav .nav {
   .nav-title {
     span {
       position: relative;
       display: inline-block;
 
-      &:before, &:after {
+      &:after,
+      &:before {
         position: absolute;
         top: 50%;
         width: 25px;
@@ -93,7 +106,6 @@
   }
 }
 
-
 .fade.in {
   opacity: 1;
 }
@@ -113,4 +125,14 @@
   height: 300px !important;
   background-color: #eee !important;
   /* box-shadow:  0px -10px 1px  #aaaaaa; */
+}
+
+.card {
+  box-shadow: none;
+}
+
+.custom-file-control:invalid,
+.form-control:invalid {
+  background-image: none;
+  // /* background-image: linear-gradient(0deg,#d50000 2px,rgba(213,0,0,0) 0),linear-gradient(0deg,rgba(0,0,0,.26) 1px,transparent 0); */
 }
