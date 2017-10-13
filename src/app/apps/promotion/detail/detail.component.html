@@ -46,14 +46,14 @@
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Ngày bắt đầu</label>
               <div class="col-md-8">
-                <input type="text" [value]="item?.start_date" name="start_date"
+                <input type="text" [value]="item?.start_date | date:'dd/MM/yyyy'" name="start_date"
                   class="form-control" readonly>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Ngày kết thúc</label>
               <div class="col-md-8">
-                <input type="text" [value]="item?.end_date" name="end_date"
+                <input type="text" [value]="item?.end_date | date:'dd/MM/yyyy'" name="end_date"
                   class="form-control" readonly>
               </div>
             </div>
@@ -90,32 +90,6 @@
               <div class="col-md-8">
                 <input type="text" [value]="item?.status?'Hoạt động':'Không hoạt động'" name="status"
                   class="form-control" readonly>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-md-12">
-                <div class="row">
-                  <label class="col-md-3 form-control-label" for="text-input">Hình ảnh</label>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                </div>
-                <div class="form-group row mt-1">
-                  <div class="col-md-12">
-                    <input type="file" id="file-multiple-input" name="file-multiple-input" multiple>
-                  </div>
-                </div>
               </div>
             </div>
           </form>

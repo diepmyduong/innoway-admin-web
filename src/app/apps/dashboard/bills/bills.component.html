@@ -1,50 +1,10 @@
 <div class="toolbar">
-  <span class="btn-group">
-      <!-- <button type="button" class="btn btn-danger" (click)="filter()">All</button>
-      <button type="button" class="btn btn-danger" (click)="filter(-1)">2</button>
-        <button type="button" class="btn btn-default" (click)="filter(0)">0</button>
-        <button type="button" class="btn btn-info" (click)="filter(1)">1</button>
-        <button type="button" class="btn btn-warning" (click)="filter(2)">2</button>
-        <button type="button" class="btn btn-primary" (click)="filter(3)">2</button>
-        <button type="button" class="btn btn-success" (click)="filter(4)">2</button>
-        <button type="button" class="btn btn-danger" (click)="filter(5)">2</button>
-          <button type="button" class="btn btn-danger" (click)="filter(6)">2</button>
-            <button type="button" class="btn btn-danger" (click)="filter(7)">2</button> -->
-    </span>
-
+  <span class="btn-group"></span>
   <button class="btn btn-sm btn-primary btn-ladda mr-h float-right">Xem tổng quan</button>
   <button class="btn btn-sm btn-primary btn-ladda mr-h float-right">Tạo đơn hàng</button>
   <button class="btn btn-sm btn-primary btn-ladda mr-h float-right">Thống kê</button>
-
 </div>
 <div class="content">
-  <!-- <div class="callout callout-success m-0 py-1" (click)="viewDetail('1000003')">
-      <div class="avatar float-right employee-avatar row">
-        <div class="col-md-12">
-              Minh Đức Uy
-              <img src="https://scontent.fsgn3-1.fna.fbcdn.net/v/t1.0-1/p320x320/18527867_1603793636298649_7716774829381887460_n.jpg?oh=64dee0d0ba2c7733e2ca025f924f1869&oe=5A257B2E" class="img-avatar float-right" alt="admin@bootstrapmaster.com">
-        </div>
-        <div class="col-md-12 m-h" formArrayName="billStatusInput">
-          <select id="select" name="select" class="form-control" size="1">
-            <option value="0">Đơn hàng thành công</option>
-            <option value="1">Đơn hàng đã điều phối</option>
-            <option value="2">Đơn hàng đang xử lý</option>
-            <option value="3">Đơn hàng đang giao</option>
-            <option value="4">Đơn hàng đã thanh toán</option>
-            <option value="5">Đơn hàng đã chỉnh sửa</option>
-            <option value="6">Đơn hàng đã thu tiền</option>
-            <option value="7">Đơn hàng đã hủy</option>
-          </select>
-        </div>
-      </div>
-      <div>Mã đơn hàng: <strong>1000003</strong></div>
-      <small class="mr-1"><i class="fa fa-usd"></i> 550,000 VND </small>
-      <small class="mr-1"><i class="icon-calendar"></i> 3:00</small>
-      <small class="mr-1"><i class="icon-location-pin"></i> Quận 1 </small>
-      <small class="mr-1"><i class="fa fa-cog fa-lg"></i> facebook</small>
-      <small class="mr-1"><i class="fa fa-user fa-lg"></i> Nguyễn Văn A</small>
-  </div> -->
-  <!-- *ngFor="let v of bills" -->
   <div class="row">
     <div class="col-md-12" *ngFor="let bill of bills | async; let i = index">
       <div class="row">
@@ -54,7 +14,6 @@
             <div class="avatar float-right employee-avatar row">
               <div class="col-md-12">
                 {{bill.customer?.phone?bill.customer.phone:''}}
-                <!-- {{selectedAction}} ----  -->
                 <img src="{{bill.customer?.avatar?bill.customer.avatar:thumbDefault}}" class="img-avatar float-right">
               </div>
               <div class="col-md-12 m-h" formArrayName="billStatusInput">
@@ -71,7 +30,6 @@
             <small class="mr-1"><i class="icon-location-pin"></i> {{bill.address}} </small>
             <small class="mr-1"><i class="fa fa-cog fa-lg"></i> {{detectChannelName(bill.channel)}}</small>
             <small class="mr-1" [ngStyle]="setStyles()"><i class="fa fa-user fa-lg"></i> {{bill.activity?(detectActionName(bill.activity.action)):""}}</small>
-            <!-- <small class="mr-1" [ngClass]="setClasses(i)" (click)="print(bill)"><i class="fa fa-print fa-lg"></i> PRINT</small> -->
           </div>
         </div>
         <div class="col-md-12 mb-h">

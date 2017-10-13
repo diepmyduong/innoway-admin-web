@@ -36,6 +36,26 @@ export class Globals {
     }
   ]
 
+  PROMOTION_TYPES = [
+    {
+      code: "PROMOTION_COST",
+      name: "Khuyến mãi theo giá cố định"
+    }, {
+      code: "PROMOTION_PERCENT",
+      name: "Khuyến mãi theo phần trăm"
+    }
+  ]
+
+  public detectPromotionTypeByCode(code: string): any {
+    let result = null;
+    this.PROMOTION_TYPES.forEach(type => {
+      if (type.code == code) {
+        result = type;
+      }
+    });
+    return result;
+  }
+
   ACTORS = [
     {
       code: 'anonymous',

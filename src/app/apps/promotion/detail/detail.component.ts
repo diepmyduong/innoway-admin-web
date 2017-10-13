@@ -3,7 +3,7 @@ import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
 
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-detail',
@@ -12,10 +12,10 @@ declare let swal:any
 })
 export class DetailComponent implements OnInit, DetailPageInterface {
 
-  employeeTypeService: any;
+  promotionTypeService: any;
   id: string;
   item: any;
-  itemFields: any = ['$all',{
+  itemFields: any = ['$all', {
     promotion_type: ["name"], customer_type: ["name"]
   }];
 
@@ -24,13 +24,13 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     private router: Router,
     public innoway: InnowayService
   ) {
-    this.employeeTypeService = innoway.getService('promotion');
+    this.promotionTypeService = innoway.getService('promotion');
   }
 
   ngOnInit() {
 
     this.id = this.route.snapshot.params['id'];
-
+    alert(this.id);
     if (this.id) {
       this.setData()
     } else {
@@ -41,9 +41,10 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async setData() {
     try {
-      this.item = await this.employeeTypeService.get(this.id, {
+      this.item = await this.promotionTypeService.get(this.id, {
         fields: this.itemFields
       })
+      alert(this.item);
     } catch (err) {
       this.alertItemNotFound()
       this.backToList()
@@ -51,11 +52,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   editItem() {
-        this.router.navigate(['../../add', this.id], { relativeTo: this.route});
+    this.router.navigate(['../../add', this.id], { relativeTo: this.route });
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route});
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {

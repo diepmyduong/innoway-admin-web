@@ -26,8 +26,7 @@
               <label class="col-md-4 form-control-label" for="text-input">Tên khuyến mãi</label>
               <div class="col-md-8">
                 <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Tên thông tin khuyến mãi'" required>
-                <small *ngIf="nameControl.errors?.required"
-                class="text-muted danger" >
+                <small *ngIf="nameControl.errors?.required" class="text-muted danger">
                   (Không được bỏ trống)
                 </small>
               </div>
@@ -42,8 +41,7 @@
               <label class="col-md-4 form-control-label" for="text-input">Mã code</label>
               <div class="col-md-8">
                 <input type="text" #codeControl="ngModel" [(ngModel)]="code" name="code" class="form-control" [placeholder]="'Nhập mã code'" required>
-                <small *ngIf="codeControl.errors?.required"
-                class="text-muted danger" >
+                <small *ngIf="codeControl.errors?.required" class="text-muted danger">
                   (Không được bỏ trống)
                 </small>
               </div>
@@ -51,19 +49,25 @@
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Ngày bắt đầu</label>
               <div class="col-md-8">
-                <input type="text" #startDateControl="ngModel" [(ngModel)]="start_date" name="start_date" class="form-control" [placeholder]="'Nhập ngày bắt đầu'">
+                <input type="text" #startDateControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="startDate" name="startDate" class="form-control" [placeholder]="'Nhập ngày bắt đầu'" require>
+                <small *ngIf="startDateControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Ngày kết thúc</label>
               <div class="col-md-8">
-                <input type="text" #endDateControl="ngModel" [(ngModel)]="end_date" name="end_date" class="form-control" [placeholder]="'Nhập ngày kết thúc'">
+                <input type="text" #endDateControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="endDate" name="endDate" class="form-control" [placeholder]="'Nhập ngày kết thúc'" require>
+                <small *ngIf="endDateControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="select">Loại khuyến mãi</label>
               <div class="col-md-8">
-                <select id="promotionTypeSelect" #promotionTypeControl="ngModel" [(ngModel)]="promotion_type_id" name="promotion_type_id" class="form-control">
+                <select id="promotionTypeSelect" #promotionTypeControl="ngModel" [(ngModel)]="promotionType" name="promotionType" class="form-control">
                     <option *ngFor="let v of promotionTypeData | async" [value]="v.id">
                       {{v.name}}
                     </option>
@@ -73,7 +77,7 @@
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="select">Loại khách hàng</label>
               <div class="col-md-8">
-                <select id="customerTypeSelect" #customerTypeControl="ngModel" [(ngModel)]="customer_type_id" name="customer_type_id" class="form-control">
+                <select id="customerTypeSelect" #customerTypeControl="ngModel" [(ngModel)]="customerType" name="customerType" class="form-control">
                     <option *ngFor="let v of customerTypeData | async" [value]="v.id">
                       {{v.name}}
                     </option>
@@ -83,13 +87,13 @@
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Giá trị</label>
               <div class="col-md-8">
-                <input type="text" #valueControl="ngModel" [(ngModel)]="value" name="value" class="form-control" [placeholder]="'Nhập giá trị'">
+                <input type="number" #valueControl="ngModel" [(ngModel)]="value" name="value" class="form-control" [placeholder]="'Nhập giá trị'">
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="text-input">Giới hạn</label>
               <div class="col-md-8">
-                <input type="text" #limitControl="ngModel" [(ngModel)]="limit" name="limit" class="form-control" [placeholder]="'Nhập giới hạn'">
+                <input type="number" #limitControl="ngModel" [(ngModel)]="limit" name="limit" class="form-control" [placeholder]="'Nhập giới hạn'">
               </div>
             </div>
             <div class="form-group row">
@@ -102,7 +106,7 @@
                 </select>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row" [hidden]="true">
               <div class="col-md-12">
                 <div class="row">
                   <label class="col-md-3 form-control-label" for="text-input">Hình ảnh</label>

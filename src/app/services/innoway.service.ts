@@ -36,7 +36,8 @@ export class InnowayService {
     'promotion_type',
     'brand_ship',
     'ship_area',
-    'paid_history'
+    'paid_history',
+    'customer_type_promotion'
   ]
   service_items:any = {}
   services:any = {}

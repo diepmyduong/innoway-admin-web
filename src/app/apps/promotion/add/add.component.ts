@@ -5,11 +5,13 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { NgForm } from "@angular/forms";
+import { Globals } from "./../../../Globals"
 
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-add',
+  providers: [Globals],
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
@@ -21,17 +23,20 @@ export class AddComponent implements OnInit, AddPageInterface {
   promotionService: any;
   customerTypeService: any;
   promotionTypeService: any;
+  customerTypePromotionService: any;
+
+  dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/];
 
   name: string;
-  amount: string;
+  amount: number = 0;
   code: string;
-  limit: string;
+  limit: number = 0;
   description: string;
-  start_date: string;
-  end_date: string;
-  value: string;
-  customer_type_id: string;
-  promotion_type_id: string;
+  startDate: string;
+  endDate: string;
+  value: number = 0;
+  customerType: string;
+  promotionType: string;
   status: number = 1;
   customerTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   promotionTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
@@ -43,6 +48,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.promotionService = innoway.getService('promotion');
     this.customerTypeService = innoway.getService('customer_type');
     this.promotionTypeService = innoway.getService('promotion_type');
+    this.customerTypePromotionService = innoway.getService('customer_type_promotion');
   }
 
   async ngOnInit() {
@@ -64,20 +70,28 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   setDefaultData() {
     this.status = 1;
-    this.start_date = null;
-    this.end_date = null;
-    this.value = null;
-    this.limit = null;
+    this.startDate = null;
+    this.startDate = null;
+    this.value = 0;
+    this.limit = 0
+    this.amount = 0;
+    this.code = null;
     if (this.promotionTypeData.getValue()[0]) {
-      this.promotion_type_id = this.promotionTypeData.getValue()[0].id;
+      this.promotionType = this.promotionTypeData.getValue()[0].id;
     }
     if (this.customerTypeData.getValue()[0]) {
-      this.customer_type_id = this.customerTypeData.getValue()[0].id;
+      this.customerType = this.customerTypeData.getValue()[0].id;
     }
     return {
       status: this.status,
-      promotion_type_id: this.promotion_type_id,
-      customer_type_id: this.customer_type_id
+      promotionType: this.promotionType,
+      customerType: this.customerType,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      value: this.value,
+      limit: this.limit,
+      amount: this.amount,
+      code: this.code
     }
   }
 
@@ -85,19 +99,20 @@ export class AddComponent implements OnInit, AddPageInterface {
     try {
       let data = await this.promotionService.get(this.id, {
         fields: ["$all", {
-          promotion_type: ["id", "name"], customer_type: ["id", "name"]
+          promotion_type: ["id", "name"], customer_types: ["$all"]
         }]
       });
+      // alert(JSON.stringify(data));
       this.name = data.name
       this.amount = data.amount
       this.code = data.code
       this.limit = data.limit
       this.description = data.description
-      this.start_date = data.start_date
-      this.end_date = data.end_date
+      this.startDate = data.start_date
+      this.endDate = data.end_date
       this.value = data.value
-      this.customer_type_id = data.customer_type_id
-      this.promotion_type_id = data.promotion_type_id
+      this.customerType = data.customer_types.id
+      this.promotionType = data.promotion_type.id
       this.status = data.status
 
     } catch (err) {
@@ -180,10 +195,28 @@ export class AddComponent implements OnInit, AddPageInterface {
     })
   }
 
+  detectDate(startDate: string, endDate: string): boolean {
+    let result = false;
+    let start = new Date(startDate);
+    let end = new Date(endDate);
+    let now = new Date(Date.now());
+    if (start.toString().toLowerCase().indexOf("invalid") == -1
+      && end.toString().toLowerCase().indexOf("invalid") == -1
+      && start > now && start <= end) {
+      result = true;
+    }
+    return result;
+  }
+
   async addItem(form: NgForm) {
-    if (form.valid) {
-      let { name, amount, code, limit, description, start_date, end_date, value, customer_type_id, promotion_type_id, status } = this;
-      await this.promotionService.add({ name, amount, code, limit, description, start_date, end_date, value, customer_type_id, promotion_type_id, status })
+    if (form.valid && this.detectDate(this.startDate, this.endDate)) {
+      let { name, amount, code, limit, description, value, status } = this;
+      let start_date = new Date(this.startDate);
+      let end_date = new Date(this.endDate);
+      let customer_type_id = this.customerType;
+      let promotion = await this.promotionService.add({ name, amount, code, limit, description, start_date, end_date, value, customer_type_id, status })
+      // let promotion_id = promotion.id;
+      // await this.customerTypePromotionService.add({ customer_type_id, promotion_id });
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -193,9 +226,13 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   async updateItem(form: NgForm) {
-    if (form.valid) {
-      let { name, amount, code, limit, description, start_date, end_date, value, customer_type_id, promotion_type_id, status } = this;
-      await this.promotionService.update(this.id, { name, amount, code, limit, description, start_date, end_date, value, customer_type_id, promotion_type_id, status })
+    if (form.valid && this.detectDate(this.startDate, this.endDate)) {
+      let { name, amount, code, limit, description, value, status } = this;
+      let start_date = new Date(this.startDate);
+      let end_date = new Date(this.endDate);
+      let customer_type_id = this.customerType;
+      let promotion_type_id = this.promotionType;
+      await this.promotionService.add({ name, amount, code, limit, description, start_date, end_date, value, customer_type_id, promotion_type_id, status })
       this.alertUpdateSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
