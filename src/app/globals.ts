@@ -25,6 +25,17 @@ export class Globals {
     }
   ]
 
+  GENDERS = [
+    {
+      code: 0,
+      name: "Nam"
+    },
+    {
+      code: 1,
+      name: "Nữ"
+    }
+  ]
+
   ACTORS = [
     {
       code: 'anonymous',

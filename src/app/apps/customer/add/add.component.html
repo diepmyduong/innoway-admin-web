@@ -14,7 +14,7 @@
                   <small *ngIf="avatarControl.errors?.url" class="text-muted danger">
                     (Link không hợp lệ)
                   </small>
-                  <img *ngIf="avatarControl.value && avatarControl.valid" style="width:100%;" [src]="avatarControl.value" />
+                  <img *ngIf="avatarControl.value && avatarControl.valid" style="width:auto;height:80px;" [src]="avatarControl.value" />
                 </div>
               </div>
             </div>
@@ -45,57 +45,35 @@
                 <input type="email" #emailControl="ngModel" [(ngModel)]="email" name="email" class="form-control" [placeholder]="'Nhập email'">
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Tên đăng nhập</label>
-              <div class="col-md-9">
-                <input #usernameControl="ngModel" [(ngModel)]="username" name="username" class="form-control" [placeholder]="'Nhập tên đăng nhập'">
-              </div>
-            </div>
-            <div class="form-group row">
+            <div class="form-group row" *ngIf="!isEdit">
               <label class="col-md-3 form-control-label" for="password-input">Password</label>
               <div class="col-md-9">
                 <input type="password" #passwordControl="ngModel" [(ngModel)]="password" name="password" class="form-control" [placeholder]="'Nhập password'">
               </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row" *ngIf="!isEdit">
               <label class="col-md-3 form-control-label" for="password-input">Xác nhận password</label>
               <div class="col-md-9">
                 <input type="password" #repasswordControl="ngModel" [(ngModel)]="repassword" name="repassword" class="form-control" [placeholder]="'Xác nhận password'">
               </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Địa chỉ</label>
-              <div class="col-md-9">
-                <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control" [placeholder]="'Nhập địa chỉ'">
-              </div>
-            </div>
+            </div>      
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Ngày sinh</label>
               <div class="col-md-9">
-                <input type="text" #birthdayControl="ngModel" [(ngModel)]="birthday" name="birthday" class="form-control" [placeholder]="'Nhập url'">
+                <input type="text" #birthdayControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="birthday" name="birthday" class="form-control" [placeholder]="'Nhập ngày sinh'" #item (click)="open(item.value)">
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Giới tính</label>
               <div class="col-md-9">
                 <select id="genderSelect" #sexControl="ngModel" [(ngModel)]="sex" name="sex" class="form-control">
-                    <option *ngFor="let v of [0,1]" [value]="v">
-                      {{ v===1?"Nam":"Nữ"}}
-                    </option>
-                  </select>
-              </div>
-            </div>
-            <hr>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="select">Loại khách hàng</label>
-              <div class="col-md-9">
-                <select id="customerTypeSelect" #customerTypeControl="ngModel" [(ngModel)]="customerType" name="customerType" class="form-control">
-                    <option *ngFor="let v of customerTypeData | async" [value]="v.id">
+                    <option *ngFor="let v of genders" [value]="v.code">
                       {{ v.name }}
                     </option>
                   </select>
               </div>
             </div>
+            <hr>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
               <div class="col-md-9">
@@ -106,32 +84,25 @@
                   </select>
               </div>
             </div>
-            <hr>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Điểm uy tín</label>
               <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Điểm uy tín">
+                <input type="text" #trustPointModel="ngModel" [(ngModel)]="trustPoint" name="trustPoint" class="form-control" [placeholder]="'Nhập điểm uy tín'">
               </div>
             </div>
             <hr>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Facebook</label>
-              <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Facebook">
-              </div>
-            </div>
-          </div>
-          <div class="card-footer">
-            <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
-            Submit &amp; New  </button>
-            <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
-            Submit &amp; Close</button>
-            <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
-            Update &amp; Close</button>
           </div>
         </div>
+        <div class="card-footer">
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; New  </button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Submit &amp; Close</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
+            Update &amp; Close</button>
+        </div>
       </div>
-      <!--/.col-->
     </div>
+    <!--/.col-->
   </form>
 </div>

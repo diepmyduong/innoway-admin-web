@@ -10,7 +10,7 @@
               </div>
               <div class="card-block">
                 <div class="col-md-12">
-                  <input type="text" #avatarControl="ngModel" [(ngModel)]="avatar" [value]="item?.avatar" name="avatar" class="form-control" readonly>
+                  <input type="text" #avatarControl="ngModel" [(ngModel)]="avatar" [value]="item?.avatar?item.avatar:'không có'" name="avatar" class="form-control" readonly>
                   <img *ngIf="avatarControl.value && avatarControl.valid" style="width:100%;" [src]="avatarControl.value" />
                 </div>
               </div>
@@ -27,93 +27,47 @@
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Họ và tên</label>
               <div class="col-md-9">
-                <input type="text" #fullnameControl="ngModel" [(ngModel)]="fullname" [value]="item?.fullname" name="fullname"
-                  class="form-control" readonly>
-                </div>
+                <input type="text" [value]="item?.fullname?item.fullname:'không có'" name="fullname" class="form-control" readonly>
+              </div>
             </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Số điện thoại</label>
               <div class="col-md-9">
-                <input type="text" #phoneControl="ngModel" [(ngModel)]="phone" [value]="item?.phone" name="phone"
-                  class="form-control" readonly>
-                </div>
+                <input type="text" [value]="item?.phone" name="phone" class="form-control" readonly>
+              </div>
             </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="email-input">Email</label>
               <div class="col-md-9">
-                <input type="email" #emailControl="ngModel" [(ngModel)]="email" [value]="item?.email" name="email"
-                  class="form-control" readonly>
-                  </div>
-            </div>
-            <!-- <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Tên đăng nhập</label>
-              <div class="col-md-9">
-                <input type="text" #usernameControl="ngModel" [(ngModel)]="username" [value]="item?.username" name="username"
-                  class="form-control" readonly>
-                    </div>
-            </div> -->
-            <!-- <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="password-input">Password</label>
-              <div class="col-md-9">
-                <input type="password" #passwordControl="ngModel" [(ngModel)]="password" [value]="item?.password" name="password"
-                  class="form-control" readonly>
-                </div>
+                <input type="email" [value]="item?.email?item.email:'không có'" name="email" class="form-control" readonly>
+              </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="password-input">Xác nhận password</label>
-              <div class="col-md-9">
-                <input type="password" #repasswordControl="ngModel" [(ngModel)]="repassword" [value]="item?.repassword" name="repassword"
-                  class="form-control" readonly>
-                </div>
-            </div> -->
-            <!-- <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Địa chỉ</label>
-              <div class="col-md-9">
-                <input type="text" #addressControl="ngModel" [(ngModel)]="address" [value]="item?.address" name="address">
-              </div>
-            </div> -->
-            <!-- <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Ngày sinh</label>
               <div class="col-md-9">
-                <input type="text" #birthdayControl="ngModel" [(ngModel)]="birthday" [value]="item?.birthday" name="birthday">
+                <input type="text" [value]="item?.birthday?(item.birthday| date:'dd/MM/yyyy'):'không có'" name="birthday" class="form-control" readonly>
               </div>
-            </div> -->
+            </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Giới tính</label>
               <div class="col-md-9">
-                <input type="text" [value]="item?.sex?'Name':'Nữ'" name="sex"
-                  class="form-control" readonly>
+                <input type="text" [value]="item?.sex?'Name':'Nữ'" name="sex" class="form-control" readonly>
               </div>
             </div>
             <hr>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="select">Loại khách hàng</label>
-              <div class="col-md-9">
-                <input type="text" [value]="item?.customerType?'Thường':'VIP'" name="customerType"
-                  class="form-control" readonly>
-              </div>
-            </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
               <div class="col-md-9">
-                <input type="text" [value]="item?.status?'Hoạt động':'Không hoạt động'" name="status"
-                  class="form-control" readonly>
-              </div>
-            </div>
-            <!-- <hr>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Điểm uy tín</label>
-              <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Điểm uy tín">
+                <input type="text" [value]="item?.status?'Hoạt động':'Không hoạt động'" name="status" class="form-control" readonly>
               </div>
             </div>
             <hr>
             <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Facebook</label>
+              <label class="col-md-3 form-control-label" for="text-input">Điểm uy tín</label>
               <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Facebook">
+                <input type="text" [value]="item?.trust_point" name="trustPoint" class="form-control" readonly>
               </div>
-            </div> -->
+            </div>
           </div>
           <div class="card-footer">
             <button (click)="editItem()" class="btn btn-sm btn-primary" data-style="expand-right">

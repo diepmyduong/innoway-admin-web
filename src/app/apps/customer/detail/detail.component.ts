@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-detail',
@@ -16,10 +16,12 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   item: any;
   itemFields: any = ['$all'];
 
+  dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-      private ref: ChangeDetectorRef,
+    private ref: ChangeDetectorRef,
     public innoway: InnowayService
   ) {
     this.customerService = innoway.getService('customer');
@@ -38,23 +40,23 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   async setData() {
-  try {
-    this.item = await this.customerService.get(this.id, {
-      fields: this.itemFields
-    })
-    this.ref.detectChanges();
-  } catch (err) {
-    this.alertItemNotFound()
-    this.backToList()
+    try {
+      this.item = await this.customerService.get(this.id, {
+        fields: this.itemFields
+      })
+      this.ref.detectChanges();
+    } catch (err) {
+      this.alertItemNotFound()
+      this.backToList()
+    }
   }
-}
 
   editItem() {
-        this.router.navigate(['../../add', this.id], { relativeTo: this.route});
+    this.router.navigate(['../../add', this.id], { relativeTo: this.route });
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route});
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {

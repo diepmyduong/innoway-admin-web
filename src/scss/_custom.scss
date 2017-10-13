@@ -134,5 +134,8 @@
 .custom-file-control:invalid,
 .form-control:invalid {
   background-image: none;
-  // /* background-image: linear-gradient(0deg,#d50000 2px,rgba(213,0,0,0) 0),linear-gradient(0deg,rgba(0,0,0,.26) 1px,transparent 0); */
+}
+
+.custom-file-control:read-only, .form-control:read-only {
+  background-image: none;
 }

@@ -25,7 +25,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   trail_expire: string;
   status: number = 1;
 
-  public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+  dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
   constructor(private route: ActivatedRoute,
     private router: Router,

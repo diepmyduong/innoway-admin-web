@@ -5,7 +5,7 @@ import { InnowayService } from "app/services";
 import { NgForm } from "@angular/forms";
 import { Globals } from "./../../../globals";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-add',
@@ -19,20 +19,19 @@ export class AddComponent implements OnInit, AddPageInterface {
   submitting: boolean = false;
 
   name: string;
-  account_type: string;
-  active_code: string;
   avatar: string;
   birthday: string;
   email: string;
   fullname: string;
   password: string;
   phone: string;
-  sex: number = 1;
+  sex: string = "0";
+  genders: any;
   status: number = 1;
+  trustPoint: number = 3;
 
-  customerType: string;
-  customerTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  customerTypeService: any;
+  dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+
   customerService: any;
 
   constructor(private route: ActivatedRoute,
@@ -41,13 +40,11 @@ export class AddComponent implements OnInit, AddPageInterface {
     private globals: Globals,
     public innoway: InnowayService) {
     this.customerService = innoway.getService('customer');
-    this.customerTypeService = innoway.getService('customer_type');
+    this.genders = this.globals.GENDERS;
   }
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-
-    await this.getCustomerTypeData();
 
     if (this.id == null) {
       this.isEdit = false;
@@ -63,12 +60,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   setDefaultData() {
     this.status = 1;
-    if (this.customerTypeData.getValue()[0]) {
-      this.customerType = this.customerTypeData.getValue()[0].id;
-    }
+    this.trustPoint = 3;
+    this.sex = "0";
+
     return {
       status: this.status,
-      customerType: this.customerType
+      trustPoint: this.trustPoint,
+      sex: this.sex
     }
   }
 
@@ -77,31 +75,19 @@ export class AddComponent implements OnInit, AddPageInterface {
       let data = await this.customerService.get(this.id, {
         fields: ["$all"]
       });
-      this.name = data.name
-      this.account_type = data.account_type
-      this.active_code = data.active_code
       this.avatar = data.avatar
       this.birthday = data.birthday
       this.email = data.email
       this.fullname = data.fullname
       this.password = data.password
       this.phone = data.phone
-      this.sex = data.sex
+      this.sex = data.sex ? data.sex.toString() : "0"
       this.status = data.status
+      this.trustPoint = data.trust_point ? data.trust_point : 3
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
       this.backToList()
-    }
-  }
-
-  async getCustomerTypeData() {
-    try {
-      this.customerTypeData = await this.innoway.getAll('customer_type', {
-        fields: ["id", "name"]
-      });
-    } catch (err) {
-      console.error('Cannot load category', err);
     }
   }
 
@@ -159,8 +145,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, avatar, birthday, email, fullname, password, phone, sex, status } = this;
-      await this.customerService.add({ name, avatar, birthday, email, fullname, password, phone, sex, status })
+      let { name, avatar, email, fullname, password, phone, sex, status } = this;
+      let trust_point = this.trustPoint;
+      let birthday = null;
+      if (!this.birthday) {
+        birthday = new Date(this.birthday);
+      }
+      await this.customerService.add({ name, avatar, birthday, email, fullname, password, phone, sex, status, trust_point })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData);
@@ -171,8 +162,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, avatar, birthday, email, fullname, password, phone, sex, status } = this;
-      await this.customerService.update(this.id, { name, avatar, birthday, email, fullname, password, phone, sex, status })
+      let { name, avatar, email, fullname, password, phone, sex, status } = this;
+      let trust_point = this.trustPoint;
+      let birthday = null;
+      if (!this.birthday) {
+        birthday = new Date(this.birthday);
+      }
+      await this.customerService.update(this.id, { name, avatar, birthday, email, fullname, password, phone, sex, status, trust_point })
       this.alertUpdateSuccess();
       form.reset();
     } else {
@@ -215,6 +211,11 @@ export class AddComponent implements OnInit, AddPageInterface {
     } finally {
       this.submitting = false;
     }
+  }
+
+  open(date) {
+    // let newDate = new Date(date);
+    // alert(newDate);
   }
 
 }
