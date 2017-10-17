@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 import { DashboardService } from "app/apps/dashboard/DashboardService";
 
 import { Globals } from './../../../globals';
-declare let swal:any
+declare let swal:any;
 
 @Component({
   selector: 'app-bills',
