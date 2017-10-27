@@ -29,7 +29,7 @@ import { ModalModule } from 'ng2-bootstrap/modal';
 import { SharedModule } from './shared/shared.module'
 import { LayoutsModule } from './layouts/layouts.module'
 
-
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 @NgModule({
   imports: [

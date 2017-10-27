@@ -3,8 +3,8 @@
     <div class="col-md-8">
       <mat-form-field floatPlaceholder="never">
         <input matInput placeholder="Tìm kiếm..." [matAutocomplete]="reactiveAuto" [formControl]="productState">
-        <mat-autocomplete #reactiveAuto="matAutocomplete" [displayWith]="displayFn">
-          <mat-option *ngFor="let product of autocompleteProduct | async" [value]="product.id">
+        <mat-autocomplete #reactiveAuto="matAutocomplete" [displayWith]="displaySearchProduct">
+          <mat-option (onSelectionChange)="onChangeAutocompleteProduct($event, product)" *ngFor="let product of autocompleteProduct | async" [value]="product.name">
             <span>{{ product.name }}</span>
           </mat-option>
         </mat-autocomplete>
@@ -35,59 +35,66 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group row">
-                <label class="col-md-4 form-control-label" for="text-input">Nhân viên</label>
+                <label class="col-md-4 form-control-label" layout-fill layout-align="center center" for="text-input">Nhân viên</label>
                 <div class="col-md-8">
-                  <input type="text" #employeeControl="ngModel" [(ngModel)]="employee" name="employee" class="form-control" [placeholder]="'Uy Minh'" required/>
-                  <small class="text-muted success">
-                </small>
+                  <input type="text" #employeeControl="ngModel" [(ngModel)]="employee" name="employee" class="form-control" readonly/>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 form-control-label" for="text-input">Khách hàng</label>
                 <div class="col-md-8">
-                  <input type="text" #customerControl="ngModel" [(ngModel)]="customer" name="customer" class="form-control" [placeholder]="'Uy Minh'" required/>
+                  <ng-select #customerSelect [allowClear]="true" [multiple]="false" [items]="autocompleteCustomerData" (mouseleave)="addToItems()" (data)="refreshValue($event)" (typed)="onChangeCustomer($event)"  (data)="refreshValue($event)" (change)="test($event)" (selected)="selected($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Nhập khách hàng"></ng-select>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 form-control-label" for="text-input">Total amount</label>
                 <div class="col-md-8">
-                  <input type="text" #totalAmountControl="ngModel" [(ngModel)]="total_amount" name="total_amount" class="form-control" [placeholder]="'Uy Minh'" required/>
+                  <input type="text" #totalAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="total_amount" name="total_amount" class="form-control" readonly/>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 form-control-label" for="text-input">Receive amount</label>
                 <div class="col-md-8">
-                  <input type="text" #receiveAmountControl="ngModel" [(ngModel)]="receive_amount" name="receive_amount" class="form-control" [placeholder]="'Uy Minh'" required/>
+                  <input type="text" #receiveAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="receive_amount" name="receive_amount" (ngModelChange)="calculateRemainAndReturnAmount($event)" class="form-control" required/>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 form-control-label" for="text-input">Pay amount</label>
                 <div class="col-md-8">
-                  <input type="text" #payAmountControl="ngModel" [(ngModel)]="pay_amount" name="pay_amount" class="form-control" [placeholder]="'Uy Minh'" required/>
+                  <input type="text" #payAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="pay_amount" name="pay_amount" class="form-control" (ngModelChange)="calculateRemainAndReturnAmount($event)" required/>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 form-control-label" for="text-input">Return amount</label>
                 <div class="col-md-8">
-                  <input type="text" #returnAmountControl="ngModel" [(ngModel)]="return_amount" name="return_amount" class="form-control" [placeholder]="'Uy Minh'" required/>
+                  <input type="text" #returnAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="return_amount" name="return_amount" class="form-control" readonly/>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 form-control-label" for="text-input">Remain amount</label>
                 <div class="col-md-8">
-                  <input type="text" #remainAmountControl="ngModel" [(ngModel)]="remain_amount" name="remain_amount" class="form-control" [placeholder]="'Uy Minh'" required/>
+                  <input type="text" #remainAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="remain_amount" name="remain_amount" class="form-control" readonly/>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-4 form-control-label" for="text-input">Giao hàng</label>
+                <label class="col-md-4 form-control-label" for="text-input">Tình trạng</label>
                 <div class="col-md-8">
-                  <input type="text" #shipFeeControl="ngModel" [(ngModel)]="ship_fee" name="ship_fee" class="form-control" [placeholder]="'Uy Minh'" required/>
+                  <input type="text" #paidTypeControl="ngModel" [(ngModel)]="paid_type" name="paid_type" class="form-control" readonly/>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 form-control-label" for="text-input">Kênh</label>
                 <div class="col-md-8">
-                  <input type="text" #channelControl="ngModel" [(ngModel)]="channel" name="channel" class="form-control" [placeholder]="'Uy Minh'" required/>
+                  <select id="channelSelect" #channelControl="ngModel" [(ngModel)]="channel" name="channel" class="form-control">
+                        <option *ngFor="let v of channels" [value]="v.code">
+                          {{v.name}}
+                        </option>
+                      </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <button class="btn btn-sm btn-primary btn-ladda mr-h float-center">Tạo đơn hàng</button>
                 </div>
               </div>
             </div>
@@ -96,13 +103,98 @@
         <tab>
           <ng-template tabHeading><i class="icon-eye"></i> Đơn hàng
           </ng-template>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="text-input">Số điện thoại</label>
+                <div class="col-md-8">
+                  <ng-select [multiple]="false" [items]="autocompleteCustomerData" (data)="refreshValue($event)" (selected)="selected($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Nhập khách hàng"></ng-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="text-input">Khách hàng</label>
+                <div class="col-md-8">
+                  <ng-select [multiple]="false" [items]="autocompleteCustomerData" (data)="refreshValue($event)" (selected)="selected($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Nhập khách hàng"></ng-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="text-input">Địa chỉ</label>
+                <div class="col-md-8">
+                  <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control" [placeholder]="'Nhập địa chỉ'" required autocorrect="off" autocapitalize="off" spellcheck="off" #addressInput>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="text-input">Giao hàng</label>
+                <div class="col-md-8">
+                  <input type="text" #shipFeeControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="shipFee" name="shipFee" class="form-control" required/>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="text-input">Giờ đặt hàng</label>
+                <div class="col-md-8">
+                  <input type="text" #shipFeeControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="deliveryTime" name="deliveryTime" class="form-control" required/>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="text-input">Ghi chú</label>
+                <div class="col-md-8">
+                  <input type="text" #noteControl="ngModel" [(ngModel)]="note" name="note" class="form-control" placeholder="Nhập ghi chú" required/>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="text-input">Mã khuyến mãi</label>
+                <div class="col-md-8">
+                  <select id="promotionSelect" #promotionControl="ngModel" [(ngModel)]="promotion" name="promotion" class="form-control">
+                        <option *ngFor="let v of promotionData | async" [value]="v.code">
+                          {{v.name}}
+                        </option>
+                      </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="text-input">Kênh</label>
+                <div class="col-md-8">
+                  <select id="channelOnlineSelect" #channelOnlineControl="ngModel" [(ngModel)]="channelOnline" name="channelOnline" class="form-control">
+                        <option *ngFor="let v of channelOnlines" [value]="v.code">
+                          {{v.name}}
+                        </option>
+                      </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="text-input">Hình thức nhận hàng</label>
+                <div class="col-md-8">
+                  <select id="deliveryMethodSelect" #deliveryMethodControl="ngModel" [(ngModel)]="deliveryMethod" name="deliveryMethod" class="form-control">
+                        <option *ngFor="let v of deliveryMethods" [value]="v.code">
+                          {{v.name}}
+                        </option>
+                      </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="text-input">Chi nhánh</label>
+                <div class="col-md-8">
+                  <select id="channelSelect" #branchControl="ngModel" [(ngModel)]="branch" name="branch" class="form-control">
+                        <option *ngFor="let v of branchData | async" [value]="v.id">
+                          {{v.name}}
+                        </option>
+                      </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <button class="btn btn-sm btn-primary btn-ladda mr-h float-center">Tạo đơn hàng</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </tab>
       </tabset>
     </form>
     <!-- </mat-toolbar> -->
   </mat-sidenav>
   <ng-sidebar-container>
-    <ng-sidebar class="pos-bottom-side" #posBottomSidebar style="backgroud-color:white" [opened]="true" position="bottom" mode="over" [dock]="true" dockedSize="20px">
+    <ng-sidebar class="pos-bottom-side" #posBottomSidebar style="backgroud-color:white" [opened]="true" position="bottom" mode="side" [dock]="true" dockedSize="20px">
       <div class="pos-bottom-dock-bar">
         <mat-icon (click)="posBottomSidebar.opened?posBottomSidebar.close():posBottomSidebar.open()">call_to_action</mat-icon>
       </div>
@@ -125,7 +217,7 @@
       <data-table #itemsTable class="order-item-table" [header]="false" indexColumnHeader="STT" [items]="selectedProduct" [pagination]="false" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true" [substituteRows]="false" [selectOnRowClick]="false"
         [expandableRows]="true">
         <template #dataTableExpand let-item="item" class="order-item-expand">
-            Content
+            <span (click)="getToppings(item.id)">Content</span>
         </template>
         <data-table-column header="Mã sản phẩm" width="120px">
           <template #dataTableCell let-item="item">
@@ -142,24 +234,43 @@
         <data-table-column header="Số lượng" width="100px">
           <template #dataTableCell let-item="item">
             <div class="cell-input">
-              <mat-form-field>
-                <input matInput type="number" #amount>
-              </mat-form-field>
+              <input type="number" class="form-control" [value]="item?.amount" #amount (keyup.enter)="updateAmount(item, amount.value)" (change)="updateAmount(item, amount.value)"/>
             </div>
           </template>
         </data-table-column>
         <data-table-column header="Đơn giá" width="120px">
           <template #dataTableCell let-item="item">
-            {{item?.price}}
+            {{item?.price | accounting}}
           </template>
         </data-table-column>
         <data-table-column header="Thành tiền" width="120px">
           <template #dataTableCell let-item="item">
-            {{item?.price}} - amount.value
+            {{item?.total | accounting}}
           </template>
+        </data-table-column>
+        <data-table-column header="Actions">
+          <template #dataTableCell let-item="item">
+                    <span class="btn-group">
+                        <button (click)="removeProduct(item)"
+                            type="button" class="btn btn-sm btn-danger btn-ladda"
+                            data-style="expand-right" [ladda]='item.deleting?true:false'><i class="icon-trash icons font-xl p-q d-block"></i></button>
+                    </span>
+                </template>
         </data-table-column>
       </data-table>
     </div>
 
   </ng-sidebar-container>
+
+  <!-- <ng-template let-data let-dialogRef="dialogRef">
+    <p *ngFor="let v of selectedTopping">v.name</p>
+    <mat-input-container>
+      <input matInput placeholder="How much?" #howMuch>
+    </mat-input-container>
+
+    <p> {{ data.message }} </p>
+    <button type="button" (click)="dialogRef.close(lastCloseResult = howMuch.value)">Close dialog</button>
+    <button (click)="dialogRef.updateSize('500px', '500px').updatePosition({ top: '25px', left: '25px' });">Change dimensions</button>
+  </ng-template> -->
+
 </mat-sidenav-container>

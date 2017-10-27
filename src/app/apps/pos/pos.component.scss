@@ -6,9 +6,14 @@
   bottom: 0;
   background-color: #ddd;
 
+  /deep/ .ng-sidebar--bottom {
+    transition: all 0.35s;
+    --webkit-transition: all 0.35s;
+  }
+
   .pos-right-side {
     width: 400px;
-    box-shadow: -1px 0px 0px 0px #aaaaaa;
+    box-shadow: -1px 0 0 0 #aaaaaa;
   }
 
   .pos-bottom-dock-bar {
@@ -97,45 +102,58 @@
     font-size: 14px;
   }
 
-  form{
-    padding-right: 0px;
+  form {
+    padding-right: 0;
   }
 
-  tabset{
+  tabset {
     width: 100%;
   }
 }
 
 .mat-sidenav {
-    min-width: 15vw;
+  min-width: 15vw;
 
-    .mat-button {
-      width: 100%;
-      position: relative;
-      bottom: 0;
-      margin: 24px 0;
-    }
+  .mat-button {
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    margin: 24px 0;
+  }
+}
+
+.demo-content {
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+.mat-toolbar {
+  .mat-icon {
+    cursor: pointer;
   }
 
-  .demo-content {
-    padding: 32px;
-    box-sizing: border-box;
+  button {
+    background: transparent;
+    border: 0;
   }
 
-  .mat-toolbar {
-    .mat-icon {
-      cursor: pointer;
-    }
-
-    button {
-      background: transparent;
-      border: 0;
-    }
-
-    .demo-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
+  .demo-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
+}
+
+.demo-dialog-card {
+  max-width: 405px;
+  margin: 20px 0;
+}
+
+/deep/ .mat-input-underline{
+    border-bottom: 1px solid #ffffff!important;
+}
+
+/deep/ .mat-input:focus{
+  border: none !important;
+}

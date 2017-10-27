@@ -5,7 +5,7 @@ import { InnowayService } from "app/services";
 import * as moment from 'moment';
 
 import { Globals } from './../../../globals';
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-bill-detail',
@@ -26,8 +26,8 @@ export class BillDetailComponent implements OnInit {
     }],
     bill_ship_detail: ['$all'],
     items: ['$all', {
-      product: ['$all','$paranoid'],
-      topping_values: ['$all','$paranoid']
+      product: ['$all', '$paranoid'],
+      topping_values: ['$all', '$paranoid']
     }],
     customer: ['$all']
   }];
@@ -46,7 +46,7 @@ export class BillDetailComponent implements OnInit {
   ngOnInit() {
 
     this.id = this.route.snapshot.params['id'];
-    console.log('bill detail',this.id)
+    console.log('bill detail', this.id)
     if (this.id) {
       this.setData()
     } else {
@@ -84,13 +84,13 @@ export class BillDetailComponent implements OnInit {
 
   detectChannelName(channel): string {
     let result = "";
-    result=this.globals.detectChannelByCode(channel);
+    result = this.globals.detectChannelByCode(channel);
     return result;
   }
 
   detectActionName(action): string {
     let result = "";
-    result=this.globals.detectBillActivityByCode(action);
+    result = this.globals.detectBillActivityByCode(action);
     return result;
   }
 
