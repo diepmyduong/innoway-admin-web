@@ -9,6 +9,7 @@ import * as Ajv from 'ajv';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 declare var swal, _: any;
+declare var $:any;
 
 @Component({
   selector: 'app-detail',
@@ -89,6 +90,10 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       this.alertItemNotFound()
       this.backToList()
     }
+
+    $.FroalaEditor.froalaEditor({
+      htmlAllowedAttrs: ['readonly','title', 'href', 'alt', 'src', 'style']
+    });
   }
 
   async setData() {

@@ -18,15 +18,6 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <div class="sample">
-            <div [froalaEditor] [(froalaModel)]="twoWayContent"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">
           <strong>Thông tin</strong>
         </div>
         <div class="card-block">
@@ -56,7 +47,7 @@
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
               <div class="col-md-8">
-                <textarea id="textarea-input" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
+                <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
               </div>
             </div>
             <div class="form-group row">

@@ -11,7 +11,8 @@ import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 import { TextMaskModule } from 'angular2-text-mask';
-import { FroalaComponent } from "app/apps/promotion/add/froala.component";
+
+import { FroalaComponent } from "app/editor/froala.component";
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 // import { FroalaComponent } from "app/apps/promotion/add/froala.component";
 @NgModule({

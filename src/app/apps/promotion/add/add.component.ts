@@ -32,7 +32,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   amount: number = 0;
   code: string;
   limit: number = 0;
-  description: string;
+  public description;
   startDate: string;
   endDate: string;
   value: number = 0;
@@ -41,9 +41,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   status: number = 1;
   customerTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   promotionTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-
-  // Sample 3 model
-  public twoWayContent;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -74,18 +71,6 @@ export class AddComponent implements OnInit, AddPageInterface {
     if (this.isEdit) {
       this.setData();
     }
-
-    // $.FroalaEditor.DefineIcon('alert', { NAME: 'info' });
-    // $.FroalaEditor.RegisterCommand('alert', {
-    //   title: 'Hello',
-    //   focus: false,
-    //   undo: false,
-    //   refreshAfterCallback: false,
-    //
-    //   callback: function() {
-    //     alert('Hello!');
-    //   }
-    // });
   }
 
   setDefaultData() {
@@ -96,6 +81,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.limit = 0
     this.amount = 0;
     this.code = null;
+    this.description='';
     if (this.promotionTypeData.getValue()[0]) {
       this.promotionType = this.promotionTypeData.getValue()[0].id;
     }
@@ -111,7 +97,8 @@ export class AddComponent implements OnInit, AddPageInterface {
       value: this.value,
       limit: this.limit,
       amount: this.amount,
-      code: this.code
+      code: this.code,
+      description: this.description
     }
   }
 

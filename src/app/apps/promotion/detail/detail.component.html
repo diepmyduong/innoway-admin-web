@@ -32,8 +32,7 @@
             <div class="form-group row">
               <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
               <div class="col-md-8">
-                <textarea id="textarea-input" [value]="item?.description" name="description"
-                  class="form-control" readonly></textarea>
+                  <textarea type="textarea" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control" [value]="item?.description" readonly></textarea>
               </div>
             </div>
             <div class="form-group row">

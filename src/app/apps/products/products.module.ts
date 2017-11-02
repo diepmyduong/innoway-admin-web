@@ -31,6 +31,9 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { PipesModule } from 'app/pipes/pipes.module'
 import { SwiperModule } from 'angular2-useful-swiper';
 
+import { FroalaComponent } from "app/editor/froala.component";
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -50,9 +53,11 @@ import { SwiperModule } from 'angular2-useful-swiper';
     DataTableModule,
     PipesModule,
     SwiperModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot(),
     // UploadImageByUrlComponent
   ],
-  declarations: [ProductsComponent, AddComponent, DetailComponent],  //UploadImageByUrlComponent
+  declarations: [ProductsComponent, AddComponent, DetailComponent,FroalaComponent],  //UploadImageByUrlComponent
   providers: []
 })
 export class ProductsModule { }
