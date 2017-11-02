@@ -1,17 +1,11 @@
 <div class="animated fadeIn">
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
       <div class="card">
         <div class="card-header">
           <strong>Ảnh đại diện</strong>
         </div>
         <div class="card-block">
-          <!-- <div class="col-md-12">
-            <img src="https://freeiconshop.com/wp-content/uploads/edd/person-flat.png" width="100%">
-          </div>
-          <div class="col-md-12 mt-h">
-            <input type="file" id="file-input" name="file-input">
-          </div> -->
           <div class="form-group row">
             <label class="col-md-3 form-control-label" for="text-input">Nhập avatar</label>
             <div class="col-md-9">
@@ -20,14 +14,17 @@
               class="text-muted danger" >
                 (Link không hợp lệ)
               </small>
-              <img *ngIf="avatarControl.value && avatarControl.valid" style="width:100%;"
+              <small *ngIf="avatarControl.errors?.required" class="text-muted danger">
+                (Không được bỏ trống)
+              </small>
+              <img *ngIf="avatarControl.value && avatarControl.valid" style="width:auto;height:80px;"
                 [src]="avatarControl.value" />
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
       <div class="card">
         <div class="card-header">
           <strong>Thông tin</strong>
@@ -38,18 +35,27 @@
               <label class="col-md-3 form-control-label" for="text-input">Họ và tên</label>
               <div class="col-md-9">
                 <input type="text" #fullnameControl="ngModel" [(ngModel)]="fullname" name="fullname" class="form-control" [placeholder]="'Nhập tên đăng nhập'" required>
+                <small *ngIf="fullnameControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Số điện thoại</label>
               <div class="col-md-9">
                 <input type="text" #phoneControl="ngModel" [(ngModel)]="phone" name="phone" class="form-control" [placeholder]="'Nhập số điện thoại'" required>
+                <small *ngIf="phoneControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="email-input">Email</label>
               <div class="col-md-9">
                 <input type="email" #emailControl="ngModel" [(ngModel)]="email" name="email" class="form-control" [placeholder]="'Nhập email'" required>
+                <small *ngIf="emailControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row">
@@ -61,7 +67,10 @@
             <div class="form-group row" *ngIf="!isEdit">
               <label class="col-md-3 form-control-label" for="password-input">Password</label>
               <div class="col-md-9">
-                <input type="password" #nameControl="ngModel" [(ngModel)]="password" name="password" class="form-control" [placeholder]="'Nhập password'" required>
+                <input type="password" #passwordControl="ngModel" [(ngModel)]="password" name="password" class="form-control" [placeholder]="'Nhập password'" required>
+                <small *ngIf="passwordControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row" *ngIf="!isEdit">
@@ -70,28 +79,6 @@
                 <input type="password" #repasswordControl="ngModel" [(ngModel)]="repassword" name="repassword" class="form-control" [placeholder]="'Xác nhận password'" required>
               </div>
             </div>
-            <!-- <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Địa chỉ</label>
-              <div class="col-md-9">
-                <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control" [placeholder]="'Nhập địa chỉ'">
-              </div>
-            </div> -->
-            <!-- <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input">Ngày sinh</label>
-              <div class="col-md-9">
-              <input type="text" #birthdayControl="ngModel" [(ngModel)]="birthday" name="birthday" class="form-control" [placeholder]="'Nhập ngày sinh'">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="select">Giới tính</label>
-              <div class="col-md-9">
-                <select id="genderSelect" #statusControl="ngModel" [(ngModel)]="gender" name="gender" class="form-control">
-                    <option *ngFor="let v of [0,1]" [value]="v">
-                      {{ v===1?"Nam":"Nữ"}}
-                    </option>
-                  </select>
-              </div>
-            </div> -->
             <hr>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Phân quyền</label>
@@ -103,13 +90,6 @@
                   </select>
               </div>
             </div>
-            <!-- <div class="form-group">
-              <select id="actionSelect" name="select" class="form-control" size="1" #action (change)="onChangeAction(action.value)">
-                <option *ngFor="let v of actions" [value]="v.action">
-                  {{v.name}}
-                </option>
-                          </select>
-            </div> -->
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
               <div class="col-md-9">
@@ -120,16 +100,6 @@
                   </select>
               </div>
             </div>
-            <!-- <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="select">Khu vực hoạt động</label>
-              <div class="col-md-9">
-                <select id="select" #areaControl="ngModel" [(ngModel)]="area" name="area" class="form-control">
-                    <option *ngFor="let v of areas" [value]="v.id">
-                      {{v.name}}
-                    </option>
-                  </select>
-              </div>
-            </div> -->
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Chi nhánh</label>
               <div class="col-md-9">
@@ -155,6 +125,5 @@
         </div>
       </div>
     </div>
-    <!--/.col-->
   </div>
 </div>
