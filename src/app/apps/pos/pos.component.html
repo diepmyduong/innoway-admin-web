@@ -41,9 +41,15 @@
                 </div>
               </div>
               <div class="form-group row">
+                <label class="col-md-4 form-control-label" for="text-input">Số điện thoại</label>
+                <div class="col-md-8">
+                  <ng-select #customerSelect [allowClear]="true" [multiple]="false" [items]="autocompleteCustomerData" (mouseleave)="addToItems()" (data)="refreshValue($event)" (typed)="onChangeCustomer($event)"  (data)="refreshValue($event)" (change)="test($event)" (selected)="selected($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Nhập số điện thoại khách hàng" style="  text-transform:none !important;"></ng-select>
+                </div>
+              </div>
+              <div class="form-group row">
                 <label class="col-md-4 form-control-label" for="text-input">Khách hàng</label>
                 <div class="col-md-8">
-                  <ng-select #customerSelect [allowClear]="true" [multiple]="false" [items]="autocompleteCustomerData" (mouseleave)="addToItems()" (data)="refreshValue($event)" (typed)="onChangeCustomer($event)"  (data)="refreshValue($event)" (change)="test($event)" (selected)="selected($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Nhập khách hàng"></ng-select>
+                  <ng-select #customerNameSelect [allowClear]="true" [multiple]="false" [items]="autocompleteCustomerNameData" (mouseleave)="addToNameItems()" (data)="refreshValueName($event)" (typed)="onChangeCustomerName($event)"  (data)="refreshValueName($event)" (change)="test($event)" (selected)="selectedName($event)" (removed)="removedName($event)" (input)="detectChangeNameSelect($event.target.value)" placeholder="Nhập tên khách hàng"></ng-select>
                 </div>
               </div>
               <div class="form-group row">
@@ -108,13 +114,13 @@
               <div class="form-group row">
                 <label class="col-md-4 form-control-label" for="text-input">Số điện thoại</label>
                 <div class="col-md-8">
-                  <ng-select [multiple]="false" [items]="autocompleteCustomerData" (data)="refreshValue($event)" (selected)="selected($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Nhập khách hàng"></ng-select>
+                  <ng-select [multiple]="false" [items]="autocompleteCustomerData" (data)="refreshValue($event)" (selected)="selected($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Nhập số điện thoại khách hàng"></ng-select>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 form-control-label" for="text-input">Khách hàng</label>
                 <div class="col-md-8">
-                  <ng-select [multiple]="false" [items]="autocompleteCustomerData" (data)="refreshValue($event)" (selected)="selected($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Nhập khách hàng"></ng-select>
+                  <ng-select [multiple]="false" [items]="autocompleteCustomerNameData" (data)="refreshValueName($event)" (selected)="selectedName($event)" (removed)="removedName($event)" (input)="detectChangeNameSelect($event.target.value)" placeholder="Nhập tên khách hàng"></ng-select>
                 </div>
               </div>
               <div class="form-group row">
@@ -202,9 +208,9 @@
         <div class="swiper-wrapper">
           <div class="swiper-slide row" style="pading:4px" *ngFor="let v of productData | async">
             <div class="col-md-12 product-time" (click)="addProduct(v)">
-              <img src={{v.thumb}} style="width: auto;height:80px" />
+              <img src={{v.thumb}} style="width: 80px;height:80px" />
               <br>
-              <span>{{ v.name }} </span>
+              <span style="white-space: pre;">{{ v.name }} </span>
               <br>
               <span>{{ v.price | accounting}}</span>
             </div>

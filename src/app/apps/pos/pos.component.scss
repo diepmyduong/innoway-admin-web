@@ -157,3 +157,7 @@
 /deep/ .mat-input:focus{
   border: none !important;
 }
+
+ng-select, span, .btn{
+  text-transform:none !important;
+}
