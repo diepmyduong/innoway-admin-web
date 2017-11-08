@@ -445,7 +445,7 @@ export class Globals {
         case 'BILL_CANCELLED_AT_DELIVERING': {
           break;
         }
-        case 'BILL_PAID': {
+        case 'c': {
           subRules = [
             this.BILL_ACTIVITY_OPTIONS[11],
           ];
