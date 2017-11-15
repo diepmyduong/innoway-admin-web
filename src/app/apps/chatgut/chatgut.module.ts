@@ -21,7 +21,9 @@ import {
   MatOptionModule,
   MatChipsModule,
   MatSlideToggleModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatCheckboxModule,
+  MatRadioModule,
 }from '@angular/material'
 
 import { ChatgutRoutingModule } from './chatgut-routing.module';
@@ -76,6 +78,8 @@ import { GenericCategoriesCardComponent } from './cards/generic-categories-card/
     MatChipsModule,
     MatSlideToggleModule,
     MatProgressBarModule,
+    MatCheckboxModule,
+    MatRadioModule
   ],
   declarations: [ChatgutComponent, PortalContainerComponent, StoriesPortalComponent, StoryDetailPortalComponent, TextCardComponent, CardContainerComponent, ImageCardComponent, VideoCardComponent, AudioCardComponent, ButtonsCardComponent, ButtonContainerComponent, UrlButtonComponent, PostbackButtonComponent, PhoneButtonComponent, GenericCardComponent, SettingsPortalComponent, MenuPortalComponent, MenuCardComponent, NestedButtonComponent, GreetingPortalComponent, WhiteListPortalComponent, DomainComponent, QuickReplyCardComponent, TextQuickReplyButtonComponent, GenericCategoriesCardComponent],
   entryComponents: [StoriesPortalComponent,StoryDetailPortalComponent,TextCardComponent,ImageCardComponent,VideoCardComponent,AudioCardComponent,ButtonsCardComponent,UrlButtonComponent,PostbackButtonComponent,PhoneButtonComponent,GenericCardComponent,SettingsPortalComponent,MenuPortalComponent,MenuCardComponent,NestedButtonComponent,GreetingPortalComponent,WhiteListPortalComponent,QuickReplyCardComponent,TextQuickReplyButtonComponent,GenericCategoriesCardComponent]

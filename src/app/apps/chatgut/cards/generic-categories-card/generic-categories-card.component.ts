@@ -51,7 +51,6 @@ export class GenericCategoriesCardComponent extends BaseCard implements OnInit {
 
 
   ngOnInit() {
-    console.log('generic categories card', this.card)
     if(!this.card.option.query) this.card.option.query = {}
     if(!this.card.option.query.filter) this.card.option.query.filter = {}
     this.updateCardState()

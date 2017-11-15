@@ -85,6 +85,7 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
   }
 
   loadCardToView(card: iCard) {
+    
     switch (card.type) {
       case "action":
         break
@@ -227,9 +228,32 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
     this.hideLoading()
   }
 
-  addGenericCard() {
+  async addGenericCard() {
     this.showLoading()
-    this.cardContainer.pushCardComp(Cards.GenericCardComponent)
+    const card = await this.chatbotApi.story.addCard(this.storyId, {
+      type: "generic",
+      option: {
+        attachment: {
+          type: "template",
+          payload: {
+            template_type: "generic",
+            elements: [{
+              title: "Tiêu đề",
+              subtitle: "Mô tả ngắn",
+              image_url: "http://material.angular.io/assets/img/examples/shiba2.jpg",
+              buttons: [{
+                type: "web_url",
+                title: "Nút Web URL",
+                url: "https://google.com"
+              }]
+            }]
+          }
+        }
+      }
+    })
+    let cards = this.story.cards as string[]
+    cards.push(card._id)
+    this.cardContainer.pushCardComp(Cards.GenericCardComponent, { card })
     this.hideLoading()
   }
 
