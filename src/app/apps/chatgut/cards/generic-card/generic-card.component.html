@@ -7,7 +7,7 @@
     <mat-icon [matMenuTriggerFor]="cardMenu" class="icon-btn">more_vert</mat-icon>
     <mat-menu #cardMenu="matMenu">
       <button mat-menu-item (click)="addElement()">Thêm hình</button>
-      <button mat-menu-item (click)="close()">Xoá</button>
+      <button mat-menu-item (click)="remove()">Xoá</button>
     </mat-menu>
   </mat-card-header>
   <form #cardFrm="ngForm">
