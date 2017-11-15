@@ -20,6 +20,7 @@
         "scss/style.scss"
       ],
       "scripts": [
+        "../node_modules/popper.js/dist/popper.min.js",
         "../node_modules/chart.js/dist/Chart.bundle.min.js",
         "../node_modules/chart.js/dist/Chart.min.js",
         "../node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.min.js"

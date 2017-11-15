@@ -27,7 +27,7 @@ import { ServicesModule } from './services';
 
 import { ModalModule } from 'ng2-bootstrap/modal';
 import { SharedModule } from './shared/shared.module'
-import { LayoutsModule } from './layouts/layouts.module'
+import { LayoutsModule } from './layouts/layouts.module';
 
 
 

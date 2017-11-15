@@ -1,0 +1,10 @@
+.add-button {
+    width:100%;
+    .mat-list-item {
+        text-align: center;
+    }
+}
+
+/deep/ .mat-card {
+    padding: 16px;
+}

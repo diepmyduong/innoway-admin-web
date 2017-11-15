@@ -12,7 +12,7 @@ import { SIDEBAR_TOGGLE_DIRECTIVES} from './sidebar.directive'
   imports: [
     CommonModule,
     TabsModule,
-    RouterModule
+    RouterModule,
   ],
   declarations: [
     NAV_DROPDOWN_DIRECTIVES,
@@ -26,7 +26,7 @@ import { SIDEBAR_TOGGLE_DIRECTIVES} from './sidebar.directive'
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
     TabsModule,
-    RouterModule
+    RouterModule,
   ]
 })
 export class SharedModule { }

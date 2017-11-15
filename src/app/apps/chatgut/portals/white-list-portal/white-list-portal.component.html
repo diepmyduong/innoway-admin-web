@@ -1,0 +1,18 @@
+<div class="portal" style="width:500px" (click)="focus()">
+  <mat-toolbar color="success" class="portal-header">
+    <span>Danh sách tên miền cho phép</span>
+    <span class="header-spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="whiteListMenu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #whiteListMenu="matMenu">
+      <button mat-menu-item (click)="addDomain()">Thêm tên miền</button>
+    </mat-menu>
+    <mat-icon class="icon-btn" (click)="close()">close</mat-icon>
+  </mat-toolbar>
+  <div class="portal-content-block">
+    <mat-nav-list>
+      <app-domain *ngFor="let url of domains" [url]="url"></app-domain>
+    </mat-nav-list>
+  </div>
+</div>

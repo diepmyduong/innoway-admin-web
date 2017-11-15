@@ -1,0 +1,10 @@
+<mat-list-item>
+  <a matLine href="javascript:;" (click)="whiteList.editDomain(url)">{{url}}</a>
+  <button mat-icon-button [matMenuTriggerFor]="domainMenu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #domainMenu="matMenu">
+    <button mat-menu-item (click)="whiteList.editDomain(url)">Thay đổi tên miền</button>
+    <button mat-menu-item (click)="whiteList.removeDomain(url)">Xoá</button>
+  </mat-menu>
+</mat-list-item>

@@ -1,0 +1,31 @@
+<div class="portal" [style.width]="mode == 'list'?'300px':'400px'" (click)="focus()">
+
+  <mat-toolbar color="success" class="portal-header">
+    <span *ngIf="mode == 'list'">Danh sách câu truyện</span>
+    <span *ngIf="mode == 'select'">Chọn câu truyện</span>
+    <span class="header-spacer"></span>
+    <mat-slide-toggle *ngIf="mode == 'select'" #saveSelectToggle checked="false" disabled="true" labelPosition="before" (change)="onSaveSelect($event)">Lưu</mat-slide-toggle>
+    <mat-icon [matMenuTriggerFor]="headerMenu" class="icon-btn">more_vert</mat-icon>
+    <mat-menu #headerMenu="matMenu">
+      <button mat-menu-item (click)="addStory()">Thêm cốt truyện</button>
+    </mat-menu>
+    <mat-icon class="icon-btn" (click)="close()">close</mat-icon>
+  </mat-toolbar>
+  <mat-progress-bar [hidden]="!progressBar.show" class="portal-progress-bar" [color]="progressBar.color" [mode]="progressBar.mode" [value]="progressBar.value"
+    [bufferValue]="progressBar.buffer">
+  </mat-progress-bar>
+  <div class="portal-content-block">
+    <mat-list *ngIf="mode == 'list'">
+      <button mat-button class="story-item" *ngFor="let story of stories" (click)="openStory(story)">
+        <mat-list-item>
+          <h3 matLine class="story-name"> {{story.name}} </h3>
+        </mat-list-item>
+      </button>
+    </mat-list>
+    <mat-selection-list #storySelection *ngIf="mode == 'select'">
+      <mat-list-option *ngFor="let story of stories" checkboxPosition="before" #option (click)="selectStory(option)" [value]="story">
+        <h3 matLine class="story-name"> {{story.name}} </h3>
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+</div>

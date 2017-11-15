@@ -1,0 +1,29 @@
+<div class="portal" style="width:300px" (click)="focus()">
+  <mat-toolbar color="success" class="portal-header">
+    <span>Thiết lập Chatbot</span>
+    <span class="header-spacer"></span>
+    <mat-icon class="icon-btn" (click)="close()">close</mat-icon>
+  </mat-toolbar>
+  <div class="portal-content-block">
+    <mat-nav-list>
+      <mat-list-item (click)="openMenu()">
+        <a matLine href="javascript:;">Thanh điều hướng</a>
+      </mat-list-item>
+      <mat-list-item (click)="openGreeting()">
+        <a matLine href="javascript:;">Lời chào</a>
+      </mat-list-item>
+      <mat-list-item >
+        <a matLine href="javascript:;" (click)="openGetStarted()">Câu truyện đầu tiên</a>
+        <button mat-icon-button [matMenuTriggerFor]="getStartedMenu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #getStartedMenu="matMenu">
+          <button mat-menu-item (click)="editGetStartedStory()">Chọn lại câu truyện</button>
+        </mat-menu>
+      </mat-list-item>
+      <mat-list-item (click)="openWhitelist()">
+        <a matLine href="javascript:;">Danh sách trắng</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </div>
+</div>

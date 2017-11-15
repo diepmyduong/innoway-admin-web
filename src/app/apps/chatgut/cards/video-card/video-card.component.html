@@ -1,0 +1,23 @@
+<mat-card mat-list-item>
+  <mat-card-header>
+    <mat-card-title>Video</mat-card-title>
+    <span class="header-spacer"></span>
+    <mat-slide-toggle #saveToggle [checked]="cardFrm.pristine" [disabled]="cardFrm.pristine" labelPosition="before" (change)="onSave(cardFrm,$event)">
+    Lưu</mat-slide-toggle>
+    <mat-icon [matMenuTriggerFor]="cardMenu" class="icon-btn">more_vert</mat-icon>
+    <mat-menu #cardMenu="matMenu">
+      <button mat-menu-item (click)="remove()">Xoá</button>
+    </mat-menu>
+  </mat-card-header>
+  <video mat-card-image controls>
+    <source [src]="card.option.attachment.payload.url">
+  </video>
+  <mat-card-content>
+    <form #cardFrm="ngForm">
+      <mat-form-field class="text-input-field">
+        <input #urlControl="ngModel" [(ngModel)]="card.option.attachment.payload.url" name="url" matInput placeholder="Video Url">
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+</mat-card>
+<mat-divider></mat-divider>

@@ -1,0 +1,35 @@
+<mat-card mat-list-item>
+  <mat-card-header>
+    <mat-card-title>Menu</mat-card-title>
+    <span class="header-spacer"></span>
+  </mat-card-header>
+  <mat-card-content>
+    <swiper class="element-container" [config]="swiperOptions" #swiper>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-wrapper">
+        <div class="swiper-slide element">
+          <mat-card>
+            <app-button-container #firstMenu [validButtons]="validButtons" [container]="container" [limit]="3" [menuIndex]="1" [menuComp]="self" (onButtonClick)="onClickMenuItem($event)"></app-button-container>
+          </mat-card>
+        </div>
+        <div class="swiper-slide element" *ngIf="activeMenu >= 2">
+          <mat-card>
+            <app-button-container #secondMenu [validButtons]="validButtons" [container]="container" [limit]="5" [menuIndex]="2" [menuComp]="self" (onButtonClick)="onClickMenuItem($event)"></app-button-container>
+          </mat-card>
+        </div>
+        <div class="swiper-slide element" *ngIf="activeMenu >= 3">
+          <mat-card>
+            <app-button-container #thirdMenu [validButtons]="lastValidButtons" [container]="container" [limit]="5" [menuIndex]="3" [menuComp]="self" (onButtonClick)="onClickMenuItem($event)"></app-button-container>
+          </mat-card>
+        </div>
+      </div>
+      <!-- Add Pagination -->
+      <div class="swiper-pagination menu-pagination"></div>
+      <!-- Add Arrows -->
+      <div class="swiper-button-next menu-button-next" ></div>
+      <div class="swiper-button-prev menu-button-prev"></div>
+    </swiper>
+
+  </mat-card-content>
+</mat-card>
+<mat-divider></mat-divider>

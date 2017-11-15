@@ -3,7 +3,7 @@ import { FullLayoutComponent } from './full-layout/full-layout.component'
 import { SimpleLayoutComponent } from './simple-layout/simple-layout.component'
 
 import { FullLayoutRouting } from './full-layout/routing'
-import { SimpleLayoutRouting, PosLayoutRouting } from './simple-layout/routing'
+import { SimpleLayoutRouting, PosLayoutRouting, ChatGutLayoutRouting } from './simple-layout/routing'
 import { ChatbotLayoutRouting } from './chatbot-layout/routing'
 import { LauncherLayoutRouting } from './launcher-layout/routing'
 
@@ -17,4 +17,5 @@ export {
     ChatbotLayoutRouting,
     LauncherLayoutRouting,
     PosLayoutRouting,
+    ChatGutLayoutRouting,
 }

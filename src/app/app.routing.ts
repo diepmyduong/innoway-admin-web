@@ -15,6 +15,7 @@ export const routes: Routes = [
   layout.ChatbotLayoutRouting,
   layout.LauncherLayoutRouting,
   layout.PosLayoutRouting,
+  layout.ChatGutLayoutRouting,
   // {
   //   path: '**',
   //   redirectTo: '404'

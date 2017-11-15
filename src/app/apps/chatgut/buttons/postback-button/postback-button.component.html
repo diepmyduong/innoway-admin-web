@@ -1,0 +1,14 @@
+<mat-list-item color="primary">
+  <a matLine href="javascript:;" *ngIf="readOnly">{{button?.title}}</a>
+  <a matLine href="javascript:;" *ngIf="!readOnly" (click)="defaultAction()">{{button?.title}}</a>
+  <button mat-icon-button [matMenuTriggerFor]="buttonMenu" *ngIf="!readOnly">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #buttonMenu="matMenu">
+    <button mat-menu-item (click)="editTitle()">Thay đổi tiêu đề</button>
+    <button mat-menu-item (click)="editStory()">Thay đổi câu truyện</button>
+    <button mat-menu-item (click)="close()">Xoá</button>
+  </mat-menu>
+
+</mat-list-item>
+<mat-divider></mat-divider>
