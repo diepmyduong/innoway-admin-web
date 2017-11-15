@@ -1,0 +1,18 @@
+<h2>Danh sách topping</h2>
+<ul>
+  <li *ngFor="let task of toppingsData">
+    <mat-checkbox [(ngModel)]="task.completed"
+                 [checked]="allComplete(task)"
+                 [indeterminate]="someComplete(task.subtasks)"
+                 (change)="setAllCompleted(task.subtasks, $event.checked)">
+      <h3>{{task.name}}</h3>
+    </mat-checkbox>
+    <ul>
+      <li *ngFor="let subtask of task.subtasks">
+        <mat-checkbox [(ngModel)]="subtask.completed" (change)="updateStatus(subtask, $event)"> 
+          {{subtask.name}}
+        </mat-checkbox>
+      </li>
+    </ul>
+  </li>
+</ul>

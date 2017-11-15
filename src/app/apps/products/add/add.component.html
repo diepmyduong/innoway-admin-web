@@ -1,7 +1,7 @@
 <div class="animated fadeIn">
   <form #itemFrm="ngForm">
     <div class="row">
-      <div class="col-md-7">
+      <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
             <div class="card">
@@ -21,7 +21,7 @@
                 <div class="form-group row">
                   <label class="col-md-3 form-control-label" for="textarea-input">Mô tả</label>
                   <div class="col-md-9">
-                    <textarea id="textarea-input" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
+                      <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
                   </div>
                 </div>
               </div>
@@ -121,6 +121,18 @@
               </div>
             </div>
           </div>
+
+          <div class="col-md-12" *ngIf="thumb">
+            <div class="card">
+              <div class="card-header">
+                <strong>Ảnh đại diện</strong>
+              </div>
+              <div class="card-block" style="text-align: center">
+                <img style="width: 100px; height: 100px;" [src]="thumb" />
+              </div>
+            </div>
+          </div>
+
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
@@ -153,7 +165,7 @@
         </div>
       </div>
       <!--/.col-->
-      <div class="col-md-5">
+      <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
             <div class="card">
@@ -202,17 +214,6 @@
                     <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Barcode">
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12" *ngIf="thumb">
-            <div class="card">
-              <div class="card-header">
-                <strong>Ảnh đại diện</strong>
-              </div>
-              <div class="card-block" style="text-align: center">
-                <img style="width: 100px; height: 100px;" [src]="thumb" />
               </div>
             </div>
           </div>

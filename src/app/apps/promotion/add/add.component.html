@@ -32,9 +32,22 @@
               </div>
             </div>
             <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="textarea-input">Hình ảnh</label>
+              <div class="col-md-8">
+                <input type="text" #imageControl="ngModel" [(ngModel)]="image" name="image" url
+                  class="form-control" [placeholder]="image?'':'Nhập url'"/>
+                  <small *ngIf="imageControl.errors?.url"
+                  class="text-muted danger" >
+                    (Link không hợp lệ)
+                  </small>
+                  <img *ngIf="imageControl.value && imageControl.valid" style="width:auto;height:80px;"
+                    [src]="imageControl.value" />
+              </div>
+            </div>
+            <div class="form-group row">
               <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
               <div class="col-md-8">
-                <textarea id="textarea-input" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
+                <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
               </div>
             </div>
             <div class="form-group row">
@@ -143,6 +156,9 @@
           </button>
           <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
             Update &amp; Close
+          </button>
+          <button (click)="send()" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda">
+            Send
           </button>
         </div>
       </div>

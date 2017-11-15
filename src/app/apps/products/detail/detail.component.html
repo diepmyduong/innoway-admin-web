@@ -21,7 +21,7 @@
                 <div class="form-group row">
                   <label class="col-md-3 form-control-label" for="textarea-input">Mô tả</label>
                   <div class="col-md-9">
-                    <textarea id="textarea-input" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control" readonly></textarea>
+                    <textarea type="textarea" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control" [value]="item?.description" readonly></textarea>
                   </div>
                 </div>
               </div>

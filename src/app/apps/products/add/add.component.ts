@@ -28,7 +28,7 @@ export class AddComponent implements OnInit {
   productTypeService: any;
 
   name: string;
-  description: string;
+  public description;
   category: string;
   product_type: string;
   status: number = 1;
@@ -104,6 +104,7 @@ export class AddComponent implements OnInit {
     this.status = 1;
     this.price = '0';
     this.base_price = '0';
+    this.description= '';
     if (this.categories.getValue()[0]) {
       this.category = this.categories.getValue()[0].id;
     }
@@ -126,7 +127,8 @@ export class AddComponent implements OnInit {
       status: this.status,
       category: this.category,
       price: this.price,
-      base_price: this.base_price
+      base_price: this.base_price,
+      description: this.description
     }
   }
 

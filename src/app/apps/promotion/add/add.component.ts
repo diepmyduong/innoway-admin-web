@@ -7,7 +7,8 @@ import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { NgForm } from "@angular/forms";
 import { Globals } from "./../../../Globals"
 
-declare let swal: any
+declare let swal: any;
+// declare var $: any;
 
 @Component({
   selector: 'app-add',
@@ -31,7 +32,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   amount: number = 0;
   code: string;
   limit: number = 0;
-  description: string;
+  public description;
   startDate: string;
   endDate: string;
   value: number = 0;
@@ -49,6 +50,10 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.customerTypeService = innoway.getService('customer_type');
     this.promotionTypeService = innoway.getService('promotion_type');
     this.customerTypePromotionService = innoway.getService('customer_type_promotion');
+  }
+
+  changeText(event){
+    console.log("bambi change text: "+JSON.stringify(event));
   }
 
   async ngOnInit() {
@@ -76,6 +81,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.limit = 0
     this.amount = 0;
     this.code = null;
+    this.description='';
     if (this.promotionTypeData.getValue()[0]) {
       this.promotionType = this.promotionTypeData.getValue()[0].id;
     }
@@ -91,7 +97,8 @@ export class AddComponent implements OnInit, AddPageInterface {
       value: this.value,
       limit: this.limit,
       amount: this.amount,
-      code: this.code
+      code: this.code,
+      description: this.description
     }
   }
 
@@ -102,7 +109,7 @@ export class AddComponent implements OnInit, AddPageInterface {
           promotion_type: ["id", "name"], customer_types: ["$all"]
         }]
       });
-      // alert(JSON.stringify(data));
+      console.log(JSON.stringify(data));
       this.name = data.name
       this.amount = data.amount
       this.code = data.code
@@ -214,13 +221,18 @@ export class AddComponent implements OnInit, AddPageInterface {
       let start_date = new Date(this.startDate);
       let end_date = new Date(this.endDate);
       let customer_type_id = this.customerType;
-      let promotion = await this.promotionService.add({ name, amount, code, limit, description, start_date, end_date, value, customer_type_id, status })
-      // let promotion_id = promotion.id;
-      // await this.customerTypePromotionService.add({ customer_type_id, promotion_id });
+      let promotion_type_id = this.promotionType;
+      let promotion = await this.promotionService.add({ name, amount, code, limit, description, start_date, end_date, value, promotion_type_id, status })
+
+      let customer_type_ids: string[] = [];
+      customer_type_ids.push(customer_type_id);
+      await this.promotionService.addCustomerTypes(promotion.id, customer_type_ids);
+
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
     } else {
+      // alert(form.valid + " ---- " + this.detectDate(this.startDate, this.endDate));
       this.alertFormNotValid();
     }
   }
@@ -276,6 +288,13 @@ export class AddComponent implements OnInit, AddPageInterface {
     } finally {
       this.submitting = false;
     }
+  }
+
+  async send() {
+    let customer_type_ids: string[] = [];
+    // alert(JSON.stringify(this.customerType));
+    // customer_type_ids.push(this.customerType);
+    await this.promotionService.sendPromotionToMessenger(this.id, "BCSBCS");
   }
 
 }

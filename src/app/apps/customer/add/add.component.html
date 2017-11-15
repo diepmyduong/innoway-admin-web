@@ -1,7 +1,7 @@
 <div class="animated fadeIn">
   <form #itemFrm="ngForm">
     <div class="row">
-      <div class="col-md-5">
+      <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
             <div class="card">
@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-7">
+      <div class="col-md-12">
         <div class="card">
           <div class="card-header">
             <strong>Thông tin</strong>
@@ -37,6 +37,9 @@
               <label class="col-md-3 form-control-label" for="text-input">Số điện thoại</label>
               <div class="col-md-9">
                 <input type="text" #phoneControl="ngModel" [(ngModel)]="phone" name="phone" class="form-control" [placeholder]="'Nhập số điện thoại'" required>
+                <small *ngIf="phoneControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row">
@@ -56,7 +59,7 @@
               <div class="col-md-9">
                 <input type="password" #repasswordControl="ngModel" [(ngModel)]="repassword" name="repassword" class="form-control" [placeholder]="'Xác nhận password'">
               </div>
-            </div>      
+            </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Ngày sinh</label>
               <div class="col-md-9">

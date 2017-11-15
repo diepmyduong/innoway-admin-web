@@ -46,6 +46,17 @@ export class Globals {
     }
   ]
 
+  DELIVERY_METHODS = [
+    {
+      code: "DELIVERY",
+      name: "Giao hàng"
+    },
+    {
+      code: "PICK_AT_STORE",
+      name: "Nhận tại quán"
+    }
+  ]
+
   public detectPromotionTypeByCode(code: string): any {
     let result = null;
     this.PROMOTION_TYPES.forEach(type => {
@@ -434,7 +445,7 @@ export class Globals {
         case 'BILL_CANCELLED_AT_DELIVERING': {
           break;
         }
-        case 'BILL_PAID': {
+        case 'c': {
           subRules = [
             this.BILL_ACTIVITY_OPTIONS[11],
           ];
@@ -596,6 +607,19 @@ export class Globals {
     }
   ];
 
+  public detectBillActivityByCode(code: string): any {
+    let result = null;
+    if (code == null || code == '') {
+      result = null;
+    }
+    this.BILL_ACTIVITIES.forEach(activity => {
+      if (activity.code == code) {
+        result = activity.name;
+      }
+    });
+    return result;
+  }
+
   public getBillActivitiesOnDashboardLayout(): any {
     let activities: Array<any> = new Array<any>();
     activities.push(this.BILL_ACTIVITIES[0]);
@@ -699,19 +723,6 @@ export class Globals {
           break;
         }
     }
-    return result;
-  }
-
-  public detectBillActivityByCode(code: string): any {
-    let result = null;
-    if (code == null || code == '') {
-      result = null;
-    }
-    this.BILL_ACTIVITIES.forEach(activity => {
-      if (activity.code == code) {
-        result = activity.name;
-      }
-    });
     return result;
   }
 

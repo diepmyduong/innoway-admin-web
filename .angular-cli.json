@@ -17,13 +17,18 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
-        "scss/style.scss"
+        "scss/style.scss",
+        "../node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+        "../node_modules/froala-editor/css/froala_style.min.css",
+        "../node_modules/font-awesome/css/font-awesome.css"
       ],
       "scripts": [
         "../node_modules/popper.js/dist/popper.min.js",
         "../node_modules/chart.js/dist/Chart.bundle.min.js",
         "../node_modules/chart.js/dist/Chart.min.js",
-        "../node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.min.js"
+        "../node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.min.js",
+        "../node_modules/jquery/dist/jquery.min.js",
+        "../node_modules/froala-editor/js/froala_editor.pkgd.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
