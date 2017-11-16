@@ -5,6 +5,7 @@ import { SidebarModule } from 'ng-sidebar';
 import { SwiperModule } from 'angular2-useful-swiper';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Ng2DragDropModule } from 'ng2-drag-drop';
 import { 
   MatToolbarModule,
   MatSidenavModule,
@@ -62,6 +63,7 @@ import { GenericCategoriesCardComponent } from './cards/generic-categories-card/
     NgbModule,
     DataTableModule,
     FormsModule, ReactiveFormsModule,
+    Ng2DragDropModule,
     MatToolbarModule,
     MatSidenavModule,
     MatIconModule,

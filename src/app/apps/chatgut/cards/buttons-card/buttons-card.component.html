@@ -1,4 +1,4 @@
-<mat-card mat-list-item>
+<mat-card mat-list-item draggable [dragData]="index" droppable (onDrop)="onCardDrop($event)" [dragScope]="card.story + '-' + portalIndex" [dropScope]="card.story + '-' + portalIndex">
   <mat-card-header>
     <mat-card-title>Nút</mat-card-title>
     <span class="header-spacer"></span>

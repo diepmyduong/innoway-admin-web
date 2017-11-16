@@ -28,6 +28,11 @@ export class PortalContainerComponent implements OnInit {
         el: '.portal-scrollbar',
         draggable: true,
       },
+      simulateTouch: false,
+      mousewheel: {
+        eventsTarged: '.portal-scrollbar',
+        sensitivity: 2
+      }
     }
     this.portals = []
     this.portalInited = new BehaviorSubject<number>(-1)

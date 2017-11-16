@@ -4,10 +4,11 @@
       <mat-form-field class="header-spacer">
         <input matInput #storyNameInput="ngModel" [(ngModel)]="story.name" name="name">
       </mat-form-field>
-      <mat-slide-toggle [checked]="storyFrm.pristine" [disabled]="storyFrm.pristine" (change)="onSave(storyFrm,$event)" labelPosition="before">Lưu</mat-slide-toggle>
+      <mat-slide-toggle #saveToggle [checked]="storyFrm.pristine" [disabled]="storyFrm.pristine" (change)="onSave(storyFrm,$event)" labelPosition="before">Lưu</mat-slide-toggle>
       <mat-icon [matMenuTriggerFor]="headerMenu" class="icon-btn">more_vert</mat-icon>
       <mat-menu #headerMenu="matMenu">
         <button mat-menu-item [matMenuTriggerFor]="cardMenu">Thêm card</button>
+        <button mat-menu-item (click)="removeStory()">Xoá câu truyện</button>
       </mat-menu>
       <mat-menu #cardMenu="matMenu">
         <button mat-menu-item (click)="addTextCard()">Text</button>

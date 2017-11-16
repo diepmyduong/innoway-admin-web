@@ -10,7 +10,7 @@ declare var swal:any
 @Component({
   selector: 'app-text-card',
   templateUrl: './text-card.component.html',
-  styleUrls: ['./text-card.component.scss']
+  styleUrls: ['./text-card.component.scss'],
 })
 export class TextCardComponent extends BaseCard implements OnInit {
 
@@ -94,5 +94,7 @@ export class TextCardComponent extends BaseCard implements OnInit {
       data: this.card
     })
   }
+
+  
 
 }

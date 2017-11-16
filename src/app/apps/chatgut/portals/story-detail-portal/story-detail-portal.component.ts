@@ -4,7 +4,7 @@ import { PortalContainerComponent } from '../portal-container/portal-container.c
 import { MatInput } from '@angular/material'
 import { ChatbotApiService, iStory, iCard } from 'app/services/chatbot'
 import { NgForm } from '@angular/forms'
-import { MatSlideToggleChange } from '@angular/material'
+import { MatSlideToggleChange, MatSlideToggle } from '@angular/material'
 import * as Cards from '../../cards'
 import * as _ from 'lodash'
 import * as Ajv from 'ajv'
@@ -20,6 +20,7 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
   @Input() mode: "story" | "get_started" = "story"
   @ViewChild("storyNameInput", { read: MatInput }) storyNameInput: MatInput
   @ViewChild("cardContainer", { read: Cards.CardContainerComponent }) cardContainer: Cards.CardContainerComponent
+  @ViewChild('saveToggle', { read: MatSlideToggle }) saveToggle: MatSlideToggle
   constructor(
     @Host() container: PortalContainerComponent,
     public chatbotApi: ChatbotApiService
@@ -46,6 +47,7 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
     }
     this.story = Object.assign({}, story)
     this.updateStoryState()
+    console.log('load cards', this.story.cards)
     for (let card of this.story.cards as string[]) {
       const cardObject = await this.chatbotApi.card.getItem(card, { local: true, reload: true })
       this.loadCardToView(cardObject)
@@ -85,7 +87,7 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
   }
 
   loadCardToView(card: iCard) {
-    
+
     switch (card.type) {
       case "action":
         break
@@ -93,28 +95,28 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
         this.cardContainer.pushCardComp(Cards.TextCardComponent, { card }, false)
         break
       case 'image':
-        this.cardContainer.pushCardComp(Cards.ImageCardComponent, { card },false)
+        this.cardContainer.pushCardComp(Cards.ImageCardComponent, { card }, false)
         break
       case 'audio':
-        this.cardContainer.pushCardComp(Cards.AudioCardComponent, { card },false)
+        this.cardContainer.pushCardComp(Cards.AudioCardComponent, { card }, false)
         break
       case "video":
-        this.cardContainer.pushCardComp(Cards.VideoCardComponent, { card },false)
+        this.cardContainer.pushCardComp(Cards.VideoCardComponent, { card }, false)
         break
       case "file":
         break
       case "generic":
-        this.cardContainer.pushCardComp(Cards.GenericCardComponent, { card },false)
+        this.cardContainer.pushCardComp(Cards.GenericCardComponent, { card }, false)
         break
       case "button":
-        this.cardContainer.pushCardComp(Cards.ButtonsCardComponent, { card },false)
+        this.cardContainer.pushCardComp(Cards.ButtonsCardComponent, { card }, false)
         break
       case "list":
         break
       case "receipt":
         break
       case "generic_categories":
-        this.cardContainer.pushCardComp(Cards.GenericCategoriesCardComponent, { card },false)
+        this.cardContainer.pushCardComp(Cards.GenericCategoriesCardComponent, { card }, false)
         break
       case "generic_products":
         break
@@ -264,11 +266,27 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
   }
 
   async onCardChange(change: Cards.iOnCardsChange) {
-    if(change.status === "remove") {
+    if (change.status === "remove") {
       this.showLoading()
       let story = await this.reloadStory()
       this.story = Object.assign({}, story)
       this.hideLoading()
+    }
+    if (change.status === "order") {
+      const { from, to } = change.data
+      let cards = this.story.cards as any[]
+      const fromIndex = cards.indexOf(from._id)
+      const toIndex = cards.indexOf(to._id)
+      if(fromIndex < toIndex) {
+        cards.splice(toIndex + 1, 0, cards[fromIndex])
+        cards.splice(fromIndex, 1)
+      } else {
+        cards.splice(toIndex, 0, cards[fromIndex])
+        cards.splice(fromIndex + 1, 1)
+      }
+      this.story.cards = cards
+      this.saveToggle.setDisabledState(false)
+      this.saveToggle.checked = false
     }
   }
 
@@ -279,12 +297,12 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
 
       // Update Card
       try {
-        await swal({
-          title: 'Có lưu thay đổi',
-          showCancelButton: true,
-          confirmButtonText: 'Lưu',
-          cancelButtonText: 'Huỷ'
-        })
+        // await swal({
+        //   title: 'Có lưu thay đổi',
+        //   showCancelButton: true,
+        //   confirmButtonText: 'Lưu',
+        //   cancelButtonText: 'Huỷ'
+        // })
         try {
           this.showLoading()
           formCtrl.form.disable()
@@ -351,5 +369,19 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
         })
       }
     })
+  }
+
+  async removeStory() {
+    await swal({
+      title: 'Xoá Câu truyện',
+      text: "Bạn có muốn xoá câu truyện này không",
+      showCancelButton: true,
+      confirmButtonText: 'Lưu',
+      cancelButtonText: 'Huỷ'
+    })
+    await this.chatbotApi.story.delete(this.storyId, { reload: true })
+    setTimeout(() => {
+      this.close()
+    }, 500);
   }
 }

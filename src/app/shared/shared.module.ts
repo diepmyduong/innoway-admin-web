@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TabsModule } from 'ng2-bootstrap/tabs';
 import { RouterModule } from '@angular/router';
+import { Ng2DragDropModule } from 'ng2-drag-drop';
 
 import { BreadcrumbsComponent } from './breadcrumb.component'
 import { AsideToggleDirective } from './aside.directive'
@@ -13,6 +14,7 @@ import { SIDEBAR_TOGGLE_DIRECTIVES} from './sidebar.directive'
     CommonModule,
     TabsModule,
     RouterModule,
+    Ng2DragDropModule.forRoot(),
   ],
   declarations: [
     NAV_DROPDOWN_DIRECTIVES,
@@ -27,6 +29,7 @@ import { SIDEBAR_TOGGLE_DIRECTIVES} from './sidebar.directive'
     AsideToggleDirective,
     TabsModule,
     RouterModule,
+    Ng2DragDropModule,
   ]
 })
 export class SharedModule { }

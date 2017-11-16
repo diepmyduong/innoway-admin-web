@@ -29,6 +29,7 @@ export class PostbackButtonComponent extends BaseButton implements OnInit {
   async editStory() {
     const storyId = await this.getStory(this.payload.data)
     if(this.button.payload != storyId) {
+      this.payload.data = storyId
       this.button.payload = JSON.stringify(this.payload)
       this.container.onButtonChange(this.index)
     }

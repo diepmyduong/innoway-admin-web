@@ -8,7 +8,7 @@ import * as _ from 'lodash'
 declare var $:any;
 export interface iOnCardsChange {
   status: string,
-  data: iCard
+  data: any
 }
 @Component({
   selector: 'app-card-container',
@@ -77,5 +77,7 @@ export class CardContainerComponent implements OnInit {
       }
     }
   }
+
+  
 
 }
