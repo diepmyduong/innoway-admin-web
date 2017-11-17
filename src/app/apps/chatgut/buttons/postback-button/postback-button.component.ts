@@ -53,7 +53,7 @@ export class PostbackButtonComponent extends BaseButton implements OnInit {
   }
 
   async defaultAction() {
-    super.defaultAction({ type: "postback" })
+    super.defaultAction(this.button)
     this.editStory()
   }
 

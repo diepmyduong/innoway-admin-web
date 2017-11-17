@@ -14,15 +14,12 @@ declare var swal:any
 })
 export class GenericCardComponent extends BaseCard implements OnInit {
 
-  @Input() card: iCard
-  @ViewChild('cardFrm', { read: NgForm }) cardFrm: NgForm
-  @ViewChild('saveToggle', { read: MatSlideToggle}) saveToggle: MatSlideToggle
   @ViewChild("swiper") swiperComp: any
   constructor(
     @Host() container: CardContainerComponent,
     public chatbotApi: ChatbotApiService
   ) {
-    super(container)
+    super(container, chatbotApi)
     this.swiperOptions = {
       pagination: {
         el: '.element-pagination',
@@ -46,12 +43,6 @@ export class GenericCardComponent extends BaseCard implements OnInit {
   }
   swiperOptions:any
   validButtons: Buttons.IValidButtons
-  cardState: iCard
-
-  ngOnInit() {
-    this.updateCardState()
-    console.log('generic card', this.card)
-  }
 
   addElement() {
     if(this.card.option.attachment.payload.elements.length >= 10) {
@@ -120,36 +111,6 @@ export class GenericCardComponent extends BaseCard implements OnInit {
     })
   }
 
-  updateCardState() {
-    console.log('update card state')
-    this.cardState = Object.assign({},this.card)
-  }
-
-  async onSave(formCtrl: NgForm, toggleChange:MatSlideToggleChange) {
-    if(toggleChange.checked) {
-      // Disable Change
-      toggleChange.source.setDisabledState(true)
-      formCtrl.form.disable()
-      // Update Card
-      try {
-        const card = await this.chatbotApi.card.update(this.card._id,this.card, { reload: true })
-        formCtrl.form.enable()
-        this.resetForm(formCtrl,this.card)
-        this.updateCardState()
-        this.container.change.emit({
-          status: "save",
-          data: card
-        })
-      } catch (err) {
-        swal("Không thể lưu","Vui lòng thử lại sau","warning")
-        formCtrl.form.enable()
-        this.saveToggle.setDisabledState(false)
-        this.saveToggle.checked = false
-      }
-      
-    }
-  }
-
   resetForm(formCtrl: NgForm,card: iCard) {
     let resetData = {
       sharable: card.option.attachment.payload.sharable,
@@ -166,26 +127,6 @@ export class GenericCardComponent extends BaseCard implements OnInit {
     this.card.option.attachment.payload.elements[elementIndex].buttons = buttons
     this.saveToggle.checked = false
     this.saveToggle.setDisabledState(false)
-  }
-
-  async remove() {
-    await swal({
-      title: 'Xác nhận xoá thẻ',
-      showCancelButton: true,
-      confirmButtonText: 'Xoá',
-      cancelButtonText: 'Huỷ'
-    })
-    const portalContainer = this.container.container
-    const curretnPortalIndex = portalContainer.swiperWrapper.indexOf(this.container.parentViewRef)
-    const currentPortal = portalContainer.portals[curretnPortalIndex]
-    currentPortal.showLoading()
-    await this.chatbotApi.card.delete(this.card._id)
-    currentPortal.hideLoading()
-    this.container.popCardComp(this.index)
-    this.container.change.emit({
-      status: "remove",
-      data: this.card
-    })
   }
 
 }

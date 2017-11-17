@@ -2,11 +2,13 @@ import { CrudAPI, iCrud } from '../crud'
 
 import { ChatbotApiService } from '../../chatbot-api.service'
 import { iPage } from './page'
+import { iStory } from './story'
 
 export interface iCard extends iCrud {
     option?: any
     page?: string | iPage
-    type?: "action" | "text" | "image" | "audio" | "video" | "file" | "generic" | "button" | "list" | "receipt" | "generic_categories" | "generic_products" | "generic_promotions" | "generic_promotion" | "innoway_receip"
+    type?: "action" | "text" | "image" | "audio" | "video" | "file" | "generic" | "button" | "list" | "receipt" | "generic_categories" | "generic_products" | "generic_promotions" | "generic_promotion" | "innoway_receip" | "quick_reply"
+    story?: string | iStory
 }
 
 export class Card extends CrudAPI<iCard> {

@@ -1,14 +1,13 @@
-<mat-card mat-list-item draggable [dragData]="index" droppable (onDrop)="onCardDrop($event)" [dragScope]="card.story + '-' + portalIndex" [dropScope]="card.story + '-' + portalIndex">
+<mat-card mat-list-item draggable [dragData]="index" droppable (onDrop)="onCardDrop($event)" [dragScope]="card.story + '-' + portalIndex"
+  [dropScope]="card.story + '-' + portalIndex">
   <mat-card-header>
     <mat-card-title>Image</mat-card-title>
     <span class="header-spacer"></span>
-    <mat-slide-toggle #saveToggle
-    [checked]="cardFrm.pristine" 
-    [disabled]="cardFrm.pristine" 
-    labelPosition="before"
-    (change)="onSave(cardFrm,$event)"> Lưu</mat-slide-toggle>
+    <mat-slide-toggle #saveToggle [checked]="cardFrm.pristine" [disabled]="cardFrm.pristine" labelPosition="before" (change)="onSave(cardFrm,$event)">
+    Lưu</mat-slide-toggle>
     <mat-icon [matMenuTriggerFor]="cardMenu" class="icon-btn">more_vert</mat-icon>
     <mat-menu #cardMenu="matMenu">
+      <button mat-menu-item (click)="quickReply()">Trả lời nhanh</button>
       <button mat-menu-item (click)="remove()">Xoá</button>
     </mat-menu>
   </mat-card-header>

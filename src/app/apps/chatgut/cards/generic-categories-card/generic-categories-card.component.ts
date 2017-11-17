@@ -13,15 +13,12 @@ declare var swal:any
 })
 export class GenericCategoriesCardComponent extends BaseCard implements OnInit {
 
-  @Input() card: iCard
   @ViewChild("swiper") swiperComp: any
-  @ViewChild('cardFrm', { read: NgForm }) cardFrm: NgForm
-  @ViewChild('saveToggle', { read: MatSlideToggle}) saveToggle: MatSlideToggle
   constructor(
     @Host() container: CardContainerComponent,
     public chatbotApi: ChatbotApiService
   ) {
-    super(container)
+    super(container, chatbotApi)
     this.swiperOptions = {
       pagination: {
         el: '.element-pagination',
@@ -47,13 +44,12 @@ export class GenericCategoriesCardComponent extends BaseCard implements OnInit {
   validButtons: Buttons.IValidButtons
   preview:boolean = false
   previewPayload: any
-  cardState: iCard
 
 
   ngOnInit() {
+    super.ngOnInit()
     if(!this.card.option.query) this.card.option.query = {}
     if(!this.card.option.query.filter) this.card.option.query.filter = {}
-    this.updateCardState()
   }
   
 
@@ -72,37 +68,6 @@ export class GenericCategoriesCardComponent extends BaseCard implements OnInit {
 
   }
 
-  updateCardState() {
-    this.cardState = Object.assign({},this.card)
-  }
-
-  async onSave(formCtrl: NgForm, toggleChange:MatSlideToggleChange) {
-    console.log('on Save')
-    if(toggleChange.checked) {
-      // Disable Change
-      toggleChange.source.setDisabledState(true)
-      formCtrl.form.disable()
-      // Update Card
-      try {
-        console.log('save card', this.card)
-        const card = await this.chatbotApi.card.update(this.card._id,this.card, { reload: true })
-        formCtrl.form.enable()
-        this.resetForm(formCtrl, card)
-        this.updateCardState()
-        this.container.change.emit({
-          status: "save",
-          data: card
-        })
-      } catch (err) {
-        swal("Không thể lưu","Vui lòng thử lại sau","warning")
-        formCtrl.form.enable()
-        this.resetForm(formCtrl, this.cardState)
-        console.error("Save card error",err)
-      }
-      
-    }
-  }
-
   resetForm(formCtrl: NgForm,card: iCard) {
     formCtrl.reset({
       limit: card.option.query.limit,
@@ -115,30 +80,9 @@ export class GenericCategoriesCardComponent extends BaseCard implements OnInit {
     this.preview = toggleChange.checked
     if(this.preview) {
       this.previewPayload = await this.chatbotApi.card.build(this.card._id)
-      console.log('generic payload', this.previewPayload)
     }else {
       this.previewPayload = undefined
     }
-  }
-
-  async remove() {
-    await swal({
-      title: 'Xác nhận xoá thẻ',
-      showCancelButton: true,
-      confirmButtonText: 'Xoá',
-      cancelButtonText: 'Huỷ'
-    })
-    const portalContainer = this.container.container
-    const curretnPortalIndex = portalContainer.swiperWrapper.indexOf(this.container.parentViewRef)
-    const currentPortal = portalContainer.portals[curretnPortalIndex]
-    currentPortal.showLoading()
-    await this.chatbotApi.card.delete(this.card._id)
-    currentPortal.hideLoading()
-    this.container.popCardComp(this.index)
-    this.container.change.emit({
-      status: "remove",
-      data: this.card
-    })
   }
 
 }

@@ -58,8 +58,8 @@ export class ButtonContainerComponent implements OnInit {
     if (this.buttons) {
       for (let button of this.buttons) {
         const { type, ...params } = button
-        if(this.readOnly) button.readOnly = true
-        if(this.validButtons[type]) {
+        if (this.readOnly) button.readOnly = true
+        if (this.validButtons[type]) {
           this.pushButtonComp(this.validButtons[type], {
             button, readOnly: this.readOnly
           }, false)
@@ -68,7 +68,7 @@ export class ButtonContainerComponent implements OnInit {
     }
   }
 
-  pushButtonComp(buttonComp: any, params: any = {}, scroll:boolean = true) {
+  pushButtonComp(buttonComp: any, params: any = {}, scroll: boolean = true) {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(buttonComp);
     let componentRef = componentFactory.create(this.buttonViewContainer.parentInjector)
     let newIndex = this.buttonComps.length
@@ -78,7 +78,7 @@ export class ButtonContainerComponent implements OnInit {
     component.viewInited = this.buttonInited
     _.merge(component, params)
     this.buttonComps.push(component)
-    if(scroll) this.scrollToBottom()
+    if (scroll) this.scrollToBottom()
     return componentRef
   }
 
@@ -95,7 +95,7 @@ export class ButtonContainerComponent implements OnInit {
   popButtonComp(index: number) {
     this.buttonViewContainer.remove(index)
     this.buttonComps.splice(index, 1)
-    this.buttons.splice(index,1)
+    this.buttons.splice(index, 1)
     this.change.emit(this.buttons)
   }
 
@@ -117,6 +117,9 @@ export class ButtonContainerComponent implements OnInit {
           break
         case "quick_reply_text":
           this.addTextQuickReplyButton()
+          break
+        case "quick_reply_location":
+          this.addLocaionQuickReplyButton()
           break
       }
     }
@@ -212,7 +215,7 @@ export class ButtonContainerComponent implements OnInit {
         data: storyId
       })
     }
-    this.pushButtonComp(this.validButtons.postback, { button } )
+    this.pushButtonComp(this.validButtons.postback, { button })
     this.buttons.push(button)
     this.change.emit(this.buttons)
   }
@@ -222,7 +225,7 @@ export class ButtonContainerComponent implements OnInit {
     return swal({
       title: 'Chọn Câu truyện',
       input: 'select',
-      inputOptions: _.fromPairs(_.map(stories, (story:iStory) => [story._id, story.name])),
+      inputOptions: _.fromPairs(_.map(stories, (story: iStory) => [story._id, story.name])),
       inputPlaceholder: 'Chưa câu truyện nào được chọn',
       showCancelButton: true,
       inputValidator: function (value) {
@@ -278,10 +281,34 @@ export class ButtonContainerComponent implements OnInit {
 
   async addTextQuickReplyButton() {
     const title = await this.getTitleDialog()
-    this.pushButtonComp(this.validButtons.quick_reply_text, { title })
+    const storyId = await this.getStoryDialog()
+    const button = {
+      type: "quick_reply_text",
+      content_type: "text",
+      title,
+      payload: JSON.stringify({
+        type: "story",
+        data: storyId
+      })
+    }
+    this.pushButtonComp(this.validButtons.quick_reply_text, { button })
+    this.buttons.push(button)
+    this.change.emit(this.buttons)
+
   }
 
-  getImageUrlDialog(url:string = "") {
+  async addLocaionQuickReplyButton() {
+    const button = {
+      type: "quick_reply_location",
+      content_type: "location"
+    }
+    this.pushButtonComp(this.validButtons.quick_reply_location, { button })
+    this.buttons.push(button)
+    this.change.emit(this.buttons)
+
+  }
+
+  getImageUrlDialog(url: string = "") {
     return swal({
       title: 'Đường dẫn URL Hình ảnh',
       input: 'text',
@@ -309,7 +336,7 @@ export class ButtonContainerComponent implements OnInit {
     })
   }
 
-  onButtonChange(indexChange:number) {
+  onButtonChange(indexChange: number) {
     const compChange = this.buttonComps[indexChange]
     this.buttons[indexChange] = compChange.button
     this.change.emit(this.buttons)

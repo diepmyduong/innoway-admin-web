@@ -2,6 +2,7 @@ import { Component, OnInit, Host, ViewChild,ViewChildren, QueryList } from '@ang
 import { BaseCard } from '../card-container/base-card'
 import { CardContainerComponent } from '../card-container/card-container.component'
 import * as Buttons from '../../buttons'
+import { iCard, ChatbotApiService } from 'app/services/chatbot'
 @Component({
   selector: 'app-menu-card',
   templateUrl: './menu-card.component.html',
@@ -14,9 +15,10 @@ export class MenuCardComponent extends BaseCard implements OnInit {
   @ViewChild('secondMenu' ) secondMenu: Buttons.ButtonContainerComponent
   @ViewChild('thirdMenu' ) thirdMenu: Buttons.ButtonContainerComponent
   constructor(
-    @Host() container: CardContainerComponent
+    @Host() container: CardContainerComponent,
+    public chatbotApi: ChatbotApiService
   ) {
-    super(container)
+    super(container, chatbotApi)
     this.validButtons = {
       web_url: Buttons.UrlButtonComponent,
       postback: Buttons.PostbackButtonComponent,

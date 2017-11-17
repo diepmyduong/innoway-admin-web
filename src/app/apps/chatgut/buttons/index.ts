@@ -5,6 +5,7 @@ import { PostbackButtonComponent } from './postback-button/postback-button.compo
 import { PhoneButtonComponent } from './phone-button/phone-button.component'
 import { NestedButtonComponent } from './nested-button/nested-button.component'
 import { TextQuickReplyButtonComponent } from './text-quick-reply-button/text-quick-reply-button.component'
+import { LocationQuickReplyButtonComponent } from './location-quick-reply-button/location-quick-reply-button.component'
 export { 
     ButtonContainerComponent,
     UrlButtonComponent,
@@ -13,4 +14,5 @@ export {
     PhoneButtonComponent,
     NestedButtonComponent,
     TextQuickReplyButtonComponent,
+    LocationQuickReplyButtonComponent,
 }

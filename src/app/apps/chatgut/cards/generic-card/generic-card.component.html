@@ -1,4 +1,5 @@
-<mat-card mat-list-item draggable [dragData]="index" droppable (onDrop)="onCardDrop($event)" [dragScope]="card.story + '-' + portalIndex" [dropScope]="card.story + '-' + portalIndex">
+<mat-card mat-list-item draggable [dragData]="index" droppable (onDrop)="onCardDrop($event)" [dragScope]="card.story + '-' + portalIndex"
+  [dropScope]="card.story + '-' + portalIndex">
   <mat-card-header>
     <mat-card-title>Nút và hình</mat-card-title>
     <span class="header-spacer"></span>
@@ -7,6 +8,7 @@
     <mat-icon [matMenuTriggerFor]="cardMenu" class="icon-btn">more_vert</mat-icon>
     <mat-menu #cardMenu="matMenu">
       <button mat-menu-item (click)="addElement()">Thêm hình</button>
+      <button mat-menu-item (click)="quickReply()">Trả lời nhanh</button>
       <button mat-menu-item (click)="remove()">Xoá</button>
     </mat-menu>
   </mat-card-header>
@@ -16,8 +18,7 @@
         <mat-checkbox #sharableControl="ngModel" [(ngModel)]="card.option.attachment.payload.sharable" name="sharable"> Hiện nút chia sẻ</mat-checkbox>
       </div>
       <div>
-        <mat-radio-group #imageAspectRatioControl="ngModel" [(ngModel)]="card.option.attachment.payload.image_aspect_ratio"
-          name="imageAspectRatio">
+        <mat-radio-group #imageAspectRatioControl="ngModel" [(ngModel)]="card.option.attachment.payload.image_aspect_ratio" name="imageAspectRatio">
           <mat-radio-button value="horizontal">Hình chữ nhật</mat-radio-button>
           <mat-radio-button value="square">Hình vuông</mat-radio-button>
         </mat-radio-group>

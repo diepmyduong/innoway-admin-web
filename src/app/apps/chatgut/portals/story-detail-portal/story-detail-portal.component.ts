@@ -145,7 +145,6 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
   }
 
   async addImageCard() {
-    const url = await this.getURLDialog()
     this.showLoading()
     const card = await this.chatbotApi.story.addCard(this.storyId, {
       type: 'image',
@@ -153,7 +152,7 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
         attachment: {
           type: 'image',
           payload: {
-            url
+            url: "http://placehold.it/800x640"
           }
         }
       }
@@ -165,7 +164,6 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
   }
 
   async addVideoCard() {
-    const url = await this.getURLDialog()
     this.showLoading()
     const card = await this.chatbotApi.story.addCard(this.storyId, {
       type: 'video',
@@ -173,7 +171,7 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
         attachment: {
           type: 'video',
           payload: {
-            url
+            url: "http://techslides.com/demos/sample-videos/small.mp4"
           }
         }
       }
@@ -185,7 +183,6 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
   }
 
   async addAudioCard() {
-    const url = await this.getURLDialog()
     this.showLoading()
     const card = await this.chatbotApi.story.addCard(this.storyId, {
       type: 'audio',
@@ -193,7 +190,7 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
         attachment: {
           type: 'audio',
           payload: {
-            url
+            url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
           }
         }
       }
@@ -259,10 +256,42 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
     this.hideLoading()
   }
 
-  addQuickReplyCard() {
+  async addQuickReplyCard() {
     this.showLoading()
+    const title = await this.getTitleDialog()
+    const storyId = await this.getStoryDialog()
+    const card = await this.chatbotApi.story.addCard(this.storyId, {
+      type: "quick_reply",
+      option: {
+        replies: [{
+          type: "quick_reply_text",
+          content_type: "text",
+          title,
+          payload: JSON.stringify({
+            type: "story",
+            data: storyId
+          })
+        }]
+      }
+    })
     this.cardContainer.pushCardComp(Cards.QuickReplyCardComponent)
     this.hideLoading()
+  }
+
+  getStoryDialog() {
+    let stories = this.chatbotApi.story.items.getValue()
+    return swal({
+      title: 'Chọn Câu truyện',
+      input: 'select',
+      inputOptions: _.fromPairs(_.map(stories, (story:iStory) => [story._id, story.name])),
+      inputPlaceholder: 'Chưa câu truyện nào được chọn',
+      showCancelButton: true,
+      inputValidator: function (value) {
+        return new Promise(function (resolve, reject) {
+          resolve()
+        })
+      }
+    })
   }
 
   async onCardChange(change: Cards.iOnCardsChange) {
@@ -341,6 +370,24 @@ export class StoryDetailPortalComponent extends BasePortal implements OnInit {
             resolve()
           } else {
             reject('Phải nhập tin nhắn')
+          }
+        })
+      }
+    })
+  }
+
+  getTitleDialog() {
+    return swal({
+      title: 'Tiêu đề',
+      input: 'text',
+      showCancelButton: true,
+      cancelButtonText: "Huỷ",
+      inputValidator: (result) => {
+        return new Promise((resolve, reject) => {
+          if (result) {
+            resolve()
+          } else {
+            reject('Phải nhập tiêu đề')
           }
         })
       }

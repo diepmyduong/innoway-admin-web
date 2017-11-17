@@ -53,6 +53,8 @@ import { DomainComponent } from './portals/white-list-portal/domain/domain.compo
 import { QuickReplyCardComponent } from './cards/quick-reply-card/quick-reply-card.component';
 import { TextQuickReplyButtonComponent } from './buttons/text-quick-reply-button/text-quick-reply-button.component';
 import { GenericCategoriesCardComponent } from './cards/generic-categories-card/generic-categories-card.component';
+import { QuickReplyPortalComponent } from './portals/quick-reply-portal/quick-reply-portal.component';
+import { LocationQuickReplyButtonComponent } from './buttons/location-quick-reply-button/location-quick-reply-button.component';
 
 @NgModule({
   imports: [
@@ -83,7 +85,7 @@ import { GenericCategoriesCardComponent } from './cards/generic-categories-card/
     MatCheckboxModule,
     MatRadioModule
   ],
-  declarations: [ChatgutComponent, PortalContainerComponent, StoriesPortalComponent, StoryDetailPortalComponent, TextCardComponent, CardContainerComponent, ImageCardComponent, VideoCardComponent, AudioCardComponent, ButtonsCardComponent, ButtonContainerComponent, UrlButtonComponent, PostbackButtonComponent, PhoneButtonComponent, GenericCardComponent, SettingsPortalComponent, MenuPortalComponent, MenuCardComponent, NestedButtonComponent, GreetingPortalComponent, WhiteListPortalComponent, DomainComponent, QuickReplyCardComponent, TextQuickReplyButtonComponent, GenericCategoriesCardComponent],
-  entryComponents: [StoriesPortalComponent,StoryDetailPortalComponent,TextCardComponent,ImageCardComponent,VideoCardComponent,AudioCardComponent,ButtonsCardComponent,UrlButtonComponent,PostbackButtonComponent,PhoneButtonComponent,GenericCardComponent,SettingsPortalComponent,MenuPortalComponent,MenuCardComponent,NestedButtonComponent,GreetingPortalComponent,WhiteListPortalComponent,QuickReplyCardComponent,TextQuickReplyButtonComponent,GenericCategoriesCardComponent]
+  declarations: [ChatgutComponent, PortalContainerComponent, StoriesPortalComponent, StoryDetailPortalComponent, TextCardComponent, CardContainerComponent, ImageCardComponent, VideoCardComponent, AudioCardComponent, ButtonsCardComponent, ButtonContainerComponent, UrlButtonComponent, PostbackButtonComponent, PhoneButtonComponent, GenericCardComponent, SettingsPortalComponent, MenuPortalComponent, MenuCardComponent, NestedButtonComponent, GreetingPortalComponent, WhiteListPortalComponent, DomainComponent, QuickReplyCardComponent, TextQuickReplyButtonComponent, GenericCategoriesCardComponent, QuickReplyPortalComponent, LocationQuickReplyButtonComponent],
+  entryComponents: [StoriesPortalComponent,StoryDetailPortalComponent,TextCardComponent,ImageCardComponent,VideoCardComponent,AudioCardComponent,ButtonsCardComponent,UrlButtonComponent,PostbackButtonComponent,PhoneButtonComponent,GenericCardComponent,SettingsPortalComponent,MenuPortalComponent,MenuCardComponent,NestedButtonComponent,GreetingPortalComponent,WhiteListPortalComponent,QuickReplyCardComponent,TextQuickReplyButtonComponent,GenericCategoriesCardComponent,QuickReplyPortalComponent,LocationQuickReplyButtonComponent]
 })
 export class ChatgutModule { }
