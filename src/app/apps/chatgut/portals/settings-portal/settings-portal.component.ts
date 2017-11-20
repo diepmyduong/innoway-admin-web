@@ -14,12 +14,12 @@ export class SettingsPortalComponent extends BasePortal implements OnInit {
     @Host() container: Portals.PortalContainerComponent,
     private zone: NgZone,
     public chatbotApi: ChatbotApiService
-  ) { 
+  ) {
     super(container)
   }
   page: iPage
 
-  getStartedStory:any = {
+  getStartedStory: any = {
     _id: "1",
     name: "Story 1",
   }
@@ -27,18 +27,20 @@ export class SettingsPortalComponent extends BasePortal implements OnInit {
   async ngOnInit() {
     this.showLoading()
     const { app } = this.chatbotApi.chatbotAuth
-    this.page = await this.chatbotApi.page.getItem(app.activePage as string, { local: true, reload: true, query: {
-      populates: ["settings"]
-    }})
+    this.page = await this.chatbotApi.page.getItem(app.activePage as string, {
+      local: true, reload: true, query: {
+        populates: ["settings"]
+      }
+    })
     this.hideLoading()
     console.log('page', this.page)
   }
 
   async openMenu() {
-    let setting:iSetting = _.find(this.page.settings, (setting:iSetting) => {
+    let setting: iSetting = _.find(this.page.settings, (setting: iSetting) => {
       return setting.type === "persistent_menu"
     })
-    if(setting === undefined) {
+    if (setting === undefined) {
       this.showLoading()
       setting = await this.chatbotApi.page.addSetting({
         type: "persistent_menu",
@@ -46,32 +48,47 @@ export class SettingsPortalComponent extends BasePortal implements OnInit {
           locale: "default",
           composer_input_disabled: false,
           call_to_actions: [{
-              "type": "web_url",
-              "title": "Web URL",
-              "url": "http://google.com"
+            "type": "web_url",
+            "title": "Web URL",
+            "url": "http://google.com"
           }]
         }]
       })
       this.hideLoading()
     }
     console.log('setting', setting)
-    this.container.pushPortalAt(this.index + 1,Portals.MenuPortalComponent, { settingId: setting._id })
+    this.container.pushPortalAt(this.index + 1, Portals.MenuPortalComponent, { settingId: setting._id })
   }
 
   async openGreeting() {
-    this.container.pushPortalAt(this.index + 1,Portals.GreetingPortalComponent)
+    let setting: iSetting = _.find(this.page.settings, (setting: iSetting) => {
+      return setting.type === "greeting"
+    })
+    if (setting === undefined) {
+      this.showLoading()
+      setting = await this.chatbotApi.page.addSetting({
+        type: "greeting",
+        option: [{
+          locale: "default",
+          text: "Xin chào {{user_first_name}} {{user_last_name}}!"
+        }]
+      })
+      this.hideLoading()
+    }
+    console.log('setting', setting)
+    this.container.pushPortalAt(this.index + 1, Portals.GreetingPortalComponent, { settingId: setting._id })
   }
 
   async openGetStarted() {
-    if(this.getStartedStory) {
-      this.container.pushPortalAt(this.index + 1,Portals.StoryDetailPortalComponent, {
+    if (this.getStartedStory) {
+      this.container.pushPortalAt(this.index + 1, Portals.StoryDetailPortalComponent, {
         mode: "get_started",
         story: this.getStartedStory
       })
-    }else {
+    } else {
       this.editGetStartedStory()
     }
-    
+
   }
 
   async openWhitelist() {
@@ -82,9 +99,9 @@ export class SettingsPortalComponent extends BasePortal implements OnInit {
     this.getStartedStory = await this.getStory(this.getStartedStory)
   }
 
-  getStory(story?:any) {
-    return new Promise((resolve,reject)=>{
-      const componentRef = this.container.pushPortalAt(this.index + 1,Portals.StoriesPortalComponent, {
+  getStory(story?: any) {
+    return new Promise((resolve, reject) => {
+      const componentRef = this.container.pushPortalAt(this.index + 1, Portals.StoriesPortalComponent, {
         mode: "select", selectedStory: story
       })
       const component = componentRef.instance as Portals.StoriesPortalComponent

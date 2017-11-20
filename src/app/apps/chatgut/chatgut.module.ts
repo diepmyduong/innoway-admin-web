@@ -25,6 +25,7 @@ import {
   MatProgressBarModule,
   MatCheckboxModule,
   MatRadioModule,
+  MatAutocompleteModule,
 }from '@angular/material'
 
 import { ChatgutRoutingModule } from './chatgut-routing.module';
@@ -83,7 +84,8 @@ import { LocationQuickReplyButtonComponent } from './buttons/location-quick-repl
     MatSlideToggleModule,
     MatProgressBarModule,
     MatCheckboxModule,
-    MatRadioModule
+    MatRadioModule,
+    MatAutocompleteModule,
   ],
   declarations: [ChatgutComponent, PortalContainerComponent, StoriesPortalComponent, StoryDetailPortalComponent, TextCardComponent, CardContainerComponent, ImageCardComponent, VideoCardComponent, AudioCardComponent, ButtonsCardComponent, ButtonContainerComponent, UrlButtonComponent, PostbackButtonComponent, PhoneButtonComponent, GenericCardComponent, SettingsPortalComponent, MenuPortalComponent, MenuCardComponent, NestedButtonComponent, GreetingPortalComponent, WhiteListPortalComponent, DomainComponent, QuickReplyCardComponent, TextQuickReplyButtonComponent, GenericCategoriesCardComponent, QuickReplyPortalComponent, LocationQuickReplyButtonComponent],
   entryComponents: [StoriesPortalComponent,StoryDetailPortalComponent,TextCardComponent,ImageCardComponent,VideoCardComponent,AudioCardComponent,ButtonsCardComponent,UrlButtonComponent,PostbackButtonComponent,PhoneButtonComponent,GenericCardComponent,SettingsPortalComponent,MenuPortalComponent,MenuCardComponent,NestedButtonComponent,GreetingPortalComponent,WhiteListPortalComponent,QuickReplyCardComponent,TextQuickReplyButtonComponent,GenericCategoriesCardComponent,QuickReplyPortalComponent,LocationQuickReplyButtonComponent]

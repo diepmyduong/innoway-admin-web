@@ -28,7 +28,4 @@ export class MenuPortalComponent extends BasePortal implements OnInit {
     this.hideLoading()
     this.cardContainer.pushCardComp(Cards.MenuCardComponent, { setting: this.setting })
   }
-
-  
-
 }
