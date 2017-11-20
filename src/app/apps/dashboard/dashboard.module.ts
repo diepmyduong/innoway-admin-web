@@ -24,15 +24,13 @@ import { AgmCoreModule } from '@agm/core';
 import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster';
 
 import { DashboardService } from "app/apps/dashboard/DashboardService";
+import { SelectModule } from 'ng2-select';
 
 @NgModule({
   imports: [
     DashboardRoutingModule,
     ChartsModule,
     CommonModule,
-
-    // FormsModule,
-    // ReactiveFormsModule,
 
     SimpleNotificationsModule,
     PushNotificationsModule,
@@ -42,14 +40,14 @@ import { DashboardService } from "app/apps/dashboard/DashboardService";
     TextMaskModule,
 
     PipesModule,
-    // SwiperModule
 
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
       libraries: ["places,drawing"]
     }),
 
-    ToasterModule
+    ToasterModule,
+    SelectModule
   ],
   providers: [DashboardService],
   bootstrap: [DashboardComponent, BillsComponent, BillDetailComponent, BillLocationComponent],

@@ -37,7 +37,14 @@ export class InnowayService {
     'brand_ship',
     'ship_area',
     'paid_history',
-    'customer_type_promotion'
+    'customer_type_promotion',
+    'blog',
+    'promotion_schedule',
+    'event',
+    'event_speaker',
+    'event_agenda',
+    'event_sponsor',
+    'event_news'
   ]
   service_items:any = {}
   services:any = {}

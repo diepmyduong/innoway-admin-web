@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class DashboardService {
-    private actionSource = new BehaviorSubject<number>(0);
+    private actionSource = new BehaviorSubject<string>("");
     selectedAction = this.actionSource.asObservable();
 
     private employeeSource = new BehaviorSubject<string>("");
@@ -12,8 +12,11 @@ export class DashboardService {
     private areaSource = new BehaviorSubject<number>(0);
     selectedArea = this.areaSource.asObservable();
 
-    private customerSource = new BehaviorSubject<string>("");
+    private customerSource = new BehaviorSubject<any>({});
     selectedCustomer = this.customerSource.asObservable();
+
+    private customerNameSource = new BehaviorSubject<any>({});
+    selectedCustomerName = this.customerSource.asObservable();
 
     private billSource = new BehaviorSubject<string>("");
     selectedBill = this.billSource.asObservable();
@@ -32,6 +35,10 @@ export class DashboardService {
 
     updateCustomer(update: any) {
         this.customerSource.next(update);
+    }
+
+    updateCustomerName(update: any) {
+        this.customerNameSource.next(update);
     }
 
     updateBill(update: any) {

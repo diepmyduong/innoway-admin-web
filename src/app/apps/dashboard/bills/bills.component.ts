@@ -43,11 +43,12 @@ export class BillsComponent implements OnInit {
 
   thumbDefault: string = "https://s11.favim.com/mini/160421/snowball-movie-the-secret-life-of-pets-cute-Favim.com-4234326.jpeg";
   actionSubscription: Subscription;
-  selectedAction: number = -1;
-  selectedEmployee: string;
+  selectedAction: string;
+  selectedEmployee: any;
   selectedArea: number = 0;
   selectedCustomer: string;
   selectedBill: string;
+  selectedCustomerName: string;
 
   constructor(
     private globals: Globals,
@@ -62,23 +63,31 @@ export class BillsComponent implements OnInit {
     this.billService = innoway.getService('bill');
     this.billActitivyService = innoway.getService('bill_activity');
 
-    // this.subscribeDashboardParent();
+    this.subscribeDashboardParent();
   }
 
   async ngOnInit() {
     this.loadBillData();
-    // this.subscribeTopicByFCM();
+    this.subscribeTopicByFCM();
   }
 
   private subscribeDashboardParent() {
     this.dashboardService.selectedAction.subscribe(
       data => {
         this.selectedAction = data;
+        // alert(JSON.stringify(data));
+        if(this.selectedAction!=null && this.selectedAction!=''){
+          this.filter(this.selectedAction);
+        }
       });
 
     this.dashboardService.selectedEmployee.subscribe(
       data => {
         this.selectedEmployee = data;
+        if(this.selectedEmployee.id!=null){
+          this.filterByCustomerId(this.selectedEmployee.id);
+        }
+        // alert(JSON.stringify(data));
       });
 
     this.dashboardService.selectedArea.subscribe(
@@ -89,6 +98,11 @@ export class BillsComponent implements OnInit {
     this.dashboardService.selectedCustomer.subscribe(
       data => {
         this.selectedCustomer = data;
+      });
+
+    this.dashboardService.selectedCustomerName.subscribe(
+      data => {
+        this.selectedCustomerName = data;
       });
 
     this.dashboardService.selectedBill.subscribe(
@@ -210,7 +224,23 @@ export class BillsComponent implements OnInit {
   }
 
   async queryBill(query: string) {
-
+    try {
+      this.bills = await this.innoway.getAll('bill', {
+        fields: ["$all", {
+          activities: ["$all", {
+            employee: ["$all"]
+          }],
+          customer: ["$all"],
+          activity: ["$all"]
+        }],
+        order: [["updated_at", "desc"]]
+      });
+      // alert(JSON.stringify(this.bills));
+      console.log('bills', this.bills.getValue())
+    } catch (err) {
+      try { await this.alertItemNotFound() } catch (err) { }
+      console.log("ERRRR", err);
+    }
   }
 
   async loadBillData() {
@@ -364,6 +394,34 @@ export class BillsComponent implements OnInit {
         }],
         filter: {
           "$activity.action$": action
+        }
+      }
+      console.log('query', query)
+      this.bills = await this.innoway.getAll('bill', query);
+      console.log('bills', this.bills.getValue())
+      // alert(JSON.stringify(this.bills));
+    } catch (err) {
+      try { await this.alertItemNotFound() } catch (err) { }
+      console.log("ERRRR", err);
+    }
+  }
+
+  async filterByCustomerId(customerId) {
+    try {
+      console.log('action', customerId)
+      this.bills = new BehaviorSubject<any[]>([]);
+      let query = {
+        fields: ["$all", {
+          // activities: ["action",
+          //   // {
+          //   //   employee: ["$all"]
+          //   // }
+          // ],
+          customer: ["$all"],
+          activity: ["action"]
+        }],
+        filter: {
+          "$customer.id$": customerId
         }
       }
       console.log('query', query)

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayService, AuthService } from "app/services";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
@@ -6,6 +6,7 @@ import { ToasterModule, ToasterService, ToasterConfig } from 'angular2-toaster/a
 import { Subscription } from "rxjs/Subscription";
 import { DashboardService } from "app/apps/dashboard/DashboardService";
 import { Globals } from "./../../globals"
+import { SelectComponent } from "ng2-select";
 
 declare let swal:any
 
@@ -35,8 +36,12 @@ export class DashboardComponent implements OnInit {
   summary: any;
   filter: any;
   area: any;
+
   areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  customerData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
+  autocompleteCustomerData: Array<any> = new Array<any>();
 
   actions: any;
 
@@ -59,6 +64,7 @@ export class DashboardComponent implements OnInit {
     this.billService = innoway.getService('bill');
     this.branchService = innoway.getService('branch');
     this.shipAreaService = innoway.getService('brand_ship');
+    this.customerService=innoway.getService('customer');
 
     this.employeeData = this.auth.service.userInfo;
     this.toasterService = toasterService;
@@ -119,6 +125,8 @@ export class DashboardComponent implements OnInit {
 
     }
   }
+
+
 
   // dropdown buttons
   public status: { isopen: boolean } = { isopen: false };
@@ -563,10 +571,6 @@ export class DashboardComponent implements OnInit {
   public sparklineChartLegend: boolean = false;
   public sparklineChartType: string = 'line';
 
-  onChangeAction(value) {
-    this.dashboardService.updateAction(value);
-  }
-
   query: any = {};
   searchTimeOut: number = 250;
   searchRef: any;
@@ -603,12 +607,81 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.updateArea(value);
   }
 
+  onChangeBill(value) {
+    this.dashboardService.updateBill(value);
+  }
+
+  onChangeAction(value) {
+    this.dashboardService.updateAction(value);
+  }
+
   onChangeCustomer(value) {
     this.dashboardService.updateCustomer(value);
   }
 
-  onChangeBill(value) {
-    this.dashboardService.updateBill(value);
+  public selected(value: any): void {
+    this.onChangeEmployee(value);
+    console.log('Selected value is: ' + value);
+  }
+
+  public removed(value: any): void {
+    console.log('Removed value is: ' + value);
+  }
+
+  public refreshValue(value: any): void {
+    console.log("bambi customer 2: " + JSON.stringify(value));
+  }
+
+  @ViewChild('customerSelect') select: SelectComponent;
+
+  addToItems() {
+    this.autocompleteCustomerData.push({ id: "", text: this.newItem });
+    this.select.items = this.autocompleteCustomerData;
+    this.select.active = [{ id: "4", text: this.newItem }];
+    this.ref.detectChanges();
+  }
+
+  newItem: string = '';
+  newNameItem: string = '';
+
+  public onChangeInputCustomer(event) {
+    this.newItem = event;
+    console.log("bambi customer: " + JSON.stringify(event));
+  }
+
+  public test(event) {
+    console.log("bambi customer 1: " + JSON.stringify(event));
+  }
+
+  public itemsToString(value: Array<any> = []): string {
+    return value
+      .map((item: any) => {
+        return item.text;
+      }).join(',');
+  }
+
+  async detectChangeSelect(event) {
+    console.log("bambi bambi: " + JSON.stringify(event));
+    const customerService = this.innoway.getService('customer');
+    let limit = 5;
+    this.customerData = await customerService.getAllWithQuery({
+      fields: ["$all"],
+      limit: limit,
+      filter: {
+        fullname: { $iLike: `%${event}%` }
+      }
+    })
+
+    this.autocompleteCustomerData = new Array<any>();
+
+    this.customerData.forEach(data => {
+      let item: any = data;
+      let tmp = {
+        text: item.fullname,
+        id: item.id
+      };
+      this.autocompleteCustomerData.push(tmp);
+    })
   }
 
 }

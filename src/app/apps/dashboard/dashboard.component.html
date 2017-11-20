@@ -125,7 +125,7 @@
             <li class="nav-item">
               <div class="form-group">
                 <select id="actionSelect" name="select" class="form-control" size="1" #action (change)="onChangeAction(action.value)">
-                  <option *ngFor="let v of actions" [value]="v.action">
+                  <option *ngFor="let v of actions" [value]="v.code">
                     {{v.name}}
                   </option>
                             </select>
@@ -136,7 +136,8 @@
             </li>
             <li class="nav-item">
               <div class="form-group">
-                <input type="text" class="form-control" formControlName="phoneInput" placeholder="Số điện thoại" #customer (keydown.enter)="onChangeCustomer(customer.value)" />
+                <!-- <input type="text" class="form-control" formControlName="phoneInput" placeholder="Số điện thoại" #customer (keydown.enter)="onChangeCustomer(customer.value)" /> -->
+                <ng-select #customerSelect [allowClear]="true" [multiple]="false" [items]="autocompleteCustomerData" (mouseleave)="addToItems()" (data)="refreshValue($event)" (typed)="onChangeInputCustomer($event)"  (data)="refreshValue($event)" (change)="test($event)" (selected)="selected($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Số điện thoại" style="  text-transform:none !important;"></ng-select>
               </div>
             </li>
             <li class="nav-item">
