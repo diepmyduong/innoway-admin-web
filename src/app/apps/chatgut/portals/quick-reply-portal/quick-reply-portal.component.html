@@ -4,6 +4,9 @@
     <span class="header-spacer"></span>
     <mat-icon class="icon-btn" (click)="close()">close</mat-icon>
   </mat-toolbar>
+  <mat-progress-bar [hidden]="!progressBar.show" class="portal-progress-bar" [color]="progressBar.color" [mode]="progressBar.mode" [value]="progressBar.value"
+  [bufferValue]="progressBar.buffer">
+  </mat-progress-bar>
   <div class="portal-content-block">
     <app-card-container #cardContainer [container]="container" [parentViewRef]="viewRef"></app-card-container>
   </div>

@@ -220,9 +220,14 @@ export class ButtonContainerComponent implements OnInit {
     this.change.emit(this.buttons)
   }
 
-  getStoryDialog() {
+  async getStoryDialog() {
     let stories = this.chatbotApi.story.items.getValue()
-    return swal({
+    if(stories.length === 0) {
+      stories = await this.chatbotApi.story.getList({
+        reload: true, query: { limit: 0 }
+      })
+    }
+    return await swal({
       title: 'Chọn Câu truyện',
       input: 'select',
       inputOptions: _.fromPairs(_.map(stories, (story: iStory) => [story._id, story.name])),
@@ -276,7 +281,18 @@ export class ButtonContainerComponent implements OnInit {
 
   async addNestedButton() {
     const title = await this.getTitleDialog()
-    this.pushButtonComp(this.validButtons.nested, { title })
+    const button = {
+      type: "nested",
+      title,
+      call_to_actions: [{
+        "type": "web_url",
+        "title": "Web URL",
+        "url": "http://google.com"
+      }]
+    }
+    this.pushButtonComp(this.validButtons.nested, { button })
+    this.buttons.push(button)
+    this.change.emit(this.buttons)
   }
 
   async addTextQuickReplyButton() {

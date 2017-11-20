@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription'
 import * as _ from 'lodash'
 import { NgForm } from '@angular/forms'
 import { MatSlideToggleChange, MatSlideToggle } from '@angular/material'
-import { iCard, ChatbotApiService } from 'app/services/chatbot'
+import { iCard, ChatbotApiService , iSetting } from 'app/services/chatbot'
 import { QuickReplyPortalComponent, StoriesPortalComponent } from '../../portals'
 declare var swal: any
 export class BaseCard {
@@ -116,7 +116,7 @@ export class BaseCard {
         }
     }
 
-    resetForm(formCtrl: NgForm, card: iCard) { }
+    resetForm(formCtrl: NgForm, card: iCard | iSetting ) { }
 
     updateCardState() {
         this.cardState = Object.assign({}, this.card)

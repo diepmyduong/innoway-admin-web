@@ -81,4 +81,40 @@ export class Page extends CrudAPI<iPage> {
         this.api.story.items.next(items)
         return row
     }
+
+    async addSetting(settingData: iSetting) {
+        let setting = {
+            method: 'POST',
+            uri: this.apiUrl(`${this.api.chatbotAuth.app.activePage }/settings`),
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'app_id': this.api.chatbotAuth.app._id,
+                'app_token': this.api.chatbotAuth.app.accessToken
+            },
+            json: true,
+            body: settingData
+        }
+        let res = await this.exec(setting)
+        let row = res.results.object as iSetting;
+        let items = this.api.setting.items.getValue()
+        items.push(row)
+        this.api.setting.items.next(items)
+        return row
+    }
+
+    async activeSetting(settingId: string) {
+        let setting = {
+            method: 'PUT',
+            uri: this.apiUrl(`${this.api.chatbotAuth.app.activePage }/settings/${settingId}`),
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'app_id': this.api.chatbotAuth.app._id,
+                'app_token': this.api.chatbotAuth.app.accessToken
+            },
+            json: true
+        }
+        let res = await this.exec(setting)
+        let row = res.results.object as iSetting;
+        return row
+    }
 }

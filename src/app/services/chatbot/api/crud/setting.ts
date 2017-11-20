@@ -4,7 +4,7 @@ import { ChatbotApiService } from '../../chatbot-api.service'
 import { iPage } from './page'
 
 export interface iSetting extends iCrud {
-    isDefault: boolean
+    isDefault?: boolean
     option: any
     type: "persistent_menu" | "greeting" | "get_started" | "whitelisted_domains"
 }

@@ -14,23 +14,12 @@ export class NestedButtonComponent extends BaseButton implements OnInit {
   ) { 
     super(container)
   }
-  subMenu:any = [{
-    type: "web_url",
-    title: "URL",
-    url: "https://google.com"
-  },{
-    type: "postback",
-    title: "POST BACK",
-    story: {
-      id: "1"
-    }
-  }]
 
   ngOnInit() {
   }
 
   async defaultAction() {
-    super.defaultAction({ type: "nested" })
+    super.defaultAction(this.button)
   }
 
 }
