@@ -15,18 +15,12 @@
       <mat-list-item (click)="openGreeting()">
         <a matLine href="javascript:;">Lời chào</a>
       </mat-list-item>
-      <mat-list-item >
-        <a matLine href="javascript:;" (click)="openGetStarted()">Câu truyện đầu tiên</a>
-        <button mat-icon-button [matMenuTriggerFor]="getStartedMenu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #getStartedMenu="matMenu">
-          <button mat-menu-item (click)="editGetStartedStory()">Chọn lại câu truyện</button>
-        </mat-menu>
+      <mat-list-item (click)="openGetStarted()">
+        <a matLine href="javascript:;">Câu truyện đầu tiên</a>
       </mat-list-item>
-      <mat-list-item (click)="openWhitelist()">
+      <!-- <mat-list-item (click)="openWhitelist()">
         <a matLine href="javascript:;">Danh sách trắng</a>
-      </mat-list-item>
+      </mat-list-item> -->
     </mat-nav-list>
   </div>
 </div>

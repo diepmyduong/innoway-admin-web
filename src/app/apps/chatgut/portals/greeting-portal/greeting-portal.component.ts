@@ -84,7 +84,7 @@ export class GreetingPortalComponent extends BasePortal implements OnInit {
       try {
         
         const setting = await this.chatbotApi.setting.update(this.setting._id, this.setting, { reload: true })
-        await this.chatbotApi.page.activeSetting(setting._id)
+        // await this.chatbotApi.page.activeSetting(setting._id)
         formCtrl.form.enable()
         this.resetForm(formCtrl, this.setting)
         this.updateSettingState()
