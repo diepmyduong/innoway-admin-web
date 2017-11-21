@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 import { DashboardService } from "app/apps/dashboard/DashboardService";
 
 import { Globals } from './../../../globals';
-declare let swal:any;
+declare let swal: any;
 
 @Component({
   selector: 'app-bills',
@@ -76,7 +76,7 @@ export class BillsComponent implements OnInit {
       data => {
         this.selectedAction = data;
         // alert(JSON.stringify(data));
-        if(this.selectedAction!=null && this.selectedAction!=''){
+        if (this.selectedAction != null && this.selectedAction != '') {
           this.filter(this.selectedAction);
         }
       });
@@ -84,7 +84,7 @@ export class BillsComponent implements OnInit {
     this.dashboardService.selectedEmployee.subscribe(
       data => {
         this.selectedEmployee = data;
-        if(this.selectedEmployee.id!=null){
+        if (this.selectedEmployee.id != null) {
           this.filterByCustomerId(this.selectedEmployee.id);
         }
         // alert(JSON.stringify(data));
@@ -98,7 +98,7 @@ export class BillsComponent implements OnInit {
     this.dashboardService.selectedCustomer.subscribe(
       data => {
         this.selectedCustomer = data;
-        if(this.selectedCustomer!=null){
+        if (this.selectedCustomer != null) {
           // alert(JSON.stringify(data));
           this.filterByCustomerId(this.selectedCustomer.id);
           // this.filterByCustomerId(this.selectedCustomer.id);
@@ -108,7 +108,7 @@ export class BillsComponent implements OnInit {
     this.dashboardService.selectedCustomerName.subscribe(
       data => {
         this.selectedCustomerName = data;
-        if(this.selectedCustomerName!=null){
+        if (this.selectedCustomerName != null) {
           // alert(JSON.stringify(data));
           this.filterByCustomerId(this.selectedCustomerName.id);
           // this.filterByCustomerId(this.selectedCustomerName.id);
@@ -300,6 +300,9 @@ export class BillsComponent implements OnInit {
     let action;
     let result = await swal({
       title: 'Chọn trạng thái',
+      html:
+      '<input id="swal-input1" class="swal2-input" placeholder="aaaa">' +
+      '<input id="swal-input2" class="swal2-input" placeholder="aaaa">',
       input: 'select',
       inputOptions: avaiavle_options,
       inputPlaceholder: 'Chọn trạng thái',
@@ -307,17 +310,41 @@ export class BillsComponent implements OnInit {
       inputValidator: function(value) {
         return new Promise(function(resolve, reject) {
           action = value;
+          alert(JSON.stringify(value) + " - " + $('#swal-input1').val() + " - " + $('#swal-input2').val());
           resolve();
         })
       }
-    })
-    console.log("result",result)
+    },
+      {
+        input: 'url',
+        inputPlaceholder: 'Enter the URL'
+      })
+
+    console.log("result", result)
 
     await swal({
       type: 'success',
       html: 'Cập nhật trạng thái: ' + this.detectActionName(result)
     })
     this.updateAction(bill, action);
+
+    // const { value: formValues } = await swal({
+    //   title: 'Multiple inputs',
+    //   html:
+    //   '<input id="swal-input1" class="swal2-input">' +
+    //   '<input id="swal-input2" class="swal2-input">',
+    //   focusConfirm: false,
+    //   preConfirm: function() {
+    //     return [
+    //       $('#swal-input1').val(),
+    //       $('#swal-input2').val()
+    //     ]
+    //   }
+    // })
+    //
+    // if (formValues) {
+    //   swal(JSON.stringify(formValues))
+    // }
   }
 
   async updateAction(bill, action) {

@@ -53,4 +53,6 @@ import { SelectModule } from 'ng2-select';
   bootstrap: [DashboardComponent, BillsComponent, BillDetailComponent, BillLocationComponent],
   declarations: [DashboardComponent, BillsComponent, BillDetailComponent, BillLocationComponent]
 })
-export class DashboardModule { }
+export class DashboardModule {
+  
+}
