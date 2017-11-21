@@ -46,9 +46,9 @@ export class BillsComponent implements OnInit {
   selectedAction: string;
   selectedEmployee: any;
   selectedArea: number = 0;
-  selectedCustomer: string;
-  selectedBill: string;
-  selectedCustomerName: string;
+  selectedCustomer: any;
+  selectedBill: any;
+  selectedCustomerName: any;
 
   constructor(
     private globals: Globals,
@@ -98,11 +98,21 @@ export class BillsComponent implements OnInit {
     this.dashboardService.selectedCustomer.subscribe(
       data => {
         this.selectedCustomer = data;
+        if(this.selectedCustomer!=null){
+          // alert(JSON.stringify(data));
+          this.filterByCustomerId(this.selectedCustomer.id);
+          // this.filterByCustomerId(this.selectedCustomer.id);
+        }
       });
 
     this.dashboardService.selectedCustomerName.subscribe(
       data => {
         this.selectedCustomerName = data;
+        if(this.selectedCustomerName!=null){
+          // alert(JSON.stringify(data));
+          this.filterByCustomerId(this.selectedCustomerName.id);
+          // this.filterByCustomerId(this.selectedCustomerName.id);
+        }
       });
 
     this.dashboardService.selectedBill.subscribe(
@@ -384,11 +394,6 @@ export class BillsComponent implements OnInit {
       this.bills = new BehaviorSubject<any[]>([]);
       let query = {
         fields: ["$all", {
-          // activities: ["action",
-          //   // {
-          //   //   employee: ["$all"]
-          //   // }
-          // ],
           customer: ["$all"],
           activity: ["action"]
         }],
@@ -412,11 +417,6 @@ export class BillsComponent implements OnInit {
       this.bills = new BehaviorSubject<any[]>([]);
       let query = {
         fields: ["$all", {
-          // activities: ["action",
-          //   // {
-          //   //   employee: ["$all"]
-          //   // }
-          // ],
           customer: ["$all"],
           activity: ["action"]
         }],

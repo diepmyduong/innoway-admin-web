@@ -40,8 +40,10 @@ export class DashboardComponent implements OnInit {
   areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   customerData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  customerNameData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   autocompleteCustomerData: Array<any> = new Array<any>();
+  autocompleteCustomerNameData: Array<any> = new Array<any>();
 
   actions: any;
 
@@ -619,25 +621,61 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.updateCustomer(value);
   }
 
+  onChangeCustomerName(value) {
+    this.dashboardService.updateCustomerName(value);
+  }
+
   public selected(value: any): void {
     this.onChangeEmployee(value);
     console.log('Selected value is: ' + value);
   }
 
+  public selectedCustomer(value: any): void {
+    this.autocompleteCustomerData.push(value);
+    this.select.items = this.autocompleteCustomerData;
+    this.onChangeCustomer(value);
+    console.log('Selected value is: ' + value);
+  }
+
+  public selectedCustomerName(value: any): void {
+    this.autocompleteCustomerNameData.push(value);
+    this.nameSelect.items = this.autocompleteCustomerNameData;
+    this.onChangeCustomerName(value);
+    console.log('Selected value is: ' + JSON.stringify(value));
+  }
+
   public removed(value: any): void {
-    console.log('Removed value is: ' + value);
+    console.log('Removed value is: ' + JSON.stringify(value));
   }
 
   public refreshValue(value: any): void {
+    // this.value = value;
+    console.log("bambi customer 2: " + JSON.stringify(value));
+  }
+
+  public removedName(value: any): void {
+    console.log('Removed value is: ' + JSON.stringify(value));
+  }
+
+  public refreshValueName(value: any): void {
+    // this.value = value;
     console.log("bambi customer 2: " + JSON.stringify(value));
   }
 
   @ViewChild('customerSelect') select: SelectComponent;
+  @ViewChild('customerNameSelect') nameSelect: SelectComponent;
 
   addToItems() {
     this.autocompleteCustomerData.push({ id: "", text: this.newItem });
     this.select.items = this.autocompleteCustomerData;
     this.select.active = [{ id: "4", text: this.newItem }];
+    this.ref.detectChanges();
+  }
+
+  addToNameItems() {
+    this.autocompleteCustomerNameData.push({ id: "", text: this.newNameItem });
+    this.nameSelect.items = this.autocompleteCustomerNameData;
+    this.nameSelect.active = [{ id: "4", text: this.newNameItem }];
     this.ref.detectChanges();
   }
 
@@ -649,8 +687,9 @@ export class DashboardComponent implements OnInit {
     console.log("bambi customer: " + JSON.stringify(event));
   }
 
-  public test(event) {
-    console.log("bambi customer 1: " + JSON.stringify(event));
+  public onChangeInputCustomerName(event) {
+    this.newNameItem = event;
+    console.log("bambi customer: " + JSON.stringify(event));
   }
 
   public itemsToString(value: Array<any> = []): string {
@@ -668,7 +707,7 @@ export class DashboardComponent implements OnInit {
       fields: ["$all"],
       limit: limit,
       filter: {
-        fullname: { $iLike: `%${event}%` }
+        phone: { $iLike: `%${event}%` }
       }
     })
 
@@ -677,11 +716,39 @@ export class DashboardComponent implements OnInit {
     this.customerData.forEach(data => {
       let item: any = data;
       let tmp = {
-        text: item.fullname,
+        text: item.phone,
         id: item.id
       };
       this.autocompleteCustomerData.push(tmp);
     })
+  }
+
+  async detectChangeNameSelect(event) {
+    console.log("bambi bambi: " + JSON.stringify(event));
+    const customerService = this.innoway.getService('customer');
+    let limit = 5;
+    this.customerNameData = await customerService.getAllWithQuery({
+      fields: ["$all"],
+      limit: limit,
+      filter: {
+        fullname: { $iLike: `%${event}%` }
+      }
+    })
+
+    this.autocompleteCustomerNameData = new Array<any>();
+
+    this.customerNameData.forEach(data => {
+      let item: any = data;
+      let tmp = {
+        text: item.fullname,
+        id: item.id
+      };
+      this.autocompleteCustomerNameData.push(tmp);
+    })
+  }
+
+  refreshFilterValue(){
+    
   }
 
 }

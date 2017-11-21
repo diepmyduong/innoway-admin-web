@@ -132,12 +132,19 @@
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="javascript:;"><i class="icon-user"></i> Khách hàng</a>
+              <a class="nav-link" href="javascript:;"><i class="icon-user"></i> Số điện thoại</a>
             </li>
             <li class="nav-item">
               <div class="form-group">
-                <!-- <input type="text" class="form-control" formControlName="phoneInput" placeholder="Số điện thoại" #customer (keydown.enter)="onChangeCustomer(customer.value)" /> -->
-                <ng-select #customerSelect [allowClear]="true" [multiple]="false" [items]="autocompleteCustomerData" (mouseleave)="addToItems()" (data)="refreshValue($event)" (typed)="onChangeInputCustomer($event)"  (data)="refreshValue($event)" (change)="test($event)" (selected)="selected($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Số điện thoại" style="  text-transform:none !important;"></ng-select>
+                <ng-select #customerSelect [allowClear]="true" [multiple]="false" [items]="autocompleteCustomerData" (mouseleave)="addToItems()" (data)="refreshValue($event)" (typed)="onChangeInputCustomer($event)"  (data)="refreshValue($event)" (selected)="selectedCustomer($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Số điện thoại" style="  text-transform:none !important;"></ng-select>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:;"><i class="icon-user"></i> Họ và tên</a>
+            </li>
+            <li class="nav-item">
+              <div class="form-group">
+                <ng-select #customerNameSelect [allowClear]="true" [multiple]="false" [items]="autocompleteCustomerNameData" (mouseleave)="addToNameItems()" (data)="refreshValueName($event)" (typed)="onChangeInputCustomerName($event)"  (data)="refreshValueName($event)" (selected)="selectedCustomerName($event)" (removed)="removedName($event)" (input)="detectChangeNameSelect($event.target.value)" placeholder="Họ và tên" style="  text-transform:none !important;"></ng-select>
               </div>
             </li>
             <li class="nav-item">

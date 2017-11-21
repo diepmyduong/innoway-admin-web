@@ -16,7 +16,7 @@ export class DashboardService {
     selectedCustomer = this.customerSource.asObservable();
 
     private customerNameSource = new BehaviorSubject<any>({});
-    selectedCustomerName = this.customerSource.asObservable();
+    selectedCustomerName = this.customerNameSource.asObservable();
 
     private billSource = new BehaviorSubject<string>("");
     selectedBill = this.billSource.asObservable();
