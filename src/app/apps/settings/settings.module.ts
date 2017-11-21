@@ -6,12 +6,12 @@ import { SettingsComponent } from './settings.component';
 
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
-import { TimepickerModule } from 'ng2-bootstrap/timepicker';
-import { DatepickerModule } from 'ng2-bootstrap/datepicker';
+import { TimepickerModule } from 'ngx-bootstrap/timepicker';
+import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 
-import {ColorPickerModule} from 'angular2-color-picker';
+import {ColorPickerModule} from 'ngx-color-picker';
 import { CustomFormsModule } from 'ng2-validation';
 // Angular 2 Input Mask
 import { TextMaskModule } from 'angular2-text-mask';
@@ -28,7 +28,7 @@ import { SellComponent } from './sell/sell.component';
     FormsModule,
     ReactiveFormsModule,
     LaddaModule,
-    DataTableModule,
+    // DataTableModule,
 
     ColorPickerModule,
     CustomFormsModule,

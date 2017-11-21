@@ -4,7 +4,7 @@ import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
 
-import { ColorPickerService } from 'angular2-color-picker';
+import { ColorPickerService } from 'ngx-color-picker';
 
 declare let swal:any
 

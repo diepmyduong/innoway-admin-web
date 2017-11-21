@@ -8,7 +8,7 @@ import { FullLayoutComponent } from './full-layout/full-layout.component';
 import { ChatbotLayoutComponent } from './chatbot-layout/chatbot-layout.component';
 import { LauncherLayoutComponent } from './launcher-layout/launcher-layout.component';
 
-import { BsDropdownModule } from 'ng2-bs-dropdown';
+//import { BsDropdownModule } from 'ng2-bs-dropdown';
 // Notifications
 import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster';
 
@@ -17,7 +17,7 @@ import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster'
     CommonModule,
     RouterModule,
     SharedModule,
-    BsDropdownModule,
+    //BsDropdownModule,
     ToasterModule
   ],
   declarations: [SimpleLayoutComponent, FullLayoutComponent, ChatbotLayoutComponent, LauncherLayoutComponent]

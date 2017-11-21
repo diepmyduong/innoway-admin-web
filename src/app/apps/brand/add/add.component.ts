@@ -3,7 +3,6 @@ import { NgForm } from "@angular/forms";
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService } from "app/services";
-import { ColorPickerService } from "angular2-color-picker";
 
 declare let swal:any
 
@@ -29,7 +28,6 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   constructor(private route: ActivatedRoute,
     private router: Router,
-    private cpService: ColorPickerService,
     private ref: ChangeDetectorRef,
     public innoway: InnowayService) {
     this.brandService = innoway.getService('brand');

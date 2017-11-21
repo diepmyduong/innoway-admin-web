@@ -1,13 +1,13 @@
 import { NgModule,ModuleWithProviders } from '@angular/core';
 import { CommonModule} from '@angular/common';
-import { TabsModule } from 'ng2-bootstrap/tabs';
-import { BsDropdownModule } from 'ng2-bootstrap/dropdown';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TagInputModule } from 'ngx-chips';
 import { SwiperModule } from 'angular2-useful-swiper';
 // import { TreeModule } from 'angular-tree-component';
 // import { TreeModule } from 'ng2-tree';
 //Modal
-import { ModalModule } from 'ng2-bootstrap/modal';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ModalModule as Ng2ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 import { SelectModule } from 'ng2-select';

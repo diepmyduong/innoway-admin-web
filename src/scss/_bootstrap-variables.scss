@@ -3,6 +3,29 @@
 // Colors
 //
 // Grayscale and brand colors for use across Bootstrap.
+$bluegrey-white:          #ECEFF1; //50
+$bluegrey-lightest:       #CFD8DC; //100
+$bluegrey-lighter:        #B0BEC5; //200
+$bluegrey-light:          #90A4AE; //300
+$bluegrey-mild:           #78909C; //400
+$bluegrey:                #607D8B; //500
+$bluegrey-dark:           #546E7A;
+$bluegrey-darker:         #455A64;
+$bluegrey-darkest:        #37474F;
+$bluegrey-black:          #263238;
+
+
+$grey-white:                #FAFAFA; //50
+$grey-lightest:             #F5F5F5; //100
+$grey-lighter:              #EEEEEE; //200
+$grey-light:                #E0E0E0; //400
+$grey-mild:                 #BDBDBD; //400
+$grey:                      #9E9E9E; //500
+$grey-dark:                 #757575;
+$grey-darker:               #616161;
+$grey-darkest:              #424242;
+$grey-black:                #212121;
+
 
 $gray-dark:                 #384042;
 $gray:                      #9faecb; //#5d76a8;
@@ -10,11 +33,13 @@ $gray-light:                #c0cadd; //#9faecb;
 $gray-lighter:              #e1e6ef; //#c0cadd
 $gray-lightest:             #f9f9fa; //#e1e6ef
 
-$brand-primary:             #20a8d8;
+$brand-primary:             #2ba8d6;
 $brand-success:             #79c447;
 $brand-info:                #67c2ef;
-$brand-warning:             #fabb3d;
-$brand-danger:              #ff5454;
+$brand-warning:             #FF6F00;
+$brand-danger:              #FF1744;
+
+$brand-dark:                #1976D2;
 
 // Options
 //

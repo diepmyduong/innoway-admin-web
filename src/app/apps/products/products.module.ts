@@ -4,14 +4,14 @@ import { ProductsComponent } from './products.component';
 import { ProductsRoutingModule } from './products-routing.module';
 import { AddComponent } from './add/add.component';
 
-import { TabsModule } from 'ng2-bootstrap/tabs';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { DetailComponent } from './detail/detail.component';
 import { VSChecklistModule } from 'ng2-vs-checklist';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 import { CustomFormsModule } from 'ng2-validation';
 
-// import { ModalDirective } from 'ng2-bootstrap/modal/modal.component';
-import { ModalModule } from 'ng2-bootstrap/modal';
+// import { ModalDirective } from 'ngx-bootstrap/modal/modal.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 // Ng2-select
 import { SelectModule } from 'ng2-select';
@@ -25,7 +25,7 @@ import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 
 import { LaddaModule } from 'angular2-ladda';
-import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { TextMaskModule } from 'angular2-text-mask';
 
 import { PipesModule } from 'app/pipes/pipes.module'
@@ -50,7 +50,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     ModalModule.forRoot(),
     CustomModal,
     LaddaModule,
-    DataTableModule,
+    // DataTableModule,
     PipesModule,
     SwiperModule,
     FroalaEditorModule.forRoot(),
