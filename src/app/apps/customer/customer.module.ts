@@ -11,7 +11,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 
 @NgModule({
@@ -23,7 +23,7 @@ import { LaddaModule } from 'angular2-ladda';
     FormsModule,
     ReactiveFormsModule,
     LaddaModule,
-    // DataTableModule
+    DataTableModule
   ],
   declarations: [CustomerComponent, DetailComponent, AddComponent],
   providers: []

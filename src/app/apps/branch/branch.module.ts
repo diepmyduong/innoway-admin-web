@@ -8,7 +8,7 @@ import { DetailComponent } from './detail/detail.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
@@ -18,7 +18,7 @@ import { AgmCoreModule } from '@agm/core';
 
     FormsModule,
     ReactiveFormsModule,
-    // DataTableModule,
+    DataTableModule,
     LaddaModule,
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",

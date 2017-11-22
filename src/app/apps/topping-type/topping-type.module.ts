@@ -19,7 +19,7 @@ import { UploadImageByUrlComponent } from 'app/modal/upload-image-by-url/upload-
 import { ModalModule as Ng2ModalModule } from 'angular2-modal';
 import { ModalModule as CustomModal} from 'app/modal/modal.module';
 import { LaddaModule } from 'angular2-ladda';
-// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 // @NgModule({})
 // export declare class Ng2UploadImageByUrlComponent extends UploadImageByUrlComponent {}
@@ -41,7 +41,7 @@ import { LaddaModule } from 'angular2-ladda';
     ModalModule.forRoot(),
     CustomModal,
     LaddaModule,
-    // DataTableModule
+    DataTableModule
   ],
   declarations: [ToppingTypeComponent, AddComponent, DetailComponent],
   providers: []

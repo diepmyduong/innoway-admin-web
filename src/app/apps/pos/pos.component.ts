@@ -12,7 +12,8 @@ import { NgModel, FormControl, NgForm } from "@angular/forms";
 
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/of'
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/debounceTime'
 
 import { DOCUMENT } from '@angular/platform-browser';
 

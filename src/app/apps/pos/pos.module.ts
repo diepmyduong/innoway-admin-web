@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SidebarModule } from 'ng-sidebar';
 import { SwiperModule } from 'angular2-useful-swiper';
-// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { SelectModule } from 'ng2-select';
 import { SharedModule } from 'app/shared'
 import {
@@ -43,7 +43,7 @@ import { AgmCoreModule } from "@agm/core";
     SwiperModule,
     SidebarModule,
     NgbModule,
-    // DataTableModule,
+    DataTableModule,
     MatToolbarModule,
     MatSidenavModule,
     MatIconModule,
