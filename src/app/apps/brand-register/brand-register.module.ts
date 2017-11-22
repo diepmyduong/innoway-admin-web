@@ -25,6 +25,7 @@ import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-not
     SimpleNotificationsModule,
     PushNotificationsModule
   ],
-  declarations: [BrandRegisterComponent]
+  declarations: [BrandRegisterComponent],
+  bootstrap: [BrandRegisterComponent],
 })
 export class BrandRegisterModule { }

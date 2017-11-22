@@ -27,8 +27,9 @@ import { TabsModule } from 'ng2-bootstrap/tabs';
     SimpleNotificationsModule,
     PushNotificationsModule,
 
-    TabsModule
+    TabsModule.forRoot()
   ],
-  declarations: [ToolComponent]
+  declarations: [ToolComponent],
+  bootstrap: [ToolComponent],
 })
 export class ToolModule { }
