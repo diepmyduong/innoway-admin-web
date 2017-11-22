@@ -11,6 +11,8 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 
+import { TabsModule } from 'ng2-bootstrap/tabs';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -23,7 +25,9 @@ import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-not
     FormsModule,
     ReactiveFormsModule,
     SimpleNotificationsModule,
-    PushNotificationsModule
+    PushNotificationsModule,
+
+    TabsModule
   ],
   declarations: [ToolComponent]
 })
