@@ -125,7 +125,7 @@ input {
     .loading-spinner {
         color: $brand-primary;
     }
-    
+
 }
 .btn-login:hover {
     background-color: $gray-light;
@@ -138,15 +138,15 @@ input {
     left: 0;
     right: 0;
     bottom: 0;
-    
+
     .circle-outline {
         position: fixed;
         color: transparent;
         background-color:transparent;
         opacity: 0.25;
-        border-width: 6em;  
+        border-width: 6em;
         border-style: solid;
-        border-color: rgba(255, 255, 255, 0.5);  
+        border-color: rgba(255, 255, 255, 0.5);
         width: 100em;
         height: 100em;
         border-radius:50%;
@@ -216,11 +216,11 @@ input {
             text-align: center;
         }
     }
-    
+
 }
 
 // ANIMATION
-@keyframes moving-circly { 
+@keyframes moving-circly {
     from {
 		transform: rotate(0deg)
 		           translate(-30px)
@@ -228,7 +228,23 @@ input {
 	}
 	to {
 		transform: rotate(360deg)
-		           translate(-30px) 
+		           translate(-30px)
 		           rotate(-360deg);
 	}
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border:none !important;
+  -webkit-text-fill-color: white !important;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+  transition: background-color 5000s ease-in-out 0s;
 }

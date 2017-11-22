@@ -128,8 +128,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-
-
   // dropdown buttons
   public status: { isopen: boolean } = { isopen: false };
   public toggleDropdown($event: MouseEvent): void {
@@ -748,7 +746,7 @@ export class DashboardComponent implements OnInit {
   }
 
   refreshFilterValue(){
-    
+
   }
 
 }
