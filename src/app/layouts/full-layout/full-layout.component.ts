@@ -138,6 +138,18 @@ export class FullLayoutComponent implements OnInit {
       name: 'Dịch vụ',
     },
     {
+      type: 'single',
+      name: 'Đăng ký',
+      link: "/brand-register",
+      icon: 'icon-speedometer',
+    },
+    {
+      type: 'single',
+      name: 'tool',
+      link: "/tool",
+      icon: 'icon-speedometer',
+    },
+    {
       type: 'parent',
       name: 'Thương hiệu',
       icon: 'icon-star',
@@ -456,7 +468,7 @@ export class FullLayoutComponent implements OnInit {
     {
       type: 'single',
       name: 'POS',
-      link: "./pos",
+      link: "/pos",
       icon: 'icon-speedometer',
     },
     {

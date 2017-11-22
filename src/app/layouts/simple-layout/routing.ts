@@ -13,3 +13,17 @@ export const PosLayoutRouting = {
   canActivate: [AuthGuard],
   loadChildren: 'app/apps/pos/pos.module#PosModule'
 }
+
+export const BrandRegisterLayoutRouting = {
+  path: 'brand-register',
+  component: SimpleLayoutComponent,
+  canActivate: [AuthGuard],
+  loadChildren: 'app/apps/brand-register/brand-register.module#BrandRegisterModule'
+}
+
+export const ToolLayoutRouting = {
+  path: 'tool',
+  component: SimpleLayoutComponent,
+  canActivate: [AuthGuard],
+  loadChildren: 'app/apps/tool/tool.module#ToolModule'
+}

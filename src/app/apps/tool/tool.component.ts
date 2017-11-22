@@ -62,6 +62,14 @@ export class ToolComponent implements OnInit {
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "",
       },{
+        title: "Khảo sát",
+        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
+        link: "",
+      },{
+        title: "Sự kiện",
+        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
+        link: "",
+      },{
         title: "Tích hợp AI",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "",
