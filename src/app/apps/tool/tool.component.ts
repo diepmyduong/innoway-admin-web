@@ -61,12 +61,16 @@ export class ToolComponent implements OnInit {
         title: "Phân tích",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "",
+      },{
+        title: "Tích hợp AI",
+        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
+        link: "",
       }, {
         title: "Tích hợp KiotViet",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "",
       },{
-        title: "Thích hợp Chatbot",
+        title: "Tích hợp Chatbot",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "",
       }
