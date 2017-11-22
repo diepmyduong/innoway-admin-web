@@ -40,20 +40,23 @@
     // &::-webkit-scrollbar-button {    }
 
     &::-webkit-scrollbar-track {
-      background-color: lighten($sidebar-bg, 5%);
-      border-right: 1px solid darken($sidebar-bg, 5%);
-      border-left: 1px solid darken($sidebar-bg, 5%);
+      // background-color: lighten($sidebar-bg, 5%);
+      // border-right: 1px solid darken($sidebar-bg, 5%);
+      // border-left: 1px solid darken($sidebar-bg, 5%);
+      background-color: $bluegrey-darker;
+      border: none;
     }
 
     // &::-webkit-scrollbar-track-piece {    }
 
     &::-webkit-scrollbar-thumb {
       height: 50px;
-      background-color: darken($sidebar-bg, 10%);
+      background-color: $bluegrey-dark;
+      //background-color: darken($sidebar-bg, 10%);
       background-clip: content-box;
-      border-color: transparent;
-      border-style: solid;
-      border-width: 1px 2px;
+      // border-color: transparent;
+      // border-style: solid;
+      // border-width: 1px 2px;
     }
 
     // &::-webkit-scrollbar-corner {    }
@@ -159,8 +162,12 @@
             font-size: $font-size-base;
             line-height: ($font-size-base * 3 / 4);
             text-align: center;
-            content: "\2039";
-            transition: .3s;
+            font-family: FontAwesome;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 0.5rem;
+            content: "\f054";
+            transition: .3s ease;
           }
         }
       }
@@ -183,8 +190,8 @@
           }
 
           > .nav-link.nav-dropdown-toggle::before {
-            -webkit-transform: rotate(-90deg);
-            transform: rotate(-90deg);
+            -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
           }
 
           .nav-dropdown.open {

@@ -4,8 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
 
 import { AppComponent } from './app.component';
-import { BsDropdownModule } from 'ng2-bootstrap';
-import { TabsModule } from 'ng2-bootstrap/tabs';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NAV_DROPDOWN_DIRECTIVES } from './shared/nav-dropdown.directive';
 
 import { ChartsModule } from 'ng2-charts/ng2-charts';
@@ -25,11 +24,13 @@ import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-not
 
 import { ServicesModule } from './services';
 
-import { ModalModule } from 'ng2-bootstrap/modal';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from './shared/shared.module'
 import { LayoutsModule } from './layouts/layouts.module'
 
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     SharedModule,
     LayoutsModule,
     BsDropdownModule.forRoot(),
+    ColorPickerModule,
   ],
   declarations: [
     AppComponent,

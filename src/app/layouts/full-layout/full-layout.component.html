@@ -1,80 +1,105 @@
 <header class="app-header navbar">
-  <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">&#9776;</button>
+  <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button"><i class="material-icons">keyboard_arrow_left</i></button>
   <a class="navbar-brand" [routerLink]="['./dashboard']">
-    <p>M-Commerce</p>
+    <div class="logo-wrapper"><img id="logo" src="../../assets/img/logo-white.svg"/></div>
   </a>
-  <ul class="nav navbar-nav hidden-md-down">
-    <li class="nav-item">
-      <a class="nav-link navbar-toggler sidebar-toggler" href="javascript:;">&#9776;</a>
+  <ul class="nav navbar-nav mr-auto">
+    <!-- <li class="nav-item hidden-md-down">
+      <a class="nav-link navbar-toggler sidebar-toggler" href="javascript:;"><i class="material-icons">keyboard_arrow_left</i></a>
+    </li> -->
+    
+    
+    <!-- USER AVATAR AND NAME -->
+    <li class="nav-item dropdown" dropdown placement="bottom" id="accountDropdownMenu">
+      <button class="nav-link nav-pill avatar dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+        <div *ngIf="!employee.avatar" >{{employee.fullname}}</div>
+        <img src="{{employee.avatar?employee.avatar:''}}" class="img-avatar" *ngIf="employee.avatar" onerror="this.style.display = 'none'">
+      </button>
+      <div class="user-name hidden-md-down"  data-toggle="dropdown">
+        {{employee.fullname}}<i class="material-icons">keyboard_arrow_down</i>
+      </div>
+      <ul class="dropdown-menu" aria-labelledby="accountDropdownMenu">
+        <li class="dropdown-item"><a><i class="fa fa-user"></i> Thông tin tài khoản</a></li>
+        <li class="dropdown-item"><a><i class="fa fa-wrench"></i> Cài đặt</a></li>
+        <li class="dropdown-item"><a><i class="fa fa-shield"></i> Khoá tài khoản</a></li>
+        <li class="dropdown-item" (click)="logout()"><a><i class="fa fa-lock"></i> Đăng xuất</a></li>
+      </ul>
     </li>
 
-  </ul>
-  <ul class="nav navbar-nav ml-auto">
+    <div class="name-separator hidden-md-down"></div>
+    
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="icon-bell"></i><span class="badge badge-pill badge-danger">5</span>
+              <i class="fa fa-bell-o" aria-hidden="true"></i><span class="badge badge-pill badge-danger">5</span>
           </a>
-      <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg" *dropdownMenu aria-labelledby="simple-dropdown">
-
-        <div class="dropdown-header text-center"><strong>Thông báo</strong></div>
-
-        <a href="javascript:;" class="dropdown-item">
-                  <i class="icon-basket-loaded text-primary"></i> Đơn hàng chờ duyệt
-                  <span class="badge badge-pill badge-primary">5</span>
-              </a>
-        <a href="javascript:;" class="dropdown-item">
-                  <i class="glyphicons glyphicons-coins text-success"></i> Đơn hàng chờ thu phí
-                  <span class="badge badge-pill badge-success">5</span>
-              </a>
-        <a href="javascript:;" class="dropdown-item">
-                  <i class="glyphicons glyphicons-exclamation-sign text-warning"></i> Đơn hàng báo huỷ
-                  <span class="badge badge-pill badge-warning">5</span>
-              </a>
-      </div>
+      <ul class="dropdown-menu" aria-labelledby="accountDropdownMenu">
+        <li class="dropdown-item"><i class="fa fa-user"></i> Đơn hàng chờ duyệt</li>
+        <li class="dropdown-item"><i class="fa fa-wrench"></i> Đơn hàng chờ thu phí</li>
+        <li class="dropdown-item"><i class="fa fa-shield"></i> Đơn hàng báo huỷ</li>
+      </ul>
     </li>
-    <li class="nav-item dropdown" dropdown placement="bottom right">
-      <a class="nav-link nav-pill avatar dropdown-toggle" data-toggle="dropdown" id="accountDropdownMenu" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <img src="{{employee.avatar?employee.avatar:'https://s11.favim.com/mini/160421/snowball-movie-the-secret-life-of-pets-cute-Favim.com-4234326.jpeg'}}" class="img-avatar" alt="admin@bootstrapmaster.com" url>
+    
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-commenting-o"></i>
           </a>
-          <div class="dropdown-menu" aria-labelledby="accountDropdownMenu">
-            <a class="dropdown-item"><i class="fa fa-user"></i> Thông tin tài khoản</a>
-            <a class="dropdown-item"><i class="fa fa-wrench"></i> Cài đặt</a>
-            <a class="dropdown-item"><i class="fa fa-shield"></i> Khoá tài khoản</a>
-            <a class="dropdown-item" (click)="logout()"><i class="fa fa-lock"></i> Đăng xuất</a>
-          </div>
-    <!-- <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="accountDropdownMenu">
-        <div class="dropdown-header text-center">
-          <strong>Tài khoản</strong>
-        </div>
-
-        <a class="dropdown-item"><i class="fa fa-user"></i> Thông tin tài khoản</a>
-        <a class="dropdown-item"><i class="fa fa-wrench"></i> Cài đặt</a>
-        <a class="dropdown-item"><i class="fa fa-shield"></i> Khoá tài khoản</a>
-        <a class="dropdown-item"><i class="fa fa-lock"></i> Đăng xuất</a>
-      </div> -->
     </li>
-    <!-- <div class="dropdown">
-      <div class="dropdown-toggle" id="accountDropdownMenu">
-        {{employee.fullname}}
-      </div>
-      <div class="dropdown-menu" aria-labelledby="accountDropdownMenu">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
-        <a class="dropdown-item" href="#">Something else here</a>
-      </div>
-    </div> -->
-    <li class="nav-item">
-      <a class="nav-link navbar-toggler aside-menu-toggler" href="javascript:;">&#9776;</a>
+    
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="icon-settings"></i>
+          </a>
     </li>
+    
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-power-off"></i>
+          </a>
+    </li>
+  </ul>
+  <ul class="nav navbar-nav ml-auto hidden-md-down">
+        <li class="nav-item">
+          <a class="nav-link navbar-toggler aside-menu-toggler" href="javascript:;"><i class="material-icons">menu</i></a>
+        </li>
   </ul>
 </header>
 
 <div class="app-body">
-  <div class="sidebar">
+
+<div class="sidebar">
+    <nav class="sidebar-nav">
+      <ul class="nav">
+
+        <div *ngFor="let nav of navigations">
+          <li class="nav-item" *ngIf="nav.type=='single'">
+              <a class="nav-link" routerLinkActive="active" [routerLink]="nav.link"><i [ngClass]="nav.icon"></i> {{nav.name}} </a>
+            </li>
+
+          <li class="nav-title text-center" *ngIf="nav.type=='title'">
+            <span>{{nav.name}}</span>
+          </li>
+          
+        <li class="nav-item nav-dropdown" routerLinkActive="open" *ngIf="nav.type=='parent'">
+            <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i [ngClass]="nav.icon"></i>{{nav.name}}</a>
+            <ul class="nav-dropdown-items">
+              <li class="nav-item" *ngFor="let c of nav.children">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="c.link"><i [ngClass]="c.icon"></i>{{c.name}}</a>
+              </li>
+            </ul>
+          </li>
+        </div>
+
+      </ul>
+    </nav>
+  </div>
+
+
+<!--       
+  <div class="sidebar" id="sidebar">
     <nav class="sidebar-nav">
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['./dashboard']"><i class="icon-speedometer"></i> Trang điều hướng </a>
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['./dashboard']"><i class="fa fa-home"></i> Trang điều hướng </a>
         </li>
         <li class="nav-title text-center">
           <span>Dịch vụ</span>
@@ -89,10 +114,10 @@
           <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Thương hiệu</a>
           <ul class="nav-dropdown-items">
             <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['./brand/add']"><i class="icon-star"></i> Thêm</a>
+              <a class="nav-link" routerLinkActive="active" [routerLink]="['./brand/add']"><i class="fa fa-plus"></i> Thêm</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['./brand/list']"><i class="icon-star"></i> Danh sách</a>
+              <a class="nav-link" routerLinkActive="active" [routerLink]="['./brand/list']"><i class="fa fa-list-ul"></i> Danh sách</a>
             </li>
           </ul>
         </li>
@@ -154,9 +179,9 @@
         <li class="nav-title text-center">
           <span>Quản lý</span>
         </li>
-        <!--  <li class="nav-item">
+          <li class="nav-item">
                   <a class="nav-link" routerLinkActive="active" [routerLink]="['./products']"><i class="icon-speedometer"></i> Sản phẩm </a>
-              </li> -->
+              </li> 
         <li class="nav-item nav-dropdown" routerLinkActive="open">
           <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i class="icon-star"></i> Sản phẩm</a>
           <ul class="nav-dropdown-items">
@@ -472,7 +497,7 @@
         </li>
       </ul>
     </nav>
-  </div>
+  </div>  -->
 
   <!-- Main content -->
   <main class="main">

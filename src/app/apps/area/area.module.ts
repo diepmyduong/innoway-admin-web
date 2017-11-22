@@ -8,7 +8,7 @@ import { DetailComponent } from './detail/detail.component';
 
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+//import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 @NgModule({
   imports: [
@@ -18,7 +18,7 @@ import { DataTableModule } from 'angular-2-data-table-bootstrap4';
     FormsModule,
     ReactiveFormsModule,
     LaddaModule,
-    DataTableModule
+    // DataTableModule
   ],
   declarations: [AreaComponent, AddComponent, DetailComponent]
 })
