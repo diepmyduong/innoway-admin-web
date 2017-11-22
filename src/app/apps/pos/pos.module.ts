@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SidebarModule } from 'ng-sidebar';
 import { SwiperModule } from 'angular2-useful-swiper';
-import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { SelectModule } from 'ng2-select';
 import { SharedModule } from 'app/shared'
-import { SelectModule } from 'ng2-select'
 import {
   MatToolbarModule,
   MatSidenavModule,
@@ -25,7 +25,7 @@ import {
 import { PosRoutingModule } from './pos-routing.module';
 import { PosComponent, ToppingDialog, CheckboxToppingChecklistComponent } from './pos.component';
 
-import { TabsModule } from 'ng2-bootstrap/tabs';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TextMaskModule } from 'angular2-text-mask';
 import { PipesModule } from 'app/pipes/pipes.module';
 
@@ -43,7 +43,7 @@ import { AgmCoreModule } from "@agm/core";
     SwiperModule,
     SidebarModule,
     NgbModule,
-    DataTableModule,
+    // DataTableModule,
     MatToolbarModule,
     MatSidenavModule,
     MatIconModule,

@@ -6,12 +6,12 @@ import { CustomerComponent } from './customer.component';
 import { DetailComponent } from './detail/detail.component';
 import { AddComponent } from './add/add.component';
 
-import { TabsModule } from 'ng2-bootstrap/tabs';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TextMaskModule } from 'angular2-text-mask';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 
 @NgModule({
@@ -23,7 +23,7 @@ import { DataTableModule } from 'angular-2-data-table-bootstrap4';
     FormsModule,
     ReactiveFormsModule,
     LaddaModule,
-    DataTableModule
+    // DataTableModule
   ],
   declarations: [CustomerComponent, DetailComponent, AddComponent],
   providers: []

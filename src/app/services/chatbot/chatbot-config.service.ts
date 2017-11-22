@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-
+import { environment } from '@environments'
 @Injectable()
 export class ChatbotConfigService {
 
   constructor() {
     this.config = {
-      host: "http://localhost:5000", //"https://chatbot-dot-m-commerce-cloud-service.appspot.com", // 
-      version: "v1"
+      host: environment.chatbot.host,
+      version: environment.chatbot.version
     }
   }
 

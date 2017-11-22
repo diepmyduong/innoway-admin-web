@@ -12,7 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 
 import { LaddaModule } from 'angular2-ladda';
-import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+//import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { TextMaskModule } from 'angular2-text-mask';
 
 import { PipesModule } from 'app/pipes/pipes.module'
@@ -24,6 +24,8 @@ import { AgmCoreModule } from '@agm/core';
 import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster';
 
 import { DashboardService } from "app/apps/dashboard/DashboardService";
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { SelectModule } from 'ng2-select';
 
 @NgModule({
   imports: [
@@ -31,28 +33,28 @@ import { DashboardService } from "app/apps/dashboard/DashboardService";
     ChartsModule,
     CommonModule,
 
-    // FormsModule,
-    // ReactiveFormsModule,
-
     SimpleNotificationsModule,
     PushNotificationsModule,
 
     LaddaModule,
-    DataTableModule,
+    // DataTableModule,
     TextMaskModule,
+    BsDropdownModule,
 
     PipesModule,
-    // SwiperModule
 
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
       libraries: ["places,drawing"]
     }),
 
-    ToasterModule
+    ToasterModule,
+    SelectModule
   ],
   providers: [DashboardService],
   bootstrap: [DashboardComponent, BillsComponent, BillDetailComponent, BillLocationComponent],
   declarations: [DashboardComponent, BillsComponent, BillDetailComponent, BillLocationComponent]
 })
-export class DashboardModule { }
+export class DashboardModule {
+  
+}

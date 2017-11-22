@@ -8,12 +8,12 @@ import { DetailComponent } from './detail/detail.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+ import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { TextMaskModule } from 'angular2-text-mask';
 
-import { TimepickerModule } from 'ng2-bootstrap/timepicker';
-import { DatepickerModule } from 'ng2-bootstrap/datepicker';
-import { ColorPickerModule } from 'angular2-color-picker';
+import { TimepickerModule } from 'ngx-bootstrap/timepicker';
+import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   imports: [
@@ -23,12 +23,12 @@ import { ColorPickerModule } from 'angular2-color-picker';
     FormsModule,
     ReactiveFormsModule,
     LaddaModule,
-    DataTableModule,
+     DataTableModule,
     TextMaskModule,
 
     TimepickerModule.forRoot(),
     DatepickerModule.forRoot(),
-    ColorPickerModule
+    ColorPickerModule,
   ],
   declarations: [BrandComponent, AddComponent, DetailComponent],
   providers: []

@@ -10,7 +10,7 @@ import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { TextMaskModule } from 'angular2-text-mask';
 import { CustomFormsModule } from 'ng2-validation';
 import { LaddaModule } from 'angular2-ladda';
-import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 @NgModule({
   imports: [
@@ -20,7 +20,7 @@ import { DataTableModule } from 'angular-2-data-table-bootstrap4';
     ReactiveFormsModule,
     TextMaskModule,
     CustomFormsModule,
-    DataTableModule,
+    // DataTableModule,
     LaddaModule
   ],
   declarations: [ProductTypeComponent, AddComponent, DetailComponent]

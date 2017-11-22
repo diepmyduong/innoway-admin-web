@@ -671,7 +671,7 @@ export class PosComponent implements OnInit {
       fields: ["$all"],
       limit: limit,
       filter: {
-        phone: { $iLike: `%${event}%` }
+        fullname: { $iLike: `%${event}%` }
       }
     })
 

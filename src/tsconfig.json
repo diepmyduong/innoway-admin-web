@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     "baseUrl": "",
+    "paths": {
+      "angular-2-data-table-bootstrap4": ["../node_modules/angular-2-data-table-bootstrap4/src"],
+      "@environments": ["./environments"]
+    },
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

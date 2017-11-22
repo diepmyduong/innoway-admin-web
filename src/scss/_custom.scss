@@ -1,6 +1,15 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "~bootstrap-material-design/dist/css/bootstrap-material-design.min.css"; // Here you can add other styles
 
+body {
+  font-family: 'Helvetica Neue';
+
+}
+
+.material-icons {
+  vertical-align: middle;
+}
+
 .navbar {
   .form-inline {
     i {

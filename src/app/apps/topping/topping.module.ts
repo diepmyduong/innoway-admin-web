@@ -10,7 +10,7 @@ import { AddComponent } from './add/add.component';
 import { DetailComponent } from './detail/detail.component';
 
 import { LaddaModule } from 'angular2-ladda';
-import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 import { PipesModule } from 'app/pipes/pipes.module'
 
@@ -22,7 +22,7 @@ import { PipesModule } from 'app/pipes/pipes.module'
     ReactiveFormsModule,
     TextMaskModule,
     LaddaModule,
-    DataTableModule,
+    // DataTableModule,
     TextMaskModule,
     PipesModule
   ],

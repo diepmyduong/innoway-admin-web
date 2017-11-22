@@ -1,36 +1,28 @@
-<div id="fundo">
-  <form #loginForm="ngForm" (keyup)="keyDownFunction($event,loginForm)" id="login">
-      <div id="logo"></div>
+<div id="fundo" class="absolute-center-container">
+  <div class="circle-outline"></div>
+  <div class="circle-outline"></div>
+  <div class="circle-outline"></div>
+  <form #loginForm="ngForm" class="absolute-center" (keyup)="keyDownFunction($event,loginForm)" id="login">
+      <img id="logo" src="../../assets/img/logo-white.svg"/>
       <h1 id="login-title">Đăng nhập</h1>
-      <div class="card-block spinner" *ngIf="submitting">
-        <div class="sk-circle" >
-          <div class="sk-circle1 sk-child"></div>
-          <div class="sk-circle2 sk-child"></div>
-          <div class="sk-circle3 sk-child"></div>
-          <div class="sk-circle4 sk-child"></div>
-          <div class="sk-circle5 sk-child"></div>
-          <div class="sk-circle6 sk-child"></div>
-          <div class="sk-circle7 sk-child"></div>
-          <div class="sk-circle8 sk-child"></div>
-          <div class="sk-circle9 sk-child"></div>
-          <div class="sk-circle10 sk-child"></div>
-          <div class="sk-circle11 sk-child"></div>
-          <div class="sk-circle12 sk-child"></div>
-        </div>
-      </div>
-      <div class="input">
+      <div class="input-row">
+        <i class="input-icon material-icons md-36">perm_identity</i>
         <input #emailControl="ngModel"
         placeholder="Email" 
         [(ngModel)]="email" 
         placeholder="Email"
         name="email" maxlength="70" email required>
       </div>
-      <div class="input">
+      <div class="input-row">
+        <i class="input-icon material-icons md-36">lock</i>
         <input #passwordControl="ngModel"
         placeholder="Password" 
         [(ngModel)]="password" 
         name="password" maxlength="70" type="password" required>
-        <div class="btn" (click)="signIn(loginForm)"></div>
       </div>
+      <button type="button" class="btn btn-login" (click)="signIn(loginForm)">
+          <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner" style="font-size:24px"></i>
+          <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng nhập</span>
+      </button>
   </form>
 </div>
