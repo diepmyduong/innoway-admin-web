@@ -25,4 +25,8 @@ export class AuthService {
     return await this.service.LoginWithEmailAndPassword(email,password)
   }
 
+  async getAccessToken() {
+    return await innoway2.api.getAccessToken()
+  }
+
 }

@@ -1,0 +1,77 @@
+<mat-card mat-list-item draggable [dragData]="index" droppable (onDrop)="onCardDrop($event)" [dragScope]="card.story + '-' + portalIndex"
+  [dropScope]="card.story + '-' + portalIndex">
+  <mat-card-header>
+    <mat-card-title>Mẫu danh mục sản phẩm</mat-card-title>
+    <span class="header-spacer"></span>
+    <mat-slide-toggle #saveToggle [checked]="cardFrm.pristine" [disabled]="cardFrm.pristine" labelPosition="before" (change)="onSave(cardFrm,$event)">
+      Lưu</mat-slide-toggle>
+    <mat-icon [matMenuTriggerFor]="cardMenu" class="icon-btn">more_vert</mat-icon>
+    <mat-menu #cardMenu="matMenu">
+      <button mat-menu-item (click)="quickReply()">Trả lời nhanh</button>
+      <button mat-menu-item (click)="remove()">Xoá</button>
+    </mat-menu>
+  </mat-card-header>
+  <mat-card-content>
+    <form #cardFrm="ngForm">
+      <table cellspacing="0" *ngIf="card.option.query" class="frm-table">
+        <tr>
+          <td>
+            <mat-form-field class="text-input-field">
+              <input type="number" matInput placeholder="Limit" #limitControl="ngModel" [(ngModel)]="card.option.query.limit" name="limit">
+              <mat-hint align="end"></mat-hint>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="text-input-field">
+              <input type="number" matInput placeholder="Page" #limitControl="ngModel" [(ngModel)]="card.option.query.page" name="page">
+              <mat-hint align="end"></mat-hint>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr *ngIf="card.option.query && card.option.query.filter">
+          <td colspan="2">
+            <mat-form-field class="text-input-field">
+              <input type="text" matInput placeholder="Filter" #limitControl="ngModel" [(ngModel)]="card.option.query.filter.name" name="filter">
+              <mat-hint align="end"></mat-hint>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <mat-slide-toggle #previewToggle [checked]="preview" labelPosition="before" (change)="onPreviewToggle($event)">
+            Preview</mat-slide-toggle>
+        </tr>
+      </table>
+
+    </form>
+    <swiper *ngIf="preview && previewPayload" class="element-container" [config]="swiperOptions" #swiper>
+      <div class="swiper-wrapper">
+        <div class="swiper-slide element" *ngFor="let element of previewPayload.elements">
+          <mat-card #elementCard (mouseenter)="elementCard.onHover = true" (mouseleave)="elementCard.onHover = false">
+            <div class="element-buttons" *ngIf="elementCard.onHover">
+              <button mat-icon-button class="danger" (click)="removeElement()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <img [src]="element.image_url" alt="">
+            <mat-card-content>
+              <mat-form-field class="text-input-field">
+                <input matInput placeholder="Title" [value]="element.title" readonly>
+              </mat-form-field>
+              <mat-form-field class="text-input-field" *ngIf="element.subtitle">
+                <input matInput placeholder="Sub Title" [value]="element.subtitle" readonly>
+              </mat-form-field>
+            </mat-card-content>
+            <app-button-container [validButtons]="validButtons" [container]="container" [buttons]="element.buttons" readOnly="true"></app-button-container>
+          </mat-card>
+        </div>
+      </div>
+      <!-- Add Pagination -->
+      <div class="swiper-pagination element-pagination"></div>
+      <!-- Add Arrows -->
+      <div class="swiper-button-next element-button-next"></div>
+      <div class="swiper-button-prev element-button-prev"></div>
+    </swiper>
+
+  </mat-card-content>
+</mat-card>
+<mat-divider></mat-divider>

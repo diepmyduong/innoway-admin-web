@@ -10,7 +10,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-//import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { TextMaskModule } from 'angular2-text-mask';
 
 import { PipesModule } from 'app/pipes/pipes.module';
@@ -26,7 +26,7 @@ import { PaidListComponent } from './paid-list/paid-list.component'
     FormsModule,
     ReactiveFormsModule,
     LaddaModule,
-    // DataTableModule,
+    DataTableModule,
     TextMaskModule,
     
     PipesModule

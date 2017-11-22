@@ -119,10 +119,10 @@ export const FullLayoutRouting = {
       path: 'pos',
       loadChildren: 'app/apps/pos/pos.module#PosModule'
     },
-    // {
-    //   path: 'paid_history',
-    //   loadChildren: 'app/apps/paid_history/paid_history.module#PaidHistoryModule'
-    // },
+    {
+      path: 'paid_history',
+      loadChildren: 'app/apps/paid_history/paid_history.module#PaidHistoryModule'
+    },
     {
       path: 'blacklist',
       loadChildren: 'app/apps/blacklist/blacklist.module#BlacklistModule'
@@ -154,6 +154,10 @@ export const FullLayoutRouting = {
     {
       path: 'settings',
       loadChildren: 'app/apps/settings/settings.module#SettingsModule'
+    },
+    {
+      path: 'schedule',
+      loadChildren: 'app/apps/schedule/schedule.module#ScheduleModule'
     },
     {
       path: 'area',

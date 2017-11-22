@@ -26,7 +26,7 @@ import { ServicesModule } from './services';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from './shared/shared.module'
-import { LayoutsModule } from './layouts/layouts.module'
+import { LayoutsModule } from './layouts/layouts.module';
 
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -48,7 +48,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
     ModalModule.forRoot(),
     SharedModule,
     LayoutsModule,
-    BsDropdownModule.forRoot(),
+    // BsDropdownModule.forRoot(),
     ColorPickerModule,
   ],
   declarations: [

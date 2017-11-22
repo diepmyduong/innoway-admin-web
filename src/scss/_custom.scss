@@ -148,3 +148,10 @@ body {
 .custom-file-control:read-only, .form-control:read-only {
   background-image: none;
 }
+
+.header-spacer {
+  flex: 1 1 auto;
+}
+.icon-btn {
+  cursor: pointer
+}

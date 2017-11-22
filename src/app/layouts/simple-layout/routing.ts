@@ -14,6 +14,12 @@ export const PosLayoutRouting = {
   loadChildren: 'app/apps/pos/pos.module#PosModule'
 }
 
+export const ChatGutLayoutRouting = {
+  path: 'mcommerce',
+  component: SimpleLayoutComponent,
+  loadChildren: 'app/apps/chatgut/chatgut.module#ChatgutModule'
+}
+
 export const BrandRegisterLayoutRouting = {
   path: 'brand-register',
   component: SimpleLayoutComponent,

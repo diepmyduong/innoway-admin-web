@@ -1,0 +1,36 @@
+<form #storyFrm="ngForm">
+  <div class="portal" (click)="focus()">
+    <mat-toolbar color="success" class="portal-header">
+      <mat-form-field class="header-spacer">
+        <input matInput #storyNameInput="ngModel" [(ngModel)]="story.name" name="name">
+      </mat-form-field>
+      <mat-slide-toggle #saveToggle [checked]="storyFrm.pristine" [disabled]="storyFrm.pristine" (change)="onSave(storyFrm,$event)" labelPosition="before">Lưu</mat-slide-toggle>
+      <mat-icon [matMenuTriggerFor]="headerMenu" class="icon-btn">more_vert</mat-icon>
+      <mat-menu #headerMenu="matMenu">
+        <button mat-menu-item [matMenuTriggerFor]="cardMenu">Thêm card</button>
+        <button mat-menu-item (click)="removeStory()">Xoá câu truyện</button>
+      </mat-menu>
+      <mat-menu #cardMenu="matMenu">
+        <button mat-menu-item (click)="addTextCard()">Text</button>
+        <button mat-menu-item (click)="addImageCard()">Image</button>
+        <button mat-menu-item (click)="addVideoCard()">Video</button>
+        <button mat-menu-item (click)="addAudioCard()">Audio</button>
+        <button mat-menu-item [matMenuTriggerFor]="templateMenu">Mẫu</button>
+        <button mat-menu-item (click)="addQuickReplyCard()">Trả lời nhanh</button>
+      </mat-menu>
+      <mat-menu #templateMenu="matMenu">
+        <button mat-menu-item (click)="addButtonsCard()">Nút</button>
+        <button mat-menu-item (click)="addGenericCard()">Hình và Nút</button>
+      </mat-menu>
+      <mat-icon class="icon-btn" (click)="close()">close</mat-icon>
+    </mat-toolbar>
+    <mat-progress-bar [hidden]="!progressBar.show" class="portal-progress-bar" [color]="progressBar.color" [mode]="progressBar.mode"
+      [value]="progressBar.value" [bufferValue]="progressBar.buffer">
+    </mat-progress-bar>
+    <div class="portal-content-block">
+      <img src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.2365-6/14302685_243106819419381_1314180151_n.png?oh=c78815335827a01158be103b67bcec36&oe=5A6DBF5C"
+        alt="" style="object-fit: contain;width: 100%;height: 350px;" *ngIf="mode == 'get_started'">
+      <app-card-container #cardContainer [container]="container" [parentViewRef]="viewRef" [cards]="story.cards" (change)="onCardChange($event)"></app-card-container>
+    </div>
+  </div>
+</form>

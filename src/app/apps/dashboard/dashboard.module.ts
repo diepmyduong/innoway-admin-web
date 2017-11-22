@@ -12,7 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 
 import { LaddaModule } from 'angular2-ladda';
-//import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { TextMaskModule } from 'angular2-text-mask';
 
 import { PipesModule } from 'app/pipes/pipes.module'
@@ -37,7 +37,7 @@ import { SelectModule } from 'ng2-select';
     PushNotificationsModule,
 
     LaddaModule,
-    // DataTableModule,
+    DataTableModule,
     TextMaskModule,
     BsDropdownModule,
 

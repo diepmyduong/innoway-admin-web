@@ -8,7 +8,7 @@ import { DetailComponent } from './detail/detail.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { BrowserModule } from "@angular/platform-browser";
 import { TabsModule } from 'ngx-bootstrap/tabs';
 
@@ -19,7 +19,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     FormsModule,
     ReactiveFormsModule,
     LaddaModule,
-    // DataTableModule,
+    DataTableModule,
     TabsModule
   ],
   declarations: [UnitComponent, AddComponent, DetailComponent],

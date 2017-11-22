@@ -6,7 +6,7 @@ import { SettingsComponent } from './settings.component';
 
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-// import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { DatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -28,7 +28,7 @@ import { SellComponent } from './sell/sell.component';
     FormsModule,
     ReactiveFormsModule,
     LaddaModule,
-    // DataTableModule,
+    DataTableModule,
 
     ColorPickerModule,
     CustomFormsModule,

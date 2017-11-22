@@ -1,0 +1,40 @@
+<div class="portal" style="width:400px" (click)="focus()">
+  <mat-toolbar color="success" class="portal-header">
+    <span>Lời chào</span>
+    <span class="header-spacer"></span>
+    <mat-icon class="icon-btn" (click)="close()">close</mat-icon>
+  </mat-toolbar>
+  <mat-progress-bar *ngIf="progressBar.show" class="portal-progress-bar" [color]="progressBar.color" [mode]="progressBar.mode"
+    [value]="progressBar.value" [bufferValue]="progressBar.buffer">
+  </mat-progress-bar>
+  <div class="portal-content-block">
+    <img src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.2365-6/14287888_188235318253964_1078929636_n.png?oh=9c46d375dab14f72aa76b6737f448962&oe=5A66C1F5"
+      alt="" style="object-fit: contain;width: 100%;height: 350px;">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Tin nhắn lời chào</mat-card-title>
+        <span class="header-spacer"></span>
+        <mat-slide-toggle #saveToggle [checked]="cardFrm.pristine" [disabled]="cardFrm.pristine" labelPosition="before" (change)="onSave(cardFrm,$event)">
+          Lưu</mat-slide-toggle>
+        <!-- <mat-icon [matMenuTriggerFor]="cardMenu" class="icon-btn">more_vert</mat-icon>
+        <mat-menu #cardMenu="matMenu">
+          <button mat-menu-item (click)="close()">Xoá</button>
+        </mat-menu> -->
+      </mat-card-header>
+      <mat-card-content>
+        <form #cardFrm="ngForm">
+          <mat-form-field class="text-input-field" *ngIf="setting">
+            <textarea #textControl="ngModel" [(ngModel)]="setting.option[0].text" name="text" matInput maxlength="160" placeholder="Tin nhắn" [matAutocomplete]="auto" #autoTrigger></textarea>
+            <mat-hint align="end">{{setting.option[0].text.length}} / 160</mat-hint>
+          </mat-form-field>
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option.value">
+              {{ option.display }}
+            </mat-option>
+          </mat-autocomplete>
+        </form>
+      </mat-card-content>
+    </mat-card>
+    <mat-divider></mat-divider>
+  </div>
+</div>

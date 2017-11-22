@@ -1,0 +1,8 @@
+<mat-nav-list #buttonListRef>
+  <ng-template #buttonViewContainer></ng-template>
+</mat-nav-list>
+<button mat-button class="add-button" *ngIf="!readOnly && buttonComps.length < limit" (click)="addButton()">
+  <mat-list-item>
+    <mat-icon matListIcon>add</mat-icon> Thêm nút
+  </mat-list-item>
+</button>
