@@ -11,6 +11,7 @@ import { LauncherLayoutComponent } from './launcher-layout/launcher-layout.compo
 //import { BsDropdownModule } from 'ng2-bs-dropdown';
 // Notifications
 import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster';
+import { ProductLayoutComponent } from "./product-layout/product-layout.component";
 
 @NgModule({
   imports: [
@@ -20,6 +21,6 @@ import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster'
     //BsDropdownModule,
     ToasterModule
   ],
-  declarations: [SimpleLayoutComponent, FullLayoutComponent, ChatbotLayoutComponent, LauncherLayoutComponent]
+  declarations: [SimpleLayoutComponent, FullLayoutComponent, ChatbotLayoutComponent, LauncherLayoutComponent, ProductLayoutComponent]
 })
 export class LayoutsModule { }

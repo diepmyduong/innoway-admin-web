@@ -6,6 +6,7 @@ import { FullLayoutRouting } from './full-layout/routing'
 import { SimpleLayoutRouting, PosLayoutRouting, ChatGutLayoutRouting, ToolLayoutRouting, BrandRegisterLayoutRouting } from './simple-layout/routing'
 import { ChatbotLayoutRouting } from './chatbot-layout/routing'
 import { LauncherLayoutRouting } from './launcher-layout/routing'
+import { ProductLayoutRouting } from "./product-layout/routing";
 
 export {
     ChatbotLayoutComponent,
@@ -20,4 +21,5 @@ export {
     ChatGutLayoutRouting,
     BrandRegisterLayoutRouting,
     ToolLayoutRouting,
+    ProductLayoutRouting
 }

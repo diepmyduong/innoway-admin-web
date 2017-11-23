@@ -9,7 +9,7 @@ export const FullLayoutRouting = {
     {
       path: '',
       redirectTo: 'dashboard',
-      pathMatch: 'full'
+      pathMatch: 'full',
     },
     {
       path: 'dashboard',
