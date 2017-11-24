@@ -18,6 +18,13 @@
               </div>
             </div>
             <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Mô tả ngắn</label>
+              <div class="col-md-8">
+                <input type="text" #shortDesciptionControl="ngModel" [(ngModel)]="shortDesciption" name="shortDesciption"
+                  class="form-control" [placeholder]="'Mô tả ngắn'"/>
+              </div>
+            </div>
+            <div class="form-group row">
               <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
               <div class="col-md-8">
                 <textarea id="textarea-input" #descriptionControl="ngModel" rows="5" [(ngModel)]="description" name="description"
