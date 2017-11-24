@@ -34,3 +34,8 @@ Thumbs.db
 
 #Customize
 /firebase
+src/app/app.routing_BACKUP_3382.ts
+src/app/app.routing_BASE_3382.ts
+src/app/app.routing_LOCAL_3382.ts
+src/app/app.routing_REMOTE_3382.ts
+src/app/layouts/index.ts.orig

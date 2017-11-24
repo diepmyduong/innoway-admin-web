@@ -33,6 +33,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   code: string;
   limit: number = 0;
   public description;
+  shortDescription: string;
   startDate: string;
   endDate: string;
   value: number = 0;
@@ -52,8 +53,8 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.customerTypePromotionService = innoway.getService('customer_type_promotion');
   }
 
-  changeText(event){
-    console.log("bambi change text: "+JSON.stringify(event));
+  changeText(event) {
+    console.log("bambi change text: " + JSON.stringify(event));
   }
 
   async ngOnInit() {
@@ -81,7 +82,8 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.limit = 0
     this.amount = 0;
     this.code = null;
-    this.description='';
+    this.description = '';
+    this.shortDescription = "";
     if (this.promotionTypeData.getValue()[0]) {
       this.promotionType = this.promotionTypeData.getValue()[0].id;
     }
@@ -98,7 +100,8 @@ export class AddComponent implements OnInit, AddPageInterface {
       limit: this.limit,
       amount: this.amount,
       code: this.code,
-      description: this.description
+      description: this.description,
+      shortDescription: this.shortDescription
     }
   }
 
@@ -115,6 +118,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.code = data.code
       this.limit = data.limit
       this.description = data.description
+      this.shortDescription = data.short_description
       this.startDate = data.start_date
       this.endDate = data.end_date
       this.value = data.value
@@ -217,12 +221,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid && this.detectDate(this.startDate, this.endDate)) {
-      let { name, amount, code, limit, description, value, status } = this;
+      let { name, amount, code, limit, shortDescription, description, value, status } = this;
       let start_date = new Date(this.startDate);
+      let short_description = shortDescription;
       let end_date = new Date(this.endDate);
       let customer_type_id = this.customerType;
       let promotion_type_id = this.promotionType;
-      let promotion = await this.promotionService.add({ name, amount, code, limit, description, start_date, end_date, value, promotion_type_id, status })
+      let promotion = await this.promotionService.add({ name, amount, code, limit, short_description, description, start_date, end_date, value, promotion_type_id, status })
 
       let customer_type_ids: string[] = [];
       customer_type_ids.push(customer_type_id);
@@ -239,12 +244,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid && this.detectDate(this.startDate, this.endDate)) {
-      let { name, amount, code, limit, description, value, status } = this;
+      let { name, amount, code, limit, shortDescription, description, value, status } = this;
       let start_date = new Date(this.startDate);
+      let short_description = shortDescription;
       let end_date = new Date(this.endDate);
       let customer_type_id = this.customerType;
       let promotion_type_id = this.promotionType;
-      await this.promotionService.add({ name, amount, code, limit, description, start_date, end_date, value, customer_type_id, promotion_type_id, status })
+      await this.promotionService.add({ name, amount, code, limit, short_description, description, start_date, end_date, value, customer_type_id, promotion_type_id, status })
       this.alertUpdateSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());

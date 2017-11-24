@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { InnowayService } from 'app/services';
 
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-add',
@@ -20,6 +20,7 @@ export class AddComponent implements OnInit {
 
   name: string;
   description: string;
+  shortDescription: string;
   image: string;
   status: number;
 
@@ -49,7 +50,7 @@ export class AddComponent implements OnInit {
 
   setDefaultData() {
     this.status = 1;
-    return{
+    return {
       status: this.status
     }
   }
@@ -61,6 +62,7 @@ export class AddComponent implements OnInit {
       });
       this.name = category.name
       this.image = category.image
+      this.shortDescription = category.short_description
       this.description = category.description
       this.status = category.status
     } catch (err) {
@@ -70,7 +72,7 @@ export class AddComponent implements OnInit {
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route});
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -123,8 +125,9 @@ export class AddComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, image, status } = this;
-      await this.categoryService.add({ name, description, image, status })
+      let { name, description, image, status, shortDescription } = this;
+      let short_description = shortDescription;
+      await this.categoryService.add({ name, description, short_description, image, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -135,8 +138,9 @@ export class AddComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, image, status } = this;
-      await this.categoryService.update(this.id, { name, description, image, status })
+      let { name, description, image, status, shortDescription } = this;
+      let short_description = shortDescription;
+      await this.categoryService.update(this.id, { name, description, short_description, image, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {

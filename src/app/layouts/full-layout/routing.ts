@@ -9,7 +9,7 @@ export const FullLayoutRouting = {
     {
       path: '',
       redirectTo: 'dashboard',
-      pathMatch: 'full'
+      pathMatch: 'full',
     },
     {
       path: 'dashboard',
@@ -120,8 +120,8 @@ export const FullLayoutRouting = {
       loadChildren: 'app/apps/pos/pos.module#PosModule'
     },
     {
-      path: 'paid_history',
-      loadChildren: 'app/apps/paid_history/paid_history.module#PaidHistoryModule'
+      path: 'paid-history',
+      loadChildren: 'app/apps/paid-history/paid-history.module#PaidHistoryModule'
     },
     {
       path: 'blacklist',

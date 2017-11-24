@@ -31,6 +31,8 @@ import { LayoutsModule } from './layouts/layouts.module';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { UiComponentComponent } from './apps/ui-component/ui-component.component';
+import { UpdateBillStatusComponentComponent } from './apps/ui-component/update-bill-status-component/update-bill-status-component.component';
 
 @NgModule({
   imports: [
@@ -53,6 +55,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
   ],
   declarations: [
     AppComponent,
+    UiComponentComponent,
+    UpdateBillStatusComponentComponent,
   ],
   providers: [{
     provide: LocationStrategy,
