@@ -17,71 +17,71 @@ export class LauncherLayoutComponent implements OnInit {
       }, {
         title: "Chi nhánh",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/branch-layout",
       },
       {
         title: "Nhân viên",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/employee-layout",
       }, {
         title: "Sản phẩm",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/product-layout",
       }, {
         title: "Người dùng",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/customer-layout",
       }, {
         title: "Đơn hàng",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/bill-layout",
       }, {
         title: "Khuyến mãi",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/promotion-layout",
       }, {
         title: "Phản hồi",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/feedback-layout",
       },{
         title: "Ticket",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/ticket-layout",
       }
     ],
     addon: [
       {
         title: "Thống kê",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/summary-layout",
       }, {
         title: "Báo cáo",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/report-layout",
       },{
         title: "Phân tích",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/analyse-layout",
       },{
         title: "Khảo sát",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/survey-layout",
       },{
         title: "Sự kiện",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/event-layout",
       },{
         title: "Tích hợp AI",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/integrate-apiai-layout",
       }, {
         title: "Tích hợp KiotViet",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/integrate-kiotviet-layout",
       },{
         title: "Tích hợp Chatbot",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/integrate-chatbot-layout",
       }
     ]
   }

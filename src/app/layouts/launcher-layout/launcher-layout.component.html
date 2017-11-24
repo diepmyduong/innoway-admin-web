@@ -97,7 +97,7 @@
             <div class="card-header">
               <div class="row">
                 <div class="col-md-2 item" *ngFor="let item of data.feature; let i = index">
-                  <img src="{{item.icon}}" width="100%" height="80px" />
+                  <img src="{{item.icon}}" width="100%" height="80px" [routerLink]="item.link" />
                   <span>{{item.title}}</span>
                 </div>
               </div>

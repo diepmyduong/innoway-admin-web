@@ -4,7 +4,7 @@ import { AuthGuard } from 'app/services'
 export const ProductLayoutRouting = {
   path: 'product-layout',
   component: ProductLayoutComponent,
-  //canActivate: [AuthGuard],
+  canActivate: [AuthGuard],
   children: [
     {
       path: '',
