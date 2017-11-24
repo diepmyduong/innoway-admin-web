@@ -1,3 +1,5 @@
+@import "../../../../scss/bootstrap-variables";
+
 .bill-progress {
   margin-left: -16px !important;
   margin-bottom: -16px !important;
@@ -16,12 +18,6 @@
   float: right;
 }
 
-.content {
-  height: 450px;
-  max-height: 450px;
-  overflow: scroll;
-}
-
 .my-btn {
   font-size: 1.7em;
 }
@@ -33,4 +29,139 @@
 
 .anotherclass {
   font-weight: bold;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-start;
+  padding: 15px;
+  margin: 0px !important; 
+  .branch-info {
+    padding: 0px;
+    color: $grey-dark;
+    div {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+  button {
+    float: right;
+    color: $grey-dark;
+    border: 1px solid $grey-mild;
+    border-radius: 5px;
+    text-transform: none !important;
+    i {
+      margin-right: 3px;
+    }
+    transition: all 0.3s ease;
+  }
+  button:hover {
+    border-color: $bluegrey-mild;
+    background-color: $brand-primary;
+    color: $grey-white;
+  }
+}
+
+.content {
+  height: calc(100% - 80px);
+  overflow-y: scroll;
+  .list-group {
+    height: 100%;
+    margin-bottom: 10px;
+    padding: 0px;
+    border: none;
+    .list-group-item {
+      display: block;
+      height: auto;
+      min-height: 160px;
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      padding: 0px;
+      border: none;
+      border-bottom: 1px solid $grey-lighter;
+      .bill-avatar {
+        width: 120px;
+        height: 100%;
+        margin-right: 0px;
+        display: flex;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 10px 0px;
+        flex-shrink: 0;
+        .img-avatar {
+          margin: auto;
+          width: 60px;
+          height: 60px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+        .user-info {
+          margin-top: 8px;
+          color: $bluegrey-mild;
+          font-size: 0.85rem;
+        }
+      }
+
+      .bill-info {
+        flex-grow: 1;
+        height: 100%;
+        width: auto;
+        padding: 15px;
+        flex-direction: column;
+        .bill-main {
+          display: flex;
+          justify-content: flex-start;
+          margin-right: 0px;
+          .bill-main-info {
+            flex-grow: 1;
+            color: $grey-dark;
+            font-size: 0.85rem;
+            div {
+              margin-bottom: 10px;
+              i {
+                color: $brand-primary;
+                margin-right: 5px;
+              }
+            }
+          }
+          .bill-date-time {
+            float: right;
+            flex-grow: 0;
+            div {
+              margin: 0px;
+              text-align: right;
+              color: $grey-mild;
+              font-size: 0.75rem;
+              margin-bottom: 5px;
+            }
+          }
+        }
+        .bill-button {
+          flex-grow: 1;
+          button {
+            margin-right: 0px;
+            color: $brand-primary;
+            border: 1px solid $brand-primary;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            text-transform: none !important;
+          }
+        }
+      }
+      .separator {
+        height: 1px;
+        width: 90%;
+        left: 5%;
+        position: absolute;
+        bottom: 0px;
+        border-bottom: 1px solid $grey-lighter;
+      }
+    }
+    // .list-group-item.active {
+    //   border-left: 3px solid $brand-primary;
+    // }
+  }
 }

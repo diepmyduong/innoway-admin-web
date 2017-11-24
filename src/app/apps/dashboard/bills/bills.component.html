@@ -1,10 +1,57 @@
+
 <div class="toolbar">
-  <span class="btn-group"></span>
-  <button class="btn btn-sm btn-primary btn-ladda mr-h float-right">Xem tổng quan</button>
-  <button class="btn btn-sm btn-primary btn-ladda mr-h float-right">Tạo đơn hàng</button>
-  <button class="btn btn-sm btn-primary btn-ladda mr-h float-right">Thống kê</button>
+  <div class="branch-info">
+    <div>Chi nhánh: {{branch.address}}</div>
+    <div>Nhân viên phụ trách: {{employeeData.fullname}} | Hotline: {{branch.phone}}</div>
+  </div>
+  <button class="btn btn-ladda btn-primary ml-auto"><i class="fa fa-plus"></i> Tạo đơn hàng</button>
 </div>
+
 <div class="content">
+  <div class="list-group">
+    <a href="#" class="list-group-item" *ngFor="let bill of bills | async; let i = index">
+      
+      <div class="bill-avatar">
+          <img class="img-avatar" src="{{bill.customer?.avatar?bill.customer.avatar:thumbDefault}}">
+          <div class="user-info" *ngIf="bill.customer && bill.customer.fullname">{{bill.customer?.fullname?bill.customer.fullname:''}}</div>
+          <div class="user-info">{{bill.customer?.phone?bill.customer.phone:''}}</div>
+      </div>
+      <div class="bill-info">
+        <div class="bill-main">
+          <div class="bill-main-info">
+            <div>
+              Mã đơn hàng: <b>{{bill.id}}</b>
+            </div>
+            <div>
+                <span><i class="fa fa-money"></i>{{bill.total_price | accounting}}</span>
+                <span><i class="fa fa-shopping-bag"></i>Tại cửa hàng </span>
+            </div>
+            <div>
+              <i class="fa fa-location-arrow"></i><span> {{bill.address}} </span>
+            </div>
+          </div>
+          <div class="bill-date-time">
+            <div>{{bill.updated_at | date:'dd/MM/yyyy'}}</div>
+            <div>{{bill.updated_at | date:'hh:mm:ss'}}</div>
+          </div>
+        </div>
+        <div class="bill-button">
+            <button (click)="changeStatusBill(bill)" class="btn btn-sm btn-success btn-ladda float-right" data-style="expand-right">
+                Cập nhật trạng thái
+              </button>
+              <button (click)="changeStatusBill(bill)" class="btn btn-sm btn-success btn-ladda float-right mr-h" data-style="expand-right">
+                Chỉnh sửa
+              </button>
+              <button (click)="print(bill)" class="btn btn-sm btn-success btn-ladda float-right mr-h" data-style="expand-right">
+                In hóa đơn
+              </button>
+        </div>
+      </div>
+      <div class="separator"></div>
+      </a>
+  </div>
+</div>
+<!-- <div class="content">
   <div class="row">
     <div class="col-md-12" *ngFor="let bill of bills | async; let i = index">
       <div class="row">
@@ -47,4 +94,4 @@
       <hr class="mx-1 my-0">
     </div>
   </div>
-</div>
+</div> -->

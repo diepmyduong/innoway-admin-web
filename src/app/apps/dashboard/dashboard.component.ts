@@ -13,7 +13,7 @@ declare let swal:any
 @Component({
   templateUrl: 'dashboard.component.html',
   providers: [Globals],
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
 
@@ -54,6 +54,52 @@ export class DashboardComponent implements OnInit {
     tapToDismiss: true,
     timeout: 5000
   });
+
+  top_right_infos = [
+    {
+      number: 78744,  
+      text: 'Khách hàng',
+    },
+    {
+      number: 12333,  
+      text: 'Phản hồi',
+    },
+    {
+      number: 8684234,  
+      text: 'Đơn hàng',
+    },
+    {
+      number: 45654,  
+      text: 'Truy cập',
+    },
+  ];
+
+  sub_header_infos = [
+    {
+      number: 56,
+      text: 'THÀNH CÔNG',
+    },
+    {
+      number: 23,
+      text: 'ĐANG XỬ LÝ',
+    },
+    {
+      number: 78,
+      text: 'ĐÃ CHUẨN BỊ',
+    },
+    {
+      number: 12,
+      text: 'ĐANG GIAO',
+    },
+    {
+      number: 411,
+      text: 'THANH TOÁN',
+    },
+    {
+      number: 19,
+      text: 'ĐÃ HỦY',
+    },
+  ];
 
   constructor(private router: Router,
     private route: ActivatedRoute,

@@ -50,6 +50,10 @@ export class BillsComponent implements OnInit {
   selectedBill: any;
   selectedCustomerName: any;
 
+  employeeData: any;
+  branchService: any;
+  branch: any;
+
   constructor(
     private globals: Globals,
     private router: Router,
@@ -63,12 +67,28 @@ export class BillsComponent implements OnInit {
     this.billService = innoway.getService('bill');
     this.billActitivyService = innoway.getService('bill_activity');
 
+    this.employeeData = this.auth.service.userInfo;
+    this.branchService = innoway.getService('branch');
     this.subscribeDashboardParent();
   }
 
   async ngOnInit() {
     this.loadBillData();
+    this.loadBranchByEmployeeData(this.employeeData.branch_id);
     this.subscribeTopicByFCM();
+
+    
+  }
+  
+  async loadBranchByEmployeeData(branchId: string) {
+    try {
+      this.branch = await this.branchService.get(branchId, {
+        fields: ["$all"]
+      })
+      this.ref.detectChanges();
+    } catch (err) {
+
+    }
   }
 
   private subscribeDashboardParent() {

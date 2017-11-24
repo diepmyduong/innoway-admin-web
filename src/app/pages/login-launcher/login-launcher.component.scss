@@ -55,9 +55,8 @@
 #login-title {
     text-align: center;
     color: white;
-    font-family: 'Helvetica Neue';
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     margin: auto;
     margin-top: 50px;
     margin-bottom: 30px;
@@ -111,12 +110,13 @@ input {
     position:relative;
     width: 100%;
     background-color: white;
-    color: #555;
+    color: $bluegrey-dark;
     padding: 15px;
     margin-top: 30px;
-    border-radius: 35px;
+    // border-radius: 35px;
+    border-radius: 10px;
     font-family: 'Helvetica Neue';
-    font-weight: bold;
+    font-weight: 500;
     font-size: 1.25rem;
     text-transform: none !important;
     -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -129,7 +129,7 @@ input {
 }
 .btn-login:hover {
     background-color: $gray-light;
-    color: #333;
+    color: $bluegrey-darker;
 }
 #fundo {
     background-color: $brand-primary;

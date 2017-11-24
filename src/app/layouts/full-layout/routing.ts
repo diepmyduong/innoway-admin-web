@@ -163,13 +163,13 @@ export const FullLayoutRouting = {
       path: 'area',
       loadChildren: 'app/apps/area/area.module#AreaModule'
     }
-    // , {
-    //   path: 'brand-register',
-    //   loadChildren: 'app/apps/brand-register/brand-register.module#BrandRegisterModule'
-    // }, {
-    //   path: 'tool',
-    //   loadChildren: 'app/apps/tool/tool.module#ToolModule'
-    // },
+    , {
+      path: 'brand-register',
+      loadChildren: 'app/apps/brand-register/brand-register.module#BrandRegisterModule'
+    }, {
+      path: 'tool',
+      loadChildren: 'app/apps/tool/tool.module#ToolModule'
+    },
   ],
 
 }
