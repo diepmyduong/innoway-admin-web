@@ -119,10 +119,10 @@ export const FullLayoutRouting = {
       path: 'pos',
       loadChildren: 'app/apps/pos/pos.module#PosModule'
     },
-    {
-      path: 'paid-history',
-      loadChildren: 'app/apps/paid-history/paid-history.module#PaidHistoryModule'
-    },
+    // {
+    //   path: 'paid-history',
+    //   loadChildren: 'app/apps/paid-history/paid-history.module#PaidHistoryModule'
+    // },
     {
       path: 'blacklist',
       loadChildren: 'app/apps/blacklist/blacklist.module#BlacklistModule'
@@ -155,21 +155,21 @@ export const FullLayoutRouting = {
       path: 'settings',
       loadChildren: 'app/apps/settings/settings.module#SettingsModule'
     },
-    {
-      path: 'schedule',
-      loadChildren: 'app/apps/schedule/schedule.module#ScheduleModule'
-    },
+    // {
+    //   path: 'schedule',
+    //   loadChildren: 'app/apps/schedule/schedule.module#ScheduleModule'
+    // },
     {
       path: 'area',
       loadChildren: 'app/apps/area/area.module#AreaModule'
-    }
-    , {
-      path: 'brand-register',
-      loadChildren: 'app/apps/brand-register/brand-register.module#BrandRegisterModule'
-    }, {
-      path: 'tool',
-      loadChildren: 'app/apps/tool/tool.module#ToolModule'
     },
+    // {
+    //   path: 'brand-register',
+    //   loadChildren: 'app/apps/brand-register/brand-register.module#BrandRegisterModule'
+    // }, {
+    //   path: 'tool',
+    //   loadChildren: 'app/apps/tool/tool.module#ToolModule'
+    // },
   ],
 
 }

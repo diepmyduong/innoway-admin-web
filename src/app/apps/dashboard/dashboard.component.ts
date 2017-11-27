@@ -37,6 +37,13 @@ export class DashboardComponent implements OnInit {
   filter: any;
   area: any;
 
+  billId = "asd";
+  billAction = "all";
+  billCustomer = "";
+  billPhone = "";
+  billEmployee = "all";
+  billArea =  "all";
+
   areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   customerData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);

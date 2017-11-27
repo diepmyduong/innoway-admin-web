@@ -6,7 +6,6 @@
 }
 
 .callout {
-  cursor: pointer;
   height: 120px;
 }
 
@@ -56,7 +55,7 @@
     transition: all 0.3s ease;
   }
   button:hover {
-    border-color: $bluegrey-mild;
+    border-color: transparent;
     background-color: $brand-primary;
     color: $grey-white;
   }
@@ -70,16 +69,30 @@
     margin-bottom: 10px;
     padding: 0px;
     border: none;
+    .list-group-item:after {
+      content: "";
+      position: absolute;
+      bottom: 0px;
+      width: 96%;
+      left: 2%;
+      height: 2px;
+      background: $grey-light;
+    }
+    .list-group-item:hover {
+      border-left: 2px solid $brand-primary;
+    }
     .list-group-item {
       display: block;
       height: auto;
-      min-height: 160px;
+      min-height: 150px;
       display: flex;
       justify-content: flex-start;
       flex-wrap: nowrap;
       padding: 0px;
       border: none;
-      border-bottom: 1px solid $grey-lighter;
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: border-left 0.3s ease;
       .bill-avatar {
         width: 120px;
         height: 100%;
@@ -101,7 +114,10 @@
         .user-info {
           margin-top: 8px;
           color: $bluegrey-mild;
-          font-size: 0.85rem;
+          font-size: 0.75rem;
+        }
+        .user-info:first-child {          
+          color: $grey-mild;
         }
       }
 
@@ -112,24 +128,40 @@
         padding: 15px;
         flex-direction: column;
         .bill-main {
-          display: flex;
-          justify-content: flex-start;
           margin-right: 0px;
           .bill-main-info {
             flex-grow: 1;
             color: $grey-dark;
             font-size: 0.85rem;
+            margin-right: 0px;
             div {
               margin-bottom: 10px;
+              span {
+                 width: 40%;
+              }
               i {
                 color: $brand-primary;
                 margin-right: 5px;
               }
+              b {
+                color: $bluegrey-dark;
+              }
+            }
+            .bill-address {
+              min-height: 30px;
+              i {
+                float: left;
+              }
+              div {
+                white-space: pre-line;
+                margin-left: 20px;
+              }
             }
           }
           .bill-date-time {
-            float: right;
-            flex-grow: 0;
+            position: absolute;
+            top: 15px;
+            right: 15px;
             div {
               margin: 0px;
               text-align: right;
@@ -142,6 +174,7 @@
         .bill-button {
           flex-grow: 1;
           button {
+            padding: 3px 5px;
             margin-right: 0px;
             color: $brand-primary;
             border: 1px solid $brand-primary;
@@ -153,8 +186,8 @@
       }
       .separator {
         height: 1px;
-        width: 90%;
-        left: 5%;
+        width: 94%;
+        left: 3%;
         position: absolute;
         bottom: 0px;
         border-bottom: 1px solid $grey-lighter;

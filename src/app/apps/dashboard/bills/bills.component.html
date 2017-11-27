@@ -8,26 +8,26 @@
 </div>
 
 <div class="content">
-  <div class="list-group">
-    <a href="#" class="list-group-item" *ngFor="let bill of bills | async; let i = index">
+  <ul class="list-group">
+    <li href="#" class="list-group-item" *ngFor="let bill of bills | async; let i = index">
       
       <div class="bill-avatar">
-          <img class="img-avatar" src="{{bill.customer?.avatar?bill.customer.avatar:thumbDefault}}">
+          <img class="img-avatar" [src]="bill.customer?.avatar" onError="this.src='../../../../assets/img/default-avatar.jpg'">
           <div class="user-info" *ngIf="bill.customer && bill.customer.fullname">{{bill.customer?.fullname?bill.customer.fullname:''}}</div>
           <div class="user-info">{{bill.customer?.phone?bill.customer.phone:''}}</div>
       </div>
       <div class="bill-info">
         <div class="bill-main">
           <div class="bill-main-info">
-            <div>
+            <div class="bill-id">
               Mã đơn hàng: <b>{{bill.id}}</b>
             </div>
             <div>
                 <span><i class="fa fa-money"></i>{{bill.total_price | accounting}}</span>
                 <span><i class="fa fa-shopping-bag"></i>Tại cửa hàng </span>
             </div>
-            <div>
-              <i class="fa fa-location-arrow"></i><span> {{bill.address}} </span>
+            <div class="bill-address">
+              <i class="fa fa-location-arrow"></i><div>{{bill.address}}</div>
             </div>
           </div>
           <div class="bill-date-time">
@@ -48,8 +48,8 @@
         </div>
       </div>
       <div class="separator"></div>
-      </a>
-  </div>
+    </li>
+  </ul>
 </div>
 <!-- <div class="content">
   <div class="row">

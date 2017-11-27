@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Observable } from 'rxjs/Observable'

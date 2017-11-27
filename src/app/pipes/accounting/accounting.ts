@@ -18,9 +18,9 @@ export class AccountingPipe implements PipeTransform {
   transform(value: any, options = {}) {
     var number:number;
     options = Object.assign({
-      symbol : "Đ",
-      decimal : ".",
-      thousand: ",",
+      symbol : "đ",
+      decimal : ",",
+      thousand: ".",
       precision : 0,
       format: "%v %s"
     },options);

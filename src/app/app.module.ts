@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
 
@@ -50,6 +51,7 @@ import { UpdateBillStatusComponentComponent } from './apps/ui-component/update-b
     ModalModule.forRoot(),
     SharedModule,
     LayoutsModule,
+    FormsModule,
     // BsDropdownModule.forRoot(),
     ColorPickerModule,
   ],

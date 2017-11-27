@@ -140,14 +140,14 @@ export class FullLayoutComponent implements OnInit {
     {
       type: 'single',
       name: 'Đăng ký',
-      link: "/brand-register",
-      icon: 'icon-speedometer',
+      link: "./brand-register",
+      icon: 'fa fa-user-plus',
     },
     {
       type: 'single',
-      name: 'tool',
-      link: "/tool",
-      icon: 'icon-speedometer',
+      name: 'Công cụ',
+      link: "./tool",
+      icon: 'fa fa-wrench',
     },
     {
       type: 'parent',

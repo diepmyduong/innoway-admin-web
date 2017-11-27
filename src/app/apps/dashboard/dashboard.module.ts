@@ -42,6 +42,8 @@ import { SelectModule } from 'ng2-select';
     BsDropdownModule,
 
     PipesModule,
+    FormsModule,
+    ReactiveFormsModule,
 
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
