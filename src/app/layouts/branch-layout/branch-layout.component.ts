@@ -14,8 +14,6 @@ import { Globals } from './../../globals';
 
 export class BranchLayoutComponent implements OnInit {
 
-  prefix = '/super-admin'
-
   employee: any;
   branch: any;
 

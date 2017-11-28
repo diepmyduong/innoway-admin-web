@@ -11,9 +11,9 @@ export class LauncherLayoutComponent implements OnInit {
   data: any = {
     feature: [
       {
-        title: "Hệ thống",
+        title: "Trang điều phối",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "",
+        link: "/super-admin/dashboard",
       }, {
         title: "Chi nhánh",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
