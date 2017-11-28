@@ -147,6 +147,10 @@ export class DashboardComponent implements OnInit {
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
 
   }
+  
+  clicked() {
+    console.log(this.billId);
+  }
 
   async loadEmployeeDataByBranchData() {
     try {

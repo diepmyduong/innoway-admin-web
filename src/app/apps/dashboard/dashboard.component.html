@@ -39,7 +39,7 @@
       <nav>
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link"><i class="fa fa-map-signs"></i> Mã đơn hàng</a>
+            <a class="nav-link"><i class="fa fa-map-signs"></i> Mã đơn hàng{{billId}}</a>
             <input type="text" [(ngModel)]="billId" class="bill-input form-control" placeholder="Tìm kiếm đơn hàng">
             <!-- <div class="form-group">
               <input type="text" class="form-control" formControlName="addressInput" placeholder="Tìm kiếm đơn hàng" #bill (keydown.enter)="onChangeBill(bill.value)" />
@@ -114,6 +114,7 @@
                           </select>
             </div> -->
           </li>
+          <button (click)="clicked()">press</button>
         </ul>
       </nav>
       <main class="bill-list">

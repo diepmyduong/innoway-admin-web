@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
+import { MatDialogModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -15,7 +16,9 @@ import { BreadcrumbsComponent } from './shared/breadcrumb.component';
 // Routing Module
 import { AppRoutingModule } from './app.routing';
 import { ModalModule as Ng2ModalModule } from 'angular2-modal';
-import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+
+import { ModalModule } from 'ngx-modialog';
+import { BootstrapModalModule } from 'ngx-modialog/plugins/bootstrap';
 
 import { ModalCardTypesComponent } from './apps/chatbot/modals/modal-card-types/modal-card-types.component';
 
@@ -25,7 +28,6 @@ import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-not
 
 import { ServicesModule } from './services';
 
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from './shared/shared.module'
 import { LayoutsModule } from './layouts/layouts.module';
 
@@ -35,6 +37,25 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { UiComponentComponent } from './apps/ui-component/ui-component.component';
 import { UpdateBillStatusComponentComponent } from './apps/ui-component/update-bill-status-component/update-bill-status-component.component';
 
+
+import { EditOrderStatusDialog } from "./modal/edit-order-status/edit-order-status.component";
+
+import {
+  MatToolbarModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatGridListModule,
+  MatTableModule,
+  MatInputModule,
+  MatButtonModule,
+  MatAutocompleteModule,
+  MatCardModule,
+  MatOptionModule,
+  MatFormFieldModule,
+  MatCheckboxModule,
+  MatPseudoCheckboxModule,
+} from '@angular/material'
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -42,28 +63,48 @@ import { UpdateBillStatusComponentComponent } from './apps/ui-component/update-b
     AppRoutingModule,
     TabsModule.forRoot(),
     Ng2ModalModule.forRoot(),
-    BootstrapModalModule,
     ChartsModule,
     ChatbotModule.forRoot(),
     SimpleNotificationsModule.forRoot(),
     PushNotificationsModule,
     ServicesModule,
+    BootstrapModalModule,
     ModalModule.forRoot(),
+    MatDialogModule,
     SharedModule,
     LayoutsModule,
     FormsModule,
     // BsDropdownModule.forRoot(),
     ColorPickerModule,
+
+    
+  MatToolbarModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatGridListModule,
+  MatTableModule,
+  MatInputModule,
+  MatButtonModule,
+  MatAutocompleteModule,
+  MatCardModule,
+  MatOptionModule,
+  MatFormFieldModule,
+  MatCheckboxModule,
+  MatPseudoCheckboxModule,
   ],
   declarations: [
     AppComponent,
     UiComponentComponent,
     UpdateBillStatusComponentComponent,
+    EditOrderStatusDialog,
   ],
   providers: [{
     provide: LocationStrategy,
     useClass: PathLocationStrategy
   }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    EditOrderStatusDialog
+  ]
 })
 export class AppModule { }

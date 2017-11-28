@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
@@ -8,6 +8,10 @@ import { InnowayService, AuthService } from "app/services";
 import * as Ajv from 'ajv';
 import * as _ from 'lodash';
 import { DashboardService } from "app/apps/dashboard/DashboardService";
+import { Overlay } from 'ngx-modialog';
+import { MatDialog } from '@angular/material';
+import { EditOrderStatusDialog } from "../../../modal/edit-order-status/edit-order-status.component";
+import { ModalModule } from '../../../modal/modal.module'
 
 import { Globals } from './../../../globals';
 declare let swal: any;
@@ -63,7 +67,8 @@ export class BillsComponent implements OnInit {
     public innoway: InnowayService,
     private ref: ChangeDetectorRef,
     public auth: AuthService,
-    public zone: NgZone
+    public zone: NgZone,
+    public dialog: MatDialog
   ) {
     this.billService = innoway.getService('bill');
     this.billActitivyService = innoway.getService('bill_activity');
@@ -311,43 +316,56 @@ export class BillsComponent implements OnInit {
   }
 
   async changeStatusBill(bill) {
-    let avaiavle_options = {};
-    let options = this.globals.avaibleBillActivityOption(bill.activity ? bill.activity.action : '');
-
-    options.forEach(option => {
-      avaiavle_options = $.extend(avaiavle_options, option);
+    let name = "asdsa";
+    let animal = "Dog";
+    let dialogRef = this.dialog.open(EditOrderStatusDialog, {
+      width: '250px',
+      data: { name: name, animal: animal }
     });
 
-    let action;
-    let result = await swal({
-      title: 'Chọn trạng thái',
-      html:
-      '<input id="swal-input1" class="swal2-input" placeholder="aaaa">' +
-      '<input id="swal-input2" class="swal2-input" placeholder="aaaa">',
-      input: 'select',
-      inputOptions: avaiavle_options,
-      inputPlaceholder: 'Chọn trạng thái',
-      showCancelButton: true,
-      inputValidator: function(value) {
-        return new Promise(function(resolve, reject) {
-          action = value;
-          alert(JSON.stringify(value) + " - " + $('#swal-input1').val() + " - " + $('#swal-input2').val());
-          resolve();
-        })
-      }
-    },
-      {
-        input: 'url',
-        inputPlaceholder: 'Enter the URL'
-      })
 
-    console.log("result", result)
+    
+    // let avaiavle_options = {};
+    // let options = this.globals.avaibleBillActivityOption(bill.activity ? bill.activity.action : '');
 
-    await swal({
-      type: 'success',
-      html: 'Cập nhật trạng thái: ' + this.detectActionName(result)
-    })
-    this.updateAction(bill, action);
+    // options.forEach(option => {
+    //   avaiavle_options = $.extend(avaiavle_options, option);
+    // });
+
+    // let action;
+    // let result = await swal({
+    //   title: 'Chọn trạng thái',
+    //   html:
+    //   '<input id="swal-input1" class="swal2-input" placeholder="aaaa">' +
+    //   '<input id="swal-input2" class="swal2-input" placeholder="aaaa">',
+    //   input: 'select',
+    //   inputOptions: avaiavle_options,
+    //   inputPlaceholder: 'Chọn trạng thái',
+    //   showCancelButton: true,
+    //   inputValidator: function(value) {
+    //     return new Promise(function(resolve, reject) {
+    //       action = value;
+    //       alert(JSON.stringify(value) + " - " + $('#swal-input1').val() + " - " + $('#swal-input2').val());
+    //       resolve();
+    //     })
+    //   }
+    // },
+    //   {
+    //     input: 'url',
+    //     inputPlaceholder: 'Enter the URL'
+    //   })
+
+    // console.log("result", result)
+
+    // await swal({
+    //   type: 'success',
+    //   html: 'Cập nhật trạng thái: ' + this.detectActionName(result)
+    // })
+    // this.updateAction(bill, action);
+
+
+
+
 
     // const { value: formValues } = await swal({
     //   title: 'Multiple inputs',
