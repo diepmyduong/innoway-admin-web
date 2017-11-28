@@ -1,8 +1,8 @@
 
 <div class="toolbar">
   <div class="branch-info">
-    <div>Chi nhánh: {{branch.address}}</div>
-    <div>Nhân viên phụ trách: {{employeeData.fullname}} | Hotline: {{branch.phone}}</div>
+    <div>Chi nhánh: {{branch!=null?branch.address:''}}</div>
+    <div>Nhân viên phụ trách: {{employeeData.fullname}} | Hotline: {{branch!=null?branch.phone:''}}</div>
   </div>
   <button class="btn btn-ladda btn-primary ml-auto"><i class="fa fa-plus"></i> Tạo đơn hàng</button>
 </div>
@@ -10,7 +10,7 @@
 <div class="content">
   <ul class="list-group">
     <li href="#" class="list-group-item" *ngFor="let bill of bills | async; let i = index">
-      
+
       <div class="bill-avatar">
           <img class="img-avatar" [src]="bill.customer?.avatar" onError="this.src='../../../../assets/img/default-avatar.jpg'">
           <div class="user-info" *ngIf="bill.customer && bill.customer.fullname">{{bill.customer?.fullname?bill.customer.fullname:''}}</div>

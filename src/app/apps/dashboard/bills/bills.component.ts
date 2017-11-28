@@ -78,14 +78,15 @@ export class BillsComponent implements OnInit {
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
     this.subscribeTopicByFCM();
 
-    
+
   }
-  
+
   async loadBranchByEmployeeData(branchId: string) {
     try {
       this.branch = await this.branchService.get(branchId, {
         fields: ["$all"]
       })
+      console.log("abc",JSON.stringify(this.branch));
       this.ref.detectChanges();
     } catch (err) {
 

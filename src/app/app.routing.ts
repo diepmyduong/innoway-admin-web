@@ -14,6 +14,7 @@ export const routes: Routes = [
   layout.FullLayoutRouting,
   layout.ChatbotLayoutRouting,
   layout.LauncherLayoutRouting,
+  layout.ChatGutLayoutRouting,
   layout.PosLayoutRouting,
   layout.BrandRegisterLayoutRouting,
   layout.ToolLayoutRouting,
