@@ -12,7 +12,7 @@ export const SettingLayoutRouting = {
       pathMatch: 'full',
     },
     {
-      path: 'setting',
+      path: 'settings',
       loadChildren: 'app/apps/settings/settings.module#SettingsModule'
     }
   ],

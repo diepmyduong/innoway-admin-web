@@ -7,12 +7,12 @@ import { SimpleLayoutRouting, PosLayoutRouting, ChatGutLayoutRouting, ToolLayout
 import { ChatbotLayoutRouting } from './chatbot-layout/routing'
 import { LauncherLayoutRouting } from './launcher-layout/routing'
 import { ProductLayoutRouting } from "./product-layout/routing";
-import { BillLayoutRouting } from "app/layouts/bill-layout/routing";
-import { EmployeeLayoutRouting } from "app/layouts/employee-layout/routing";
-import { CustomerLayoutRouting } from "app/layouts/customer-layout/routing";
-import { PromotionLayoutRouting } from "app/layouts/promotion-layout/routing";
-import { SettingLayoutRouting } from "app/layouts/setting-layout/routing";
-import { BranchLayoutRouting } from "app/layouts/branch-layout/routing";
+import { BillLayoutRouting } from "./bill-layout/routing";
+import { EmployeeLayoutRouting } from "./employee-layout/routing";
+import { CustomerLayoutRouting } from "./customer-layout/routing";
+import { PromotionLayoutRouting } from "./promotion-layout/routing";
+import { SettingLayoutRouting } from "./setting-layout/routing";
+import { BranchLayoutRouting } from "./branch-layout/routing";
 
 export {
     ChatbotLayoutComponent,
