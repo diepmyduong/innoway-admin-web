@@ -29,13 +29,8 @@
       <nav>
         <ul class="nav">
           <li class="nav-item">
-<<<<<<< HEAD
             <a class="nav-link" [ngClass]="billFilterInfo.billId?.length?'blue-primary':''"><i class="fa fa-map-signs"></i> Mã đơn hàng</a>
             <input type="text" [(ngModel)]="billFilterInfo.billId" class="input-control form-control" placeholder="Tìm kiếm đơn hàng">
-=======
-            <a class="nav-link"><i class="fa fa-map-signs"></i> Mã đơn hàng</a>
-            <input type="text" [(ngModel)]="billId" class="bill-input form-control" placeholder="Tìm kiếm đơn hàng">
->>>>>>> b9ea99f56cb00c854143ce42e2b26d5bfbe6a604
           </li>
           <li class="nav-item">
             <a class="nav-link" [ngClass]="billFilterInfo.billAction?'blue-primary':''"><i class="fa fa-info-circle"></i> Trạng thái</a>
@@ -49,21 +44,12 @@
             </select>
           </li>
           <li class="nav-item">
-<<<<<<< HEAD
             <a class="nav-link" [ngClass]="billFilterInfo.billPhone?.length?'blue-primary':''"><i class="fa fa-phone"></i> Số điện thoại</a>
             <input [(ngModel)]="billFilterInfo.billPhone" class="input-control form-control" type="text" placeholder="+84 hoặc 0">
           </li>
           <li class="nav-item">
             <a class="nav-link" [ngClass]="billFilterInfo.billCustomer?.length?'blue-primary':''"><i class="fa fa-user"></i> Họ và tên</a>
             <input [(ngModel)]="billFilterInfo.billCustomer" class="input-control form-control" type="text" placeholder="Tên khách hàng">
-=======
-            <a class="nav-link"><i class="fa fa-phone"></i> Số điện thoại</a>
-            <input [(ngModel)]="billPhone" class="bill-input form-control" type="text" placeholder="+84 hoặc 0">
-          </li>
-          <li class="nav-item">
-            <a class="nav-link"><i class="fa fa-user"></i> Họ và tên</a>
-            <input [(ngModel)]="billCustomer" class="bill-input form-control" type="text" placeholder="Tên khách hàng">
->>>>>>> b9ea99f56cb00c854143ce42e2b26d5bfbe6a604
           </li>
           <li class="nav-item">
             <a class="nav-link" [ngClass]="billFilterInfo.billEmployee?'blue-primary':''"><i class="fa fa-bicycle"></i> Nhân viên</a>
