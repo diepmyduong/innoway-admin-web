@@ -70,15 +70,13 @@ export class BillsComponent implements OnInit {
 
     this.employeeData = this.auth.service.userInfo;
     this.branchService = innoway.getService('branch');
-    this.subscribeDashboardParent();
+    //this.subscribeDashboardParent();
   }
 
   async ngOnInit() {
     this.loadBillData();
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
     this.subscribeTopicByFCM();
-
-
   }
 
   async loadBranchByEmployeeData(branchId: string) {
@@ -288,7 +286,7 @@ export class BillsComponent implements OnInit {
         order: [["updated_at", "desc"]]
       });
       // alert(JSON.stringify(this.bills));
-      console.log('bills', this.bills.getValue())
+      // console.log('bills', this.bills.getValue())
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);

@@ -22,16 +22,6 @@
     </div>
   </div>
 
-
-  <!-- <div class="card-group">
-    <div class="card">
-      <div class="card-block">
-        <h5>Chi nhánh: {{branch.address}}</h5>
-        <h5>Hotline: {{branch.phone}}</h5>
-        <h5>Nhân viên phụ trách: {{employeeData.fullname}}</h5>
-      </div>
-    </div>
-  </div> -->
 </div>
 <div class="row wide-bg animated fadeIn">
   <div class="col-12 bill-container">
@@ -41,9 +31,6 @@
           <li class="nav-item">
             <a class="nav-link"><i class="fa fa-map-signs"></i> Mã đơn hàng</a>
             <input type="text" [(ngModel)]="billId" class="bill-input form-control" placeholder="Tìm kiếm đơn hàng">
-            <!-- <div class="form-group">
-              <input type="text" class="form-control" formControlName="addressInput" placeholder="Tìm kiếm đơn hàng" #bill (keydown.enter)="onChangeBill(bill.value)" />
-            </div> -->
           </li>
           <li class="nav-item">
             <a class="nav-link"><i class="fa fa-info-circle"></i> Trạng thái</a>
@@ -55,27 +42,14 @@
                 {{v.name}}
               </option>
             </select>
-            <!-- <div class="form-group">
-              <select id="actionSelect" name="select" class="form-control" size="1" #action (change)="onChangeAction(action.value)">
-                <option *ngFor="let v of actions" [value]="v.code">
-                  {{v.name}}
-                </option>
-                          </select>
-            </div> -->
           </li>
           <li class="nav-item">
             <a class="nav-link"><i class="fa fa-phone"></i> Số điện thoại</a>
             <input [(ngModel)]="billPhone" class="bill-input form-control" type="text" placeholder="+84 hoặc 0">
-            <!-- <div class="form-group">
-              <ng-select #customerSelect [allowClear]="true" [multiple]="false" [items]="autocompleteCustomerData" (mouseleave)="addToItems()" (data)="refreshValue($event)" (typed)="onChangeInputCustomer($event)"  (data)="refreshValue($event)" (selected)="selectedCustomer($event)" (removed)="removed($event)" (input)="detectChangeSelect($event.target.value)" placeholder="Số điện thoại" style="  text-transform:none !important;"></ng-select>
-            </div> -->
           </li>
           <li class="nav-item">
             <a class="nav-link"><i class="fa fa-user"></i> Họ và tên</a>
             <input [(ngModel)]="billCustomer" class="bill-input form-control" type="text" placeholder="Tên khách hàng">
-            <!-- <div class="form-group">
-              <ng-select #customerNameSelect [allowClear]="true" [multiple]="false" [items]="autocompleteCustomerNameData" (mouseleave)="addToNameItems()" (data)="refreshValueName($event)" (typed)="onChangeInputCustomerName($event)"  (data)="refreshValueName($event)" (selected)="selectedCustomerName($event)" (removed)="removedName($event)" (input)="detectChangeNameSelect($event.target.value)" placeholder="Họ và tên" style="  text-transform:none !important;"></ng-select>
-            </div> -->
           </li>
           <li class="nav-item">
             <a class="nav-link"><i class="fa fa-bicycle"></i> Nhân viên</a>
@@ -87,13 +61,6 @@
                 {{v.fullname}}
               </option>
             </select>
-            <!-- <div class="form-group">
-              <select id="employeeSelect" name="select" formControlName="districtInput" class="form-control" size="1" #employee (change)="onChangeEmployee(employee.value)">
-                <option *ngFor="let v of employees | async" [value]="v.id">
-                  {{v.fullname}}
-                </option>
-                              </select>
-            </div> -->
           </li>
           <li class="nav-item">
             <a class="nav-link"><i class="fa fa-map"></i> Khu vực</a>
@@ -105,14 +72,6 @@
                 {{v.name}}
               </option>
             </select>
-            <!-- <div class="form-group">
-              <select id="areaSelect" name="select" formControlName="districtInput" class="form-control" size="1" #area (change)="onChangeArea(area.value)">
-                              <option value="0" selected>Tất cả</option>
-                              <option *ngFor="let v of areas | async" [value]="v.id">
-                                {{v.name}}
-                              </option>
-                          </select>
-            </div> -->
           </li>
         </ul>
       </nav>
