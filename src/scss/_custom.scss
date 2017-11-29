@@ -3,10 +3,13 @@
 
 body {
   font-family: 'Helvetica Neue';
+  overflow: hidden;
 }
 
 .main {
   background-color: white;
+  overflow-y: scroll;
+  height: calc(100vh - 60px);
 }
 
 .material-icons {
@@ -157,4 +160,45 @@ body {
 }
 .icon-btn {
   cursor: pointer
+}
+
+.input-control {
+  color: $grey-dark;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+  &::-moz-placeholder { /* Firefox 19+ */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+  &:-ms-input-placeholder { /* IE 10+ */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+  &:-moz-placeholder { /* Firefox 18- */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+  &:focus {
+    color: $grey-dark;
+  }
+}
+
+.select-control {
+  color: $grey-dark;
+  border-radius: 3px !important;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  &:focus {
+    color: $grey-dark;
+    border: 1px solid $brand-primary !important;
+  }
+  option {
+    margin: 5px;
+    padding: 5px;
+    font-size: 0.85rem;
+  }
 }

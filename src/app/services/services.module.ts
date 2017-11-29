@@ -11,6 +11,8 @@ import { ChatbotAuthService } from './chatbot/chatbot-auth.service';
 import { ChatbotApiService } from './chatbot/chatbot-api.service';
 import { ChatbotAuthGuard } from './guards/chatbot-auth.guard';
 
+import { SharedDataService } from './shared-data/shared-data.service'
+
 @NgModule({
   imports: [
     CommonModule
@@ -31,6 +33,8 @@ import { ChatbotAuthGuard } from './guards/chatbot-auth.guard';
     ChatbotApiService,
 
     ChatbotAuthGuard,
+
+    SharedDataService,
   ]
 })
 export class ServicesModule { }

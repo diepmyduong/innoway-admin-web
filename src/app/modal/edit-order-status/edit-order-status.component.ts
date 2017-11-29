@@ -7,12 +7,18 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
     templateUrl: './edit-order-status.component.html',
 })
 export class EditOrderStatusDialog implements OnInit {
-    
+
+    info = {};
+
     constructor(
     public dialogRef: MatDialogRef<EditOrderStatusDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
     ngOnInit() {
+        console.log(this.data.employees.getValue());
+    }
+
+    onYesClick() {
 
     }
 

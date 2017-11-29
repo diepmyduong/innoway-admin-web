@@ -1,11 +1,23 @@
-<h1 mat-dialog-title>Hi {{data.name}}</h1>
-<div mat-dialog-content>
-  <p>What's your favorite animal?</p>
-  <mat-form-field>
-    <input matInput tabindex="1" [(ngModel)]="data.animal">
-  </mat-form-field>
+<h2 class="title">Thay đổi trạng thái</h2>
+<select [(ngModel)]="info.action" class="select-control form-control" >
+  <option *ngFor="let e of data.actions" [ngValue]="e.code">
+    {{ e.name }}
+  </option>
+</select>
+<div> 
+  <select [(ngModel)]="info.employee" class="select-control form-control">
+    <option *ngFor="let e of data.employees.getValue()" [ngValue]="e.id">
+      {{ e.fullname }}
+    </option>
+  </select>
+  <input type="text" [(ngModel)]="info.note" class="input-control form-control">
 </div>
-<div mat-dialog-actions>
+<div class="bottom-btn-group">
+  <button class="btn-confirm" [mat-dialog-close]="info">Xác nhận</button>
+  <button class="btn-cancel" (click)="onNoClick()">Quay lại</button>
+</div>
+
+<!-- <div mat-dialog-actions>
   <button mat-button [mat-dialog-close]="data.animal" tabindex="2">Ok</button>
   <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
-</div>
+</div> -->

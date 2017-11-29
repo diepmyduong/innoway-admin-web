@@ -11,7 +11,8 @@ import { DashboardService } from "app/apps/dashboard/DashboardService";
 import { Overlay } from 'ngx-modialog';
 import { MatDialog } from '@angular/material';
 import { EditOrderStatusDialog } from "../../../modal/edit-order-status/edit-order-status.component";
-import { ModalModule } from '../../../modal/modal.module'
+import { ModalModule } from '../../../modal/modal.module';
+import { SharedDataService } from '../../../services/shared-data/shared-data.service'
 
 import { Globals } from './../../../globals';
 declare let swal: any;
@@ -43,7 +44,7 @@ export class BillsComponent implements OnInit {
   billChangeObservable: Observable<any>;
   bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
-  employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  //employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   thumbDefault: string = "https://s11.favim.com/mini/160421/snowball-movie-the-secret-life-of-pets-cute-Favim.com-4234326.jpeg";
@@ -59,6 +60,21 @@ export class BillsComponent implements OnInit {
   branchService: any;
   branch: any;
 
+  get billFilterInfo():any { 
+    return this.sharedDataService.billFilterInfo; 
+  } 
+  set billFilterInfo(value: any) { 
+    this.sharedDataService.billFilterInfo = value; 
+  } 
+
+  get employees(): BehaviorSubject<any[]> {
+    return this.sharedDataService.employees; 
+  }
+
+  set employees(value: BehaviorSubject<any[]>) {
+    this.sharedDataService.employees = value;
+  }
+
   constructor(
     private globals: Globals,
     private router: Router,
@@ -68,7 +84,8 @@ export class BillsComponent implements OnInit {
     private ref: ChangeDetectorRef,
     public auth: AuthService,
     public zone: NgZone,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public sharedDataService:SharedDataService
   ) {
     this.billService = innoway.getService('bill');
     this.billActitivyService = innoway.getService('bill_activity');
@@ -82,8 +99,6 @@ export class BillsComponent implements OnInit {
     this.loadBillData();
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
     this.subscribeTopicByFCM();
-
-
   }
 
   async loadBranchByEmployeeData(branchId: string) {
@@ -112,7 +127,7 @@ export class BillsComponent implements OnInit {
       data => {
         this.selectedEmployee = data;
         if (this.selectedEmployee.id != null) {
-          this.filterByCustomerId(this.selectedEmployee.id);
+          //this.filterByCustomerId(this.selectedEmployee.id);
         }
         // alert(JSON.stringify(data));
       });
@@ -127,7 +142,7 @@ export class BillsComponent implements OnInit {
         this.selectedCustomer = data;
         if (this.selectedCustomer != null) {
           // alert(JSON.stringify(data));
-          this.filterByCustomerId(this.selectedCustomer.id);
+          //this.filterByCustomerId(this.selectedCustomer.id);
           // this.filterByCustomerId(this.selectedCustomer.id);
         }
       });
@@ -137,7 +152,7 @@ export class BillsComponent implements OnInit {
         this.selectedCustomerName = data;
         if (this.selectedCustomerName != null) {
           // alert(JSON.stringify(data));
-          this.filterByCustomerId(this.selectedCustomerName.id);
+          //this.filterByCustomerId(this.selectedCustomerName.id);
           // this.filterByCustomerId(this.selectedCustomerName.id);
         }
       });
@@ -317,21 +332,26 @@ export class BillsComponent implements OnInit {
   }
 
   async changeStatusBill(bill) {
-    let name = "asdsa";
-    let animal = "Dog";
-    let dialogRef = this.dialog.open(EditOrderStatusDialog, {
-      width: '250px',
-      data: { name: name, animal: animal }
-    });
-
-
     
-    // let avaiavle_options = {};
-    // let options = this.globals.avaibleBillActivityOption(bill.activity ? bill.activity.action : '');
+        
+    let actions = [];
+    let options = this.globals.avaibleBillActivityOption(bill.activity ? bill.activity.action : '');
 
-    // options.forEach(option => {
-    //   avaiavle_options = $.extend(avaiavle_options, option);
-    // });
+    options.forEach(option => {
+      actions.push({ code: Object.keys(option)[0], name: option[Object.keys(option)[0]]});
+    });
+    //console.log(actions);
+
+    let dialogRef = this.dialog.open(EditOrderStatusDialog, {
+      width: '400px',
+      data: { actions: actions, employees: this.employees }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result)
+      {
+        console.log(result);
+      }
+    })
 
     // let action;
     // let result = await swal({
@@ -479,26 +499,26 @@ export class BillsComponent implements OnInit {
   }
 
   async filterByCustomerId(customerId) {
-    try {
-      console.log('action', customerId)
-      this.bills = new BehaviorSubject<any[]>([]);
-      let query = {
-        fields: ["$all", {
-          customer: ["$all"],
-          activity: ["action"]
-        }],
-        filter: {
-          "$customer.id$": customerId
-        }
-      }
-      console.log('query', query)
-      this.bills = await this.innoway.getAll('bill', query);
-      console.log('bills', this.bills.getValue())
-      // alert(JSON.stringify(this.bills));
-    } catch (err) {
-      try { await this.alertItemNotFound() } catch (err) { }
-      console.log("ERRRR", err);
-    }
+    // try {
+    //   console.log('action', customerId)
+    //   this.bills = new BehaviorSubject<any[]>([]);
+    //   let query = {
+    //     fields: ["$all", {
+    //       customer: ["$all"],
+    //       activity: ["action"]
+    //     }],
+    //     filter: {
+    //       "$customer.id$": customerId
+    //     }
+    //   }
+    //   console.log('query', query)
+    //   this.bills = await this.innoway.getAll('bill', query);
+    //   console.log('bills', this.bills.getValue())
+    //   // alert(JSON.stringify(this.bills));
+    // } catch (err) {
+    //   try { await this.alertItemNotFound() } catch (err) { }
+    //   console.log("ERRRR", err);
+    // }
   }
 
   //set a property that holds a random color for our style.

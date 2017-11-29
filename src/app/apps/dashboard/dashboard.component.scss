@@ -97,14 +97,19 @@
             border-radius: 3px;
             height: auto;
             display: block;
+            padding: 8px 15px;
             .nav-link {
                 color: $bluegrey-darker;
                 font-weight: normal;
                 padding: 0px;
+                border: none;
+                transition: all 0.3s ease;
+                padding-top: 8px;
                 i {
                     color: $bluegrey-mild;
                     margin-left: 5px;
                     margin-right: 8px;
+                    transition: all 0.3s ease;
                 }
             }
             .form-group {
@@ -118,5 +123,12 @@
             height: 100%;
             padding: 0px !important;
         }
+    }
+}
+
+.blue-primary {
+    color: $brand-primary !important;
+    i {
+        color: $brand-primary !important;
     }
 }

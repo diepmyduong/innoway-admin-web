@@ -7,6 +7,7 @@ import { Subscription } from "rxjs/Subscription";
 import { DashboardService } from "app/apps/dashboard/DashboardService";
 import { Globals } from "./../../globals"
 import { SelectComponent } from "ng2-select";
+import { SharedDataService } from "./../../services/shared-data/shared-data.service";
 
 declare let swal:any
 
@@ -37,15 +38,23 @@ export class DashboardComponent implements OnInit {
   filter: any;
   area: any;
 
-  billId = "asd";
-  billAction = "all";
-  billCustomer = "";
-  billPhone = "";
-  billEmployee = "all";
-  billArea =  "all";
+  get billFilterInfo():any { 
+    return this.sharedDataService.billFilterInfo; 
+  } 
+  set billFilterInfo(value: any) { 
+    this.sharedDataService.billFilterInfo = value; 
+  }
+
+  get employees(): BehaviorSubject<any[]> {
+    return this.sharedDataService.employees; 
+  }
+
+  set employees(value: BehaviorSubject<any[]>) {
+    this.sharedDataService.employees = value;
+  }
 
   areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  //employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   customerData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   customerNameData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
@@ -115,7 +124,8 @@ export class DashboardComponent implements OnInit {
     private globals: Globals,
     toasterService: ToasterService,
     private dashboardService: DashboardService,
-    public auth: AuthService) {
+    public auth: AuthService,
+    public sharedDataService:SharedDataService) {
     this.billService = innoway.getService('bill');
     this.branchService = innoway.getService('branch');
     this.shipAreaService = innoway.getService('brand_ship');
@@ -145,11 +155,6 @@ export class DashboardComponent implements OnInit {
     this.loadAreaData();
     this.loadEmployeeDataByBranchData();
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
-
-  }
-  
-  clicked() {
-    console.log(this.billId);
   }
 
   async loadEmployeeDataByBranchData() {

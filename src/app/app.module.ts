@@ -40,21 +40,6 @@ import { UpdateBillStatusComponentComponent } from './apps/ui-component/update-b
 
 import { EditOrderStatusDialog } from "./modal/edit-order-status/edit-order-status.component";
 
-import {
-  MatToolbarModule,
-  MatSidenavModule,
-  MatIconModule,
-  MatGridListModule,
-  MatTableModule,
-  MatInputModule,
-  MatButtonModule,
-  MatAutocompleteModule,
-  MatCardModule,
-  MatOptionModule,
-  MatFormFieldModule,
-  MatCheckboxModule,
-  MatPseudoCheckboxModule,
-} from '@angular/material'
 
 @NgModule({
   imports: [
@@ -76,21 +61,6 @@ import {
     FormsModule,
     // BsDropdownModule.forRoot(),
     ColorPickerModule,
-
-    
-  MatToolbarModule,
-  MatSidenavModule,
-  MatIconModule,
-  MatGridListModule,
-  MatTableModule,
-  MatInputModule,
-  MatButtonModule,
-  MatAutocompleteModule,
-  MatCardModule,
-  MatOptionModule,
-  MatFormFieldModule,
-  MatCheckboxModule,
-  MatPseudoCheckboxModule,
   ],
   declarations: [
     AppComponent,
