@@ -10,7 +10,7 @@ export class AnonymousGuard implements CanActivate {
     public auth:AuthService,
     public router: Router,
   ){
-    
+
   }
 
   canActivate(
@@ -20,7 +20,7 @@ export class AnonymousGuard implements CanActivate {
         this.auth.getAuthState().then(obState =>{
           obState.subscribe(state =>{
             if(state){
-              let url = sessionStorage.getItem('relogin_router_state_url') || '/super-admin';
+              let url = sessionStorage.getItem('relogin_router_state_url') || '/launcher';
               this.router.navigate([url]);
             }
             sub.next(!state);

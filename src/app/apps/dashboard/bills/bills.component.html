@@ -1,8 +1,13 @@
 
 <div class="toolbar">
   <div class="branch-info">
+<<<<<<< HEAD
     <div>Chi nhánh: {{branch?.address}}</div>
     <div>Nhân viên phụ trách: {{employeeData?.fullname}} | Hotline: {{branch?.phone}}</div>
+=======
+    <!-- <div>Chi nhánh: {{branch!=null?branch.address:''}}</div> -->
+    <!-- <div>Nhân viên phụ trách: {{employeeData.fullname}} | Hotline: {{branch!=null?branch.phone:''}}</div> -->
+>>>>>>> b9ea99f56cb00c854143ce42e2b26d5bfbe6a604
   </div>
   <button class="btn btn-ladda btn-primary ml-auto"><i class="fa fa-plus"></i> Tạo đơn hàng</button>
 </div>
@@ -19,7 +24,7 @@
       <div class="bill-info">
         <div class="bill-main">
           <div class="bill-main-info">
-            <div class="bill-id">
+            <div class="bill-id" (click)="viewDetail(bill)">
               Mã đơn hàng: <b>{{bill.id}}</b>
             </div>
             <div>
@@ -51,47 +56,3 @@
     </li>
   </ul>
 </div>
-<!-- <div class="content">
-  <div class="row">
-    <div class="col-md-12" *ngFor="let bill of bills | async; let i = index">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="callout callout-success m-0 py-1">
-
-            <div class="avatar float-right employee-avatar row">
-              <div class="col-md-12">
-                {{bill.customer?.phone?bill.customer.phone:''}}
-                <img src="{{bill.customer?.avatar?bill.customer.avatar:thumbDefault}}" class="img-avatar float-right">
-              </div>
-              <div class="col-md-12 m-h" formArrayName="billStatusInput">
-                <select [hidden]="true" id="actionSelect" class="form-control">
-              <option *ngFor="let v of actions" [value]="v.action">
-                {{v.name}}
-              </option>
-            </select>
-              </div>
-            </div>
-            <div (click)="viewDetail(bill)">Mã đơn hàng: <strong>{{bill.id}}</strong></div>
-            <small class="mr-1"><i class="fa fa-usd"></i> {{bill.total_price | accounting}} </small>
-            <small class="mr-1"><i class="icon-calendar"></i> {{bill.updated_at | date:'dd/MM/yyyy hh:mm:ss Z'}}</small>
-            <small class="mr-1"><i class="icon-location-pin"></i> {{bill.address}} </small>
-            <small class="mr-1"><i class="fa fa-cog fa-lg"></i> {{detectChannelName(bill.channel)}}</small>
-            <small class="mr-1" [ngStyle]="setStyles()"><i class="fa fa-user fa-lg"></i> {{bill.activity?(detectActionName(bill.activity.action)):""}}</small>
-          </div>
-        </div>
-        <div class="col-md-12 mb-h">
-          <button (click)="changeStatusBill(bill)" class="btn btn-sm btn-success btn-ladda float-right" data-style="expand-right">
-          Cập nhật trạng thái
-        </button>
-          <button (click)="changeStatusBill(bill)" class="btn btn-sm btn-success btn-ladda float-right mr-h" data-style="expand-right">
-        Chỉnh sửa
-        </button>
-          <button (click)="print(bill)" class="btn btn-sm btn-success btn-ladda float-right mr-h" data-style="expand-right">
-          In hóa đơn
-        </button>
-        </div>
-      </div>
-      <hr class="mx-1 my-0">
-    </div>
-  </div>
-</div> -->

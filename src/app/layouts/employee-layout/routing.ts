@@ -7,8 +7,8 @@ export const EmployeeLayoutRouting = {
   canActivate: [AuthGuard],
   children: [
     {
-      path: 'employee-layout',
-      redirectTo: 'employee',
+      path: '',
+      redirectTo: 'employee/list',
       pathMatch: 'full',
     },
     {

@@ -7,8 +7,8 @@ export const BranchLayoutRouting = {
   canActivate: [AuthGuard],
   children: [
     {
-      path: 'branch-layout',
-      redirectTo: 'branch',
+      path: '',
+      redirectTo: 'branch/list',
       pathMatch: 'full',
     },
     {
