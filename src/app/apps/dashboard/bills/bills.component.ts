@@ -340,11 +340,14 @@ export class BillsComponent implements OnInit {
     options.forEach(option => {
       actions.push({ code: Object.keys(option)[0], name: option[Object.keys(option)[0]]});
     });
-    //console.log(actions);
+    
+    console.log(bill);
+    let currentAction = this.globals.detectBillActivityByCode(bill.activity.action);
+    console.log(bill.activity.action)
 
     let dialogRef = this.dialog.open(EditOrderStatusDialog, {
-      width: '400px',
-      data: { actions: actions, employees: this.employees }
+      width: '500px',
+      data: { actions: actions, employees: this.employees, currentAction: currentAction }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result)

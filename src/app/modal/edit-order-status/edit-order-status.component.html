@@ -1,20 +1,37 @@
 <h2 class="title">Thay đổi trạng thái</h2>
-<select [(ngModel)]="info.action" class="select-control form-control" >
-  <option *ngFor="let e of data.actions" [ngValue]="e.code">
-    {{ e.name }}
-  </option>
-</select>
-<div> 
-  <select [(ngModel)]="info.employee" class="select-control form-control">
-    <option *ngFor="let e of data.employees.getValue()" [ngValue]="e.id">
-      {{ e.fullname }}
-    </option>
-  </select>
-  <input type="text" [(ngModel)]="info.note" class="input-control form-control">
+<div class="row">
+  <p class="col-4 header-text">Trạng thái hiện tại</p>
+  <p class="col-8 info-text">{{ data.currentAction }}</p>
+</div>
+<div class="row">
+    <p class="col-4 header-text">Trạng thái mới</p>
+    <div class="col-8">
+        <select [(ngModel)]="info.action" class="select-control form-control" >
+          <option *ngFor="let e of data.actions" [ngValue]="e.code">
+            {{ e.name }}
+          </option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <p class="col-4 header-text">Nhân viên</p>
+    <div class="col-8">
+        <select [(ngModel)]="info.employee" class="select-control form-control">
+          <option *ngFor="let e of data.employees.getValue()" [ngValue]="e.id">
+            {{ e.fullname }}
+          </option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <p class="col-4 header-text">Ghi chú</p>
+    <div class="col-8">
+        <input type="text" [(ngModel)]="info.note" class="input-control form-control">
+    </div>
 </div>
 <div class="bottom-btn-group">
-  <button class="btn-confirm" [mat-dialog-close]="info">Xác nhận</button>
-  <button class="btn-cancel" (click)="onNoClick()">Quay lại</button>
+  <button class="btn-confirm btn btn-md" [mat-dialog-close]="info">Cập nhật trạng thái</button>
+  <button class="btn-cancel btn btn-md" (click)="onNoClick()">Trở về</button>
 </div>
 
 <!-- <div mat-dialog-actions>
