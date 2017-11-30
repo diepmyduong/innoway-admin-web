@@ -1,123 +1,67 @@
 <header class="app-header navbar">
-  <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">&#9776;</button>
-  <ul class="nav navbar-nav hidden-md-down">
-    <li class="nav-item">
-      <a class="nav-link navbar-toggler sidebar-toggler" href="javascript:;">&#9776;</a>
+  <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button"><i class="material-icons">keyboard_arrow_left</i></button>
+  <a class="navbar-brand" [routerLink]="['./dashboard']">
+    <div class="logo-wrapper"><img id="logo" src="../../assets/img/logo-white.svg"/></div>
+  </a>
+  <ul class="nav navbar-nav mr-auto">
+    <li class="nav-item dropdown" dropdown placement="bottom" id="accountDropdownMenu">
+      <button class="nav-link nav-pill avatar dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+        <div *ngIf="!employee.avatar" >{{employee.fullname[0]}}</div>
+        <img src="{{employee.avatar?employee.avatar:''}}" class="img-avatar" *ngIf="employee.avatar" onerror="this.style.display = 'none'">
+      </button>
+      <div class="user-name hidden-md-down"  data-toggle="dropdown">
+        {{employee.fullname}}<i class="material-icons">keyboard_arrow_down</i>
+      </div>
+      <ul class="dropdown-menu" aria-labelledby="accountDropdownMenu">
+        <li class="dropdown-item"><a><i class="fa fa-user"></i> Thông tin tài khoản</a></li>
+        <li class="dropdown-item"><a><i class="fa fa-wrench"></i> Cài đặt</a></li>
+        <li class="dropdown-item"><a><i class="fa fa-shield"></i> Khoá tài khoản</a></li>
+        <li class="dropdown-item" (click)="logout()"><a><i class="fa fa-lock"></i> Đăng xuất</a></li>
+      </ul>
     </li>
 
-  </ul>
-  <ul class="nav navbar-nav ml-auto">
+    <div class="name-separator hidden-md-down"></div>
+
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-                <i class="icon-bell"></i><span class="badge badge-pill badge-danger">5</span>
-            </a>
-      <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg" *dropdownMenu aria-labelledby="simple-dropdown">
-
-        <div class="dropdown-header text-center"><strong>Thông báo</strong></div>
-
-        <a href="javascript:;" class="dropdown-item">
-                    <i class="icon-basket-loaded text-primary"></i> Đơn hàng chờ duyệt
-                    <span class="badge badge-pill badge-primary">5</span>
-                </a>
-        <a href="javascript:;" class="dropdown-item">
-                    <i class="glyphicons glyphicons-coins text-success"></i> Đơn hàng chờ thu phí
-                    <span class="badge badge-pill badge-success">5</span>
-                </a>
-        <a href="javascript:;" class="dropdown-item">
-                    <i class="glyphicons glyphicons-exclamation-sign text-warning"></i> Đơn hàng báo huỷ
-                    <span class="badge badge-pill badge-warning">5</span>
-                </a>
-      </div>
+              <i class="fa fa-bell-o" aria-hidden="true"></i><span class="badge badge-pill badge-danger">5</span>
+          </a>
+      <ul class="dropdown-menu" aria-labelledby="accountDropdownMenu">
+        <li class="dropdown-item"><i class="fa fa-user"></i> Đơn hàng chờ duyệt</li>
+        <li class="dropdown-item"><i class="fa fa-wrench"></i> Đơn hàng chờ thu phí</li>
+        <li class="dropdown-item"><i class="fa fa-shield"></i> Đơn hàng báo huỷ</li>
+      </ul>
     </li>
-    <li class="nav-item dropdown" dropdown placement="bottom right">
-      <a class="nav-link nav-pill avatar" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-                <img src="assets/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-            </a>
-      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
-        <div class="dropdown-header text-center">
-          <strong>Tài khoản</strong>
-        </div>
 
-        <a class="dropdown-item" href="javascript:;"><i class="fa fa-user"></i> Thông tin tài khoản</a>
-        <a class="dropdown-item" href="javascript:;"><i class="fa fa-wrench"></i> Cài đặt</a>
-        <a class="dropdown-item" href="javascript:;"><i class="fa fa-shield"></i> Khoá tài khoản</a>
-        <a class="dropdown-item" href="javascript:;"><i class="fa fa-lock"></i> Đăng xuất</a>
-      </div>
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-commenting-o"></i>
+          </a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link navbar-toggler aside-menu-toggler" href="javascript:;">&#9776;</a>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="icon-settings"></i>
+          </a>
+    </li>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-power-off"></i>
+          </a>
     </li>
   </ul>
+  <ul class="nav navbar-nav ml-auto hidden-md-down">
+        <li class="nav-item">
+          <a class="nav-link navbar-toggler aside-menu-toggler" href="javascript:;"><i class="material-icons">menu</i></a>
+        </li>
+  </ul>
 </header>
-<div id="fundo">
 
-  <!-- <div id="login">
-      <div id="logo"></div>
-       <h1>Sign in to iCloud</h1>
-
-      <div class="input">
-          <input type="text" placeholder="Apple ID" />
-      </div>
-      <div class="input">
-          <input type="text" placeholder="Password" />
-          <div class="btn"></div>
-      </div>
-      <div id="footer">
-          <label>
-              <input type="checkbox" /> <span>Keep me signed in</span>
-
-          </label>
-      </div>
-  </div> -->
-
-  <!-- <div class="pages">
-    <div class="page">
-      <div class="page-thumb" [routerLink]="['/dashboard-page']">
-        <img src="assets/img/favicon.png" alt="">
-      </div>
-      <div class="page-title">
-        Dashboard
-      </div>
+<div class="app-body">
+    <div class="container-fluid">
+      <router-outlet></router-outlet>
     </div>
-    <div class="page">
-        <div class="page-thumb" [routerLink]="['/product-page']">
-          <img src="assets/img/favicon.png" alt="">
-        </div>
-        <div class="page-title">
-          Product
-        </div>
-      </div>
-  </div> -->
-  <div class="row pages">
-    <div class="col-lg-12">
-      <tabset>
-        <tab>
-          <ng-template tabHeading><i class="icon-calculator"></i> Tính năng</ng-template>
-          <div class="card">
-            <div class="card-header">
-              <div class="row">
-                <div class="col-md-2 item" *ngFor="let item of data.feature; let i = index">
-                  <img src="{{item.icon}}" width="100%" height="80px" [routerLink]="item.link" />
-                  <span>{{item.title}}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </tab>
-        <tab>
-          <ng-template tabHeading><i class="icon-basket-loaded"></i> Tiện ích</ng-template>
-          <div class="card">
-            <div class="card-header">
-              <div class="row">
-                <div class="col-md-2 item" *ngFor="let item of data.addon; let i = index">
-                  <img src="{{item.icon}}" width="100%" height="80px" />
-                  <span>{{item.title}}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </tab>
-      </tabset>
-    </div>
-  </div>
 </div>
+
+<toaster-container [toasterconfig]="toasterconfig"></toaster-container>

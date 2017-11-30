@@ -31,14 +31,14 @@ export class AddComponent implements OnInit {
   public description;
   shortDescription: string;
   category: string;
-  product_type: string;
+  product_type: string = null;
   status: number = 1;
   topping: string;
   base_price: string;
   price: string;
   list_image: any[] = [];
   image_on_hover: number;
-  unit: string;
+  unit: string = null;
   attribute: string;
   thumb: string;
   topping_items = new BehaviorSubject<any[]>([]);
@@ -124,6 +124,8 @@ export class AddComponent implements OnInit {
     this.toppings.next(toppings);
     this.list_image = [];
     this.thumb = null;
+    this.unit = null;
+    this.product_type = null;
 
     return {
       status: this.status,
@@ -215,11 +217,11 @@ export class AddComponent implements OnInit {
       this.shortDescription = product.short_description
       this.price = product.price
       this.base_price = product.base_price
-      this.unit = product.unit_id
+      this.unit = product.unit_id ? product.unit_id : "Không có dữ liệu"
       this.status = product.status
       this.category = product.category_id
       this.list_image = product.list_image
-      this.product_type = product.product_type_id
+      this.product_type = product.product_type_id ? product.product_type_id : "Không có dữ liệu"
       let toppings = this.toppings.getValue();
       this.toppingSelecter.active = product.toppings.map(product_topping => {
         let index = _.findIndex(toppings, { id: product_topping.topping.id });

@@ -1,4 +1,8 @@
-import { Component, OnInit,ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { AuthService, InnowayService } from "app/services";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Observable } from "rxjs/Observable";
+import { ToasterModule, ToasterService, ToasterConfig } from 'angular2-toaster/angular2-toaster';
 
 @Component({
   selector: 'app-launcher-layout',
@@ -8,87 +12,113 @@ import { Component, OnInit,ViewEncapsulation } from '@angular/core';
 })
 export class LauncherLayoutComponent implements OnInit {
 
-  data: any = {
-    feature: [
-      {
-        title: "Trang điều phối",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/super-admin/dashboard",
-      }, {
-        title: "Chi nhánh",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/branch-layout",
-      },
-      {
-        title: "Nhân viên",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/employee-layout",
-      }, {
-        title: "Sản phẩm",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/product-layout",
-      }, {
-        title: "Người dùng",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/customer-layout",
-      }, {
-        title: "Đơn hàng",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/bill-layout",
-      }, {
-        title: "Khuyến mãi",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/promotion-layout",
-      }, {
-        title: "Phản hồi",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/feedback-layout",
-      },{
-        title: "Ticket",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/ticket-layout",
-      }
-    ],
-    addon: [
-      {
-        title: "Thống kê",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/summary-layout",
-      }, {
-        title: "Báo cáo",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/report-layout",
-      },{
-        title: "Phân tích",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/analyse-layout",
-      },{
-        title: "Khảo sát",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/survey-layout",
-      },{
-        title: "Sự kiện",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/event-layout",
-      },{
-        title: "Tích hợp AI",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/integrate-apiai-layout",
-      }, {
-        title: "Tích hợp KiotViet",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/integrate-kiotviet-layout",
-      },{
-        title: "Tích hợp Chatbot",
-        icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
-        link: "/integrate-chatbot-layout",
-      }
-    ]
-  }
+    employee: any;
+    branch: any;
 
-  constructor() { }
+    public disabled: boolean = false;
+    public status: { isopen: boolean } = { isopen: false };
 
-  ngOnInit() {
-  }
+    billService: any;
+    billActitivyService: any;
+    billChangeObservable: Observable<any>;
+    subscribers: any = {};
+
+    private toasterService: ToasterService;
+
+    public toasterconfig: ToasterConfig = new ToasterConfig({
+      tapToDismiss: false,
+      timeout: 2000
+    });
+
+    constructor(private router: Router,
+      private route: ActivatedRoute,
+      private innoway: InnowayService,
+      private ref: ChangeDetectorRef,
+      toasterService: ToasterService,
+      private auth: AuthService,
+      private zone: NgZone
+    ) {
+      this.employee = this.auth.service.userInfo;
+      this.toasterService = toasterService;
+      this.billService = innoway.getService('bill');
+    }
+
+    async ngOnInit() {
+      this.subscribeTopicByFCM();
+      console.log("bambi: " + JSON.stringify(this.employee));
+    }
+
+    async subscribeTopicByFCM() {
+      this.billChangeObservable = await this.billService.subscribe();
+      this.subscribers.bill = this.billChangeObservable.subscribe(data => {
+        this.getDataBillChange(data.id);
+      });
+    }
+
+    itemFields: any = ['$all', {
+      activities: ['$all', {
+        employee: ['$all']
+      }],
+      bill_ship_detail: ['$all'],
+      items: ['$all', {
+        Branch: ['$all', '$paranoid'],
+        topping_values: ['$all', '$paranoid']
+      }],
+      customer: ['$all'],
+      activity: ['$all']
+    }];
+
+    async getDataBillChange(id: string) {
+      try {
+        let bill = await this.billService.get(id, {
+          fields: ['$all', {
+            activities: ['$all', {
+              employee: ['$all']
+            }],
+            bill_ship_detail: ['$all'],
+            items: ['$all', {
+              Branch: ['$all', '$paranoid'],
+              topping_values: ['$all', '$paranoid']
+            }],
+            customer: ['$all'],
+            activity: ['$all']
+          }]
+        });
+        console.log("bambi: " + JSON.stringify(bill));
+      } catch (err) {
+
+      }
+    }
+
+    showSuccess() {
+      console.log("bambi showSuccess()");
+      this.toasterService.pop('success', 'Success Toaster', 'This is toaster description');
+      this.ref.detectChanges();
+    }
+
+    public toggled(open: boolean): void {
+      console.log('Dropdown is now: ', open);
+      alert(open);
+    }
+
+    public toggleDropdown($event: MouseEvent): void {
+      $event.preventDefault();
+      $event.stopPropagation();
+      this.status.isopen = !this.status.isopen;
+    }
+
+    logout() {
+      this.auth.service.logout();
+    }
+
+    navigations = [
+      {
+        type: 'single',
+        name: 'Công cụ',
+        link: "./tool",
+        icon: 'fa fa-wrench',
+      }
+    ];
+
 
 }

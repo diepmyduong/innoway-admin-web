@@ -14,7 +14,6 @@ import { Globals } from './../../globals';
 
 export class FullLayoutComponent implements OnInit {
 
-  prefix = '/super-admin'
 
   employee: any;
   branch: any;

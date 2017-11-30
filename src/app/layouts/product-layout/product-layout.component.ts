@@ -128,140 +128,122 @@ export class ProductLayoutComponent implements OnInit {
     {
       type: 'parent',
       name: 'Sản phẩm',
-      icon: 'icon-star',
+      icon: 'fa fa-cubes',
       children: [
         {
           name: 'Thêm',
           link: "./products/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
           link: "./products/list",
-          icon: 'icon-menu'
+          icon: 'fa fa-list-ul'
         }
       ]
     },
     {
       type: 'parent',
       name: 'Loại sản phẩm',
-      icon: 'icon-star',
+      icon: 'fa fa-cube',
       children: [
         {
           name: 'Thêm',
-          link: "./categories/add",
-          icon: 'icon-add'
+          link: "./category/add",
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
-          link: "./categories/list",
-          icon: 'icon-menu'
+          link: "./category/list",
+          icon: 'fa fa-list-ul'
         }
       ]
     },
     {
       type: 'parent',
       name: 'Trạng thái sản phẩm',
-      icon: 'icon-star',
+      icon: 'fa fa-info',
       children: [
         {
           name: 'Thêm',
           link: "./product-type/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
           link: "./product-type/list",
-          icon: 'icon-menu'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Loại sản phẩm',
-      icon: 'icon-star',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./categories/add",
-          icon: 'icon-add'
-        },
-        {
-          name: 'Danh sách',
-          link: "./categories/list",
-          icon: 'icon-menu'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Loại sản phẩm',
-      icon: 'icon-star',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./product-type/add",
-          icon: 'icon-add'
-        },
-        {
-          name: 'Danh sách',
-          link: "./product-type/list",
-          icon: 'icon-menu'
+          icon: 'fa fa-list-ul'
         }
       ]
     },
     {
       type: 'parent',
       name: 'Đơn vị',
-      icon: 'icon-star',
+      icon: 'fa fa-dot-circle-o',
       children: [
         {
           name: 'Thêm',
           link: "./unit/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
           link: "./unit/list",
-          icon: 'icon-menu'
+          icon: 'fa fa-list-ul'
         }
       ]
     },
     {
       type: 'parent',
       name: 'Topping',
-      icon: 'icon-star',
+      icon: 'fa fa-leaf',
       children: [
         {
           name: 'Thêm',
           link: "./topping/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
           link: "./topping/list",
-          icon: 'icon-menu'
+          icon: 'fa fa-list-ul'
         }
       ]
     },
     {
       type: 'parent',
       name: 'Loại topping',
-      icon: 'icon-star',
+      icon: 'fa fa-pagelines',
       children: [
         {
           name: 'Thêm',
           link: "./topping-type/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
           link: "./topping-type/list",
-          icon: 'icon-menu'
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Thuộc tính sản phẩm',
+      icon: 'fa fa-certificate',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./attribute/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./attribute/list",
+          icon: 'fa fa-list-ul'
         }
       ]
     }
-
   ];
 
 }

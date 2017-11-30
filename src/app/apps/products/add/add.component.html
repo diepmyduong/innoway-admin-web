@@ -6,54 +6,105 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <strong>Nhập thông tin</strong>
+                Nhập thông tin
               </div>
               <div class="card-block">
                 <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input">Tên sản phẩm</label>
-                  <div class="col-md-9">
-                    <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Nhập tên sản phẩm'" required>
+                  <label class="col-md-2 header-text" for="text-input">Tên sản phẩm</label>
+                  <div class="col-md-10">
+                    <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Nhập tên sản phẩm'" required>
                     <small *ngIf="nameControl.errors?.required" class="text-muted danger">
                       (Không được bỏ trống)
                     </small>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-md-4 form-control-label" for="text-input">Mô tả ngắn</label>
-                  <div class="col-md-8">
-                    <input type="text" #shortDesciptionControl="ngModel" [(ngModel)]="shortDesciption" name="shortDesciption"
-                      class="form-control" [placeholder]="'Mô tả ngắn'"/>
+                  <label class="col-md-2 header-text" for="text-input">Mô tả ngắn</label>
+                  <div class="col-md-10">
+                    <input type="text" #shortDesciptionControl="ngModel" [(ngModel)]="shortDesciption" name="shortDesciption" class="form-control input-control" [placeholder]="'Mô tả ngắn'" />
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="textarea-input">Mô tả</label>
-                  <div class="col-md-9">
-                      <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
+                  <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
+                  <div class="col-md-10">
+                    <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <strong>Chi phí</strong>
+                Thiết lập
               </div>
               <div class="card-block">
                 <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input">Giá sản phẩm</label>
-                  <div class="col-md-9">
-                    <input type="text" #priceControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="price" name="price" class="form-control" [placeholder]="'Nhập giá sản phẩm'" required>
-                    <!-- <small class="text-muted" *ngIf="price">{{ price | accounting }}</small> -->
+                  <label class="col-md-2 header-text" for="select">Loại sản phẩm</label>
+                  <div class="col-md-10">
+                    <select id="categorySelect" #categoryControl="ngModel" [(ngModel)]="category" name="category" class="form-control input-control">
+                          <option value="null" disabled="true" [selected]="true">Chọn loại sản phẩm</option>
+                          <option *ngFor="let v of categories | async" [value]="v.id">
+                            {{v.name}}
+                          </option>
+                        </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
+                  <div class="col-md-10">
+                    <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">
+                        <option *ngFor="let v of [0,1]" [value]="v">
+                          {{ v===1?"Hoạt động":"Không hoạt động"}}
+                        </option>
+                      </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12" [hidden]="true">
+            <div class="card">
+              <div class="card-header">
+                Mã sản phẩm
+              </div>
+              <div class="card-block">
+                <div class="form-group row">
+                  <label class="col-md-2 header-text" for="text-input">SKU</label>
+                  <div class="col-md-10">
+                    <input type="text" id="text-input" name="text-input" class="form-control input-control" placeholder="SKU">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 header-text" for="text-input">Barcode</label>
+                  <div class="col-md-10">
+                    <input type="text" id="text-input" name="text-input" class="form-control input-control" placeholder="Barcode">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                Chi phí
+              </div>
+              <div class="card-block">
+                <div class="form-group row">
+                  <label class="col-md-2 header-text" for="text-input">Giá sản phẩm</label>
+                  <div class="col-md-10">
+                    <input type="text" #priceControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="price" name="price" class="input-control form-control" [placeholder]="'Nhập giá sản phẩm'" required>
                     <small *ngIf="priceControl.errors?.required" class="text-muted danger">
                       (Không được bỏ trống)
                     </small>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input">Giá gốc sản phẩm</label>
-                  <div class="col-md-9">
-                    <input type="text" step="1000" #basePriceControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="base_price" name="base_price" class="form-control" [placeholder]="'Nhập giá gốc sản phẩm'">
+                  <label class="col-md-2 header-text" for="text-input">Giá gốc sản phẩm</label>
+                  <div class="col-md-10">
+                    <input type="text" step="1000" #basePriceControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="base_price" name="base_price" class="form-control input-control" [placeholder]="'Nhập giá gốc sản phẩm'">
                   </div>
                 </div>
               </div>
@@ -62,13 +113,14 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <strong>Trạng thái sản phẩm</strong>
+                Trạng thái sản phẩm
               </div>
               <div class="card-block">
                 <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input">Trạng thái sản phẩm</label>
-                  <div class="col-md-9">
-                    <select id="productTypeSelect" #productTypeControl="ngModel" [(ngModel)]="product_type" name="product_type" class="form-control">
+                  <label class="col-md-2 header-text" for="text-input">Trạng thái sản phẩm</label>
+                  <div class="col-md-10">
+                    <select id="productTypeSelect" #productTypeControl="ngModel" [(ngModel)]="product_type" name="product_type" class="form-control input-control" placeholder="Trạng thái sản phẩm">
+                          <option value="null" disabled="true" [selected]="true">Chọn trạng thái sản phẩm</option>
                           <option *ngFor="let v of productTypes | async" [value]="v.id">
                             {{v.name}}
                           </option>
@@ -81,13 +133,14 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <strong>Đơn vị tính</strong>
+                Đơn vị tính
               </div>
               <div class="card-block">
                 <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input">Đơn vị</label>
-                  <div class="col-md-9">
-                    <select id="unitSelect" #unitControl="ngModel" [(ngModel)]="unit" name="unit" class="form-control">
+                  <label class="col-md-2 header-text" for="text-input">Đơn vị</label>
+                  <div class="col-md-10">
+                    <select id="unitSelect" #unitControl="ngModel" [(ngModel)]="unit" name="unit" class="form-control input-control" placeholder="Đơn vị">
+                          <option value="null" disabled="true" [selected]="true">Chọn đơn vị</option>
                           <option *ngFor="let v of units | async" [value]="v.id">
                             {{v.name}}
                           </option>
@@ -100,10 +153,13 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <strong>Hình ảnh</strong>
+                Hình ảnh
                 <button type="submit" class="btn btn-sm btn-primary float-right" (click)="addImage()"> Thêm</button>
               </div>
               <div class="card-block">
+                <small *ngIf="list_image == null || list_image.length == 0" class="text-muted danger">
+                  Chưa có hình ảnh
+                </small>
                 <swiper [config]="imageConfig" #imageSwiper id="product-swiper">
                   <div class="swiper-wrapper">
                     <div class="swiper-slide" *ngFor="let image of list_image; let i = index" (mouseenter)="image_on_hover = i" (mouseleave)="image_on_hover = -1">
@@ -132,7 +188,7 @@
           <div class="col-md-12" *ngIf="thumb">
             <div class="card">
               <div class="card-header">
-                <strong>Ảnh đại diện</strong>
+                Ảnh đại diện
               </div>
               <div class="card-block" style="text-align: center">
                 <img style="width: 100px; height: 100px;" [src]="thumb" />
@@ -143,22 +199,21 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <strong>Topping</strong>
-                <div class="col-md-12">
-                </div>
+                Topping
               </div>
               <div class="card-block">
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <ng-select [multiple]="true" #toppingSelecter [allowClear]="true" [items]="topping_items | async" (selected)="toppingSelected($event)" (removed)="toppingRemoved($event)" placeholder="No topping selected">
+                <div class="form-group row remove-pb">
+                  <label class="col-md-2 header-text">Topping:</label>
+                  <div class="col-md-10">
+                    <ng-select class="form-group input-control" [multiple]="true" #toppingSelecter [allowClear]="true" [items]="topping_items | async" (selected)="toppingSelected($event)" (removed)="toppingRemoved($event)" placeholder="Chọn loại topping">
                     </ng-select>
                   </div>
                 </div>
-                <div class="form-group row" *ngFor="let topping of toppings | async">
-                  <label class="col-md-12 form-control-label" *ngIf="topping.selected">{{topping.name}}:</label>
+                <div class="form-group row remove-pb" *ngFor="let topping of toppings | async" [hidden]="toppings!=null?false:true">
+                  <label class="col-md-2 sub-header-text" *ngIf="topping.selected && topping.values">{{topping.name}}:</label>
                   <div class="col-md-12" *ngIf="topping.selected && topping.values">
-                    <div class="row">
-                      <div class="col-md-4" *ngFor="let value of topping.values">
+                    <div class="row remove-pb">
+                      <div class="col-md-2" *ngFor="let value of topping.values">
                         <label class="checkbox-inline" for="inline-checkbox1">
                                  <i class="icon-check icons mr-h"></i> {{value.name}}
                              </label>
@@ -177,60 +232,9 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <strong>Thiết lập</strong>
+                Thêm sản phẩm
               </div>
               <div class="card-block">
-                <div class="form-group row">
-                  <label class="col-md-4 form-control-label" for="select">Loại sản phẩm</label>
-                  <div class="col-md-8">
-                    <select id="categorySelect" #categoryControl="ngModel" [(ngModel)]="category" name="category" class="form-control">
-                          <option *ngFor="let v of categories | async" [value]="v.id">
-                            {{v.name}}
-                          </option>
-                        </select>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
-                  <div class="col-md-8">
-                    <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
-                        <option *ngFor="let v of [0,1]" [value]="v">
-                          {{ v===1?"Hoạt động":"Không hoạt động"}}
-                        </option>
-                      </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12" [hidden]="true">
-            <div class="card">
-              <div class="card-header">
-                <strong>Mã sản phẩm</strong>
-              </div>
-              <div class="card-block">
-                <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input">SKU</label>
-                  <div class="col-md-9">
-                    <input type="text" id="text-input" name="text-input" class="form-control" placeholder="SKU">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input">Barcode</label>
-                  <div class="col-md-9">
-                    <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Barcode">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <strong>Thêm sản phẩm</strong>
-              </div>
-              <div class="card-footer">
                 <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
                   Submit &amp; New
                 </button>

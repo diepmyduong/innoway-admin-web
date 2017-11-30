@@ -1,0 +1,64 @@
+@import '../../../scss/bootstrap-variables';
+
+/deep/ .app {
+    margin: 0 !important;
+    height: 100% !important;
+    background-color: white !important;
+}
+
+.item{
+  margin-bottom: 1.5rem;
+}
+
+.item img{
+  height: 50px;
+  width: 100%;
+  object-fit: contain;
+  padding: 0.25rem;
+}
+
+.header-text {
+  color: $bluegrey-darker;
+  font-size: 0.95rem;
+  padding: 0.25rem;
+  margin: 0.25rem;
+  font-weight: 400;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.row{
+  background: white;
+}
+
+.card, .card-header{
+  background: white;
+  border: 0 !important;
+}
+
+/deep/ tabset .tab-content{
+  background: white;
+  border: 0 !important;
+}
+
+/deep/ tabset .nav-tabs .active{
+  border: 0 !important;
+}
+
+/deep/ tabset .nav-item:hover{
+  border: 0 !important;
+}
+
+/deep/ tabset .nav-link:hover{
+  border: 0 !important;
+}
+
+/deep/ tabset .nav-tabs{
+  border: 0 !important;
+}
+
+/deep/ tabset .nav-link{
+  border: 0 !important;
+}
