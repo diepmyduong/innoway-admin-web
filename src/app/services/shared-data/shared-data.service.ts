@@ -5,4 +5,5 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class SharedDataService {
   billFilterInfo = {};
   employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  employeeData: any;
 }

@@ -15,6 +15,7 @@ import { ModalModule } from '../../../modal/modal.module';
 import { SharedDataService } from '../../../services/shared-data/shared-data.service'
 
 import { Globals } from './../../../globals';
+import * as moment from 'moment';
 declare let swal: any;
 
 @Component({
@@ -58,7 +59,9 @@ export class BillsComponent implements OnInit {
 
   employeeData: any;
   branchService: any;
+  brandService: any;
   branch: any;
+  brand: any;
 
   get billFilterInfo():any { 
     return this.sharedDataService.billFilterInfo; 
@@ -92,13 +95,28 @@ export class BillsComponent implements OnInit {
 
     this.employeeData = this.auth.service.userInfo;
     this.branchService = innoway.getService('branch');
+    this.brandService = innoway.getService('brand');
     //this.subscribeDashboardParent();
   }
 
   async ngOnInit() {
     this.loadBillData();
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
+    this.loadBrandByEmployeeData(this.employeeData.brand_id);
+    console.log(this.employeeData.brand_id)
     this.subscribeTopicByFCM();
+  }
+
+  async loadBrandByEmployeeData(brandId: string) {
+    try {
+      this.brand = await this.brandService.get(brandId, {
+        fields: ["$all"]
+      })
+      console.log("abc",JSON.stringify(this.brand));
+      this.ref.detectChanges();
+    } catch (err) {
+
+    }
   }
 
   async loadBranchByEmployeeData(branchId: string) {
@@ -211,6 +229,7 @@ export class BillsComponent implements OnInit {
             product: ['$all', '$paranoid'],
             topping_values: ['$all', '$paranoid']
           }],
+          bill_ship_detail: ["$all"],
         }]
       });
       if (isPrint && data.items != null) {
@@ -223,33 +242,101 @@ export class BillsComponent implements OnInit {
   }
 
   async printBill(data: any, popupWin: any) {
-    let printContents, billContent;
-    printContents = "";
-    printContents =
-      '<div> Mã đơn hàng: ' + data.id + '</div>'
-      ;
-    billContent = '';
 
+    console.log(data);
+    
+    let tableContent = "";
+    let index = 0;
     data.items.forEach(item => {
-      billContent += '<p>' + item.product.name + ' --- ' + item.amount + '</p>'
+      tableContent += "<tr class='small-text text-right'>";
+      tableContent += '<td>' + (index + 1) + '</td>'; 
+      tableContent += '<td>' + item.product.name + '</td>'; 
+      tableContent += '<td>' + item.amount + '</td>'; 
+      tableContent += '<td>' + this.addSpace(item.product_price) + '</td>'; 
+      tableContent += '<td>' + this.addSpace(item.total_price) + '</td>'; 
+      tableContent += '</tr>';
     });
-
-    printContents += billContent;
-
+    
     popupWin.document.write(`
             <html>
                 <head>
-                    <title>Print tab</title>
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css">
                     <style>
-                        //........Customized style.......
+                      @media print { body.receipt { width: 80mm, min-height: 500mm } } 
+                        .receipt { width: 80mm; min-height: 500mm; font-family: sans-serif; color: #555; text-align: center;  }
+                        .sheet { padding: 2.5mm; }
+                        .text-center { }
+                        .text-left { text-align: left }
+                        .text-right { text-align: right }
+                        .brand-name { font-size: 2mm; }
+                        .logo { width: 80%; margin-left: 10%; }
+                        .normal-text { margin-left: 0.5mm; font-size: 3.5mm;}
+                        .small-text { font-size: 3mm; }
+                        .title { font-size: 5mm; font-weight: 600; }
+                        .padding-3 { padding: 3mm; }
+                        .padding-4 { padding: 4mm; }
+                        .left { float: left }
+                        .right { float: right }
+                        th { color: #444; border-bottom: dashed 1px;  }
+                        td { color: #777 }
+                        th, td { padding-top: 2mm; padding-bottom: 2mm; }
                     </style>
                 </head>
-                <body onload="window.print();window.close()">${printContents}
+                <body onload="window.print();window.close()" class="receipt">
+                  <section class="sheet">
+                    <img class='logo padding-3' src='https://i.imgur.com/V8SWFDN.png'>
+                    <div class='text-center normal-text padding-3'>` + this.branch.address + `</div>
+                    <div class='text-center normal-text'>Hotline: ` + this.branch.phone + `</div>
+
+                    <hr style="border: none; border-top: solid 1px;" />
+                    
+                    <div style="display: inline-block; width: 100%;">
+                      <div class='small-text left'>Ngày đặt: ` + moment(data.created_at).format('L') + `</div>
+                      <div class='small-text text-right right'>Ngày nhận: ` + moment().format('L') + `</div>
+                    </div>
+
+                    <div class='title padding-4'>Phiếu thanh toán</div> 
+
+                    <div class='normal-text text-left'>Mã đơn hàng: 1154</div>
+                    <div class='normal-text text-left'>Nhân viên giao hàng: Uy Minh</div>
+
+                    <hr style="border: none; border-top: dashed 1px;" />
+                    <table style="width:100%">
+                      <tr class='small-text text-right'>
+                        <th>TT</th>
+                        <th>Tên sản phẩm</th> 
+                        <th>SL</th>
+                        <th>Đơn giá</th>
+                        <th>T. Tiền</th>
+                      </tr>
+                      ` + tableContent + `
+                    </table>
+                    <hr style="border: none; border-top: dashed 1px;" />
+                    <div style="padding-bottom: 1.5mm; display: inline-block; width: 100%;">
+                      <div class='small-text left'>Phí ship</div>
+                      <div class='small-text right'>` + this.addSpace(data.bill_ship_detail.fee) + `</div>
+                    </div>
+                    <div style="padding-bottom: 1.5mm; display: inline-block; width: 100%;">
+                      <div class='small-text left'>Phí VAT</div>
+                      <div class='small-text right'>` + this.addSpace(data.vat_fee) + `</div>
+                    </div>
+                    <hr style="border: none; border-top: solid 1px;" />
+                    <div style="margin: 3mm 0mm">
+                      <div class='normal-text left'><b>Thành tiền</b></div>
+                      <div class='normal-text right'><b>` + this.addSpace(data.total_price) + 'đ' + `</b></div>
+                    </div>
+                    <div style="min-height: 15mm">
+                    </div>
+                  </section>
                 </body>
             </html>`
     );
     popupWin.document.close();
   }
+
+  addSpace(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
 
   async loadEmployeeData() {
     try {
@@ -283,7 +370,8 @@ export class BillsComponent implements OnInit {
             employee: ["$all"]
           }],
           customer: ["$all"],
-          activity: ["$all"]
+          activity: ["$all"],
+          bill_ship_detail: ["$all"],
         }],
         order: [["updated_at", "desc"]]
       });
@@ -303,10 +391,12 @@ export class BillsComponent implements OnInit {
             employee: ["$all"]
           }],
           customer: ["$all"],
-          activity: ["$all"]
+          activity: ["$all"],
+          bill_ship_detail: ["$all"],
         }],
         order: [["updated_at", "desc"]]
       });
+      console.log(this.bills.getValue());
       // alert(JSON.stringify(this.bills));
       // console.log('bills', this.bills.getValue())
     } catch (err) {
