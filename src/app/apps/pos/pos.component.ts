@@ -34,7 +34,6 @@ export interface State {
   providers: [Globals],
   templateUrl: './pos.component.html',
   styleUrls: ['./pos.component.scss'],
-
 })
 export class PosComponent implements OnInit {
   swiperOptions: any;
@@ -59,11 +58,16 @@ export class PosComponent implements OnInit {
   productState: FormControl;
   autocompleteProduct: any;
 
+  customerPhoneOnline: string = "";
+  customerNameOnline: string = "";
+  customerPhoneAtStore: string = "";
+  customerNameAtStore: string = "";
+
   selectedProduct: Array<any> = new Array<any>();
   selectedTopping: Array<any> = new Array<any>();
   allProductData: Array<any> = new Array<any>();
   autocompleteCustomerData: Array<any> = new Array<any>();
-  autocompleteCustomerNameData: Array<any>=new Array<any>();
+  autocompleteCustomerNameData: Array<any> = new Array<any>();
 
   currentEmployee: any = {};
   isChose: boolean = false;
@@ -170,6 +174,13 @@ export class PosComponent implements OnInit {
   };
   numTemplateOpens = 0;
 
+  outputAmountOfPriceItems = 0;
+  outputSubFee = 0;
+  outputVAT = 0;
+  outputPromotion = 0;
+  outputShipFee = 0;
+  outputAmountOfPurchase = 0;
+
   @ViewChild(TemplateRef) template: TemplateRef<any>;
 
   constructor(private innoway: InnowayService,
@@ -224,16 +235,18 @@ export class PosComponent implements OnInit {
     });
   }
 
-  openToppingDialog(data) {
+  openToppingDialog(productId, data) {
     this.config.data = data;
     this.dialogRef = this.dialog.open(ToppingDialog, this.config);
-    this.dialogRef.componentInstance.totalPrice = "0";
+    // this.dialogRef.componentInstance.totalPrice = "0";
 
     this.dialogRef.beforeClose().subscribe((result: string) => {
       this.lastBeforeCloseResult = result;
     });
     this.dialogRef.afterClosed().subscribe((result) => {
-      alert(this.dialogRef.componentInstance.totalPrice);
+      // alert(this.dialogRef.componentInstance.totalPrice);
+      // alert(JSON.stringify(result));
+      this.addToppingsToProduct(result, productId);
       this.lastAfterClosedResult = result;
       this.dialogRef = null;
     });
@@ -348,7 +361,7 @@ export class PosComponent implements OnInit {
       });
       this.selectedTopping = data.toppings != null ? data.toppings : null;
       if (this.selectedTopping != null) {
-        this.openToppingDialog(data.toppings);
+        this.openToppingDialog(productId, data.toppings);
       } else {
         this.alertItemNotFound();
       }
@@ -382,6 +395,7 @@ export class PosComponent implements OnInit {
       thumb: product.thumb,
       price: product.price,
       total: total.toString(),
+      toppings: [],
     }
 
     if (isAvaible) {
@@ -389,6 +403,31 @@ export class PosComponent implements OnInit {
     } else {
       this.selectedProduct.push(item);
     }
+
+    this.updateTotalAmount();
+    this.ref.detectChanges();
+  }
+
+  addToppingsToProduct(toppings: any, id: string) {
+    let pos = -1;
+    this.selectedProduct.forEach((item, index) => {
+      if (item.id == id) {
+        pos = index;
+        return;
+      }
+    })
+
+    let product = this.selectedProduct[pos];
+    product.toppings = toppings;
+
+    let total = 0;
+    product.toppings.forEach((item, index) => {
+      total += Number.parseInt(item.price);
+    });
+
+    product.price = (Number.parseInt(product.price) + total).toString();
+    product.total = (Number.parseInt(product.price) * Number.parseInt(product.amount)).toString();
+    this.selectedProduct[pos] = product;
 
     this.updateTotalAmount();
     this.ref.detectChanges();
@@ -502,6 +541,7 @@ export class PosComponent implements OnInit {
       thumb: product.thumb,
       price: product.price,
       total: total.toString(),
+      toppings: product.toppings,
     }
 
     if (isAvaible) {
@@ -518,6 +558,8 @@ export class PosComponent implements OnInit {
       total += Number.parseInt(item.total);
     })
     this.total_amount = total.toString();
+    this.outputAmountOfPriceItems = total;
+    this.calculateAmountOfPurchase();
     this.ref.detectChanges();
   }
 
@@ -533,6 +575,14 @@ export class PosComponent implements OnInit {
       this.paid_type = this.globals.PAID_HISTORY_TYPES[0].name;
     }
     this.ref.detectChanges();
+  }
+
+  private calculateAmountOfPurchase() {
+    this.outputAmountOfPurchase = this.outputAmountOfPriceItems
+      + this.outputShipFee
+      + this.outputSubFee
+      + this.outputVAT
+      - this.outputPromotion;
   }
 
   displaySearchProduct(value: any): string {
@@ -563,6 +613,7 @@ export class PosComponent implements OnInit {
       });
     });
   }
+
 
   public selected(value: any): void {
     console.log('Selected value is: ' + value);
@@ -714,15 +765,17 @@ export class PosComponent implements OnInit {
   template: `
   <checkbox-topping-checklist [toppings]="selectedTopping"
   (updateSelectedTopping)="handleupdateSelectedTopping($event)"></checkbox-topping-checklist>
-  <p>{{totalPrice}}</p>
-  <button type="button" (click)="dialogRef.close(howMuch.value)">Close dialog</button>
-  <button (click)="togglePosition()">Change dimensions</button>`
+  <p class="header-text">Chi phí: {{totalPrice | accounting}}</p>
+  <div style="text-align:center;margin:auto;width:100%;">
+  <button type="button" class="btn btn-ladda btn-primary ml-auto" (click)="dialogRef.close(selectedToppings)">Chấp nhận</button>
+  </div>`,
+  styleUrls: ['./pos.component.scss'],
 })
 export class ToppingDialog {
   private _dimesionToggle = false;
   private selectedTopping: any;
   initialCount: number = 10;
-  totalPrice: string;
+  totalPrice: number = 0;
   selectedToppings: any[] = [];
 
   constructor(
@@ -736,7 +789,12 @@ export class ToppingDialog {
   }
 
   handleupdateSelectedTopping(selectedToppings) {
+    this.totalPrice = 0;
     this.selectedToppings = selectedToppings;
+    this.selectedToppings.forEach(topping => {
+      this.totalPrice += Number.parseInt(topping.price);
+    });
+    // this.addToppingsToProduct(result, )
   }
 
   togglePosition(): void {
@@ -756,12 +814,8 @@ export class ToppingDialog {
 
 @Component({
   selector: 'checkbox-topping-checklist',
-  styles: [`
-    li {
-      margin-bottom: 4px;
-    }
-  `],
   templateUrl: 'nested-checklist.html',
+  styleUrls: ['./pos.component.scss'],
 })
 export class CheckboxToppingChecklistComponent implements OnInit {
 
@@ -789,6 +843,7 @@ export class CheckboxToppingChecklistComponent implements OnInit {
       };
       data.topping.values.forEach(data => {
         let subtask = {
+          id: data.id,
           name: data.name,
           price: data.price != null ? data.price : 0,
           completed: false,
@@ -819,22 +874,32 @@ export class CheckboxToppingChecklistComponent implements OnInit {
 
   setAllCompleted(tasks: any[], completed: boolean) {
     tasks.forEach(t => {
-      t.completed = completed;
+      this.updateStatus(t, completed);
     });
   }
 
   updateStatus(subtask, event) {
+    subtask.completed = event;
+    let pos = -1;
     for (var i = this.selectedToppings.length; i--;) {
-      if (this.selectedToppings[i].name === subtask.name) {
-        if (!subtask.completed) {
-          this.selectedToppings.splice(i, 1);
-        } else {
-          this.selectedToppings.push(subtask);
-        }
+      if (this.selectedToppings[i].name == subtask.name) {
+        pos = i;
         break;
       }
     }
 
-    this.updateSelectedTopping.emit(subtask);
+    if (pos != -1) {
+      if (subtask.completed) {
+        this.selectedToppings.push(subtask);
+      } else {
+        this.selectedToppings.splice(pos, 1);
+      }
+    } else {
+      if (subtask.completed) {
+        this.selectedToppings.push(subtask);
+      }
+    }
+
+    this.updateSelectedTopping.emit(this.selectedToppings);
   }
 }
