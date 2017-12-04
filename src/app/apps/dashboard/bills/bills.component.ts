@@ -63,15 +63,15 @@ export class BillsComponent implements OnInit {
   branch: any;
   brand: any;
 
-  get billFilterInfo():any { 
-    return this.sharedDataService.billFilterInfo; 
-  } 
-  set billFilterInfo(value: any) { 
-    this.sharedDataService.billFilterInfo = value; 
-  } 
+  get billFilterInfo():any {
+    return this.sharedDataService.billFilterInfo;
+  }
+  set billFilterInfo(value: any) {
+    this.sharedDataService.billFilterInfo = value;
+  }
 
   get employees(): BehaviorSubject<any[]> {
-    return this.sharedDataService.employees; 
+    return this.sharedDataService.employees;
   }
 
   set employees(value: BehaviorSubject<any[]>) {
@@ -244,25 +244,25 @@ export class BillsComponent implements OnInit {
   async printBill(data: any, popupWin: any) {
 
     console.log(data);
-    
+
     let tableContent = "";
     let index = 0;
     data.items.forEach(item => {
       tableContent += "<tr class='small-text text-right'>";
-      tableContent += '<td>' + (index + 1) + '</td>'; 
-      tableContent += '<td>' + item.product.name + '</td>'; 
-      tableContent += '<td>' + item.amount + '</td>'; 
-      tableContent += '<td>' + this.addSpace(item.product_price) + '</td>'; 
-      tableContent += '<td>' + this.addSpace(item.total_price) + '</td>'; 
+      tableContent += '<td>' + (index + 1) + '</td>';
+      tableContent += '<td>' + item.product.name + '</td>';
+      tableContent += '<td>' + item.amount + '</td>';
+      tableContent += '<td>' + this.addSpace(item.product_price) + '</td>';
+      tableContent += '<td>' + this.addSpace(item.total_price) + '</td>';
       tableContent += '</tr>';
     });
-    
+
     popupWin.document.write(`
             <html>
                 <head>
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css">
                     <style>
-                      @media print { body.receipt { width: 80mm, min-height: 500mm } } 
+                      @media print { body.receipt { width: 80mm, min-height: 500mm } }
                         .receipt { width: 80mm; min-height: 500mm; font-family: sans-serif; color: #555; text-align: center;  }
                         .sheet { padding: 2.5mm; }
                         .text-center { }
@@ -289,13 +289,13 @@ export class BillsComponent implements OnInit {
                     <div class='text-center normal-text'>Hotline: ` + this.branch.phone + `</div>
 
                     <hr style="border: none; border-top: solid 1px;" />
-                    
+
                     <div style="display: inline-block; width: 100%;">
                       <div class='small-text left'>Ngày đặt: ` + moment(data.created_at).format('L') + `</div>
                       <div class='small-text text-right right'>Ngày nhận: ` + moment().format('L') + `</div>
                     </div>
 
-                    <div class='title padding-4'>Phiếu thanh toán</div> 
+                    <div class='title padding-4'>Phiếu thanh toán</div>
 
                     <div class='normal-text text-left'>Mã đơn hàng: 1154</div>
                     <div class='normal-text text-left'>Nhân viên giao hàng: Uy Minh</div>
@@ -304,7 +304,7 @@ export class BillsComponent implements OnInit {
                     <table style="width:100%">
                       <tr class='small-text text-right'>
                         <th>TT</th>
-                        <th>Tên sản phẩm</th> 
+                        <th>Tên sản phẩm</th>
                         <th>SL</th>
                         <th>Đơn giá</th>
                         <th>T. Tiền</th>
@@ -422,15 +422,15 @@ export class BillsComponent implements OnInit {
   }
 
   async changeStatusBill(bill) {
-    
-        
+
+
     let actions = [];
     let options = this.globals.avaibleBillActivityOption(bill.activity ? bill.activity.action : '');
 
     options.forEach(option => {
       actions.push({ code: Object.keys(option)[0], name: option[Object.keys(option)[0]]});
     });
-    
+
     console.log(bill);
     let currentAction = this.globals.detectBillActivityByCode(bill.activity.action);
     console.log(bill.activity.action)
@@ -442,6 +442,8 @@ export class BillsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result)
       {
+        this.updateAction(bill,result.action,result.employee,result.note);
+        // alert(JSON.stringify(result));
         console.log(result);
       }
     })
@@ -500,13 +502,14 @@ export class BillsComponent implements OnInit {
     // }
   }
 
-  async updateAction(bill, action) {
+  async updateAction(bill, action, employee, note) {
     console.log("bambi: updateAction " + bill.id + " ---- " + action);
     try {
       let bill_id = bill.id;
       let data = {
         activity: action,
-        note: '',
+        employee_id: employee,
+        note: note,
       };
       // await this.billActitivyService.add({ bill_id, action });
       await this.billService.changeActivity(bill_id, data);

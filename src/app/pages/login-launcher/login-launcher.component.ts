@@ -9,7 +9,7 @@ declare var swal:any;
   selector: 'app-login-launcher',
   templateUrl: './login-launcher.component.html',
   styleUrls: ['./login-launcher.component.scss'],
-  animations: [ 
+  animations: [
       trigger('fade', [
       state('visible', style({
         opacity: 1

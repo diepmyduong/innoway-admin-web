@@ -5,8 +5,6 @@
   <button type="button" class="btn btn-secondary"><span class="fa fa-phone"></span></button>
   </span>
   <span class="btn-group pull-right">
-        <!-- <button type="button" class="btn btn-secondary"><span class="fa fa-chevron-left"></span></button>
-  <button type="button" class="btn btn-secondary"><span class="fa fa-chevron-right"></span></button> -->
   <button (click)="editBill()" class="btn btn-sm btn-primary btn-ladda mr-h">Chỉnh sửa</button>
   <button (click)="changeStatusBill(item)" class="btn btn-sm btn-primary btn-ladda">Cập nhật trạng thái</button>
   </span>
@@ -67,7 +65,7 @@
       <tr *ngFor="let v of item.items">
         <td>{{v.product?v.product.name:v.id}}</td>
         <td>{{v.amount}}</td>
-        <td>{{v.total_price}}</td>
+        <td>{{v.total_price | accounting}}</td>
       </tr>
     </tbody>
   </table>
