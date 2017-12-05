@@ -21,6 +21,7 @@ import { ModalModule } from 'ngx-modialog';
 import { BootstrapModalModule } from 'ngx-modialog/plugins/bootstrap';
 
 import { ModalCardTypesComponent } from './apps/chatbot/modals/modal-card-types/modal-card-types.component';
+import { TooltipModule } from 'ng2-bootstrap/tooltip';
 
 import { ChatbotModule } from './apps/chatbot/chatbot.module';
 
@@ -55,6 +56,7 @@ import { EditOrderStatusDialog } from "./modal/edit-order-status/edit-order-stat
     ServicesModule,
     BootstrapModalModule,
     ModalModule.forRoot(),
+    TooltipModule.forRoot(),
     MatDialogModule,
     SharedModule,
     LayoutsModule,

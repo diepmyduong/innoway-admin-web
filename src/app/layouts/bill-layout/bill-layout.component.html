@@ -1,6 +1,6 @@
 <header class="app-header navbar">
   <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button"><i class="material-icons">keyboard_arrow_left</i></button>
-  <a class="navbar-brand" [routerLink]="['./dashboard']">
+  <a class="navbar-brand" [routerLink]="['/launcher/tool']">
     <div class="logo-wrapper"><img id="logo" src="../../assets/img/logo-white.svg"/></div>
   </a>
   <ul class="nav navbar-nav mr-auto">
@@ -181,10 +181,10 @@
   </aside>
 </div>
 
-<footer class="app-footer" (click)="showSuccess()">
+<!-- <footer class="app-footer" (click)="showSuccess()">
   <a href="#">Innoway</a> &copy; 2017
   <span class="float-right">Powered by <a href="#">Innoway</a>
   </span>
-</footer>
+</footer> -->
 
 <toaster-container [toasterconfig]="toasterconfig"></toaster-container>

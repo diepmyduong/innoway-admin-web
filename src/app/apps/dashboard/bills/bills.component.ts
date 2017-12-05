@@ -243,7 +243,7 @@ export class BillsComponent implements OnInit {
 
   async printBill(data: any, popupWin: any) {
 
-    console.log(data);
+    console.log(this.brand);
     
     let tableContent = "";
     let index = 0;
@@ -269,7 +269,7 @@ export class BillsComponent implements OnInit {
                         .text-left { text-align: left }
                         .text-right { text-align: right }
                         .brand-name { font-size: 2mm; }
-                        .logo { width: 80%; margin-left: 10%; }
+                        .logo { width: 80%; margin: auto; }
                         .normal-text { margin-left: 0.5mm; font-size: 3.5mm;}
                         .small-text { font-size: 3mm; }
                         .title { font-size: 5mm; font-weight: 600; }
@@ -284,7 +284,7 @@ export class BillsComponent implements OnInit {
                 </head>
                 <body onload="window.print();window.close()" class="receipt">
                   <section class="sheet">
-                    <img class='logo padding-3' src='https://i.imgur.com/V8SWFDN.png'>
+                    <img class='logo padding-3' src='` + this.brand.logo +`'>
                     <div class='text-center normal-text padding-3'>` + this.branch.address + `</div>
                     <div class='text-center normal-text'>Hotline: ` + this.branch.phone + `</div>
 
@@ -297,7 +297,7 @@ export class BillsComponent implements OnInit {
 
                     <div class='title padding-4'>Phiếu thanh toán</div> 
 
-                    <div class='normal-text text-left'>Mã đơn hàng: 1154</div>
+                    <div class='normal-text text-left'>Mã đơn hàng: ` + data.id +`</div>
                     <div class='normal-text text-left'>Nhân viên giao hàng: Uy Minh</div>
 
                     <hr style="border: none; border-top: dashed 1px;" />

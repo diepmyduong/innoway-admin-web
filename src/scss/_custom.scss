@@ -202,3 +202,147 @@ body {
     font-size: 0.85rem;
   }
 }
+
+.button-default-primary {
+  float: right;
+  margin-left: 10px;
+  color: $grey-dark;
+  border: 1px solid $grey-mild;
+  border-radius: 5px;
+  text-transform: none !important;
+  i {
+    margin-right: 5px;
+  }
+  transition: all 0.3s ease;
+  &:hover {
+    border-color: transparent;
+    background-color: $brand-primary;
+    color: $grey-white;
+  }
+}
+
+.button-default-danger {
+  float: right;
+  margin-right: 10px;
+  color: $grey-lightest;
+  background-color: $brand-danger-light;
+  border-radius: 5px;
+  text-transform: none !important;
+  i {
+    margin-right: 5px;
+  }
+  transition: all 0.3s ease;
+  &:hover:not(:disabled) {
+    border-color: transparent;
+    background-color: $brand-danger;
+    color: white;
+  }
+  &:disabled{
+    border: 1px solid $grey-mild;
+  }
+}
+
+.table-wrapper{
+  margin: 8px auto;
+  .column-selector-button {
+    display: none;
+  }
+  .button-panel {
+    margin: 8px auto;
+  }
+  .search-bar {
+    display: flex;
+    width: 75%;
+    z-index: 99999;
+    position:relative;
+    margin-bottom: -42px;
+    p {
+      float: left;
+      width: 80px;
+      margin: 0px;
+      padding-top: 8px;
+    }
+    input {
+      float: right;
+    }
+  }
+  tr,td {
+    padding: 5px;
+    transition: all 0.3s ease;
+  }
+  tr {    
+    border-left: 3px solid transparent;
+    background-color: white !important;
+    border-top: 1px solid $grey-white;
+    &:hover{
+      border-left: 3px solid $brand-primary !important;
+    }
+    &.selected, &.selected:hover {
+      border-left: 3px solid $bluegrey-white;
+      border-top: 1px solid $bluegrey-white;
+      background-color: $bluegrey-white !important;
+    }
+  }
+  .index-column,
+  .index-column-header {
+      text-align: right;
+  }
+  .btn-table {
+    zoom: 1.4;
+    padding: 2px 0px 2px 5px;
+    color: $bluegrey-dark;
+    border: none;
+    transition: all 0.3s ease;
+    &:hover {
+      border: none;
+      background-color: transparent;
+    }
+  }
+  .btn-red {
+    &:hover {
+      color: #FF5252;
+    }
+  }
+  .btn-yellow {
+    &:hover {
+      color: #FFC400;
+    }
+  }
+  .btn-green {
+    &:hover {
+      color: #00E676;
+    }
+  }
+  .btn-blue {
+    &:hover {
+      color: #448AFF;
+    }
+  }
+  input[type=checkbox]:after{
+    cursor: pointer;
+    cursor: hand;
+    content: '\f00c';
+    line-height: 16px;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    display: block;
+    position: relative;
+    border: none;
+    border-radius: 2px;
+    background: $bluegrey-lighter;
+    color: transparent;
+}
+
+  input[type=checkbox]:checked:after {
+    color: white;
+  }
+}
+
+i.muted {
+  color: $grey;
+  font-size: small;
+}

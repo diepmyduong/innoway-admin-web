@@ -126,17 +126,17 @@ export class BillLayoutComponent implements OnInit {
     {
       type: 'parent',
       name: 'Đơn hàng',
-      icon: 'icon-star',
+      icon: 'fa fa-file-text-o',
       children: [
         {
           name: 'Thêm',
           link: "./bill/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
           link: "./bill/list",
-          icon: 'icon-menu'
+          icon: 'fa fa-list-ul'
         }
       ]
     }
