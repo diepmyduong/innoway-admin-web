@@ -72,6 +72,7 @@ export class BillDetailComponent implements OnInit {
       this.item = await this.billService.get(this.id, {
         fields: this.itemFields
       });
+      console.log("billdata:"+JSON.stringify(this.item));
     } catch (err) {
       this.alertItemNotFound()
       this.backToList()

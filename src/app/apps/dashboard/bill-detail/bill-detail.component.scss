@@ -1,5 +1,13 @@
 .content {
-    height: 450px;
-    max-height: 450px;
-    overflow: scroll;
+  height: 450px;
+  max-height: 450px;
+  overflow: scroll;
+}
+
+.toolbar {
+  margin: 0 !important;
+}
+
+.content {
+  padding: 8px;
 }

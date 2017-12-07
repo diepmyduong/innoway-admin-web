@@ -5,6 +5,7 @@
   right: 0;
   bottom: 0;
   background-color: #ddd;
+  border-top: 1px solid #000;
 
   /deep/ .ng-sidebar--bottom {
     transition: all 0.35s;
@@ -150,14 +151,376 @@
   margin: 20px 0;
 }
 
-/deep/ .mat-input-underline{
-    border-bottom: 1px solid #ffffff!important;
+/deep/ .mat-input-underline {
+  border-bottom: 1px solid #ffffff!important;
 }
 
-/deep/ .mat-input:focus{
+/deep/ .mat-input:focus {
   border: none !important;
 }
 
-ng-select, span, .btn{
-  text-transform:none !important;
+/deep/ .mat-input-container {
+  width: 100%;
+  padding-top: 1.4rem;
+}
+
+/deep/ input:focus {
+  cursor: none;
+  outline-offset: 0;
+}
+
+.btn,
+ng-select,
+span {
+  text-transform: none !important;
+}
+@import '../../../scss/bootstrap-variables';
+
+/deep/ .app {
+  margin: 0 !important;
+  height: 100% !important;
+  background-color: white !important;
+}
+
+.item {
+  margin-bottom: 1.5rem;
+}
+
+.item img {
+  height: 50px;
+  width: 100%;
+  object-fit: contain;
+  padding: 0.25rem;
+}
+
+.header-text {
+  color: $bluegrey-darker;
+  font-size: 0.95rem;
+  padding: 0.25rem;
+  margin: 0.25rem;
+  font-weight: 400;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.row {
+  background: white;
+}
+
+.card,
+.card-header {
+  background: white;
+  border: 0 !important;
+}
+
+/deep/ tabset .tab-content {
+  background: white;
+  border: 0 !important;
+}
+
+/deep/ tabset .nav-tabs .active {
+  border: 0 !important;
+}
+
+/deep/ tabset .nav-item:hover {
+  border: 0 !important;
+}
+
+/deep/ tabset .nav-link:hover {
+  border: 0 !important;
+}
+
+/deep/ tabset .nav-tabs {
+  border: 0 !important;
+}
+
+/deep/ tabset .nav-link {
+  border: 0 !important;
+}
+
+.card .card-header {
+  padding: 0.75rem 1.25rem;
+}
+
+.title {
+  text-align: center;
+  color: $bluegrey;
+  margin: 0 auto 20px;
+  font-size: 1.5rem;
+}
+
+.header-text {
+  color: $bluegrey-darker;
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.info-text {
+  color: $grey;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.row {
+  padding-bottom: 20px;
+}
+
+.bottom-btn-group {
+  text-align: center;
+
+  .btn-confirm {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+    background-color: $brand-light;
+    color: #000;
+    transition: all 0.3s ease;
+    text-transform: none !important;
+
+    &:hover {
+      background-color: $brand-primary;
+    }
+  }
+
+  .btn-cancel {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: $grey-lighter;
+    color: $grey;
+    transition: all 0.3s ease;
+    text-transform: none !important;
+
+    &:hover {
+      background-color: $grey-light;
+      color: $grey-dark;
+    }
+  }
+}
+
+/deep/ ng-select span {
+  text-transform: none !important;
+}
+
+/deep/ ng-select .btn {
+  padding: 0.25rem !important;
+}
+
+/deep/ ng-select input {
+  color: $grey-dark;
+  border-radius: 3px;
+  font-size: 0.85rem;
+
+  &::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+
+  &::-moz-placeholder {
+    /* Firefox 19+ */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+
+  &:-ms-input-placeholder {
+    /* IE 10+ */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+
+  &:-moz-placeholder {
+    /* Firefox 18- */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+
+  &:focus {
+    color: $grey-dark;
+  }
+}
+
+.remove-pb {
+  padding-bottom: 0 !important;
+}
+
+label.checkbox-inline {
+  padding-left: 0 !important;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #000;
+  font-family: 'Helvetica Neue';
+}
+
+.sub-header-text {
+  float: left;
+  font-size: 0.85rem;
+}
+
+/deep/ ng-select .ui-select-choices li .active {
+  background-color: #428bca !important;
+}
+
+/deep/ ng-select .dropdown-item div {
+  padding-top: 0.5rem !important;
+}
+
+/deep/ .mat-toolbar {
+  background: white !important;
+  border-bottom: 1px #000;
+}
+
+/deep/ .mat-primary {
+  background: white !important;
+  border-bottom: 1px #000;
+}
+
+/deep/ .ng-sidebar__content {
+  background: white;
+}
+
+input {
+  color: rgba(0,0,0,0.7);
+}
+
+label {
+  border: none;
+}
+
+/deep/ .pos-right-side form {
+  margin: 0;
+}
+
+.row {
+  padding-bottom: 0;
+}
+
+.card .card-header {
+  padding: 0.75rem 1.25rem;
+}
+
+.title {
+  text-align: center;
+  color: $bluegrey;
+  margin: 0 auto 20px;
+  font-size: 1.5rem;
+}
+
+.header-text {
+  color: $bluegrey-darker;
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: end;
+}
+
+.info-text {
+  color: $grey;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.content-text {
+  justify-content: flex-end;
+  text-align: end;
+}
+
+/deep/ tab {
+  padding-bottom: 0;
+}
+
+/deep/ tab .btn {
+  width: 100%;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.blue-primary {
+  color: $brand-primary !important;
+
+  i {
+    color: $brand-primary !important;
+  }
+}
+
+/deep/ tabset .nav-tabs {
+  border-bottom: 1px solid !important;
+  margin-bottom: 1px;
+}
+
+/deep/ tabset .nav-tabs .active {
+  margin-bottom: 1px;
+}
+
+/deep/ mat-sidenav .order-form {
+  padding: 0 !important;
+}
+
+/deep/ mat-form-field input {
+  cursor: none !important;
+  background: white !important;
+  outline-offset: 0;
+}
+
+/deep/ mat-toolbar input {
+  background: white !important;
+}
+
+/deep/ mat-toolbar input:focus {
+  background: white !important;
+}
+
+.product-name-text {
+  color: $bluegrey-darker;
+  font-size: 0.95rem;
+  font-weight: bold;
+}
+
+.product-price-text {
+  color: $bluegrey-darker;
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.product-thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 15px;
+}
+
+.btn-item{
+  border: none !important;
+  padding: 0.25rem !important;
+}
+
+.btn-item:hover, .btn-item:focus{
+  background: none !important;
+}
+
+.btn-group{
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/deep/ .pos-container[_ngcontent-c1] .order-item-table[_ngcontent-c1] td{
+  vertical-align: middle !important;
+}
+
+/deep/ .table thead th{
+  // text-align: center !important;
+}
+
+.item-topping {
+  font-size: 0.5rem;
+  font-weight: bold;
 }
