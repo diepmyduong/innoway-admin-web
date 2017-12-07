@@ -8,7 +8,6 @@ import { InnowayService, AuthService } from "app/services";
 import * as Ajv from 'ajv';
 import * as _ from 'lodash';
 import { DashboardService } from "app/apps/dashboard/DashboardService";
-import { Overlay } from 'ngx-modialog';
 import { MatDialog } from '@angular/material';
 import { EditOrderStatusDialog } from "../../../modal/edit-order-status/edit-order-status.component";
 import { ModalModule } from '../../../modal/modal.module';
@@ -249,7 +248,7 @@ export class BillsComponent implements OnInit {
     let index = 0;
     data.items.forEach(item => {
       tableContent += "<tr class='small-text text-right'>";
-      tableContent += '<td>' + (index + 1) + '</td>'; 
+      tableContent += '<td>' + (index++) + '</td>'; 
       tableContent += '<td>' + item.product.name + '</td>'; 
       tableContent += '<td>' + item.amount + '</td>'; 
       tableContent += '<td>' + this.addSpace(item.product_price) + '</td>'; 

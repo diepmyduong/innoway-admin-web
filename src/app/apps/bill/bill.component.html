@@ -20,11 +20,6 @@
       [showReloading]="true" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
         <data-table-column property="address" header="Địa điểm" [sortable]="true" [visible]="false">
         </data-table-column>
-        <data-table-column property="total_price" header="Tổng tiền" [sortable]="true">
-          <template #dataTableCell let-item="item">
-              <div class="text-right">{{item.total_price | accounting}}</div>
-            </template>
-        </data-table-column>
         <data-table-column property="customer.phone" header="Khách hàng" [resizable]="true" [sortable]="true">
           <template #dataTableCell let-item="item">
               {{item.customer?.phone}}
@@ -65,11 +60,40 @@
                 <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>
               </template>
         </data-table-column> -->
-        <data-table-column header="Thao tác">
+        <data-table-column property="total_price" header="Tổng tiền" [sortable]="true">
           <template #dataTableCell let-item="item">
-              <button (click)="print(item)" class="btn btn-sm btn-table btn-green" title="In hóa đơn" tooltip="In hóa đơn"><i class="fa fa-print"></i></button>
-              <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow" title="Xem chi tiết" tooltip="Xem chi tiết"><i class="fa fa-eye"></i></button>
-              <button (click)="editItem(item)" class="btn btn-sm btn-table btn-blue" title="Chỉnh sửa" tooltip="Chỉnh sửa"><i class="fa fa-pencil"></i></button>        
+              <div>{{item.total_price | accounting}}</div>
+            </template>
+        </data-table-column>
+        <data-table-column header="Ph. thức" [width]="100" [resizable]="false">
+          <template #dataTableCell let-item="item">
+            <div class="text-left">
+            <i matTooltip="Tại cửa hàng" class="material-icons color-bluegrey-light" 
+            *ngIf="item.channel=='at_store'">store</i>
+            <i matTooltip="Facebook" class="fa fa-facebook-official custom-fa color-bluegrey-light" 
+            *ngIf="item.channel=='facebook'"></i>
+            <i matTooltip="Hotline" class="material-icons color-bluegrey-light" 
+            *ngIf="item.channel=='hot_line'">phone</i>
+            <i matTooltip="Chatbot" class="fa fa-android custom-fa color-bluegrey-light" 
+            *ngIf="item.channel=='chatbot'"></i>
+            <i matTooltip="ứng dụng" class="material-icons color-bluegrey-light" 
+            *ngIf="item.channel=='application'">apps</i>
+            <i matTooltip="Web" class="material-icons color-bluegrey-light" 
+            *ngIf="item.channel=='website'">language</i>
+            
+            <i matTooltip="Nhận tại cửa hàng" class="material-icons color-bluegrey-light" 
+            *ngIf="item.bill_ship_detail?.ship_method==0">shopping cart</i>
+            <i matTooltip="Giao hàng" class="fa fa-truck custom-fa color-bluegrey-light" 
+            *ngIf="item.bill_ship_detail?.ship_method!=0"></i>
+          </div>
+        </template>
+      </data-table-column>
+        <data-table-column header="Thao tác" [width]="100" [resizable]="false">
+          <template #dataTableCell let-item="item">
+            <div>
+              <button (click)="print(item)" class="btn btn-sm btn-table btn-green"><i class="fa fa-print"></i></button>
+              <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-eye"></i></button> 
+            </div> 
           </template>
         </data-table-column>
       </data-table>

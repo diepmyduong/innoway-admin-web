@@ -1,0 +1,63 @@
+@import "../../../../scss/bootstrap-variables";
+
+.info-column {
+    padding-left: 18px;
+    padding-right: 10px;
+    h6 {
+        margin-bottom: 12px;
+        i {
+            margin-right: 8px;
+        }
+    }
+    div {
+        margin-bottom: 4px;
+    }
+}
+
+.table-price {
+    td {
+        padding: 5px;
+        padding-left: 12px;
+        padding-bottom: 8px;
+    }
+    .price-title {
+        color: $bluegrey-darker;
+    }
+    tr:last-child {
+        border-top: 1px solid $bluegrey-mild;
+        td {
+            padding-top: 15px;
+            font-size: 1.2rem;
+        }
+    }
+}
+
+.btn-edit {
+    margin: 4px 15px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid $bluegrey-dark;
+    color: $bluegrey;
+    background-color: $bluegrey-white;
+    font-weight: bold;
+    text-transform: none !important;
+    i {
+        margin-right: 5px;
+    }
+    &:hover {
+        background-color: $bluegrey-lightest;
+        color: $bluegrey-dark;
+    }
+}
+
+.btn-editor {
+    cursor: pointer;
+    cursor: hand;
+    color: $bluegrey-mild;
+    margin: 5px;
+}
+
+.modal-dialog {
+    width: 100%;
+    height: 100%;
+  }

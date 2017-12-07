@@ -1,0 +1,21 @@
+<h2 class="title">Chỉnh sửa</h2>
+<div class="row" *ngFor="let item of data">
+    <p class="col-3 header-text">{{item.title}}</p>
+    <div class="col-9">
+        <input *ngIf="item.type=='text'||item.type=='number'" type="{{item.type}}" [(ngModel)]="info[item.property]" class="input-control form-control">
+        <select *ngIf="item.type=='select'" [(ngModel)]="info[item.property]" class="select-control form-control" >
+          <option *ngFor="let e of item.options" [ngValue]="e.code" [selected]="info[item.property]==e.code">
+            {{ e.display }}
+          </option>
+        </select>
+    </div>
+</div>
+<div class="bottom-btn-group">
+  <button class="btn-confirm btn btn-md" [mat-dialog-close]="info">Cập nhật trạng thái</button>
+  <button class="btn-cancel btn btn-md" (click)="onNoClick()">Trở về</button>
+</div>
+
+<!-- <div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data.animal" tabindex="2">Ok</button>
+  <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
+</div> -->

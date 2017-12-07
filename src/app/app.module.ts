@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
 import { MatDialogModule } from '@angular/material';
+import { MatTooltipModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -15,13 +16,12 @@ import { AsideToggleDirective } from './shared/aside.directive';
 import { BreadcrumbsComponent } from './shared/breadcrumb.component';
 // Routing Module
 import { AppRoutingModule } from './app.routing';
-import { ModalModule as Ng2ModalModule } from 'angular2-modal';
+// import { ModalModule as Ng2ModalModule } from 'angular2-modal';
 
 import { ModalModule } from 'ngx-modialog';
 import { BootstrapModalModule } from 'ngx-modialog/plugins/bootstrap';
 
 import { ModalCardTypesComponent } from './apps/chatbot/modals/modal-card-types/modal-card-types.component';
-import { TooltipModule } from 'ng2-bootstrap/tooltip';
 
 import { ChatbotModule } from './apps/chatbot/chatbot.module';
 
@@ -40,6 +40,7 @@ import { UpdateBillStatusComponentComponent } from './apps/ui-component/update-b
 
 
 import { EditOrderStatusDialog } from "./modal/edit-order-status/edit-order-status.component";
+import { EditInfoDialog } from "./modal/edit-info/edit-info.component";
 
 
 @NgModule({
@@ -48,7 +49,7 @@ import { EditOrderStatusDialog } from "./modal/edit-order-status/edit-order-stat
     BrowserAnimationsModule,
     AppRoutingModule,
     TabsModule.forRoot(),
-    Ng2ModalModule.forRoot(),
+    // Ng2ModalModule.forRoot(),
     ChartsModule,
     ChatbotModule.forRoot(),
     SimpleNotificationsModule.forRoot(),
@@ -56,8 +57,8 @@ import { EditOrderStatusDialog } from "./modal/edit-order-status/edit-order-stat
     ServicesModule,
     BootstrapModalModule,
     ModalModule.forRoot(),
-    TooltipModule.forRoot(),
     MatDialogModule,
+    MatTooltipModule,
     SharedModule,
     LayoutsModule,
     FormsModule,
@@ -69,6 +70,7 @@ import { EditOrderStatusDialog } from "./modal/edit-order-status/edit-order-stat
     UiComponentComponent,
     UpdateBillStatusComponentComponent,
     EditOrderStatusDialog,
+    EditInfoDialog,
   ],
   providers: [{
     provide: LocationStrategy,
@@ -76,7 +78,8 @@ import { EditOrderStatusDialog } from "./modal/edit-order-status/edit-order-stat
   }],
   bootstrap: [AppComponent],
   entryComponents: [
-    EditOrderStatusDialog
+    EditOrderStatusDialog,
+    EditInfoDialog
   ]
 })
 export class AppModule { }

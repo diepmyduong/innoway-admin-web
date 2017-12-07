@@ -171,51 +171,112 @@ export class Globals {
   //bill status
   BILL_ACTIVITY_OPTIONS = [
     {
-      'BILL_SENT_SUCCESSFULLY': 'gửi thành công'
+      'BILL_SENT_SUCCESSFULLY': 'Gửi thành công'
     },
 
     {
-      'BILL_DISTRIBUTED': 'đã điều phối'
+      'BILL_DISTRIBUTED': 'Đã điều phối'
     },
 
     {
-      'BILL_WAITING_FOR_CONFIRMATION': 'chờ xác nhận'
+      'BILL_WAITING_FOR_CONFIRMATION': 'Chờ xác nhận'
     },
     {
-      'BILL_CONFIRMED': 'đã xác nhận'
+      'BILL_CONFIRMED': 'Đã xác nhận'
     },
     {
-      'BILL_PICKING_UP': 'đang lấy hàng'
-    },
-
-    {
-      'BILL_RECEIVED': 'đã nhận hàng'
+      'BILL_PICKING_UP': 'Đang lấy hàng'
     },
 
     {
-      'BILL_PROCESSING': 'đang xử lý'
+      'BILL_RECEIVED': 'Đã nhận hàng'
     },
 
     {
-      'BILL_PREPARED': 'đã chuẩn bị'
+      'BILL_PROCESSING': 'Đang xử lý'
     },
 
     {
-      'BILL_SENT_SHIPPER': 'gửi giao hàng'
+      'BILL_PREPARED': 'Đã chuẩn bị'
     },
 
     {
-      'BILL_DELIVERING': 'đang giao hàng'
+      'BILL_SENT_SHIPPER': 'Gửi giao hàng'
     },
 
     {
-      'BILL_PAID': 'đã thanh toán'
+      'BILL_DELIVERING': 'Đang giao hàng'
     },
 
     {
-      'BILL_COLLECTED_MONEY': 'đã thu tiền'
+      'BILL_PAID': 'Đã thanh toán'
+    },
+
+    {
+      'BILL_COLLECTED_MONEY': 'Đã thu tiền'
     },
   ];
+
+    //bill status
+    BILL_ACTIVITY_OPTIONS_OBJECT = [
+      {
+        code: 'BILL_SENT_SUCCESSFULLY',
+        display: 'Gửi thành công'
+      },
+  
+      {
+        code: 'BILL_DISTRIBUTED',
+        display: 'Đã điều phối'
+      },
+  
+      {
+        code: 'BILL_WAITING_FOR_CONFIRMATION',
+        display: 'Chờ xác nhận'
+      },
+      {
+        code: 'BILL_CONFIRMED',
+        display: 'Đã xác nhận'
+      },
+      {
+        code: 'BILL_PICKING_UP',
+        display: 'Đang lấy hàng'
+      },
+  
+      {
+        code: 'BILL_RECEIVED',
+        display: 'Đã nhận hàng'
+      },
+  
+      {
+        code: 'BILL_PROCESSING',
+        display: 'Đang xử lý'
+      },
+  
+      {
+        code: 'BILL_PREPARED',
+        display: 'Đã chuẩn bị'
+      },
+  
+      {
+        code: 'BILL_SENT_SHIPPER',
+        display: 'Gửi giao hàng'
+      },
+  
+      {
+        code: 'BILL_DELIVERING',
+        display: 'Đang giao hàng'
+      },
+  
+      {
+        code: 'BILL_PAID',
+        display: 'Đã thanh toán'
+      },
+  
+      {
+        code: 'BILL_COLLECTED_MONEY',
+        display: 'Đã thu tiền'
+      },
+    ];
 
   public avaibleBillActivityOption(code: string): any {
     let result = null;

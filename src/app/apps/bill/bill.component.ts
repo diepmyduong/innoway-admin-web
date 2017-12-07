@@ -5,6 +5,7 @@ import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayService, AuthService } from "app/services";
 import { Globals } from './../../globals';
+import {MatTooltipModule} from '@angular/material';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
@@ -264,7 +265,7 @@ export class BillComponent implements OnInit, ListPageInterface {
     let index = 0;
     data.items.forEach(item => {
       tableContent += "<tr class='small-text text-right'>";
-      tableContent += '<td>' + (index + 1) + '</td>'; 
+      tableContent += '<td>' + (index++) + '</td>'; 
       tableContent += '<td>' + item.product.name + '</td>'; 
       tableContent += '<td>' + item.amount + '</td>'; 
       tableContent += '<td>' + this.addSpace(item.product_price) + '</td>'; 

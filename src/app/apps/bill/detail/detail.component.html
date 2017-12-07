@@ -1,39 +1,50 @@
 <div class="animated fadeIn">
-  <tabset>
+  <tabset class="tabset-control">
     <tab>
-      <ng-template tabHeading><i class="icon-eye"></i> Thông tin đơn hàng</ng-template>
+      <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin đơn hàng</ng-template>
       <div class="row">
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
-              Đơn hàng: <strong>{{item.id}}</strong>
-              <a class="btn btn-sm btn-info float-right" (click)="printt()"><i class="fa fa-print"></i> Print</a>
-              <a class="btn btn-sm btn-info float-right mr-h"><i class="fa fa-save"></i> Đã thu tiền</a>
+              <div class="float-left">
+                <div>Đơn hàng: <strong>{{item.id}}</strong></div>
+                <div>Ngày nhận: {{changeDateFormat(item.bill_ship_detail?.received_time, 'DD-MM-YYYY HH:mm')}}</div>
+              </div>
+              <a class="btn btn-sm btn-gray-info float-right" (click)="print(item)"><i class="fa fa-print"></i> In hóa đơn</a>
+              <a class="btn btn-sm btn-gray-info float-right mr-h"><i class="fa fa-save"></i> Đã thu tiền</a>
             </div>
             <div class="card-block" id="print_content">
               <div class="row mb-2">
 
-                <div class="col-sm-4">
-                  <h6 class="mb-1">Khách hàng:</h6>
-                  <div><strong>Họ và tên: {{item.customer?item.customer.fullname:'Không có'}}</strong></div>
+                <div class="col-sm-4 info-column">
+                  <h6><i class="fa fa-address-card-o"></i> Khách hàng 
+                    <i class="fa fa-pencil btn-editor" *ngIf="load_done.getValue()" (click)="editInfo()"></i></h6>
+                  <div>Họ và tên: <strong>{{item.customer?.fullname}}</strong>
+                    <i class='muted' *ngIf="!item.customer?.fullname">Không có</i></div>
                   <div>Địa chỉ: {{item.address}}</div>
-                  <div>Phone: {{item.customer?item.customer.phone:''}}</div>
+                  <div>SĐT: {{item.customer?.phone}}</div>
                 </div>
                 <!--/.col-->
 
-                <div class="col-sm-4">
-                  <h6 class="mb-1">Nhân viên giao hàng:</h6>
-                  <div><strong>Họ và tên: {{item.employee?item.employee.fullname:'Không có'}}</strong></div>
-                  <div>Phone: {{item.employee?item.employee.phone:'Không có'}}</div>
-                  <div>Email: {{item.employee?item.employee.email:'Không có'}}</div>
+                <div class="col-sm-4 info-column">
+                  <h6><i class="fa fa-truck"></i> Nhân viên giao hàng</h6>
+                  <div>Họ và tên: <strong>{{item.employee?.fullname}}</strong>
+                    <i class='muted' *ngIf="!item.employee?.fullname">Không có</i>
+                  </div>
+                  <div>Phone: {{item.employee?.phone}}
+                    <i class='muted' *ngIf="!item.employee?.phone">Không có</i>
+                  </div>
+                  <div>Email: {{item.employee?.email}}
+                    <i class='muted' *ngIf="!item.employee?.email">Không có</i>
+                  </div>
                 </div>
                 <!--/.col-->
 
-                <div class="col-sm-4">
-                  <h6 class="mb-1">Thông tin đơn hàng:</h6>
-                  <div> Tổng tiền đơn hàng: {{item.total_price | accounting}}</div>
+                <div class="col-sm-4 info-column">
+                  <h6><i class="fa fa-file-text-o"></i> Thông tin đơn hàng</h6>
+                  <div> Tổng tiền đơn hàng: {{item.bill_items_total_price | accounting}}</div>
                   <div> Tổng tiền phải trả: {{item.total_price | accounting}}</div>
-                  <div> Khuyến mãi: Không có</div>
+                  <div> Khuyến mãi: <i class='muted'>Không có</i></div>
                 </div>
                 <!--/.col-->
 
@@ -68,34 +79,53 @@
               <div class="row">
 
                 <div class="col-lg-4 col-sm-5">
-                  <div class="well">
-
-                  </div>
+                    <!-- <div class="row">
+                        <button class="btn btn-sm btn-edit">
+                          <i class="fa fa-thermometer-three-quarters"></i> Thay đổi trạng thái
+                        </button>
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-sm btn-edit">
+                          <i class="fa fa-file-text"></i> Chỉnh sửa hóa đơn
+                        </button>
+                    </div>
+                    <div class="row">
+                      <button class="btn btn-sm btn-edit" (click)="onClick()">
+                        <i class="fa fa-money"></i> Điều chỉnh giá tiền
+                      </button>
+                  </div> -->
                 </div>
                 <!--/.col-->
 
                 <div class="col-lg-4 offset-lg-4 col-sm-5 offset-sm-2">
-                  <table class="table table-clear">
+                  <table class="table table-clear table-price">
                     <tbody>
                       <tr>
-                        <td class="left"><strong>Tổng đơn hàng</strong></td>
-                        <td class="right">{{item.total_price | accounting}}</td>
+                        <td class="price-title">Tổng đơn hàng</td>
+                        <td class="text-right">{{item.total_price | accounting}}</td>
                       </tr>
                       <tr>
-                        <td class="left"><strong>Khuyến mãi </strong></td>
-                        <td class="right">0đ</td>
+                        <td class="price-title">Khuyến mãi</td>
+                        <td class="text-right">- 0 đ</td>
                       </tr>
                       <tr>
-                        <td class="left"><strong>VAT (10%)</strong></td>
-                        <td class="right">9.000đ</td>
+                        <td class="price-title">VAT (10%)</td>
+                        <td class="text-right">+ {{item.vat_fee | accounting}}</td>
                       </tr>
                       <tr>
-                        <td class="left"><strong>Tổng</strong></td>
-                        <td class="right"><strong>{{item.total_price | accounting}}</strong></td>
+                        <td class="price-title">Phí ship</td>
+                        <td class="text-right">+ {{item.bill_ship_detail?.fee | accounting}}</td>
+                      </tr>
+                      <tr>
+                        <td class="price-title">Phí phụ thu</td>
+                        <td class="text-right">+ 15.000 đ</td>
+                      </tr>
+                      <tr>
+                        <td class="price-title"><strong>Tổng</strong></td>
+                        <td class="text-right"><strong>{{item.total_price | accounting}}</strong></td>
                       </tr>
                     </tbody>
                   </table>
-                  <a href="#" class="btn btn-success"><i class="fa fa-usd"></i> Proceed to Payment</a>
                 </div>
                 <!--/.col-->
 
@@ -108,7 +138,7 @@
       </div>
     </tab>
     <tab>
-      <ng-template tabHeading><i class="icon-calculator"></i> Lịch sử đơn hàng</ng-template>
+      <ng-template tabHeading class="tab-header"><i class="fa fa-history"></i> Lịch sử đơn hàng</ng-template>
       <div class="row">
         <div class="col-lg-12">
           <!-- <div class="card"> -->

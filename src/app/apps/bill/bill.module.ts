@@ -12,6 +12,8 @@ import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { TextMaskModule } from 'angular2-text-mask';
+import { MatTooltipModule } from '@angular/material';
+import { TooltipModule } from 'ngx-bootstrap';
 
 import { PipesModule } from 'app/pipes/pipes.module';
 import { PaidComponent } from './paid/paid.component';
@@ -28,6 +30,8 @@ import { PaidListComponent } from './paid-list/paid-list.component'
     LaddaModule,
     DataTableModule,
     TextMaskModule,
+    MatTooltipModule,
+    TooltipModule.forRoot(),
     
     PipesModule
   ],
