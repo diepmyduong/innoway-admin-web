@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
 import * as _ from 'lodash'
+import * as moment from 'moment';
 import { Globals } from "./../../globals";
 import { InnowayService, AuthService } from "app/services";
 
@@ -45,6 +46,7 @@ export class PosComponent implements OnInit {
   productData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   customerData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   promotionData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  responseOrderAtStore: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
   employeeService: any;
   branchService: any;
@@ -52,6 +54,7 @@ export class PosComponent implements OnInit {
   productService: any;
   customerService: any;
   brandService: any;
+  billService: any;
 
   subscriptions: any = {};
 
@@ -70,6 +73,7 @@ export class PosComponent implements OnInit {
   autocompleteCustomerNameData: Array<any> = new Array<any>();
 
   currentEmployee: any = {};
+  currentCustomer: any;
   isChose: boolean = false;
 
   private numberMask = createNumberMask({
@@ -86,7 +90,7 @@ export class PosComponent implements OnInit {
   return_amount: string = "0";
   remain_amount: string = "0";
   shipFee: string = "0";
-  deliveryTime: string;
+  deliveryTime: any;
   paid_type: string = "partical";
 
   channel: string;
@@ -140,6 +144,8 @@ export class PosComponent implements OnInit {
   branch: string;
 
   address: string;
+  subFee: string = "0";
+  subFeeNote: string;
 
   @ViewChild("addressInput")
   searchElementRef: ElementRef;
@@ -181,6 +187,45 @@ export class PosComponent implements OnInit {
   outputShipFee = 0;
   outputAmountOfPurchase = 0;
 
+  // receiver_name: Sequelize.STRING,
+  // receiver_phone: Sequelize.STRING,
+  // receiver_address: Sequelize.STRING,
+  // receiver_note: Sequelize.STRING,
+  //
+  // payer_name: Sequelize.STRING,
+  // payer_phone: Sequelize.STRING,
+  // payer_address: Sequelize.STRING,
+  // payer_note: Sequelize.STRING,
+
+  //request
+
+  note: string;
+  longitude: string;
+  latitude: string;
+
+  receivedTime: string;
+  shipMethod: string;
+
+  receiveAmount: string;
+  payAmount: string;
+  returnAmount: string;
+  remainAmount: string;
+
+  employeeId: string;
+  customerId: string;
+  branchId: string;
+  promotionId: string;
+
+  receiverName: string;
+  receiverPhone: string;
+  receiverAddress: string;
+  receiverNote: string;
+
+  payerName: string;
+  payerPhone: string;
+  payerAddress: string;
+  payerNote: string;
+
   @ViewChild(TemplateRef) template: TemplateRef<any>;
 
   constructor(private innoway: InnowayService,
@@ -206,6 +251,7 @@ export class PosComponent implements OnInit {
     this.productService = innoway.getService('product');
     this.customerService = innoway.getService('customer');
     this.brandService = innoway.getService('brand');
+    this.billService = innoway.getService('bill');
     this.currentEmployee = this.auth.service.userInfo;
 
     console.log("bambi auth: " + JSON.stringify(this.currentEmployee));
@@ -233,6 +279,18 @@ export class PosComponent implements OnInit {
     dialog.afterAllClosed.subscribe(() => {
       doc.body.classList.remove('no-scroll');
     });
+
+    this.deliveryTime = moment(Date.now()).format('MM/DD/yyyy hh:mm');
+  }
+
+  checkVAT(event) {
+    this.isVAT = event;
+    this.updateTotalAmount();
+  }
+
+  updateDeliveryTime(event) {
+    // this.deliveryTime = new Date(event);
+    console.log((new Date(event)).toString());
   }
 
   openToppingDialog(productId, data) {
@@ -559,8 +617,19 @@ export class PosComponent implements OnInit {
     })
     this.total_amount = total.toString();
     this.outputAmountOfPriceItems = total;
+    if (this.isVAT == true) {
+      this.outputVAT = this.outputAmountOfPriceItems * 5 / 100;
+    } else {
+      this.outputVAT = 0;
+    }
+    console.log("VAT: " + this.isVAT + " --- " + this.outputVAT);
     this.calculateAmountOfPurchase();
     this.ref.detectChanges();
+  }
+
+  updateOutputSubFee(event) {
+    // alert(JSON.stringify(event));
+    this.outputSubFee = this.globals.convertStringToPrice(event);
   }
 
   private calculateRemainAndReturnAmount(event) {
@@ -608,12 +677,66 @@ export class PosComponent implements OnInit {
           }
 
           this.address = place.formatted_address;
+          console.log(place.geometry.location.lng() + " --- " + place.geometry.location.lat());
+          this.calculateShipFee(place.geometry.location.lng(), place.geometry.location.lat());
+
           this.ref.detectChanges();
         });
       });
     });
   }
 
+  async calculateShipFee(longitude, latitude) {
+    try {
+      let data = {
+        "longitude": longitude,
+        "latitude": latitude
+      }
+      console.log("request: " + JSON.stringify(data));
+      let fee = await this.billService.calculateShipFee(data);
+      console.log("shipFee: " + JSON.stringify(fee));
+      this.outputShipFee = fee.fee;
+    } catch (err) {
+
+    }
+  }
+
+  async detectCustomerByPhone(phone: string) {
+    console.log("detect: " + phone);
+    try {
+      let data = {
+        phone: phone.toString()
+      }
+      this.currentCustomer = await this.customerService.getCustomerByPhone(data);
+
+      if (this.currentCustomer != null && this.currentCustomer.code != 500) {
+        this.customerNameAtStore = this.currentCustomer.fullname ? this.currentCustomer.fullname : "Chưa cập nhật";
+        this.getPromotionsByCustomerId(this.currentCustomer.id);
+      }
+
+      this.ref.detectChanges();
+    } catch (err) {
+      this.customerNameAtStore = null;
+      this.currentCustomer = null;
+      console.log("detect phone: " + err);
+    }
+  }
+
+  async createNewCustomer(input: any) {
+
+  }
+  async getPromotionsByCustomerId(customerId) {
+    try {
+      let promotion = await this.customerService.getPromotions(customerId);
+      console.log("detect phone: " + customerId);
+      if (promotion != null) {
+        alert(JSON.stringify(promotion));
+      }
+
+    } catch (err) {
+
+    }
+  }
 
   public selected(value: any): void {
     console.log('Selected value is: ' + value);
@@ -739,22 +862,110 @@ export class PosComponent implements OnInit {
     })
   }
 
-  orderAtStore() {
+  async validateECustomerByPhone(phone: string) {
 
   }
 
-  async orderOnline(form: NgForm) {
-    if (form.valid) {
-      let { addressOnline } = this;
-      let address;
-      let phone;
+  async orderAtStore() {
+    try {
+      let request = {
+        "address": this.address,
+        "longitude": this.longitude,
+        "latitude": this.latitude,
+        "sub_fee": this.globals.convertStringToPrice(this.subFee),
+        "sub_fee_note": this.subFeeNote,
+        "channel": this.channel,
+        "pay_amount": this.globals.convertStringToPrice(this.pay_amount),
+        "receive_amount": this.globals.convertStringToPrice(this.receive_amount),
+        "branch_id": this.branch,
+        "employee_id": this.currentEmployee.id,
+        "note": this.note,
+        "promotion_id": this.promotionId,
+        "customer_id": this.customerId,
+        "products": []
+      }
 
-      // await this.brandService.add({ name, color, logo, trail_expire, status })
-      // this.alertAddSuccess();
-      // form.reset();
-      // form.resetForm(this.setDefaultData);
-    } else {
-      this.alertFormNotValid();
+      let products = [];
+      this.selectedProduct.forEach(product => {
+        let item = {
+          product_id: product.id,
+          amount: product.amount,
+          topping_value_ids: product.toppings
+        }
+        products.push(item);
+      });
+
+      request.products = products;
+      console.log("bambi-request: " + JSON.stringify(request));
+
+      let responseOrderAtStore = await this.billService.orderAtStore(request);
+      // alert(JSON.stringify(responseOrderAtStore));
+
+    } catch (err) {
+      console.log("bambi: " + err.toString());
+      // this.alertAddFailed();
+      alert(JSON.stringify(err));
+    }
+  }
+
+  async orderOnline() {
+
+    // address, longitude, latitude, sub_fee, sub_fee_note, channel,
+    //   pay_amount, receive_amount, products, branch_id, employee_id,
+    //   promotion_id, customer_id, received_time, is_vat, ship_method, note,
+    //   receiver_name, receiver_phone, receiver_address, receiver_note,
+    //   payer_name, payer_phone, payer_address, payer_note
+    //
+
+    try {
+      let request = {
+        "address": this.address,
+        "longitude": this.longitude,
+        "latitude": this.latitude,
+        "sub_fee": this.subFee,
+        "sub_fee_note": this.subFeeNote,
+        "channel": this.channel,
+        "pay_amount": this.payAmount,
+        "receive_amount": this.receiveAmount,
+        "branch_id": this.branchId,
+        "employee_id": this.employeeId,
+        "promotion_id": this.promotionId,
+        "customer_id": this.customerId,
+        "received_time": this.receivedTime,
+        "is_vat": this.isVAT,
+        "ship_method": this.shipMethod,
+        "note": this.note,
+        "receiver_name": this.receiverName,
+        "receiver_phone": this.receiverPhone,
+        "receiver_address": this.receiverAddress,
+        "receiver_note": this.receiverNote,
+        "payer_name": this.payerName,
+        "payer_phone": this.payerPhone,
+        "payer_address": this.payerAddress,
+        "payer_note": this.payerNote,
+        "products": [],
+      }
+
+      let products = [];
+      this.selectedProduct.forEach(product => {
+        let item = {
+          product_id: product.id,
+          amount: product.amount,
+          topping_value_ids: product.toppings
+        }
+        products.push(item);
+      });
+
+      request.products = products;
+      console.log("bambi-request: " + JSON.stringify(request));
+
+      let responseOrderAtStore = await this.billService.orderAtStore(request);
+      // alert(JSON.stringify(responseOrderAtStore));
+
+    } catch (err) {
+      console.log("bambi: " + err.toString());
+      // this.alertAddFailed();
+      alert(JSON.stringify(err));
     }
   }
 }
