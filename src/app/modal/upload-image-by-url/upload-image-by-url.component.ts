@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { DialogRef, ModalComponent, CloseGuard } from 'angular2-modal';
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap/index';
 import { FormBuilder , FormGroup, Validators} from '@angular/forms';
-import { TextCardFormGroup, TextCardValidateMessages } from 'app/apps/chatbot/forms/text-card.groups';
 import { CustomValidators } from 'ng2-validation';
 
 export class TextCardModalContext extends BSModalContext {
@@ -29,7 +28,17 @@ export class UploadImageByUrlComponent implements OnInit,CloseGuard, ModalCompon
   }
 
   ngOnInit() {
-    this.frmCard = TextCardFormGroup(this.formBuilder);
+    
+    this.frmCard = this.formBuilder.group({
+        type  : [''],
+        text  : [
+          '', //Default value
+          Validators.compose([
+              Validators.maxLength(640)
+          ])
+        ],
+        story : ['']
+    })  
     this.frmCard.controls["text"].setValidators([CustomValidators.url, Validators.required]);
     if(this.context.data && this.context.data.text){
       this.frmCard.controls['text'].setValue(this.context.data.text);

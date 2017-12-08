@@ -3,6 +3,7 @@ import { AuthService, InnowayService } from "app/services";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs/Observable";
 import { ToasterModule, ToasterService, ToasterConfig } from 'angular2-toaster/angular2-toaster';
+import { InnowayApiService } from 'app/services/innoway'
 
 @Component({
   selector: 'app-launcher-layout',
@@ -36,7 +37,8 @@ export class LauncherLayoutComponent implements OnInit {
       private ref: ChangeDetectorRef,
       toasterService: ToasterService,
       private auth: AuthService,
-      private zone: NgZone
+      private zone: NgZone,
+      public innowayApi: InnowayApiService
     ) {
       this.employee = this.auth.service.userInfo;
       this.toasterService = toasterService;
@@ -109,6 +111,7 @@ export class LauncherLayoutComponent implements OnInit {
 
     logout() {
       this.auth.service.logout();
+      this.innowayApi.innowayAuth.logout()
     }
 
     navigations = [

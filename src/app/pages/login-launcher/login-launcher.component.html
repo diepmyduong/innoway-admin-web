@@ -3,26 +3,27 @@
   <div class="circle-outline"></div>
   <div class="circle-outline"></div>
   <form #loginForm="ngForm" class="absolute-center" (keyup)="keyDownFunction($event,loginForm)" id="login">
-      <img id="logo" src="../../assets/img/logo-white.svg"/>
-      <h1 id="login-title">ĐĂNG NHẬP</h1>
-      <div class="input-row">
-        <i class="input-icon material-icons md-36">perm_identity</i>
-        <input #emailControl="ngModel"
-        placeholder="Email" 
-        [(ngModel)]="email" 
-        placeholder="Email"
-        name="email" maxlength="70" tabindex="1" email required>
-      </div>
-      <div class="input-row">
-        <i class="input-icon material-icons md-36">lock</i>
-        <input #passwordControl="ngModel"
-        placeholder="Password" 
-        [(ngModel)]="password" 
-        name="password" maxlength="70" type="password" required>
-      </div>
-      <button type="button" class="btn btn-login" (click)="signIn(loginForm)">
-          <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner" style="font-size:24px"></i>
-          <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng nhập</span>
-      </button>
+    <img id="logo" src="../../assets/img/logo-white.svg" />
+    <h1 id="login-title">ĐĂNG NHẬP</h1>
+    <div class="input-row">
+      <i class="input-icon material-icons md-36">perm_identity</i>
+      <input #brandNameControl="ngModel" placeholder="Tên cửa hàng" [(ngModel)]="brandName" name="brandName" maxlength="70" tabindex="1"
+        required>
+    </div>
+    <div class="input-row">
+      <i class="input-icon material-icons md-36">perm_identity</i>
+      <input #emailControl="ngModel" placeholder="Email" [(ngModel)]="email" placeholder="Email" name="email" maxlength="70" tabindex="2"
+        email required>
+    </div>
+    <div class="input-row">
+      <i class="input-icon material-icons md-36">lock</i>
+      <input #passwordControl="ngModel" placeholder="Password" [(ngModel)]="password" name="password" maxlength="70" type="password"
+        required>
+    </div>
+    <button type="button" class="btn btn-login" (click)="signIn(loginForm)">
+      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner"
+        style="font-size:24px"></i>
+      <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng nhập</span>
+    </button>
   </form>
 </div>

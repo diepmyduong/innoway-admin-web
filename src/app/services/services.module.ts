@@ -6,10 +6,9 @@ import { AuthService } from './auth.service';
 //Guard
 import { AuthGuard } from './guards/auth.guard';
 import { AnonymousGuard } from './guards/anonymous.guard';
-import { ChatbotConfigService } from './chatbot/chatbot-config.service';
-import { ChatbotAuthService } from './chatbot/chatbot-auth.service';
-import { ChatbotApiService } from './chatbot/chatbot-api.service';
-import { ChatbotAuthGuard } from './guards/chatbot-auth.guard';
+import { InnowayConfigService } from './innoway/innoway-config.service';
+import { InnowayAuthService } from './innoway/innoway-auth.service';
+import { InnowayApiService } from './innoway/innoway-api.service';
 
 import { SharedDataService } from './shared-data/shared-data.service'
 
@@ -21,19 +20,11 @@ import { SharedDataService } from './shared-data/shared-data.service'
   providers: [
     InnowayService,
     AuthService,
-
     AuthGuard,
-
     AnonymousGuard,
-
-    ChatbotConfigService,
-
-    ChatbotAuthService,
-
-    ChatbotApiService,
-
-    ChatbotAuthGuard,
-
+    InnowayConfigService,
+    InnowayAuthService,
+    InnowayApiService,
     SharedDataService,
   ]
 })
