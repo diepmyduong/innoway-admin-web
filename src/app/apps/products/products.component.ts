@@ -2,9 +2,9 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { InnowayService } from 'app/services'
-
+import { InnowayApiService } from 'app/services/innoway'
 import { DataTable } from 'angular-2-data-table-bootstrap4';
-
+import { Subscription } from 'rxjs/Subscription'
 declare let swal:any
 
 @Component({
@@ -18,7 +18,8 @@ export class ProductsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public innoway: InnowayService,
-    private ref: ChangeDetectorRef
+    private ref: ChangeDetectorRef,
+    public innowayApi: InnowayApiService
   ) {
     this.productService = innoway.getService('product');
   }
@@ -36,10 +37,20 @@ export class ProductsComponent implements OnInit {
   public query: any = {}
   public searchTimeOut = 250;
   public searchRef: any;
+  subscriptions: Subscription[] = []
 
   @ViewChild(DataTable) itemsTable;
 
   ngOnInit() {
+    this.subscriptions.push(this.innowayApi.product.items.subscribe(items => {
+      this.items.next(items)
+    }))
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe()
+    })
   }
 
   async reloadItems(params) {
@@ -54,8 +65,10 @@ export class ProductsComponent implements OnInit {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('product', query);
-    this.itemCount = this.productService.currentPageCount;
+    // this.items = await this.innoway.getAll('product', query);
+    this.items.next(await this.innowayApi.product.getList({local: true, query }))
+    this.itemCount = this.innowayApi.product.pagination.totalItems
+    // this.itemCount = this.productService.currentPageCount;
     this.ref.detectChanges();
     return this.items;
   }

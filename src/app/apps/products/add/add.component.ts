@@ -6,6 +6,7 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { SelectComponent } from 'ng2-select';
 import * as Ajv from 'ajv';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+import { InnowayApiService } from 'app/services/innoway'
 
 declare var swal, _: any;
 
@@ -73,7 +74,8 @@ export class AddComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService
+    public innoway: InnowayService,
+    public innowayApi: InnowayApiService
   ) {
     this.categoryService = innoway.getService('product_category');
     this.toppingService = innoway.getService('topping');

@@ -3,6 +3,9 @@ import { InnowayAuthService, iUserRecord, iUserRecords } from './innoway-auth.se
 import { InnowayConfigService } from './innoway-config.service'
 import { FirebaseAuthGuard } from './firebase-auth.guard'
 
+export * from './api/crud/attribute'
+export * from './api/crud/product'
+
 export {
     InnowayApiService,
     InnowayAuthService, iUserRecord, iUserRecords,

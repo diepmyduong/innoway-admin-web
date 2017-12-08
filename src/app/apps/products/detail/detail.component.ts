@@ -7,6 +7,7 @@ import { SelectComponent } from "ng2-select";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import * as Ajv from 'ajv';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+import { InnowayApiService } from 'app/services/innoway'
 
 declare var swal, _: any;
 declare var $:any;
@@ -35,8 +36,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   category: string;
   status: string;
   topping: string;
-  base_price: string;
-  price: string;
+  base_price: number;
+  price: number;
   list_image: any[] = [];
   image_on_hover: number;
   unit: string;
@@ -74,7 +75,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public innoway: InnowayService
+    public innoway: InnowayService,
+    public innowayApi: InnowayApiService
   ) {
     this.productService = innoway.getService('product');
     this.toppingService = innoway.getService('topping');
@@ -98,18 +100,33 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async setData() {
     try {
-      let product = await this.productService.get(this.id, {
-        fields: ["$all", {
-          toppings: ["id", {
-            topping: ["id", "name", {
-              values: ["id", "name"]
-            }]
-          }],
-          unit: ["name"],
-          category: ["name"],
-          product_type: ["name"]
-        }]
-      });
+      let product = await this.innowayApi.product.getItem(this.id, {
+        local: false, reload: false, query: {
+          fields: ["$all", {
+            toppings: ["id", {
+              topping: ["id", "name", {
+                values: ["id", "name"]
+              }]
+            }],
+            unit: ["name"],
+            category: ["name"],
+            product_type: ["name"]
+          }]
+        }
+      })
+      console.log("PRODUCT", product)
+      // let product = await this.productService.get(this.id, {
+      //   fields: ["$all", {
+      //     toppings: ["id", {
+      //       topping: ["id", "name", {
+      //         values: ["id", "name"]
+      //       }]
+      //     }],
+      //     unit: ["name"],
+      //     category: ["name"],
+      //     product_type: ["name"]
+      //   }]
+      // });
 
       this.name = product.name;
       this.thumb = product.thumb;
