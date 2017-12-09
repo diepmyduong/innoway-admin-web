@@ -1,57 +1,62 @@
 @import '../../../scss/bootstrap-variables';
 
 .title {
-    text-align: center;
-    color: $bluegrey;
-    margin: 0px auto 20px ;
-    font-size: 1.5rem;
+  text-align: center;
+  color: $bluegrey;
+  margin: 0 auto 20px;
+  font-size: 1.5rem;
 }
 
 .header-text {
-    color: $bluegrey-darker;
-    font-size: 0.85rem;
-    font-weight: bold;
-    padding: 0px;
-    margin: 0px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  color: $bluegrey-darker;
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .info-text {
-    color: $grey;
-    font-size: 0.85rem;
-    margin: 0px;
+  color: $grey;
+  font-size: 0.85rem;
+  margin: 0;
 }
 
 .row {
-    padding-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .bottom-btn-group {
-    text-align: center;
-    .btn-confirm {
-        padding: 10px;
-        border-radius: 5px;
-        margin: 10px;
-        background-color: $brand-light;
-        color: white;
-        transition: all 0.3s ease;
-        text-transform: none !important;
-        &:hover {
-            background-color: $brand-primary;
-        }
+  text-align: center;
+
+  .btn-confirm {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 4px;
+    background-color: $brand-light;
+    color: white;
+    transition: all 0.3s ease;
+    text-transform: none !important;
+
+    &:hover {
+      background-color: $brand-primary;
     }
-    .btn-cancel {
-        padding: 10px;
-        border-radius: 5px;
-        background-color: $grey-lighter;
-        color: $grey;
-        transition: all 0.3s ease;
-        text-transform: none !important;
-        &:hover {
-            background-color: $grey-light;
-            color: $grey-dark;
-        }
+  }
+
+  .btn-cancel {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 4px;
+    background-color: $grey-lighter;
+    color: $grey;
+    transition: all 0.3s ease;
+    text-transform: none !important;
+
+    &:hover {
+      background-color: $grey-light;
+      color: $grey-dark;
     }
+  }
 }

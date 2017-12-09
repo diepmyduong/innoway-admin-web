@@ -9,7 +9,7 @@ import { EditInfoDialog } from "../../../modal/edit-info/edit-info.component";
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
-declare let swal:any;
+declare let swal: any;
 
 @Component({
   selector: 'app-detail',
@@ -28,7 +28,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   employeeType: any;
   thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
   load_done: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  
+
   billService: any;
   branchService: any;
   brandService: any;
@@ -155,7 +155,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       this.brand = await this.brandService.get(brandId, {
         fields: ["$all"]
       })
-      console.log("abc",JSON.stringify(this.brand));
+      console.log("abc", JSON.stringify(this.brand));
       this.ref.detectChanges();
     } catch (err) {
 
@@ -167,7 +167,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       this.branch = await this.branchService.get(branchId, {
         fields: ["$all"]
       })
-      console.log("abc",JSON.stringify(this.branch));
+      console.log("abc", JSON.stringify(this.branch));
       this.ref.detectChanges();
     } catch (err) {
 
@@ -221,10 +221,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   changeDateFormat(time, format) {
     if (!time)
-      return; 
+      return;
 
-    if (format)
-    {
+    if (format) {
       return moment(time).format(format);
     }
     return moment(time).format('L');
@@ -237,112 +236,113 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     let itemObject = this.item as any;
     let actions = this.globals.BILL_ACTIVITY_OPTIONS_OBJECT;
 
-    let data = [
-      {
-        title: "Họ và tên",
-        property: "customer.fullname",
-        type: "text",
-        current: itemObject.customer.fullname,
-      },
-      {
-        title: "Giá phụ",
-        property: "vat_fee",
-        type: "number",
-        current: itemObject.vat_fee,
-      },
-      {
-        title: "Hoạt động",
-        property: "customer.activity.action",
-        type: "select",
-        current: itemObject.activity.action,
-        options: actions
-      },
-      {
-        title: "Họ và tên",
-        property: "customer.fullname",
-        type: "text",
-        current: itemObject.customer.fullname,
-      },
-      {
-        title: "Giá phụ",
-        property: "vat_fee",
-        type: "number",
-        current: itemObject.vat_fee,
-      },
-      {
-        title: "Hoạt động",
-        property: "customer.activity.action",
-        type: "select",
-        current: itemObject.activity.action,
-        options: actions
-      },
-    ];
+    let data = {
+      inputs: [
+        {
+          title: "Họ và tên",
+          property: "customer.fullname",
+          type: "text",
+          current: itemObject.customer.fullname,
+        },
+        {
+          title: "Giá phụ",
+          property: "vat_fee",
+          type: "number",
+          current: itemObject.vat_fee,
+        },
+        {
+          title: "Hoạt động",
+          property: "customer.activity.action",
+          type: "select",
+          current: itemObject.activity.action,
+          options: actions
+        },
+        {
+          title: "Họ và tên",
+          property: "customer.fullname",
+          type: "text",
+          current: itemObject.customer.fullname,
+        },
+        {
+          title: "Giá phụ",
+          property: "vat_fee",
+          type: "number",
+          current: itemObject.vat_fee,
+        },
+        {
+          title: "Hoạt động",
+          property: "customer.activity.action",
+          type: "select",
+          current: itemObject.activity.action,
+          options: actions
+        },
+      ]
+    };
 
     let dialogRef = this.dialog.open(EditInfoDialog, {
       width: '500px',
       data: data
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result)
-      {
+      if (result) {
         console.log(result);
       }
     })
   }
-  
-    async print(bill) {
-      if (!this.load_done.getValue())
-        return;
 
-      let popupWin;
-      popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-      popupWin.document.open();
-      this.loadDetailedBill(bill.id, true, popupWin);
-  
-    }
-  
-    async loadDetailedBill(id: string, isPrint: boolean, popupWin: any) {
-      try {
-        let data = await this.billService.get(id, {
-          fields: ["$all", {
-            items: ['$all', {
-              product: ['$all', '$paranoid'],
-              topping_values: ['$all', '$paranoid']
-            }],
-            bill_ship_detail: ["$all"],
-          }]
-        });
-        if (isPrint && data.items != null) {
-          this.printBill(data, popupWin);
-        }
-      } catch (err) {
-        this.alertItemNotFound()
-        // alert(err);
-      }
-    }
-  
-    async printBill(data: any, popupWin: any) {
-  
-      console.log(data);
-      
-      let tableContent = "";
-      let index = 0;
-      data.items.forEach(item => {
-        tableContent += "<tr class='small-text text-right'>";
-        tableContent += '<td>' + (index++) + '</td>'; 
-        tableContent += '<td>' + item.product.name + '</td>'; 
-        tableContent += '<td>' + item.amount + '</td>'; 
-        tableContent += '<td>' + this.addSpace(item.product_price) + '</td>'; 
-        tableContent += '<td>' + this.addSpace(item.total_price) + '</td>'; 
-        tableContent += '</tr>';
+  async print(bill) {
+    if (!this.load_done.getValue())
+      return;
+
+    let popupWin;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    this.loadDetailedBill(bill.id, true, popupWin);
+
+  }
+
+  async loadDetailedBill(id: string, isPrint: boolean, popupWin: any) {
+    try {
+      let data = await this.billService.get(id, {
+        fields: ["$all", {
+          items: ['$all', {
+            product: ['$all', '$paranoid'],
+            topping_values: ['$all', '$paranoid']
+          }],
+          bill_ship_detail: ["$all"],
+        }]
       });
-      
-      popupWin.document.write(`
+      if (isPrint && data.items != null) {
+        this.printBill(data, popupWin);
+      }
+    } catch (err) {
+      this.alertItemNotFound()
+      // alert(err);
+    }
+  }
+
+  async printBill(data: any, popupWin: any) {
+
+    console.log(data);
+
+    let tableContent = "";
+    let index = 0;
+    data.items.forEach(item => {
+      tableContent += "<tr class='small-text text-right'>";
+      tableContent += '<td>' + (index++) + '</td>';
+      tableContent += '<td>' + item.product.name + '</td>';
+      tableContent += '<td>' + item.amount + '</td>';
+      tableContent += '<td>' + this.addSpace(item.product_price) + '</td>';
+      tableContent += '<td>' + this.addSpace(item.total_price) + '</td>';
+      tableContent += '</tr>';
+    });
+
+    popupWin.document.write(`
               <html>
                   <head>
                       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css">
                       <style>
-                        @media print { body.receipt { width: 80mm, min-height: 500mm } } 
+                        @media print { body.receipt { width: 80mm, min-height: 500mm } }
                           .receipt { width: 80mm; min-height: 500mm; font-family: sans-serif; color: #555; text-align: center;  }
                           .sheet { padding: 2.5mm; }
                           .text-center { }
@@ -364,27 +364,27 @@ export class DetailComponent implements OnInit, DetailPageInterface {
                   </head>
                   <body onload="window.print();window.close()" class="receipt">
                     <section class="sheet">
-                      <img class='logo padding-3' src='` + this.brand.logo +`'>
+                      <img class='logo padding-3' src='` + this.brand.logo + `'>
                       <div class='text-center normal-text padding-3'>` + this.branch.address + `</div>
                       <div class='text-center normal-text'>Hotline: ` + this.branch.phone + `</div>
-  
+
                       <hr style="border: none; border-top: solid 1px;" />
-                      
+
                       <div style="display: inline-block; width: 100%;">
                         <div class='small-text left'>Ngày đặt: ` + moment(data.created_at).format('L') + `</div>
                         <div class='small-text text-right right'>Ngày nhận: ` + moment().format('L') + `</div>
                       </div>
-  
-                      <div class='title padding-4'>Phiếu thanh toán</div> 
-  
-                      <div class='normal-text text-left'>Mã đơn hàng: ` + data.id +`</div>
+
+                      <div class='title padding-4'>Phiếu thanh toán</div>
+
+                      <div class='normal-text text-left'>Mã đơn hàng: ` + data.id + `</div>
                       <div class='normal-text text-left'>Nhân viên giao hàng: Uy Minh</div>
-  
+
                       <hr style="border: none; border-top: dashed 1px;" />
                       <table style="width:100%">
                         <tr class='small-text text-right'>
                           <th>TT</th>
-                          <th>Tên sản phẩm</th> 
+                          <th>Tên sản phẩm</th>
                           <th>SL</th>
                           <th>Đơn giá</th>
                           <th>T. Tiền</th>
@@ -410,15 +410,15 @@ export class DetailComponent implements OnInit, DetailPageInterface {
                     </section>
                   </body>
               </html>`
-      );
-      popupWin.document.close();
-    }
-    
-      addSpace(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    }
-  
-    timeFromNow(time) {
-      return moment(time).fromNow();
-    }
+    );
+    popupWin.document.close();
+  }
+
+  addSpace(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+
+  timeFromNow(time) {
+    return moment(time).fromNow();
+  }
 }
