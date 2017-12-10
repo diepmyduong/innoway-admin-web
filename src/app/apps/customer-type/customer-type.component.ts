@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ListPageInterface } from "app/apps/interface/listPageInterface";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayService } from "app/services";
 
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-customer-type',
@@ -23,11 +23,12 @@ export class CustomerTypeComponent implements OnInit, ListPageInterface {
 
   customerTypeService: any;
 
-  @ViewChild(DataTable) itemsTable;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
     private router: Router,
     public innoway: InnowayService,
+    private route: ActivatedRoute,
     private ref: ChangeDetectorRef
   ) {
     this.customerTypeService = innoway.getService('customer_type');
@@ -64,15 +65,15 @@ export class CustomerTypeComponent implements OnInit, ListPageInterface {
   }
 
   addItem() {
-    this.router.navigate(['/customer-type/add']);
+    this.router.navigate(['../add'], { relativeTo: this.route });
   }
 
   editItem(item) {
-    this.router.navigate(['/customer-type/add', item.id]);
+    this.router.navigate(['../add', item.id], { relativeTo: this.route });
   }
 
   viewItem(item) {
-    this.router.navigate(['/customer-type/detail', item.id]);
+    this.router.navigate(['../detail', item.id], { relativeTo: this.route });
   }
 
   async confirmDelete() {
@@ -119,6 +120,9 @@ export class CustomerTypeComponent implements OnInit, ListPageInterface {
   }
 
   async deleteAll() {
+    if (this.itemsTable.selectedRows.length == 0)
+      return;
+
     let rows = this.itemsTable.selectedRows;
     let ids = [];
     rows.forEach(row => {
@@ -138,8 +142,6 @@ export class CustomerTypeComponent implements OnInit, ListPageInterface {
         row.item.deleting = false;
       });
     }
-
-
   }
 
   onSearch(e) {

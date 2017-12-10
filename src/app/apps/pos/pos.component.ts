@@ -74,8 +74,6 @@ export class PosComponent implements OnInit {
   autocompleteCustomerData: Array<any> = new Array<any>();
   autocompleteCustomerNameData: Array<any> = new Array<any>();
 
-  // employee: any = {};
-  // customer: any;
   isChose: boolean = false;
 
   private numberMask = createNumberMask({
