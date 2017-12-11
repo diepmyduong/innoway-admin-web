@@ -1,13 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
 import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { NgModel } from "@angular/forms";
 import { SelectComponent } from "ng2-select";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Subscription } from 'rxjs/Subscription'
 import * as Ajv from 'ajv';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import { InnowayApiService } from 'app/services/innoway'
+import * as Console from 'console-prefix'
 
 declare var swal, _: any;
 declare var $:any;
@@ -25,19 +26,14 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   isEdit: boolean = false;
 
   submitting: boolean = false;
-  categoryService: any;
-  toppingService: any;
-  unitService: any;
-  attributeService: any;
-  productService: any;
 
   name: string;
   description: string;
   category: string;
   status: string;
   topping: string;
-  base_price: number;
-  price: number;
+  base_price: string;
+  price: string;
   list_image: any[] = [];
   image_on_hover: number;
   unit: string;
@@ -70,16 +66,13 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     prevButton: '.swiper-button-prev',
     spaceBetween: 10
   };
-
+  subscriptions: Subscription[] = []
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public innoway: InnowayService,
     public innowayApi: InnowayApiService
   ) {
-    this.productService = innoway.getService('product');
-    this.toppingService = innoway.getService('topping');
   }
 
   async ngOnInit() {
@@ -98,10 +91,18 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     });
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach( subscription => {
+      subscription.unsubscribe()
+    })
+  }
+
+  get log() { return Console(`[Product Detail]`).log }
+
   async setData() {
     try {
       let product = await this.innowayApi.product.getItem(this.id, {
-        local: false, reload: false, query: {
+        local: true, reload: true, query: {
           fields: ["$all", {
             toppings: ["id", {
               topping: ["id", "name", {
@@ -115,11 +116,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         }
       })
 
-      this.name = product.name;
-      this.thumb = product.thumb;
-      this.description = product.description;
-      this.price = product.price;
-      this.base_price = product.base_price;
+      this.name = product.name
+      this.thumb = product.thumb
+      this.description = product.description
+      this.price = _.toString(product.price)
+      this.base_price = _.toString(product.base_price)
       this.unit = product.unit == null ? "Không có" : product.unit.name;
       this.status = product.status == 1 ? "Hoạt động" : "Không hoạt động";
       this.category = product.category.name;
@@ -146,11 +147,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   editItem() {
-    this.router.navigate(['../../add', this.id], { relativeTo: this.route });
+    this.router.navigate(['../add', this.id], { relativeTo: this.route });
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route });
+    this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -163,10 +164,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async loadToppingData() {
     try {
-      this.toppings = await this.innoway.getAll('topping', {
-        fields: ["id", "name"]
-      });
-      this.toppings.subscribe(toppings => {
+      this.subscriptions.push(this.toppings.subscribe(toppings => {
         let items = toppings.map(topping => {
           return {
             text: topping.name,
@@ -174,7 +172,13 @@ export class DetailComponent implements OnInit, DetailPageInterface {
           }
         })
         this.topping_items.next(items);
-      });
+      }))
+      this.toppings.next(await this.innowayApi.topping.getList({
+        local: true, reload: true, query: {
+          fields: ["id", "name"],
+          limit: 0
+        }
+      }))
     } catch (err) {
       console.error("cannot load toppings", err);
     }

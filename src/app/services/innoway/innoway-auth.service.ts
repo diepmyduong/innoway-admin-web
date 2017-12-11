@@ -108,6 +108,7 @@ export class InnowayAuthService {
 
   async loginInnoway() {
     if (this.firebaseToken && this.innowayConfig.brandName) {
+      this.log('uid',this.firebaseUser.uid, this.firebaseUser)
       const option = {
         method: 'POST',
         uri: this.innowayConfig.apiUrl('auth/login_with_firebase'),

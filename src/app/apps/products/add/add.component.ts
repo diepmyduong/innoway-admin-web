@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm, NgModel } from '@angular/forms';
-import { InnowayService } from 'app/services';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Subscription } from 'rxjs/Subscription'
 import { SelectComponent } from 'ng2-select';
@@ -21,13 +20,6 @@ export class AddComponent implements OnInit {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-
-  categoryService: any;
-  toppingService: any;
-  unitService: any;
-  attributeService: any;
-  productService: any;
-  productTypeService: any;
 
   name: string;
   public description;
@@ -236,8 +228,8 @@ export class AddComponent implements OnInit {
       this.thumb = product.thumb
       this.description = product.description
       this.shortDescription = product.short_description
-      this.price = product.price.toString()
-      this.base_price = product.base_price.toString()
+      this.price = _.toString(product.price)
+      this.base_price = _.toString(product.base_price)
       this.unit = product.unit_id ? product.unit_id : "Không có dữ liệu"
       this.status = product.status
       this.category = product.category_id

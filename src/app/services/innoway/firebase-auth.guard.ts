@@ -16,7 +16,7 @@ export class FirebaseAuthGuard implements CanActivate {
     state: RouterStateSnapshot):  Promise<boolean>  {
     return this.innowayApi.innowayAuth.authenticated.then(state => {
       if(state == false) {
-        this.router.navigate(['pages/login'])
+        this.router.navigate(['login'])
       } 
       return state
     })

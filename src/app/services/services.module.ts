@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 //Guard
 import { AuthGuard } from './guards/auth.guard';
 import { AnonymousGuard } from './guards/anonymous.guard';
+import { FirebaseAuthGuard } from './innoway/firebase-auth.guard'
 import { InnowayConfigService } from './innoway/innoway-config.service';
 import { InnowayAuthService } from './innoway/innoway-auth.service';
 import { InnowayApiService } from './innoway/innoway-api.service';
@@ -26,6 +27,7 @@ import { SharedDataService } from './shared-data/shared-data.service'
     InnowayAuthService,
     InnowayApiService,
     SharedDataService,
+    FirebaseAuthGuard,
   ]
 })
 export class ServicesModule { }

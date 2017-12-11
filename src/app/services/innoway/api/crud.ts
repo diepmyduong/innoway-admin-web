@@ -129,7 +129,7 @@ export class CrudAPI<T> extends BaseAPI {
         const hashedQuery = hash(options.query)
         if (options.local && this.hashCache[hashedQuery] && this.localBrandName == this.api.innowayConfig.brandName) {
             let items = this.hashCache[hashedQuery].items
-            let item = _.find(items, { _id: id })
+            let item = _.find(items, { id: id })
             if (item) return item
         }
         if (this.localBrandName != this.api.innowayConfig.brandName)
@@ -139,7 +139,7 @@ export class CrudAPI<T> extends BaseAPI {
         if (options.reload) {
             if(hashedQuery === this.activeHashQuery) {
                 let items = this.items.getValue()
-                let index = _.findIndex(items, { _id: id })
+                let index = _.findIndex(items, { id: id })
                 if (index > -1) {
                     items[index] = row
                 } else {
@@ -155,7 +155,7 @@ export class CrudAPI<T> extends BaseAPI {
                     pagination: {},
                     items: []
                 }
-                let index = _.findIndex(this.hashCache[hashedQuery].items, { _id: id })
+                let index = _.findIndex(this.hashCache[hashedQuery].items, { id: id })
                 if (index > -1) {
                     this.hashCache[hashedQuery].items[index] = row
                 } else {
@@ -215,7 +215,7 @@ export class CrudAPI<T> extends BaseAPI {
         let row = res.results.object as T
         if (options.reload) {
             let items = this.items.getValue()
-            let index = _.findIndex(items, { _id: id })
+            let index = _.findIndex(items, { id: id })
             if (index > -1) {
                 items[index] = row
             } else {
@@ -245,16 +245,20 @@ export class CrudAPI<T> extends BaseAPI {
             json: true // Automatically parses the JSON string in the response
         }
         let res = await this.exec(setting)
+       
         if (options.reload) {
             let items = this.items.getValue()
             _.remove(items, function (item) {
-                return item._id == id;
+                return item.id == id;
             })
+            this.log('items', items)
+            this.log('hash',this.hashCache,this.activeHashQuery)
             this.items.next(items)
             this.hashCache[this.activeHashQuery].items = items
             this.hashCache = {
                 [this.activeHashQuery]: this.hashCache[this.activeHashQuery]
             }
+            this.log(this.hashCache)
         }
         return true
     }
@@ -278,7 +282,7 @@ export class CrudAPI<T> extends BaseAPI {
         if (options.reload) {
             let items = this.items.getValue()
             _.remove(items, function (item) {
-                return _.indexOf(ids, item._id) !== -1
+                return _.indexOf(ids, item.id) !== -1
             });
             this.items.next(items)
             this.hashCache[this.activeHashQuery].items = items
