@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm, NgModel } from '@angular/forms';
 import { InnowayService } from 'app/services';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Subscription } from 'rxjs/Subscription'
 import { SelectComponent } from 'ng2-select';
 import * as Ajv from 'ajv';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
@@ -69,6 +70,7 @@ export class AddComponent implements OnInit {
     prevButton: '.swiper-button-prev',
     spaceBetween: 10
   };
+  subscriptions: Subscription[] = []
 
   constructor(
     private route: ActivatedRoute,
@@ -101,6 +103,12 @@ export class AddComponent implements OnInit {
     if (this.isEdit) {
       this.setData();
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach( subscription => {
+      subscription.unsubscribe()
+    })
   }
 
   setDefaultData() {
@@ -167,10 +175,8 @@ export class AddComponent implements OnInit {
 
   async loadToppingData() {
     try {
-      this.toppings = await this.innoway.getAll('topping', {
-        fields: ["id", "name"]
-      });
-      this.toppings.subscribe(toppings => {
+    
+      this.subscriptions.push(this.toppings.subscribe(toppings => {
         let items = toppings.map(topping => {
           return {
             text: topping.name,
@@ -178,7 +184,13 @@ export class AddComponent implements OnInit {
           }
         })
         this.topping_items.next(items);
-      });
+      }))
+      this.toppings.next(await this.innowayApi.topping.getList({
+        local: true, query: {
+          fields: ["id", "name"],
+          limit: 0
+        }
+      }))
     } catch (err) {
       console.error("cannot load toppings", err);
     }
@@ -309,7 +321,7 @@ export class AddComponent implements OnInit {
       confirmButtonText: 'Nhập',
       showLoaderOnConfirm: true,
       preConfirm: ((image) => {
-        return new Promise((function(resolve, reject) {
+        return new Promise((function (resolve, reject) {
           let ajv = new Ajv();
           let valid = ajv.validate({ type: "string", format: 'url' }, image);
           if (!valid) {

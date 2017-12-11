@@ -4,8 +4,14 @@ import { InnowayApiService } from '../../innoway-api.service'
 
 export interface iProductCategory extends iCrud {
     brand_id?: string,
+    description?: string,
+    thirdparty_id?: string,
+    image?: string,
     name?: string,
-    value?: string,
+    parent_id?: string,
+    short_description?: string,
+
+    parent?: iProductCategory
 }
 
 export class ProductCategory extends CrudAPI<iProductCategory> {

@@ -11,7 +11,6 @@ export interface iProduct extends iCrud {
     name: string,
     price: number,
     product_type_id: string,
-    status: number,
     thumb: string,
     unit_id: string,
     short_description: string,

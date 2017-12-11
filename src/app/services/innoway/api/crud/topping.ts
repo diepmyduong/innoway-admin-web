@@ -2,16 +2,17 @@ import { CrudAPI, iCrud } from '../crud'
 
 import { InnowayApiService } from '../../innoway-api.service'
 
-export interface iProductType extends iCrud {
+export interface iTopping extends iCrud {
     brand_id?: string,
     description?: string,
-    name?: string
+    is_select_multiple?: boolean,
+    name?: string,
 }
 
-export class ProductType extends CrudAPI<iProductType> {
+export class Topping extends CrudAPI<iTopping> {
     constructor(
         public api: InnowayApiService
     ) {
-        super(api, 'product_type')
+        super(api, 'topping')
     }
 }
