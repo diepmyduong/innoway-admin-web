@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router, ActivatedRoute } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { ListPageInterface } from "app/apps/interface/listPageInterface";
-
+import { Subscription } from 'rxjs/Subscription'
 declare let swal:any;
 @Component({
   selector: 'app-area',
@@ -19,21 +19,29 @@ export class AreaComponent implements OnInit, ListPageInterface {
   query: any = {};
   searchTimeOut: number = 250;
   searchRef: any;
+  subscriptions: Subscription[] = []
 
-  shipAreaService: any;
 
   @ViewChild(DataTable) itemsTable;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private ref: ChangeDetectorRef
   ) {
-    this.shipAreaService = innoway.getService('ship_area');
   }
 
   ngOnInit() {
+    this.subscriptions.push(this.innowayApi.product.items.subscribe(items => {
+      this.items.next(items)
+    }))
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe()
+    })
   }
 
   async reloadItems(params) {
@@ -48,8 +56,8 @@ export class AreaComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('ship_area', query);
-    this.itemCount = this.shipAreaService.currentPageCount;
+    this.items.next(await this.innowayApi.shipArea.getList({local: true, query }))
+    this.itemCount = this.innowayApi.shipArea.pagination.totalItems
     this.ref.detectChanges();
     return this.items;
   }
@@ -107,7 +115,7 @@ export class AreaComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.shipAreaService.delete(item.id)
+      await this.innowayApi.shipArea.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -126,7 +134,7 @@ export class AreaComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.shipAreaService.deleteAll(ids)
+      await this.innowayApi.shipArea.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();

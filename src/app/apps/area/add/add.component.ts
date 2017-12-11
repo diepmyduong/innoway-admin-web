@@ -1,8 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { NgForm } from "@angular/forms";
+import * as _ from 'lodash'
 
 declare let swal:any
 
@@ -15,7 +16,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  customerService: any;
 
   name: string;
   fee: string;
@@ -26,8 +26,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService) {
-    this.customerService = innoway.getService('ship_area');
+    public innowayApi: InnowayApiService) {
   }
 
   ngOnInit(): void {
@@ -53,11 +52,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.customerService.get(this.id, {
-        fields: ["$all"]
-      });
+      let data = await this.innowayApi.shipArea.getItem(this.id, {
+        local: true, reload: true, query: {
+          fields: ["$all"]
+        }
+      })
       this.name = data.name
-      this.fee = data.fee
+      this.fee = _.toString(data.fee)
       this.city = data.city
       this.area = data.area
       this.status = data.status
@@ -69,7 +70,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route });
+    this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -123,7 +124,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { name, fee, city, area, status } = this;
-      await this.customerService.add({ name, fee, city, area, status })
+      await this.innowayApi.shipArea.add({ name, fee: _.toNumber(fee), city, area, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -135,7 +136,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { name, fee, city, area, status } = this;
-      await this.customerService.update(this.id, { name, fee, city, area, status })
+      await this.innowayApi.shipArea.update(this.id, { name, fee: _.toNumber(fee), city, area, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {
