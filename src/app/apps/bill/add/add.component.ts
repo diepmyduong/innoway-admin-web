@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { InnowayService } from 'app/services';
+import { InnowayApiService } from 'app/services/innoway';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Globals } from './../../../globals';
 
@@ -20,18 +20,14 @@ export class AddComponent implements OnInit {
 
   submitting: boolean = false;
 
-  billService: any;
-  billActitivyService: any;
-  employeeService: any;
-
   employee: string;
   employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   // bill_actions: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   bill_actions: any[];
 
   name: string;
-  action: number = 1;
-  actions: any[] = [
+  action: number = 1; // #FIX
+  actions: any[] = [ // #FIX
     {
       action: -2,
       name: "Chỉnh sửa"
@@ -81,11 +77,8 @@ export class AddComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService
+    public innowayApi: InnowayApiService
   ) {
-    this.billService = innoway.getService('bill');
-    this.employeeService = innoway.getService('employee');
-    this.billActitivyService = innoway.getService('bill_activity');
   }
 
   async ngOnInit() {
@@ -120,11 +113,13 @@ export class AddComponent implements OnInit {
 
   async setData() {
     try {
-      let bill = await this.billService.get(this.id, {
-        fields: ["$all", {
-          activities: ["$all"]
-        }]
-      });
+      let bill = await this.innowayApi.bill.getItem(this.id, {
+        query: {
+          fields: ["$all", {
+            activities: ["$all"]
+          }]
+        }
+      })
       this.bill_actions = bill.activities;
       let activity = bill.activities;
       this.avaiable_actions = [];
@@ -145,16 +140,18 @@ export class AddComponent implements OnInit {
 
   async loadEmployeeData() {
     try {
-      this.employees = await this.innoway.getAll('employee', {
-        fields: ["id", "fullname", "phone", "email"]
-      });
+      this.employees.next(await this.innowayApi.employee.getList({
+        query: {
+          fields: ["id", "fullname", "phone", "email"]
+        }
+      }))
     } catch (err) {
       console.error("cannot load employees", err);
     }
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route });
+    this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -269,7 +266,8 @@ export class AddComponent implements OnInit {
       let { action, employee } = this;
       let employee_id = employee;
       let bill_id = this.id;
-      await this.billActitivyService.add({ bill_id, action, employee_id })
+      // #FIX
+      await this.innowayApi.billActivity.add({ bill_id, action: "BILL_SENT_SUCCESSFULLY", employee_id })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());

@@ -34,7 +34,7 @@ export class AreaComponent implements OnInit, ListPageInterface {
 
   ngOnInit() {
     this.subscriptions.push(this.innowayApi.product.items.subscribe(items => {
-      this.items.next(items)
+      this.getItems()
     }))
   }
 

@@ -8,6 +8,12 @@ import { ProductType } from './api/crud/product-type'
 import { Topping } from './api/crud/topping'
 import { Unit } from './api/crud/unit'
 import { ShipArea } from './api/crud/ship-area'
+import { Brand } from './api/crud/brand'
+import { Branch } from './api/crud/branch'
+import { Bill } from './api/crud/bill'
+import { BillActivity } from './api/crud/bill-activity'
+import { Employee } from './api/crud/employee'
+import { PaidHistory } from './api/crud/paid-history'
 @Injectable()
 export class InnowayApiService {
 
@@ -24,4 +30,10 @@ export class InnowayApiService {
   topping = new Topping(this)
   unit = new Unit(this)
   shipArea = new ShipArea(this)
+  brand = new Brand(this)
+  branch = new Branch(this)
+  bill = new Bill(this)
+  billActivity = new BillActivity(this)
+  employee = new Employee(this)
+  paidHistory = new PaidHistory(this)
 }

@@ -3,9 +3,10 @@ import { ListPageInterface } from "app/apps/interface/listPageInterface";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService, AuthService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { Globals } from './../../globals';
 import {MatTooltipModule} from '@angular/material';
+import { Subscription } from 'rxjs/Subscription'
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
@@ -33,30 +34,26 @@ export class BillComponent implements OnInit, ListPageInterface {
 
   employeeData: any;
 
-  billService: any;
-  branchService: any;
-  brandService: any;
-
   branch: any;
   brand: any;
 
   @ViewChild('itemsTable') itemsTable: DataTable;
+  subscriptions: Subscription[] = []
 
   constructor(
     private globals: Globals,
     private router: Router,
     private route: ActivatedRoute,
-    public auth: AuthService,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private ref: ChangeDetectorRef
   ) {
-    this.employeeData = this.auth.service.userInfo;
-    this.billService = innoway.getService('bill');
-    this.branchService = innoway.getService('branch');
-    this.brandService = innoway.getService('brand');
+    this.employeeData = this.innowayApi.innowayAuth.innowayUser
   }
 
   ngOnInit() {
+    this.subscriptions.push(this.innowayApi.bill.items.subscribe(items => {
+      this.getItems()
+    }))
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
     this.loadBrandByEmployeeData(this.employeeData.brand_id);
 
@@ -65,10 +62,11 @@ export class BillComponent implements OnInit, ListPageInterface {
   
     async loadBrandByEmployeeData(brandId: string) {
       try {
-        this.brand = await this.brandService.get(brandId, {
-          fields: ["$all"]
+        this.brand = await this.innowayApi.brand.getItem(brandId, {
+          local: true, reload: true, query: {
+            fields: ["$all"]
+          }
         })
-        console.log("abc",JSON.stringify(this.brand));
         this.ref.detectChanges();
       } catch (err) {
   
@@ -77,10 +75,11 @@ export class BillComponent implements OnInit, ListPageInterface {
   
     async loadBranchByEmployeeData(branchId: string) {
       try {
-        this.branch = await this.branchService.get(branchId, {
-          fields: ["$all"]
+        this.branch = await this.innowayApi.branch.getItem(branchId, {
+          local: true, reload: true, query: {
+            fields: ["$all"]
+          }
         })
-        console.log("abc",JSON.stringify(this.branch));
         this.ref.detectChanges();
       } catch (err) {
   
@@ -100,10 +99,9 @@ export class BillComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('bill', query);
-    this.itemCount = this.billService.currentPageCount;
+    this.items.next(await this.innowayApi.bill.getList({ query }))
+    this.itemCount = this.innowayApi.bill.pagination.totalItems
     this.ref.detectChanges();
-    console.log(this.items)
     return this.items;
   }
 
@@ -178,7 +176,7 @@ export class BillComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.billService.delete(item.id)
+      await this.innowayApi.bill.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -200,7 +198,7 @@ export class BillComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.billService.deleteAll(ids)
+      await this.innowayApi.bill.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
@@ -239,15 +237,17 @@ export class BillComponent implements OnInit, ListPageInterface {
 
   async loadDetailedBill(id: string, isPrint: boolean, popupWin: any) {
     try {
-      let data = await this.billService.get(id, {
-        fields: ["$all", {
-          items: ['$all', {
-            product: ['$all', '$paranoid'],
-            topping_values: ['$all', '$paranoid']
-          }],
-          bill_ship_detail: ["$all"],
-        }]
-      });
+      let data = await this.innowayApi.bill.getItem(id, {
+        query: {
+          fields: ["$all", {
+            items: ['$all', {
+              product: ['$all', '$paranoid'],
+              topping_values: ['$all', '$paranoid']
+            }],
+            bill_ship_detail: ["$all"],
+          }]
+        }
+      })
       if (isPrint && data.items != null) {
         this.printBill(data, popupWin);
       }
@@ -258,8 +258,6 @@ export class BillComponent implements OnInit, ListPageInterface {
   }
 
   async printBill(data: any, popupWin: any) {
-
-    console.log(data);
     
     let tableContent = "";
     let index = 0;

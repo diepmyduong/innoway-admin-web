@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ElementRef, ViewContainerRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { InnowayService, AuthService } from 'app/services'
+import { InnowayApiService } from 'app/services/innoway'
 import { Globals } from './../../../globals';
 import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
@@ -29,10 +29,6 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
   load_done: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  billService: any;
-  branchService: any;
-  brandService: any;
-
   branch: any;
   brand: any;
 
@@ -42,17 +38,14 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     private router: Router,
     elRef: ElementRef,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService,
-    private auth: AuthService,
+    public innowayApi: InnowayApiService,
     public dialog: MatDialog,
   ) {
     this.elRef = elRef;
-    this.employee = this.auth.service.userInfo;
+    this.employee = this.innowayApi.innowayAuth.innowayUser
+    console.log('employee',this.employee)
+    console.log('innoway',this.innowayApi)
     this.setupUIFollowActor(this.employee);
-
-    this.billService = innoway.getService('bill');
-    this.branchService = innoway.getService('branch');
-    this.brandService = innoway.getService('brand');
   }
 
   private setupUIFollowActor(employee: any) {
@@ -152,10 +145,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async loadBrandByEmployeeData(brandId: string) {
     try {
-      this.brand = await this.brandService.get(brandId, {
-        fields: ["$all"]
+      this.brand = await this.innowayApi.brand.getItem(brandId, {
+        query: { fields: ["$all"] }
       })
-      console.log("abc", JSON.stringify(this.brand));
       this.ref.detectChanges();
     } catch (err) {
 
@@ -164,10 +156,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async loadBranchByEmployeeData(branchId: string) {
     try {
-      this.branch = await this.branchService.get(branchId, {
-        fields: ["$all"]
+      this.branch = await this.innowayApi.branch.getItem(branchId, {
+        query: { fields: ["$all"] }
       })
-      console.log("abc", JSON.stringify(this.branch));
       this.ref.detectChanges();
     } catch (err) {
 
@@ -176,9 +167,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async setData() {
     try {
-      this.item = await this.billService.get(this.id, {
-        fields: this.itemFields
-      })
+      this.item.next(await this.innowayApi.bill.getItem(this.id, {
+        query: { fields: this.itemFields }
+      }))
       this.load_done.next(true);
     } catch (err) {
       this.alertItemNotFound()
@@ -204,11 +195,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   editItem() {
-    this.router.navigate(['../../add', this.id], { relativeTo: this.route });
+    this.router.navigate(['../add', this.id], { relativeTo: this.route });
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route });
+    this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -303,15 +294,17 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async loadDetailedBill(id: string, isPrint: boolean, popupWin: any) {
     try {
-      let data = await this.billService.get(id, {
-        fields: ["$all", {
-          items: ['$all', {
-            product: ['$all', '$paranoid'],
-            topping_values: ['$all', '$paranoid']
-          }],
-          bill_ship_detail: ["$all"],
-        }]
-      });
+      let data = await this.innowayApi.bill.getItem(id, {
+        query: {
+          fields: ["$all", {
+            items: ['$all', {
+              product: ['$all', '$paranoid'],
+              topping_values: ['$all', '$paranoid']
+            }],
+            bill_ship_detail: ["$all"],
+          }]
+        }
+      })
       if (isPrint && data.items != null) {
         this.printBill(data, popupWin);
       }
