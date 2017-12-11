@@ -30,6 +30,7 @@ export class AddComponent implements OnInit {
   numberOfBill: string = "0";
   amountOfPurchase: string = "0";
   sex: string = null;
+  genders: any[];
   status: number = 1;
 
   numberMask = createNumberMask({
@@ -47,6 +48,7 @@ export class AddComponent implements OnInit {
     public innoway: InnowayService
   ) {
     this.customerTypeService = innoway.getService('customer_type');
+    this.genders = this.globals.GENDERS;
     //this.lastDateOrder = moment(Date.now()).format('MM/DD/yyyy hh:mm');
   }
 
@@ -97,6 +99,10 @@ export class AddComponent implements OnInit {
       try { await this.alertItemNotFound() } catch (err) { }
       this.backToList()
     }
+  }
+
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
   }
 
   backToList() {
@@ -155,7 +161,7 @@ export class AddComponent implements OnInit {
     if (form.valid && (this.lastDateOrder == null
       || this.lastDateOrder.toString().toLowerCase().indexOf("invalid") == -1)) {
       let { lastDateOrder, numberOfBill, amountOfPurchase, sex, name, description, status } = this;
-      sex = sex != null ? sex : null;
+      sex = sex == null || sex == "null" ? null : sex;
       let last_date_order = lastDateOrder ? new Date(lastDateOrder) : null;
       let number_of_bill = numberOfBill;
       let amount_of_purchase = this.globals.convertStringToPrice(amountOfPurchase);
@@ -172,7 +178,7 @@ export class AddComponent implements OnInit {
     if (form.valid && (this.lastDateOrder == null
       || this.lastDateOrder.toString().toLowerCase().indexOf("invalid") == -1)) {
       let { lastDateOrder, numberOfBill, amountOfPurchase, sex, name, description, status } = this;
-      sex = sex != null ? sex : null;
+      sex = sex == null || sex == "null" ? null : sex;
       let last_date_order = lastDateOrder ? new Date(lastDateOrder) : null;
       let number_of_bill = numberOfBill;
       let amount_of_purchase = this.globals.convertStringToPrice(amountOfPurchase);
@@ -201,7 +207,7 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       await this.addItem(form);
-      this.backToList();
+      this.backToListForAddNew();
     } catch (err) {
       this.alertAddFailed()
     } finally {

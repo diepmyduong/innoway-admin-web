@@ -27,12 +27,16 @@ export class Globals {
 
   GENDERS = [
     {
-      code: 0,
+      code: "male",
       name: "Nam"
     },
     {
-      code: 1,
+      code: "female",
       name: "Nữ"
+    },
+    {
+      code: "other",
+      name: "Khác"
     }
   ]
 
@@ -825,7 +829,7 @@ export class Globals {
   public convertStringToFormatPhone(phone: string): any {
     let output = {
       phone: phone,
-      isValid: false
+      isValid: true
     };
     phone = phone.replace(/\s/g, '')
     if (phone.startsWith("+84")) {
@@ -842,7 +846,7 @@ export class Globals {
       output.phone = '+84' + phone
       output.isValid = true
     } else {
-      output.phone = '+84' + phone
+      output.phone = phone
       output.isValid = false
     }
     return output;

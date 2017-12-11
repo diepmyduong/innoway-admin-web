@@ -51,8 +51,8 @@
               <div class="col-md-10">
                 <select id="genderSelect" #sexControl="ngModel" [(ngModel)]="sex" name="sex" class="form-control input-control">
                   <option value="null" [selected]="true">Chọn giới tính</option>
-                    <option *ngFor="let v of [0,1]" [value]="v">
-                      {{ v===1?"Nam":"Nữ"}}
+                    <option *ngFor="let v of genders" [value]="v.code">
+                      {{ v.name}}
                     </option>
                   </select>
               </div>
