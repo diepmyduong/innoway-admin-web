@@ -25,10 +25,13 @@ export class AddComponent implements OnInit, AddPageInterface {
   fullname: string;
   password: string;
   phone: string;
-  sex: string = "0";
+  sex: string = null;
   genders: any;
   status: number = 1;
   trustPoint: number = 3;
+
+  isExisted: boolean = false;
+  isValidPhone: boolean = false;
 
   dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
@@ -81,7 +84,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.fullname = data.fullname
       this.password = data.password
       this.phone = data.phone
-      this.sex = data.sex ? data.sex.toString() : "0"
+      this.sex = data.sex ? data.sex.toString() : null
       this.status = data.status
       this.trustPoint = data.trust_point ? data.trust_point : 3
     } catch (err) {
@@ -144,7 +147,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   async addItem(form: NgForm) {
-    if (form.valid) {
+    if (form.valid && !this.isExisted && this.isValidPhone) {
       let { name, avatar, email, fullname, password, phone, sex, status } = this;
       let trust_point = this.trustPoint;
       let birthday = null;
@@ -161,7 +164,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   async updateItem(form: NgForm) {
-    if (form.valid) {
+    if (form.valid && !this.isExisted && this.isValidPhone) {
       let { name, avatar, email, fullname, password, phone, sex, status } = this;
       let trust_point = this.trustPoint;
       let birthday = null;
@@ -213,9 +216,32 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
-  open(date) {
-    // let newDate = new Date(date);
-    // alert(newDate);
+  async validateCustomerByPhone(phone: string) {
+    try {
+      let data = {
+        phone: phone.toString()
+      }
+      let response = await this.customerService.getCustomerByPhone(data);
+
+      if (response != null && response.code != 500) {
+        console.log(JSON.stringify(response));
+        this.isExisted = true;
+      } else {
+        this.isExisted = false;
+      }
+    } catch (err) {
+      this.isExisted = false;
+    }
   }
 
+  onBlurMethodPhone(event) {
+    if (event.isTrusted) {
+      if (this.phone.indexOf("+84") == -1) {
+        let data = this.globals.convertStringToFormatPhone(this.phone);
+        this.phone = data.phone;
+        this.isValidPhone = data.isValid;
+        this.validateCustomerByPhone(this.phone);
+      }
+    }
+  }
 }

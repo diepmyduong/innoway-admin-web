@@ -224,66 +224,66 @@ export class Globals {
     },
   ];
 
-    //bill status
-    BILL_ACTIVITY_OPTIONS_OBJECT = [
-      {
-        code: 'BILL_SENT_SUCCESSFULLY',
-        display: 'Gửi thành công'
-      },
+  //bill status
+  BILL_ACTIVITY_OPTIONS_OBJECT = [
+    {
+      code: 'BILL_SENT_SUCCESSFULLY',
+      display: 'Gửi thành công'
+    },
 
-      {
-        code: 'BILL_DISTRIBUTED',
-        display: 'Đã điều phối'
-      },
+    {
+      code: 'BILL_DISTRIBUTED',
+      display: 'Đã điều phối'
+    },
 
-      {
-        code: 'BILL_WAITING_FOR_CONFIRMATION',
-        display: 'Chờ xác nhận'
-      },
-      {
-        code: 'BILL_CONFIRMED',
-        display: 'Đã xác nhận'
-      },
-      {
-        code: 'BILL_PICKING_UP',
-        display: 'Đang lấy hàng'
-      },
+    {
+      code: 'BILL_WAITING_FOR_CONFIRMATION',
+      display: 'Chờ xác nhận'
+    },
+    {
+      code: 'BILL_CONFIRMED',
+      display: 'Đã xác nhận'
+    },
+    {
+      code: 'BILL_PICKING_UP',
+      display: 'Đang lấy hàng'
+    },
 
-      {
-        code: 'BILL_RECEIVED',
-        display: 'Đã nhận hàng'
-      },
+    {
+      code: 'BILL_RECEIVED',
+      display: 'Đã nhận hàng'
+    },
 
-      {
-        code: 'BILL_PROCESSING',
-        display: 'Đang xử lý'
-      },
+    {
+      code: 'BILL_PROCESSING',
+      display: 'Đang xử lý'
+    },
 
-      {
-        code: 'BILL_PREPARED',
-        display: 'Đã chuẩn bị'
-      },
+    {
+      code: 'BILL_PREPARED',
+      display: 'Đã chuẩn bị'
+    },
 
-      {
-        code: 'BILL_SENT_SHIPPER',
-        display: 'Gửi giao hàng'
-      },
+    {
+      code: 'BILL_SENT_SHIPPER',
+      display: 'Gửi giao hàng'
+    },
 
-      {
-        code: 'BILL_DELIVERING',
-        display: 'Đang giao hàng'
-      },
+    {
+      code: 'BILL_DELIVERING',
+      display: 'Đang giao hàng'
+    },
 
-      {
-        code: 'BILL_PAID',
-        display: 'Đã thanh toán'
-      },
+    {
+      code: 'BILL_PAID',
+      display: 'Đã thanh toán'
+    },
 
-      {
-        code: 'BILL_COLLECTED_MONEY',
-        display: 'Đã thu tiền'
-      },
-    ];
+    {
+      code: 'BILL_COLLECTED_MONEY',
+      display: 'Đã thu tiền'
+    },
+  ];
 
   public avaibleBillActivityOption(code: string): any {
     let result = null;
@@ -820,5 +820,31 @@ export class Globals {
 
   public convertStringToPrice(input: string): number {
     return Number.parseInt(input.toString().replace(/[^\d]/g, ''));
+  }
+
+  public convertStringToFormatPhone(phone: string): any {
+    let output = {
+      phone: phone,
+      isValid: false
+    };
+    phone = phone.replace(/\s/g, '')
+    if (phone.startsWith("+84")) {
+      phone = phone.slice(3)
+    }
+    if (phone.startsWith("+840")) {
+      phone = phone.slice(4)
+    }
+    if (phone.startsWith("0")) {
+      phone = phone.slice(1)
+    }
+    if ((phone.length == 9 && /\d\d\d\d\d\d\d\d\d/g.test(phone))
+      || (phone.length == 10 && /\d\d\d\d\d\d\d\d\d\d/g.test(phone))) {
+      output.phone = '+84' + phone
+      output.isValid = true
+    } else {
+      output.phone = '+84' + phone
+      output.isValid = false
+    }
+    return output;
   }
 }
