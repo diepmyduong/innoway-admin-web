@@ -114,19 +114,6 @@ export class DetailComponent implements OnInit, DetailPageInterface {
           }]
         }
       })
-      console.log("PRODUCT", product)
-      // let product = await this.productService.get(this.id, {
-      //   fields: ["$all", {
-      //     toppings: ["id", {
-      //       topping: ["id", "name", {
-      //         values: ["id", "name"]
-      //       }]
-      //     }],
-      //     unit: ["name"],
-      //     category: ["name"],
-      //     product_type: ["name"]
-      //   }]
-      // });
 
       this.name = product.name;
       this.thumb = product.thumb;

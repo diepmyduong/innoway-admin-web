@@ -141,9 +141,12 @@ export class AddComponent implements OnInit {
 
   async loadCategoryData() {
     try {
-      this.categories = await this.innoway.getAll('product_category', {
-        fields: ["id", "name"]
-      });
+      this.categories.next(await this.innowayApi.ProductCategory.getList({
+        local: true, query: {
+          fields: ["id", "name"],
+          limit: 0
+        }
+      }))
     } catch (err) {
       console.error('Cannot load category', err);
     }
