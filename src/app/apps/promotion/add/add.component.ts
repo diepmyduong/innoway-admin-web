@@ -7,6 +7,7 @@ import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { NgForm } from "@angular/forms";
 import { Globals } from "./../../../Globals"
 
+declare let accounting: any;
 declare let swal: any;
 // declare var $: any;
 
@@ -23,7 +24,7 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   promotionService: any;
   customerTypeService: any;
-  promotionTypeService: any;
+  // promotionTypeService: any;
   customerTypePromotionService: any;
 
   dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/];
@@ -32,6 +33,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   amount: number = 0;
   code: string;
   limit: number = 0;
+  image: string;
   public description;
   shortDescription: string;
   startDate: string;
@@ -39,18 +41,22 @@ export class AddComponent implements OnInit, AddPageInterface {
   value: number = 0;
   customerType: string;
   promotionType: string;
+  promotionTypes: any[];
   status: number = 1;
   customerTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  promotionTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  // promotionTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
+    private globals: Globals,
     public innoway: InnowayService) {
     this.promotionService = innoway.getService('promotion');
     this.customerTypeService = innoway.getService('customer_type');
-    this.promotionTypeService = innoway.getService('promotion_type');
     this.customerTypePromotionService = innoway.getService('customer_type_promotion');
+
+    this.promotionTypes = this.globals.PROMOTION_TYPES;
+    this.promotionType = this.promotionTypes[0].code;
   }
 
   changeText(event) {
@@ -59,7 +65,6 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    await this.loadPromotionTypeData();
     await this.loadCustomerTypeData();
 
     if (this.id == null) {
@@ -82,11 +87,10 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.limit = 0
     this.amount = 0;
     this.code = null;
-    this.description = '';
+    this.description = "";
     this.shortDescription = "";
-    if (this.promotionTypeData.getValue()[0]) {
-      this.promotionType = this.promotionTypeData.getValue()[0].id;
-    }
+    this.image = "";
+    this.promotionType = this.promotionTypes[0].code;
     if (this.customerTypeData.getValue()[0]) {
       this.customerType = this.customerTypeData.getValue()[0].id;
     }
@@ -101,7 +105,8 @@ export class AddComponent implements OnInit, AddPageInterface {
       amount: this.amount,
       code: this.code,
       description: this.description,
-      shortDescription: this.shortDescription
+      shortDescription: this.shortDescription,
+      image: this.image
     }
   }
 
@@ -109,7 +114,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     try {
       let data = await this.promotionService.get(this.id, {
         fields: ["$all", {
-          promotion_type: ["id", "name"], customer_types: ["$all"]
+          customer_types: ["$all"]
         }]
       });
       console.log(JSON.stringify(data));
@@ -122,21 +127,11 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.startDate = data.start_date
       this.endDate = data.end_date
       this.value = data.value
-      this.customerType = data.customer_types.id
-      this.promotionType = data.promotion_type.id
+      this.customerType = data.customer_types[0].customer_type_id
+      this.promotionType = data.promotion_type
       this.status = data.status
+      this.image = data.image
 
-    } catch (err) {
-      try { await this.alertItemNotFound() } catch (err) { }
-      console.log("ERRRR", err);
-    }
-  }
-
-  async loadPromotionTypeData() {
-    try {
-      this.promotionTypeData = await this.innoway.getAll('promotion_type', {
-        fields: ["id", "name"]
-      });
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -155,7 +150,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   backToList() {
-    this.router.navigate(['../list'], { relativeTo: this.route });
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -220,14 +215,20 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   async addItem(form: NgForm) {
-    if (form.valid && this.detectDate(this.startDate, this.endDate)) {
-      let { name, amount, code, limit, shortDescription, description, value, status } = this;
+    if (form.valid && this.detectDate(this.startDate, this.endDate)
+      && ((this.promotionType == this.globals.PROMOTION_TYPES[1].code && this.value <= 100 && this.value > 0)
+        || (this.promotionType == this.globals.PROMOTION_TYPES[0].code) && this.value > 0)) {
+      let { name, amount, code, limit, shortDescription, description, value, status, image } = this;
       let start_date = new Date(this.startDate);
       let short_description = shortDescription;
       let end_date = new Date(this.endDate);
       let customer_type_id = this.customerType;
-      let promotion_type_id = this.promotionType;
-      let promotion = await this.promotionService.add({ name, amount, code, limit, short_description, description, start_date, end_date, value, promotion_type_id, status })
+      let promotion_type = this.promotionType;
+      let promotion_type_id = "b6c94210-9d10-11e7-98bd-95376425271c";
+      let promotion = await this.promotionService.add({
+        name, amount, code, limit, short_description,
+        description, start_date, end_date, value, promotion_type, promotion_type_id, status, image
+      })
 
       let customer_type_ids: string[] = [];
       customer_type_ids.push(customer_type_id);
@@ -237,23 +238,33 @@ export class AddComponent implements OnInit, AddPageInterface {
       form.reset();
       form.resetForm(this.setDefaultData());
     } else {
-      // alert(form.valid + " ---- " + this.detectDate(this.startDate, this.endDate));
       this.alertFormNotValid();
     }
   }
 
   async updateItem(form: NgForm) {
-    if (form.valid && this.detectDate(this.startDate, this.endDate)) {
-      let { name, amount, code, limit, shortDescription, description, value, status } = this;
+    if (form.valid && this.detectDate(this.startDate, this.endDate)
+      && ((this.promotionType == this.globals.PROMOTION_TYPES[1].code && this.value <= 100 && this.value > 0)
+        || (this.promotionType == this.globals.PROMOTION_TYPES[0].code) && this.value > 0)) {
+      let { name, amount, code, limit, shortDescription, description, value, status, image } = this;
       let start_date = new Date(this.startDate);
       let short_description = shortDescription;
       let end_date = new Date(this.endDate);
       let customer_type_id = this.customerType;
-      let promotion_type_id = this.promotionType;
-      await this.promotionService.add({ name, amount, code, limit, short_description, description, start_date, end_date, value, customer_type_id, promotion_type_id, status })
+      let promotion_type = this.promotionType;
+      let promotion_type_id = "b6c94210-9d10-11e7-98bd-95376425271c";
+      let promotion = await this.promotionService.update(this.id, {
+        name, amount, code, limit, short_description,
+        description, start_date, end_date, value, customer_type_id, promotion_type, status, image
+      })
+
+      let customer_type_ids: string[] = [];
+      customer_type_ids.push(customer_type_id);
+      await this.promotionService.updateCustomerType(promotion.id, customer_type_ids);
+
       this.alertUpdateSuccess();
       form.reset();
-      form.resetForm(this.setDefaultData());
+      this.backToList();
     } else {
       this.alertFormNotValid();
     }
@@ -302,5 +313,6 @@ export class AddComponent implements OnInit, AddPageInterface {
     // customer_type_ids.push(this.customerType);
     await this.promotionService.sendPromotionToMessenger(this.id, "BCSBCS");
   }
+
 
 }

@@ -1,20 +1,5 @@
 <div class="animated fadeIn">
   <div class="row">
-    <div class="col-md-4" [hidden]="true">
-      <div class="card">
-        <div class="card-header">
-          <strong>Ảnh đại diện</strong>
-        </div>
-        <div class="card-block">
-          <div class="col-md-12">
-            <img src="https://freeiconshop.com/wp-content/uploads/edd/person-flat.png" width="100%">
-          </div>
-          <div class="col-md-12 mt-h">
-            <input type="file" id="file-input" name="file-input">
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
@@ -23,81 +8,84 @@
         <div class="card-block">
           <form #itemFrm="ngForm">
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Tên khuyến mãi</label>
-              <div class="col-md-8">
-                <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Tên thông tin khuyến mãi'" required>
+              <label class="col-md-2 header-text" for="text-input">Tên khuyến mãi</label>
+              <div class="col-md-10">
+                <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Tên thông tin khuyến mãi'" required>
                 <small *ngIf="nameControl.errors?.required" class="text-muted danger">
                   (Không được bỏ trống)
                 </small>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="textarea-input">Hình ảnh</label>
-              <div class="col-md-8">
-                <input type="text" #imageControl="ngModel" [(ngModel)]="image" name="image" url
-                  class="form-control" [placeholder]="image?'':'Nhập url'"/>
+              <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
+              <div class="col-md-10">
+                <input type="text" #imageControl="ngModel" [(ngModel)]="image" name="image"
+                  class="form-control input-control" [placeholder]="image?'':'Nhập url'" url required/>
+                  <small *ngIf="imageControl.errors?.required" class="text-muted danger">
+                    (Không được bỏ trống)
+                  </small>
                   <small *ngIf="imageControl.errors?.url"
                   class="text-muted danger" >
                     (Link không hợp lệ)
                   </small>
-                  <img *ngIf="imageControl.value && imageControl.valid" style="width:auto;height:80px;"
+                  <img *ngIf="imageControl.value && imageControl.valid" style="width:auto;height:80px;margin-top:0.1rem;"
                     [src]="imageControl.value" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Mô tả ngắn</label>
-              <div class="col-md-8">
+              <label class="col-md-2 header-text" for="text-input">Mô tả ngắn</label>
+              <div class="col-md-10">
                 <input type="text" #shortDesciptionControl="ngModel" [(ngModel)]="shortDesciption" name="shortDesciption"
-                  class="form-control" [placeholder]="'Mô tả ngắn'"/>
+                  class="form-control input-control" [placeholder]="'Mô tả ngắn'"/>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
-              <div class="col-md-8">
-                <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
+              <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
+              <div class="col-md-10">
+                <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Mã code</label>
-              <div class="col-md-8">
-                <input type="text" #codeControl="ngModel" [(ngModel)]="code" name="code" class="form-control" [placeholder]="'Nhập mã code'" required>
+              <label class="col-md-2 header-text" for="text-input">Mã code</label>
+              <div class="col-md-10">
+                <input type="text" #codeControl="ngModel" [(ngModel)]="code" name="code" class="form-control input-control" [placeholder]="'Nhập mã code'" required>
                 <small *ngIf="codeControl.errors?.required" class="text-muted danger">
                   (Không được bỏ trống)
                 </small>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Ngày bắt đầu</label>
-              <div class="col-md-8">
-                <input type="text" #startDateControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="startDate" name="startDate" class="form-control" [placeholder]="'Nhập ngày bắt đầu'" require>
+              <label class="col-md-2 header-text" for="text-input">Ngày bắt đầu</label>
+              <div class="col-md-10">
+                <input type="text" #startDateControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="startDate" name="startDate" class="form-control input-control" [placeholder]="'Nhập ngày bắt đầu'" required>
                 <small *ngIf="startDateControl.errors?.required" class="text-muted danger">
                   (Không được bỏ trống)
                 </small>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Ngày kết thúc</label>
-              <div class="col-md-8">
-                <input type="text" #endDateControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="endDate" name="endDate" class="form-control" [placeholder]="'Nhập ngày kết thúc'" require>
+              <label class="col-md-2 header-text" for="text-input">Ngày kết thúc</label>
+              <div class="col-md-10">
+                <input type="text" #endDateControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="endDate" name="endDate" class="form-control input-control" [placeholder]="'Nhập ngày kết thúc'" required>
                 <small *ngIf="endDateControl.errors?.required" class="text-muted danger">
                   (Không được bỏ trống)
                 </small>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="select">Loại khuyến mãi</label>
-              <div class="col-md-8">
-                <select id="promotionTypeSelect" #promotionTypeControl="ngModel" [(ngModel)]="promotionType" name="promotionType" class="form-control">
-                    <option *ngFor="let v of promotionTypeData | async" [value]="v.id">
+              <label class="col-md-2 header-text" for="select">Loại khuyến mãi</label>
+              <div class="col-md-10">
+                <select id="promotionTypeSelects" #promotionTypeControl="ngModel" [(ngModel)]="promotionType" name="promotionType" class="form-control input-control">
+                    <option *ngFor="let v of promotionTypes" [value]="v.code">
                       {{v.name}}
                     </option>
                   </select>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="select">Loại khách hàng</label>
-              <div class="col-md-8">
-                <select id="customerTypeSelect" #customerTypeControl="ngModel" [(ngModel)]="customerType" name="customerType" class="form-control">
+              <label class="col-md-2 header-text" for="select">Loại khách hàng</label>
+              <div class="col-md-10">
+                <select id="customerTypeSelect" #customerTypeControl="ngModel" [(ngModel)]="customerType" name="customerType" class="form-control input-control">
                     <option *ngFor="let v of customerTypeData | async" [value]="v.id">
                       {{v.name}}
                     </option>
@@ -105,21 +93,35 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Giá trị</label>
-              <div class="col-md-8">
-                <input type="number" #valueControl="ngModel" [(ngModel)]="value" name="value" class="form-control" [placeholder]="'Nhập giá trị'">
+              <label class="col-md-2 header-text" for="text-input">Giá trị</label>
+              <div class="col-md-10">
+                <input type="number" #valueControl="ngModel" [(ngModel)]="value" name="value" class="form-control input-control" [placeholder]="'Nhập giá trị'" required>
+                <small *ngIf="valueControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
+                <small *ngIf="valueControl.value == 0"
+                class="text-muted danger" >
+                  (Không thể để giá trị bằng 0)
+                </small>
+                <small *ngIf="valueControl.value > 100 && promotionType=='discount_by_percent'"
+                class="text-muted danger" >
+                  (Không thể để giá trị lớn hơn 100%)
+                </small>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Giới hạn</label>
-              <div class="col-md-8">
-                <input type="number" #limitControl="ngModel" [(ngModel)]="limit" name="limit" class="form-control" [placeholder]="'Nhập giới hạn'">
+              <label class="col-md-2 header-text" for="text-input">Giới hạn</label>
+              <div class="col-md-10">
+                <input type="number" #limitControl="ngModel" [(ngModel)]="limit" name="limit" class="form-control input-control" [placeholder]="'Nhập giới hạn'" required>
+                <small *ngIf="limitControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
-              <div class="col-md-8">
-                <select id="statusSelect" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
+              <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
+              <div class="col-md-10">
+                <select id="statusSelect" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">
                   <option *ngFor="let v of [0,1]" [value]="v">
                     {{ v===1?"Hoạt động":"Không hoạt động"}}
                   </option>
@@ -155,18 +157,12 @@
           </form>
         </div>
         <div class="card-footer">
-          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
-            Submit &amp; New
-          </button>
-          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
-            Submit &amp; Close
-          </button>
-          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
-            Update &amp; Close
-          </button>
-          <button (click)="send()" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda">
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
+          <!-- <button (click)="send()" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda">
             Send
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
