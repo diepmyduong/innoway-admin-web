@@ -1,5 +1,5 @@
-<h2 class="title">Chỉnh sửa</h2>
-<div class="row" *ngFor="let item of data">
+<h2 class="title">{{data.title}}</h2>
+<div class="row" *ngFor="let item of data.inputs">
     <p class="col-3 header-text">{{item.title}}</p>
     <div class="col-9">
         <input *ngIf="item.type=='text'||item.type=='number'" type="{{item.type}}" [(ngModel)]="info[item.property]" class="input-control form-control">
@@ -11,8 +11,8 @@
     </div>
 </div>
 <div class="bottom-btn-group">
-  <button class="btn-confirm btn btn-md" [mat-dialog-close]="info">Cập nhật trạng thái</button>
-  <button class="btn-cancel btn btn-md" (click)="onNoClick()">Trở về</button>
+  <button class="btn-confirm btn btn-md" [mat-dialog-close]="info">{{data.button_yes}}</button>
+  <button class="btn-cancel btn btn-md" (click)="onNoClick()">{{data.button_no}}</button>
 </div>
 
 <!-- <div mat-dialog-actions>

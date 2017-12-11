@@ -8,39 +8,49 @@
         <div class="card-block">
           <form #itemFrm="ngForm">
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Loại khách hàng</label>
-              <div class="col-md-8">
-                <input type="input" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Nhập loại khách hàng'" required>
+              <label class="col-md-2 header-text" for="text-input">Loại khách hàng</label>
+              <div class="col-md-10">
+                <input type="input" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Nhập loại khách hàng'" required>
+                <small *ngIf="nameControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
-              <div class="col-md-8">
-                <textarea id="textarea-input" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control" [placeholder]="'Nhập mô tả'"></textarea>
+              <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
+              <div class="col-md-10">
+                <textarea id="textarea-input" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Tổng tiền thanh toán</label>
-              <div class="col-md-8">
-                <input type="input" #amountOfPurchaseControl="ngModel" [(ngModel)]="amount_of_purchase" name="amount_of_purchase" class="form-control" [placeholder]="'Nhập tổng tiền'">
+              <label class="col-md-2 header-text" for="text-input">Tổng tiền thanh toán</label>
+              <div class="col-md-10">
+                <input type="input" #amountOfPurchaseControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="amountOfPurchase" name="amountOfPurchase" class="form-control input-control" [placeholder]="'Nhập tổng tiền'" required>
+                <small *ngIf="amountOfPurchaseControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Tổng đơn hàng</label>
-              <div class="col-md-8">
-                <input type="input" #numberOfBillControl="ngModel" [(ngModel)]="number_of_bill" name="number_of_bill" class="form-control" [placeholder]="'Nhập tổng đơn hàng'" required>
+              <label class="col-md-2 header-text" for="text-input">Tổng đơn hàng</label>
+              <div class="col-md-10">
+                <input type="input" #numberOfBillControl="ngModel" [(ngModel)]="numberOfBill" name="numberOfBill" class="form-control input-control" [placeholder]="'Nhập tổng đơn hàng'" required>
+                <small *ngIf="numberOfBillControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Ngày mua gần nhất</label>
-              <div class="col-md-8">
-                <input type="input" #lastDateOrderControl="ngModel" [(ngModel)]="last_date_order" name="last_date_order" class="form-control" [placeholder]="'Nhập loại khách hàng'" required>
+              <label class="col-md-2 header-text" for="text-input">Ngày mua gần nhất</label>
+              <div class="col-md-10">
+                <input type="input" #lastDateOrderControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="lastDateOrder" name="lastDateOrder" class="form-control input-control" [placeholder]="'Nhập ngày mua gần nhất'">
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="select">Giới tính</label>
-              <div class="col-md-8">
-                <select id="genderSelect" #sexControl="ngModel" [(ngModel)]="sex" name="sex" class="form-control">
+              <label class="col-md-2 header-text" for="select">Giới tính</label>
+              <div class="col-md-10">
+                <select id="genderSelect" #sexControl="ngModel" [(ngModel)]="sex" name="sex" class="form-control input-control">
+                  <option value="null" [selected]="true">Chọn giới tính</option>
                     <option *ngFor="let v of [0,1]" [value]="v">
                       {{ v===1?"Nam":"Nữ"}}
                     </option>
@@ -48,11 +58,11 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
-              <div class="col-md-8">
-                <select id="genderSelect" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
+              <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
+              <div class="col-md-10">
+                <select id="genderSelect" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">
                     <option *ngFor="let v of [0,1]" [value]="v">
-                      {{ v===1?"Hoạt động":"Không hoạt đồng"}}
+                      {{ v===1?"Hoạt động":"Không hoạt động"}}
                     </option>
                   </select>
               </div>
@@ -60,15 +70,9 @@
           </form>
         </div>
         <div class="card-footer">
-          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
-            Submit &amp; New
-          </button>
-          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
-            Submit &amp; Close
-          </button>
-          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
-            Update &amp; Close
-          </button>
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
         </div>
       </div>
     </div>

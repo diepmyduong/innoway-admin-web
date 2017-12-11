@@ -22,6 +22,8 @@ import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angu
 import { MapsAPILoader } from "@agm/core";
 import { SelectComponent } from "ng2-select";
 
+import { EditInfoDialog } from "../../modal/edit-info/edit-info.component";
+
 declare let swal: any;
 const defaultDialogConfig = new MatDialogConfig();
 
@@ -72,80 +74,12 @@ export class PosComponent implements OnInit {
   autocompleteCustomerData: Array<any> = new Array<any>();
   autocompleteCustomerNameData: Array<any> = new Array<any>();
 
-  currentEmployee: any = {};
-  currentCustomer: any;
   isChose: boolean = false;
 
   private numberMask = createNumberMask({
     prefix: '',
     suffix: ' đ'
   })
-
-  employee: any;
-  customer: string;
-  transaction_time: string = "1";
-  total_amount: string = "0";
-  receive_amount: string = "0";
-  pay_amount: string = "0";
-  return_amount: string = "0";
-  remain_amount: string = "0";
-  shipFee: string = "0";
-  deliveryTime: any;
-  paid_type: string = "partical";
-
-  channel: string;
-  channels: any[];
-
-  // channelOnline: string;
-  // channelOnlines: any[] = [];
-
-  deliveryMethod: string;
-  deliveryMethods: any[] = [];
-
-  isPickAtStore: boolean = false;
-  isVAT: boolean = false;
-
-  nameCustomerOnline: string;
-  phoneCustomerOnline: string;
-  addressOnline: string;
-  shipFeeOnline: string;
-  orderTimeOnline: string;
-  totalAmountOnline: string = "0";
-  payAmountOnline: string = "0";
-  remainAmountOnline: string = "0";
-  payTypeOnline: string;
-  promotionOnline: string;
-  promotionOnlines: string[];
-  channelOnline: any;
-  channelOnlines: any[];
-  branchOnline: string;
-  branchOnlines: string;
-  deliveryMethodOnline: any;
-  deliveryMethodOnlines: any[];
-  noteOnline: string;
-
-
-  nameCustomerAtStore: string;
-  phoneCustomerAtStore: string;
-  totalAmountAtStore: string = "0";
-  receivedAmountAtStore: string = "0";
-  payAmountAtStore: string = "0";
-  returnAmountAtStore: string = "0";
-  remainAmountAtStore: string = "0";
-  payTypeAtStore: string;
-  noteAtStore: string;
-  promotionAtStore: any;
-  promotionAtStores: any[];
-  channelAtStore: any;
-  channelAtStores: any[];
-
-  code: string;
-  promotion: string;
-  branch: string;
-
-  address: string;
-  subFee: string = "0";
-  subFeeNote: string;
 
   @ViewChild("addressInput")
   searchElementRef: ElementRef;
@@ -180,22 +114,14 @@ export class PosComponent implements OnInit {
   };
   numTemplateOpens = 0;
 
+  //summary
+
   outputAmountOfPriceItems = 0;
   outputSubFee = 0;
   outputVAT = 0;
   outputPromotion = 0;
   outputShipFee = 0;
   outputAmountOfPurchase = 0;
-
-  // receiver_name: Sequelize.STRING,
-  // receiver_phone: Sequelize.STRING,
-  // receiver_address: Sequelize.STRING,
-  // receiver_note: Sequelize.STRING,
-  //
-  // payer_name: Sequelize.STRING,
-  // payer_phone: Sequelize.STRING,
-  // payer_address: Sequelize.STRING,
-  // payer_note: Sequelize.STRING,
 
   //request
 
@@ -206,10 +132,15 @@ export class PosComponent implements OnInit {
   receivedTime: string;
   shipMethod: string;
 
-  receiveAmount: string;
-  payAmount: string;
-  returnAmount: string;
-  remainAmount: string;
+  totalAmount: string = "0";
+  receiveAmount: string = "0";
+  payAmount: string = "0";
+  returnAmount: string = "0";
+  remainAmount: string = "0";
+  transactionTime: string = "1";
+
+  employeeName: string = "";
+  branchName: string = "";
 
   employeeId: string;
   customerId: string;
@@ -225,6 +156,30 @@ export class PosComponent implements OnInit {
   payerPhone: string;
   payerAddress: string;
   payerNote: string;
+
+  channelOnline: string;
+  channelOnlines: any[] = [];
+
+  promotion: any;
+  branch: any;
+  employee: any;
+  customer: any;
+
+  address: string;
+  subFee: string = "0";
+  subFeeNote: string;
+
+  shipFee: string = "0";
+  deliveryTime: any;
+  paidType: string = "partical";
+
+  channel: string;
+  channels: any[];
+
+  deliveryMethod: string;
+  deliveryMethods: any[] = [];
+
+  isVAT: boolean = false;
 
   @ViewChild(TemplateRef) template: TemplateRef<any>;
 
@@ -252,9 +207,8 @@ export class PosComponent implements OnInit {
     this.customerService = innoway.getService('customer');
     this.brandService = innoway.getService('brand');
     this.billService = innoway.getService('bill');
-    this.currentEmployee = this.auth.service.userInfo;
 
-    console.log("bambi auth: " + JSON.stringify(this.currentEmployee));
+    this.employee = this.auth.service.userInfo;
 
     this.channels = [this.globals.CHANNELS[0]];
     this.channel = this.channels[0].code;
@@ -296,14 +250,11 @@ export class PosComponent implements OnInit {
   openToppingDialog(productId, data) {
     this.config.data = data;
     this.dialogRef = this.dialog.open(ToppingDialog, this.config);
-    // this.dialogRef.componentInstance.totalPrice = "0";
 
     this.dialogRef.beforeClose().subscribe((result: string) => {
       this.lastBeforeCloseResult = result;
     });
     this.dialogRef.afterClosed().subscribe((result) => {
-      // alert(this.dialogRef.componentInstance.totalPrice);
-      // alert(JSON.stringify(result));
       this.addToppingsToProduct(result, productId);
       this.lastAfterClosedResult = result;
       this.dialogRef = null;
@@ -312,10 +263,15 @@ export class PosComponent implements OnInit {
 
   async ngOnInit() {
     this.allProductData = await this.getProductData();
-    this.employee = this.currentEmployee.fullname;
-    this.getBrandData(this.currentEmployee.brand_id);
+    // this.employee = this.employee.fullname;
+    this.employeeId = this.employee.id;
+    this.employeeName = this.employee.fullname;
+
+    console.log("bambi auth: " + JSON.stringify(this.employee));
+
+    this.getBrandData(this.employee.brand_id);
     this.getPromotionData();
-    this.getBranchData();
+    this.getBranchData(this.employee.branch_id);
     this.setAutocompleteMap();
   }
 
@@ -326,7 +282,6 @@ export class PosComponent implements OnInit {
           'brand_ship': ['$all']
         }]
       })
-      console.log("bambi brand: " + JSON.stringify(data));
       if (data.brand_ship != null) {
         if (data.brand_ship.allow_ship) {
           this.deliveryMethods.push(this.globals.DELIVERY_METHODS[0]);
@@ -342,13 +297,15 @@ export class PosComponent implements OnInit {
     }
   }
 
-  async getBranchData() {
+  async getBranchData(id: string) {
+    console.log("branch_id: " + id);
     try {
-      let data = await this.innoway.getAll('branch', {
-        fields: ["$all"]
-      });
-      this.branchData = data;
-      this.branch = data._value[0].id;
+      let data = await this.branchService.get(id, {
+        fields: ["$all", "$paranoid"]
+      })
+      this.branch = data;
+      this.branchId = this.branch.id;
+      this.branchName = this.branch.name;
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -615,7 +572,7 @@ export class PosComponent implements OnInit {
     this.selectedProduct.forEach(item => {
       total += Number.parseInt(item.total);
     })
-    this.total_amount = total.toString();
+    this.totalAmount = total.toString();
     this.outputAmountOfPriceItems = total;
     if (this.isVAT == true) {
       this.outputVAT = this.outputAmountOfPriceItems * 5 / 100;
@@ -633,15 +590,15 @@ export class PosComponent implements OnInit {
   }
 
   private calculateRemainAndReturnAmount(event) {
-    let totalAmount = this.globals.convertStringToPrice(this.total_amount);
-    let receiveAmount = this.globals.convertStringToPrice(this.receive_amount);
-    let payAmount = this.globals.convertStringToPrice(this.pay_amount);
-    this.remain_amount = (totalAmount - payAmount).toString();
-    this.return_amount = (receiveAmount - payAmount).toString();
+    let totalAmount = this.globals.convertStringToPrice(this.totalAmount);
+    let receiveAmount = this.globals.convertStringToPrice(this.receiveAmount);
+    let payAmount = this.globals.convertStringToPrice(this.payAmount);
+    this.remainAmount = (totalAmount - payAmount).toString();
+    this.returnAmount = (receiveAmount - payAmount).toString();
     if (totalAmount == payAmount) {
-      this.paid_type = this.globals.PAID_HISTORY_TYPES[1].name;
+      this.paidType = this.globals.PAID_HISTORY_TYPES[1].name;
     } else {
-      this.paid_type = this.globals.PAID_HISTORY_TYPES[0].name;
+      this.paidType = this.globals.PAID_HISTORY_TYPES[0].name;
     }
     this.ref.detectChanges();
   }
@@ -707,17 +664,17 @@ export class PosComponent implements OnInit {
       let data = {
         phone: phone.toString()
       }
-      this.currentCustomer = await this.customerService.getCustomerByPhone(data);
+      this.customer = await this.customerService.getCustomerByPhone(data);
 
-      if (this.currentCustomer != null && this.currentCustomer.code != 500) {
-        this.customerNameAtStore = this.currentCustomer.fullname ? this.currentCustomer.fullname : "Chưa cập nhật";
-        this.getPromotionsByCustomerId(this.currentCustomer.id);
+      if (this.customer != null && this.customer.code != 500) {
+        this.customerNameAtStore = this.customer.fullname ? this.customer.fullname : "Chưa cập nhật";
+        this.getPromotionsByCustomerId(this.customer.id);
       }
 
       this.ref.detectChanges();
     } catch (err) {
       this.customerNameAtStore = null;
-      this.currentCustomer = null;
+      this.customer = null;
       console.log("detect phone: " + err);
     }
   }
@@ -875,10 +832,10 @@ export class PosComponent implements OnInit {
         "sub_fee": this.globals.convertStringToPrice(this.subFee),
         "sub_fee_note": this.subFeeNote,
         "channel": this.channel,
-        "pay_amount": this.globals.convertStringToPrice(this.pay_amount),
-        "receive_amount": this.globals.convertStringToPrice(this.receive_amount),
-        "branch_id": this.branch,
-        "employee_id": this.currentEmployee.id,
+        "payAmount": this.globals.convertStringToPrice(this.payAmount),
+        "receiveAmount": this.globals.convertStringToPrice(this.receiveAmount),
+        "branch_id": this.branchId,
+        "employee_id": this.employee.id,
         "note": this.note,
         "promotion_id": this.promotionId,
         "customer_id": this.customerId,
@@ -911,7 +868,7 @@ export class PosComponent implements OnInit {
   async orderOnline() {
 
     // address, longitude, latitude, sub_fee, sub_fee_note, channel,
-    //   pay_amount, receive_amount, products, branch_id, employee_id,
+    //   payAmount, receiveAmount, products, branch_id, employee_id,
     //   promotion_id, customer_id, received_time, is_vat, ship_method, note,
     //   receiver_name, receiver_phone, receiver_address, receiver_note,
     //   payer_name, payer_phone, payer_address, payer_note
@@ -925,8 +882,8 @@ export class PosComponent implements OnInit {
         "sub_fee": this.subFee,
         "sub_fee_note": this.subFeeNote,
         "channel": this.channel,
-        "pay_amount": this.payAmount,
-        "receive_amount": this.receiveAmount,
+        "payAmount": this.payAmount,
+        "receiveAmount": this.receiveAmount,
         "branch_id": this.branchId,
         "employee_id": this.employeeId,
         "promotion_id": this.promotionId,
@@ -967,6 +924,94 @@ export class PosComponent implements OnInit {
       // this.alertAddFailed();
       alert(JSON.stringify(err));
     }
+  }
+
+  openUpdateReceiverInfoDialog() {
+    let data = {
+      title: "Thông tin người nhận",
+      button_yes: "Cập nhật",
+      button_no: "Bỏ qua",
+      inputs: [
+        {
+          title: "Họ và tên",
+          property: "receiverName",
+          type: "text",
+          current: this.receiverName,
+        },
+        {
+          title: "Số điện thoại",
+          property: "receiverPhone",
+          type: "number",
+          current: this.receiverPhone,
+        },
+        {
+          title: "Địa chỉ",
+          property: "receiverAddress",
+          type: "text",
+          current: this.receiverAddress,
+        },
+        {
+          title: "Ghi chú",
+          property: "receiverNote",
+          type: "text",
+          current: this.receiverNote,
+        }
+      ]
+    };
+
+    let dialogRef = this.dialog.open(EditInfoDialog, {
+      width: '500px',
+      data: data,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+      }
+    })
+  }
+
+  openUpdatePayerInfoDialog() {
+    let data = {
+      title: "Thông tin người trả tiền",
+      button_yes: "Cập nhật",
+      button_no: "Bỏ qua",
+      inputs: [
+        {
+          title: "Họ và tên",
+          property: "payerName",
+          type: "text",
+          current: this.payerName,
+        },
+        {
+          title: "Số điện thoại",
+          property: "payerPhone",
+          type: "number",
+          current: this.payerPhone,
+        },
+        {
+          title: "Địa chỉ",
+          property: "payerAddress",
+          type: "text",
+          current: this.payerAddress,
+        },
+        {
+          title: "Ghi chú",
+          property: "payerNote",
+          type: "text",
+          current: this.payerNote,
+        }
+      ]
+    };
+
+    let dialogRef = this.dialog.open(EditInfoDialog, {
+      width: '500px',
+      data: data,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+      }
+    })
   }
 }
 
