@@ -198,9 +198,12 @@ export class AddComponent implements OnInit {
 
   async loadUnitData() {
     try {
-      this.units = await this.innoway.getAll('unit', {
-        fields: ["id", "name"]
-      });
+      this.units.next(await this.innowayApi.unit.getList({
+        local: true, query: {
+          fields: ["id", "name"],
+          limit: 0
+        }
+      }))
     } catch (err) {
       console.error("cannot load units", err);
     }

@@ -6,6 +6,7 @@ import { Product } from './api/crud/product'
 import { ProductCategory } from './api/crud/product-category'
 import { ProductType } from './api/crud/product-type'
 import { Topping } from './api/crud/topping'
+import { Unit } from './api/crud/unit'
 @Injectable()
 export class InnowayApiService {
 
@@ -20,4 +21,5 @@ export class InnowayApiService {
   productCategory = new ProductCategory(this)
   productType = new ProductType(this)
   topping = new Topping(this)
+  unit = new Unit(this)
 }
