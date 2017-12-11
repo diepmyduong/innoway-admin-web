@@ -29,7 +29,7 @@ export interface iCrud {
     status?: number
     updated_at?: Date
 
-    [key:string]: any
+    [key: string]: any
 }
 
 export interface iCrudPagination {
@@ -43,10 +43,10 @@ export interface iCrudPagination {
 
 export class CrudAPI<T> extends BaseAPI {
     constructor(
-        public api: InnowayApiService, 
+        public api: InnowayApiService,
         public moduleName: string
     ) {
-        super(api,moduleName)
+        super(api, moduleName)
         this.options = {
             reload: true, //Auto update items list each request, 'false' to get result only.
             local: true, //Get local data instant request server.
@@ -79,16 +79,16 @@ export class CrudAPI<T> extends BaseAPI {
         let setting = {
             uri: this.apiUrl(),
             qs: this._paserQuery(options.query),
-            headers: _.merge({},{ //headers
+            headers: _.merge({}, { //headers
                 'User-Agent': 'Request-Promise',
                 'access_token': this.api.innowayAuth.adminToken
-            },options.headers),
+            }, options.headers),
             json: true // Automatically parses the JSON string in the response
         }
         const hashedQuery = hash(options.query)
         this.activeHashQuery = hashedQuery
         this.log('hashed query', hashedQuery, this.hashCache)
-        if(options.local && this.hashCache[hashedQuery] && this.localBrandName == this.api.innowayConfig.brandName) {
+        if (options.local && this.hashCache[hashedQuery] && this.localBrandName == this.api.innowayConfig.brandName) {
             let items = this.hashCache[hashedQuery].items
             this.pagination = this.hashCache[hashedQuery].pagination
             if (items.length > 1) { // If local empty, request to server
@@ -96,7 +96,7 @@ export class CrudAPI<T> extends BaseAPI {
                 return items
             }
         }
-        if(this.localBrandName != this.api.innowayConfig.brandName)
+        if (this.localBrandName != this.api.innowayConfig.brandName)
             this.localBrandName = this.api.innowayConfig.brandName
         let res = await this.exec(setting)
         let { results, pagination } = res
@@ -120,31 +120,47 @@ export class CrudAPI<T> extends BaseAPI {
             method: 'GET',
             uri: this.apiUrl(id),
             qs: this._paserQuery(options.query),
-            headers: _.merge({},{ //headers
+            headers: _.merge({}, { //headers
                 'User-Agent': 'Request-Promise',
                 'access_token': this.api.innowayAuth.adminToken
-            },options.headers),
+            }, options.headers),
             json: true // Automatically parses the JSON string in the response
         }
-        if (options.local) {
-            let items = this.items.getValue()
+        const hashedQuery = hash(options.query)
+        if (options.local && this.hashCache[hashedQuery] && this.localBrandName == this.api.innowayConfig.brandName) {
+            let items = this.hashCache[hashedQuery].items
             let item = _.find(items, { _id: id })
             if (item) return item
         }
+        if (this.localBrandName != this.api.innowayConfig.brandName)
+            this.localBrandName = this.api.innowayConfig.brandName
         let res = await this.exec(setting)
         let row = res.results.object as T
         if (options.reload) {
-            let items = this.items.getValue()
-            let index = _.findIndex(items, { _id: id })
-            if (index > -1) {
-                items[index] = row
+            if(hashedQuery === this.activeHashQuery) {
+                let items = this.items.getValue()
+                let index = _.findIndex(items, { _id: id })
+                if (index > -1) {
+                    items[index] = row
+                } else {
+                    items.push(row)
+                }
+                this.items.next(items)
+                this.hashCache[this.activeHashQuery].items = items
+                this.hashCache = {
+                    [this.activeHashQuery]: this.hashCache[this.activeHashQuery]
+                }
             } else {
-                items.push(row)
-            }
-            this.items.next(items)
-            this.hashCache[this.activeHashQuery].items = items
-            this.hashCache = {
-                [this.activeHashQuery]: this.hashCache[this.activeHashQuery]
+                if(!this.hashCache[hashedQuery]) this.hashCache[hashedQuery] = {
+                    pagination: {},
+                    items: []
+                }
+                let index = _.findIndex(this.hashCache[hashedQuery].items, { _id: id })
+                if (index > -1) {
+                    this.hashCache[hashedQuery].items[index] = row
+                } else {
+                    this.hashCache[hashedQuery].items.push(row)
+                }
             }
         }
         return row
@@ -157,11 +173,11 @@ export class CrudAPI<T> extends BaseAPI {
             method: 'POST',
             uri: this.apiUrl(),
             qs: this._paserQuery(options.query),
-            headers: _.merge({},{ //headers
+            headers: _.merge({}, { //headers
                 'User-Agent': 'Request-Promise',
                 "content-type": "application/json",
                 'access_token': this.api.innowayAuth.adminToken
-            },options.headers),
+            }, options.headers),
             body: data,
             json: true // Automatically parses the JSON string in the response
         }
@@ -187,11 +203,11 @@ export class CrudAPI<T> extends BaseAPI {
             method: 'PUT',
             uri: this.apiUrl(id),
             qs: this._paserQuery(options.query),
-            headers: _.merge({},{ //headers
+            headers: _.merge({}, { //headers
                 'User-Agent': 'Request-Promise',
                 "content-type": "application/json",
                 'access_token': this.api.innowayAuth.adminToken
-            },options.headers),
+            }, options.headers),
             body: data,
             json: true // Automatically parses the JSON string in the response
         }
@@ -221,11 +237,11 @@ export class CrudAPI<T> extends BaseAPI {
             method: 'DELETE',
             uri: this.apiUrl(id),
             qs: this._paserQuery(options.query),
-            headers: _.merge({},{ //headers
+            headers: _.merge({}, { //headers
                 'User-Agent': 'Request-Promise',
                 "content-type": "application/json",
                 'access_token': this.api.innowayAuth.adminToken
-            },options.headers),
+            }, options.headers),
             json: true // Automatically parses the JSON string in the response
         }
         let res = await this.exec(setting)
@@ -251,11 +267,11 @@ export class CrudAPI<T> extends BaseAPI {
             qs: this._paserQuery(_.merge({}, {
                 items: ids
             }, options.query)),
-            headers: _.merge({},{ //headers
+            headers: _.merge({}, { //headers
                 'User-Agent': 'Request-Promise',
                 "content-type": "application/json",
                 'access_token': this.api.innowayAuth.adminToken
-            },options.headers),
+            }, options.headers),
             json: true // Automatically parses the JSON string in the response
         }
         let res: any = await this.exec(setting)

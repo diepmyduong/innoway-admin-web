@@ -3,22 +3,22 @@ import { InnowayApiService } from '../../innoway-api.service'
 import * as _ from 'lodash'
 
 export interface iProduct extends iCrud {
-    base_price: number,
-    brand_id: string,
-    category_id: string,
-    description: string,
-    list_image: string[],
-    name: string,
-    price: number,
-    product_type_id: string,
-    thumb: string,
-    unit_id: string,
-    short_description: string,
-    thirdparty_id: string,
-    link: string,
-    code: number,
-    is_available: boolean,
-    rate: number,
+    base_price?: number,
+    brand_id?: string,
+    category_id?: string,
+    description?: string,
+    list_image?: string[],
+    name?: string,
+    price?: number,
+    product_type_id?: string,
+    thumb?: string,
+    unit_id?: string,
+    short_description?: string,
+    thirdparty_id?: string,
+    link?: string,
+    code?: number,
+    is_available?: boolean,
+    rate?: number,
 }
 
 export class Product extends CrudAPI<iProduct> {
@@ -28,7 +28,7 @@ export class Product extends CrudAPI<iProduct> {
         super(api, 'product')
     }
 
-    async addTopping(id: string, toppingIds: string[], options?: crudOptions) {
+    async addToppings(id: string, toppingIds: string[], options?: crudOptions) {
         options = _.assign({}, this.options, options)
         let setting = {
             method: 'POST',
@@ -45,7 +45,7 @@ export class Product extends CrudAPI<iProduct> {
         return rows;
     }
 
-    async updateTopping(id: string, toppingIds: string[], options?: crudOptions) {
+    async updateToppings(id: string, toppingIds: string[], options?: crudOptions) {
         options = _.assign({}, this.options, options)
         let setting = {
             method: 'PUT',
