@@ -141,7 +141,7 @@ export class AddComponent implements OnInit {
 
   async loadCategoryData() {
     try {
-      this.categories.next(await this.innowayApi.ProductCategory.getList({
+      this.categories.next(await this.innowayApi.productCategory.getList({
         local: true, query: {
           fields: ["id", "name"],
           limit: 0
@@ -154,9 +154,12 @@ export class AddComponent implements OnInit {
 
   async loadProductTypeData() {
     try {
-      this.productTypes = await this.innoway.getAll('product_type', {
-        fields: ["id", "name"]
-      });
+      this.productTypes.next(await this.innowayApi.productType.getList({
+        local: true, query: {
+          fields: ["id", "name"],
+          limit: 0
+        }
+      }))
     } catch (err) {
       console.error('Cannot load product_type', err);
     }
