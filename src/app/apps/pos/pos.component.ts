@@ -589,7 +589,7 @@ export class PosComponent implements OnInit {
     this.outputSubFee = this.globals.convertStringToPrice(event);
   }
 
-  private calculateRemainAndReturnAmount(event) {
+  private calculateRemainAndReturnAmount() {
     let totalAmount = this.globals.convertStringToPrice(this.totalAmount);
     let receiveAmount = this.globals.convertStringToPrice(this.receiveAmount);
     let payAmount = this.globals.convertStringToPrice(this.payAmount);
@@ -609,6 +609,8 @@ export class PosComponent implements OnInit {
       + this.outputSubFee
       + this.outputVAT
       - this.outputPromotion;
+
+    this.calculateRemainAndReturnAmount();
   }
 
   displaySearchProduct(value: any): string {
@@ -825,6 +827,11 @@ export class PosComponent implements OnInit {
 
   async orderAtStore() {
     try {
+
+      this.address = this.branch.address;
+      this.longitude = this.branch.longitude;
+      this.latitude = this.branch.latitude;
+
       let request = {
         "address": this.address,
         "longitude": this.longitude,
@@ -832,8 +839,8 @@ export class PosComponent implements OnInit {
         "sub_fee": this.globals.convertStringToPrice(this.subFee),
         "sub_fee_note": this.subFeeNote,
         "channel": this.channel,
-        "payAmount": this.globals.convertStringToPrice(this.payAmount),
-        "receiveAmount": this.globals.convertStringToPrice(this.receiveAmount),
+        "pay_amount": this.globals.convertStringToPrice(this.payAmount),
+        "receive_amount": this.globals.convertStringToPrice(this.receiveAmount),
         "branch_id": this.branchId,
         "employee_id": this.employee.id,
         "note": this.note,
@@ -882,8 +889,8 @@ export class PosComponent implements OnInit {
         "sub_fee": this.subFee,
         "sub_fee_note": this.subFeeNote,
         "channel": this.channel,
-        "payAmount": this.payAmount,
-        "receiveAmount": this.receiveAmount,
+        "pay_amount": this.payAmount,
+        "receive_amount": this.receiveAmount,
         "branch_id": this.branchId,
         "employee_id": this.employeeId,
         "promotion_id": this.promotionId,

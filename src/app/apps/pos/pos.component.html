@@ -123,13 +123,13 @@
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Receive amount</label>
                 <div class="col-md-8">
-                  <input type="text" #receiveAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="receiveAmount" name="receiveAmount" (ngModelChange)="calculateRemainAndReturnAmount($event)" class="form-control input-control" required/>
+                  <input type="text" #receiveAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="receiveAmount" name="receiveAmount" (ngModelChange)="calculateRemainAndReturnAmount()" class="form-control input-control" required/>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Pay amount</label>
                 <div class="col-md-8">
-                  <input type="text" #payAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="payAmount" name="payAmount" class="form-control input-control" (ngModelChange)="calculateRemainAndReturnAmount($event)" required/>
+                  <input type="text" #payAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="payAmount" name="payAmount" class="form-control input-control" (ngModelChange)="calculateRemainAndReturnAmount()" required/>
                 </div>
               </div>
               <div class="form-group row">

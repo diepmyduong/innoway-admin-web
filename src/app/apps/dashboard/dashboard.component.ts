@@ -816,7 +816,7 @@ export class DashboardComponent implements OnInit {
     try {
       let request = {
         start_time: "2017-10-10",
-        end_time: "2017-12-11"
+        end_time: "2017-12-13"
       }
       let data = await this.billService.summaryBill(request);
       this.summary = data;
