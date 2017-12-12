@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { ListPageInterface } from "app/apps/interface/listPageInterface";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayService } from "app/services";
+import { MatDialog } from '@angular/material';
+import { ChangePasswordDialog } from "./../../modal/change-password/change-password.component";
+import { ModalModule } from './../../modal/modal.module';
 
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-employee',
@@ -17,7 +20,7 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
   itemCount: number = 0;
   thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";;
   itemFields: any = ["$all", {
-    branch: ["name"]
+    branch: ["$all"]
   }];
   query: any = {};
   searchTimeOut: number = 250;
@@ -25,13 +28,14 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
 
   employeeService: any;
 
-  @ViewChild(DataTable) itemsTable;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     public innoway: InnowayService,
-    private ref: ChangeDetectorRef
+    private route: ActivatedRoute,
+    private ref: ChangeDetectorRef,
+    public dialog: MatDialog,
   ) {
     this.employeeService = innoway.getService('employee');
   }
@@ -67,15 +71,15 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
   }
 
   addItem() {
-    this.router.navigate(['../add'], { relativeTo : this.route});
+    this.router.navigate(['../add'], { relativeTo: this.route });
   }
 
   editItem(item) {
-    this.router.navigate(['../add', item.id], { relativeTo : this.route});
+    this.router.navigate(['../add', item.id], { relativeTo: this.route });
   }
 
   viewItem(item) {
-    this.router.navigate(['../detail', item.id], { relativeTo : this.route});
+    this.router.navigate(['../detail', item.id], { relativeTo: this.route });
   }
 
   async confirmDelete() {
@@ -122,6 +126,9 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
   }
 
   async deleteAll() {
+    if (this.itemsTable.selectedRows.length == 0)
+      return;
+
     let rows = this.itemsTable.selectedRows;
     let ids = [];
     rows.forEach(row => {
@@ -141,8 +148,6 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
         row.item.deleting = false;
       });
     }
-
-
   }
 
   onSearch(e) {
@@ -157,5 +162,43 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
       }
       this.getItems();
     }, this.searchTimeOut);
+  }
+
+  showChangePasswordDialog(item) {
+
+    let data = {
+      title: "Đổi mật khẩu nhân viên",
+      button_yes: "Cập nhật",
+      button_no: "Bỏ qua",
+      inputs: [
+        {
+          title: "Mật khẩu",
+          property: "password",
+          type: "text",
+        },
+        {
+          title: "Xác nhận mật khẩu",
+          property: "repassword",
+          type: "text",
+        }
+      ]
+    };
+
+    let dialogRef = this.dialog.open(ChangePasswordDialog, {
+      width: '500px',
+      data: data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.changePassword(item, result.password);
+      }
+    })
+  }
+
+  async changePassword(data: any, password) {
+    try {
+      await this.employeeService.update(data.id, { password })
+    } catch (err) {
+    }
   }
 }
