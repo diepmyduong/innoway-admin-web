@@ -39,6 +39,7 @@
       <data-table-column header="Actions">
         <template #dataTableCell let-item="item">
                 <span class="btn-group">
+                  <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-green"><i class="fa fa-eye"></i></button>
                         <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
                           <button (click)="showChangePasswordDialog(item)" class="btn btn-sm btn-table btn-blue"><i class="fa fa-lock"></i></button>
                 </span>
