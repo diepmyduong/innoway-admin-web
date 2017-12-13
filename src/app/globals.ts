@@ -59,11 +59,11 @@ export class Globals {
 
   DELIVERY_METHODS = [
     {
-      code: "DELIVERY",
+      code: "delivery",
       name: "Giao hàng"
     },
     {
-      code: "PICK_AT_STORE",
+      code: "pick_at_store",
       name: "Nhận tại quán"
     }
   ]

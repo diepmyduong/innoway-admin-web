@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { NgForm } from "@angular/forms";
 import { Globals } from "./../../../Globals"
+import * as moment from 'moment';
 
 declare let accounting: any;
 declare let swal: any;
@@ -124,8 +125,8 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.limit = data.limit
       this.description = data.description
       this.shortDescription = data.short_description
-      this.startDate = data.start_date
-      this.endDate = data.end_date
+      this.startDate = moment(data.start_date).format("MM/DD/YYYY hh:mm")
+      this.endDate = moment(data.end_date).format("MM/DD/YYYY hh:mm")
       this.value = data.value
       this.customerType = data.customer_types[0].customer_type_id
       this.promotionType = data.promotion_type
@@ -215,19 +216,21 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   async addItem(form: NgForm) {
+    // alert(this.startDate)
+    // alert(moment(this.startDate, "MM/DD/YYYY hh:mm").format())
+    // alert(new Date(this.startDate).toString()+"\n"+new Date(this.endDate).toString());
     if (form.valid && this.detectDate(this.startDate, this.endDate)
       && ((this.promotionType == this.globals.PROMOTION_TYPES[1].code && this.value <= 100 && this.value > 0)
         || (this.promotionType == this.globals.PROMOTION_TYPES[0].code) && this.value > 0)) {
       let { name, amount, code, limit, shortDescription, description, value, status, image } = this;
-      let start_date = new Date(this.startDate);
+      let start_date = moment(this.startDate, "MM/DD/YYYY hh:mm").format();
       let short_description = shortDescription;
-      let end_date = new Date(this.endDate);
+      let end_date = moment(this.endDate, "MM/DD/YYYY hh:mm").format();
       let customer_type_id = this.customerType;
       let promotion_type = this.promotionType;
-      let promotion_type_id = "b6c94210-9d10-11e7-98bd-95376425271c";
       let promotion = await this.promotionService.add({
         name, amount, code, limit, short_description,
-        description, start_date, end_date, value, promotion_type, promotion_type_id, status, image
+        description, start_date, end_date, value, promotion_type, status, image
       })
 
       let customer_type_ids: string[] = [];
@@ -247,12 +250,11 @@ export class AddComponent implements OnInit, AddPageInterface {
       && ((this.promotionType == this.globals.PROMOTION_TYPES[1].code && this.value <= 100 && this.value > 0)
         || (this.promotionType == this.globals.PROMOTION_TYPES[0].code) && this.value > 0)) {
       let { name, amount, code, limit, shortDescription, description, value, status, image } = this;
-      let start_date = new Date(this.startDate);
+      let start_date = moment(this.startDate, "MM/DD/YYYY hh:mm").format();
       let short_description = shortDescription;
-      let end_date = new Date(this.endDate);
+      let end_date = moment(this.endDate, "MM/DD/YYYY hh:mm").format();
       let customer_type_id = this.customerType;
       let promotion_type = this.promotionType;
-      let promotion_type_id = "b6c94210-9d10-11e7-98bd-95376425271c";
       let promotion = await this.promotionService.update(this.id, {
         name, amount, code, limit, short_description,
         description, start_date, end_date, value, customer_type_id, promotion_type, status, image

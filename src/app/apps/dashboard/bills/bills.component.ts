@@ -347,6 +347,7 @@ export class BillsComponent implements OnInit {
           customer: ["$all"]
         }]
       });
+      console.log("bills",JSON.stringify(this.bills));
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);

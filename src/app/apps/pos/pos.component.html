@@ -16,7 +16,7 @@
   <mat-sidenav class="pos-right-side" mode="side" opened="true" align="end">
     <form class="row order-form" #itemFrm="ngForm" style="width:100% !important; padding: 8px;">
       <tabset>
-        <tab>
+        <tab (select)="selectBillAtStoreTab()">
           <ng-template tabHeading>Hóa đơn
           </ng-template>
           <div class="row">
@@ -62,13 +62,13 @@
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Phụ thu</label>
                 <div class="col-md-8">
-                  <input type="text" #subFeeControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="subFee" name="subFee" (ngModelChange)="updateOutputSubFee($event)" class="form-control input-control"/>
+                  <input type="text" #subFeeControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="subFee" name="subFee" (ngModelChange)="updateOutputSubFee($event)" class="form-control input-control" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Nội dung phụ thu</label>
                 <div class="col-md-8">
-                  <input type="text" #subFeeNoteControl="ngModel" [(ngModel)]="subFeeNote" name="subFeeNote" class="form-control input-control" placeholder="Ghi chú phụ thu"/>
+                  <input type="text" #subFeeNoteControl="ngModel" [(ngModel)]="subFeeNote" name="subFeeNote" class="form-control input-control" placeholder="Ghi chú phụ thu" />
                 </div>
               </div>
               <div class="form-group row">
@@ -93,11 +93,12 @@
                   <input type="text" #noteControl="ngModel" [(ngModel)]="note" name="note" class="form-control input-control" placeholder="Nhập ghi chú" required/>
                 </div>
               </div>
-              <div class="form-group row" [hidden]="this.customer!=null?false:true">
+              <div class="form-group row" *ngIf="this.customer">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Khuyến mãi</label>
                 <div class="col-md-8">
-                  <select id="promotionSelect" #promotionControl="ngModel" [(ngModel)]="promotion" name="promotion" class="form-control input-control">
-                        <option *ngFor="let v of promotionData | async" [value]="v.code">
+                  <select #promotion1 [(ngModel)]="promotion" (ngModelChange)="selectCustomerPromotion(promotion1.value)" name="promotion" class="form-control input-control">
+                        <option value=null [selected]="true">Chọn khuyến mãi</option>
+                        <option *ngFor="let v of promotionData" [value]="v.id">
                           {{v.name}}
                         </option>
                       </select>
@@ -200,7 +201,7 @@
             </div>
           </div>
         </tab>
-        <tab>
+        <tab (select)="selectBillOnlineTab()">
           <ng-template tabHeading>Đơn hàng
           </ng-template>
           <div class="row">
@@ -242,15 +243,27 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-4 header-text form-control input-control-label" for="text-input">Địa chỉ</label>
+                <label class="col-md-4 header-text form-control input-control-label" for="text-input">Hình thức nhận hàng</label>
                 <div class="col-md-8">
-                  <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control input-control" [placeholder]="'Nhập địa chỉ'" required autocorrect="off" autocapitalize="off" spellcheck="off" #addressInput>
+                  <select id="deliveryMethodSelect" #deliveryMethodControl="ngModel" [(ngModel)]="deliveryMethod" (ngModelChange)="selectDeliveryMethod(deliveryMethod)" name="deliveryMethod" class="form-control input-control">
+                        <option *ngFor="let v of deliveryMethods" [value]="v.code">
+                          {{v.name}}
+                        </option>
+                      </select>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-4 header-text form-control input-control-label" for="text-input">Giao hàng</label>
+                <label class="col-md-4 header-text form-control input-control-label" for="text-input">Địa chỉ</label>
                 <div class="col-md-8">
-                  <input type="text" #shipFeeControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="outputShipFee" name="outputShipFee" class="form-control input-control" readonly/>
+                  <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control input-control" [placeholder]="'Nhập địa chỉ'"
+                  required autocorrect="off" autocapitalize="off" spellcheck="off" #addressInput
+                  [readonly]="isPickAtStore" >
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-4 header-text form-control input-control-label" for="text-input">Phí giao hàng</label>
+                <div class="col-md-8">
+                  <input type="text" #shipFeeControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="shipFee" name="shipFee" class="form-control input-control" readonly/>
                 </div>
               </div>
               <div class="form-group row">
@@ -262,13 +275,13 @@
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Phụ thu</label>
                 <div class="col-md-8">
-                  <input type="text" #subFeeControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="subFee" (ngModelChange)="updateOutputSubFee($event)" name="subFee" class="form-control input-control"/>
+                  <input type="text" #subFeeControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="subFee" (ngModelChange)="updateOutputSubFee($event)" name="subFee" class="form-control input-control" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Nội dung phụ thu</label>
                 <div class="col-md-8">
-                  <input type="text" #subFeeNoteControl="ngModel" [(ngModel)]="subFeeNote" name="subFeeNote" class="form-control input-control" placeholder="Ghi chú phụ thu"/>
+                  <input type="text" #subFeeNoteControl="ngModel" [(ngModel)]="subFeeNote" name="subFeeNote" class="form-control input-control" placeholder="Ghi chú phụ thu" />
                 </div>
               </div>
               <div class="form-group row">
@@ -283,11 +296,12 @@
                   <input type="text" #noteControl="ngModel" [(ngModel)]="note" name="note" class="form-control input-control" placeholder="Nhập ghi chú" required/>
                 </div>
               </div>
-              <div class="form-group row" [hidden]="this.customer!=null?false:true">
+              <div class="form-group row" *ngIf="this.customer">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Khuyến mãi</label>
                 <div class="col-md-8">
-                  <select id="promotionSelect" #promotionControl="ngModel" [(ngModel)]="promotion" name="promotion" class="form-control input-control">
-                        <option *ngFor="let v of promotionData | async" [value]="v.code">
+                  <select #promotion2 [(ngModel)]="promotion" (ngModelChange)="selectCustomerPromotion(promotion2.value)" name="promotion" class="form-control input-control">
+                        <option value=null [selected]="true">Chọn khuyến mãi</option>
+                        <option *ngFor="let v of promotionData" [value]="v.id">
                           {{v.name}}
                         </option>
                       </select>
@@ -303,29 +317,17 @@
                       </select>
                 </div>
               </div>
-              <div class="form-group row">
-                <label class="col-md-4 header-text form-control input-control-label" for="text-input">Hình thức nhận hàng</label>
-                <div class="col-md-8">
-                  <select id="deliveryMethodSelect" #deliveryMethodControl="ngModel" [(ngModel)]="deliveryMethod" name="deliveryMethod" class="form-control input-control">
-                        <option *ngFor="let v of deliveryMethods" [value]="v.code">
-                          {{v.name}}
-                        </option>
-                      </select>
-                </div>
-              </div>
               <hr>
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Thông tin người nhận</label>
                 <div class="col-md-8">
-                  <button (click)="openUpdateReceiverInfoDialog()"
-                type="button" class="btn btn-sm btn-success btn-ladda btn-item"><i class="icon-plus icons font-xl p-q"></i> Add</button>
+                  <button (click)="openUpdateReceiverInfoDialog()" type="button" class="btn btn-sm btn-success btn-ladda btn-item"><i class="icon-plus icons font-xl p-q"></i> Add</button>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Thông tin người trả tiền</label>
                 <div class="col-md-8">
-                  <button (click)="openUpdatePayerInfoDialog()"
-                type="button" class="btn btn-sm btn-success btn-ladda btn-item"><i class="icon-plus icons font-xl p-q"></i> Add</button>
+                  <button (click)="openUpdatePayerInfoDialog()" type="button" class="btn btn-sm btn-success btn-ladda btn-item"><i class="icon-plus icons font-xl p-q"></i> Add</button>
                 </div>
               </div>
               <hr>
