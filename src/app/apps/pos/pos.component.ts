@@ -238,7 +238,7 @@ export class PosComponent implements OnInit {
       doc.body.classList.remove('no-scroll');
     });
 
-    this.deliveryTime = moment(Date.now()).format('MM/DD/yyyy hh:mm');
+    this.deliveryTime = moment(Date.now()).format('MM/DD/yyyy HH:mm');
   }
 
   checkVAT(event) {
@@ -857,13 +857,16 @@ export class PosComponent implements OnInit {
         this.shipMethod = this.brand.brand_ship.ship_method;
       }
 
+      this.receivedTime = this.deliveryTime ? moment(this.deliveryTime, "MM/DD/YYYY HH:mm").format() : null
+
+
       let request = {
         "address": this.address,
         "longitude": this.longitude,
         "latitude": this.latitude,
         "sub_fee": this.globals.convertStringToPrice(this.subFee),
         "sub_fee_note": this.subFeeNote,
-        "channel": this.channel,
+        "channel": this.channelOnline,
         "pay_amount": this.globals.convertStringToPrice(this.payAmount),
         "receive_amount": this.globals.convertStringToPrice(this.receiveAmount),
         "branch_id": this.branchId,

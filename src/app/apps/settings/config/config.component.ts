@@ -23,10 +23,54 @@ export class ConfigComponent implements OnInit {
   name: string;
   color: string = "#127bdc";
   logo: string;
-  trail_expire: string;
+  trialExpire: string;
   status: number = 1;
+  vatValue: number;
+  openHour: string;
+  closeHour: string;
+  address: string;
+  phone: string;
 
   dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+  timeMask = [/\d/, /\d/, ':', /\d/, /\d/];
+
+  days = [
+    {
+      name: "T2",
+      code: "monday",
+      status: false
+    },
+    {
+      name: "T3",
+      code: "tuesday",
+      status: false
+    },
+    {
+      name: "T4",
+      code: "wednesday",
+      status: false
+    },
+    {
+      name: "T5",
+      code: "thursday",
+      status: false
+    },
+    {
+      name: "T6",
+      code: "friday",
+      status: false
+    },
+    {
+      name: "T7",
+      code: "saturday",
+      status: false
+    },
+    {
+      name: "CN",
+      code: "sunday",
+      status: false
+    }
+  ]
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -39,17 +83,7 @@ export class ConfigComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
-    if (this.id == null) {
-      this.isEdit = false;
-      this.setDefaultData();
-    } else {
-      this.isEdit = true;
-    }
-
-    if (this.isEdit) {
-      this.setData();
-    }
+    this.setData(this.employee.brand_id);
   }
 
   setDefaultData() {
@@ -59,16 +93,41 @@ export class ConfigComponent implements OnInit {
     }
   }
 
-  async setData() {
+  async setData(brandId) {
     try {
-      let data = await this.brandService.get(this.id, {
+      let data = await this.brandService.get(brandId, {
         fields: ["$all"]
       });
+      console.log("brand", JSON.stringify(data));
       this.name = data.name
       this.color = data.color
       this.logo = data.logo
-      this.trail_expire = data.trail_expire
+      this.trialExpire = data.trail_expire
       this.status = data.status
+      this.address = data.address
+      this.vatValue = data.vat_value
+      this.phone = data.phone
+      this.openHour = data.open_hour_online
+      this.closeHour = data.close_hour_online
+      data.open_days_of_week.forEach(item => {
+        console.log(JSON.stringify(item));
+      })
+
+      data.open_days_of_week.forEach(v => {
+        let pos = -1;
+        let count = 0;
+        this.days.forEach(day => {
+          if (v == day.code) {
+            pos = count;
+          }
+          count++;
+        })
+        if (pos != -1) {
+          this.days[pos].status = true;
+        } else {
+          this.days[pos].status = false;
+        }
+      })
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -77,7 +136,7 @@ export class ConfigComponent implements OnInit {
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route });
+    this.router.navigate(['./../../config'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -130,8 +189,21 @@ export class ConfigComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, color, logo, trail_expire, status } = this;
-      await this.brandService.add({ name, color, logo, trail_expire, status })
+      let { name, color, logo, trialExpire, address, vatValue, openHour, closeHour, status } = this;
+      let trial_expire = trialExpire;
+      let vat_value = vatValue
+      let open_hour_online = moment(openHour, "HH:mm").format("HH:mm");
+      let close_hour_online = moment(closeHour, "HH:mm").format("HH:mm");
+      let open_days_of_week: string[] = [];
+      this.days.forEach(day => {
+        if (day.status) {
+          open_days_of_week.push(day.code);
+        }
+      });
+      await this.brandService.add({
+        name, color, logo, trial_expire, address, vat_value,
+        open_hour_online, close_hour_online, open_days_of_week, status
+      })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData);
@@ -142,10 +214,27 @@ export class ConfigComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, color, logo, trail_expire, status } = this;
-      await this.brandService.update(this.id, { name, color, logo, trail_expire, status })
-      this.alertUpdateSuccess();
-      form.reset();
+      try {
+        let { name, color, logo, trialExpire, address, phone, vatValue, openHour, closeHour, status } = this;
+        let trial_expire = trialExpire;
+        let vat_value = vatValue
+        let open_hour_online = moment(openHour, "HH:mm").format("HH:mm");
+        let close_hour_online = moment(closeHour, "HH:mm").format("HH:mm");
+        let open_days_of_week: string[] = [];
+        this.days.forEach(day => {
+          if (day.status) {
+            open_days_of_week.push(day.code);
+          }
+        });
+        await this.brandService.update(this.employee.brand_id, {
+          name, color, logo, trial_expire, address, vat_value, phone,
+          open_hour_online, close_hour_online, open_days_of_week, status
+        })
+        this.alertUpdateSuccess();
+        // form.reset();
+      } catch (err) {
+        alert(err.toString())
+      }
     } else {
       this.alertFormNotValid();
     }
@@ -182,6 +271,7 @@ export class ConfigComponent implements OnInit {
       await this.updateItem(form);
       this.backToList();
     } catch (err) {
+      alert(err.toString());
       this.alertUpdateFailed();
     } finally {
       this.submitting = false;
@@ -189,7 +279,18 @@ export class ConfigComponent implements OnInit {
   }
 
   onChangeColorHex8(color: string) {
-    //  return this.cpService.outputFormat(this.cpService.stringToHsva(color, true), 'rgba', null);
     this.color = color;
+  }
+
+  checkDayStatus(event, data) {
+    let pos = 0;
+    let count = 0;
+    this.days.forEach(day => {
+      if (day.name == data.name) {
+        pos = count;
+      }
+      count++;
+    })
+    this.days[pos].status = this.days[pos].status ? false : true;
   }
 }
