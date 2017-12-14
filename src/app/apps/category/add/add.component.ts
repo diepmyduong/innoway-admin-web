@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { InnowayService } from 'app/services';
+import { InnowayApiService } from 'app/services/innoway';
 
 declare let swal: any
 
@@ -16,7 +16,6 @@ export class AddComponent implements OnInit {
   isEdit: boolean = false;
 
   submitting: boolean = false;
-  categoryService: any;
 
   name: string;
   description: string;
@@ -29,9 +28,8 @@ export class AddComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService
+    public innowayApi: InnowayApiService
   ) {
-    this.categoryService = innoway.getService('product_category');
   }
 
   ngOnInit() {
@@ -57,9 +55,9 @@ export class AddComponent implements OnInit {
 
   async setData() {
     try {
-      let category = await this.categoryService.get(this.id, {
-        fields: ["name", "description", "image", "status"]
-      });
+      let category = await this.innowayApi.productCategory.getItem(this.id, {
+        query: { fields: ["name", "description", "image", "status"] }
+      })
       this.name = category.name
       this.image = category.image
       this.shortDescription = category.short_description
@@ -127,7 +125,7 @@ export class AddComponent implements OnInit {
     if (form.valid) {
       let { name, description, image, status, shortDescription } = this;
       let short_description = shortDescription;
-      await this.categoryService.add({ name, description, short_description, image, status })
+      await this.innowayApi.productCategory.add({ name, description, short_description, image, status})
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -140,7 +138,7 @@ export class AddComponent implements OnInit {
     if (form.valid) {
       let { name, description, image, status, shortDescription } = this;
       let short_description = shortDescription;
-      await this.categoryService.update(this.id, { name, description, short_description, image, status })
+      await this.innowayApi.productCategory.update(this.id, { name, description, short_description, image, status})
       this.alertUpdateSuccess();
       form.reset();
     } else {
