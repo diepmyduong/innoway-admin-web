@@ -209,7 +209,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     let now = new Date(Date.now());
     if (start.toString().toLowerCase().indexOf("invalid") == -1
       && end.toString().toLowerCase().indexOf("invalid") == -1
-      && start > now && start <= end) {
+      && end >= now && start <= end) {
       result = true;
     }
     return result;
