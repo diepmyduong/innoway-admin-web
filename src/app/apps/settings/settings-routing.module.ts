@@ -11,7 +11,7 @@ import { ConfigComponent } from "app/apps/settings/config/config.component";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'list',
+    redirectTo: 'config',
     pathMatch: 'full'
   },
   {
