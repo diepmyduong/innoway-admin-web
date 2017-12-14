@@ -59,7 +59,7 @@ export class BillsComponent implements OnInit {
   branch: any;
   brand: any;
 
-  get billFilterInfo():any {
+  get billFilterInfo(): any {
     return this.sharedDataService.billFilterInfo;
   }
   set billFilterInfo(value: any) {
@@ -83,7 +83,7 @@ export class BillsComponent implements OnInit {
     private ref: ChangeDetectorRef,
     public zone: NgZone,
     public dialog: MatDialog,
-    public sharedDataService:SharedDataService
+    public sharedDataService: SharedDataService
   ) {
     this.employeeData = this.innowayApi.innowayAuth.innowayUser
     //this.subscribeDashboardParent();
@@ -274,7 +274,7 @@ export class BillsComponent implements OnInit {
                 </head>
                 <body onload="window.print();window.close()" class="receipt">
                   <section class="sheet">
-                    <img class='logo padding-3' src='` + this.brand.logo +`'>
+                    <img class='logo padding-3' src='` + this.brand.logo + `'>
                     <div class='text-center normal-text padding-3'>` + this.branch.address + `</div>
                     <div class='text-center normal-text'>Hotline: ` + this.branch.phone + `</div>
 
@@ -287,7 +287,7 @@ export class BillsComponent implements OnInit {
 
                     <div class='title padding-4'>Phiếu thanh toán</div>
 
-                    <div class='normal-text text-left'>Mã đơn hàng: ` + data.id +`</div>
+                    <div class='normal-text text-left'>Mã đơn hàng: ` + data.id + `</div>
                     <div class='normal-text text-left'>Nhân viên giao hàng: Uy Minh</div>
 
                     <hr style="border: none; border-top: dashed 1px;" />
@@ -326,24 +326,6 @@ export class BillsComponent implements OnInit {
 
   addSpace(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-}
-
-  async loadEmployeeData() {
-    try {
-      this.bills.next(await this.innowayApi.bill.getList({
-        query: {
-          fields: ["$all", {
-            activities: ["$all", {
-              employee: ["$all"]
-            }],
-            customer: ["$all"]
-          }]
-        }
-      }))
-    } catch (err) {
-      try { await this.alertItemNotFound() } catch (err) { }
-      console.log("ERRRR", err);
-    }
   }
 
   async loadBranchData() {
@@ -423,7 +405,7 @@ export class BillsComponent implements OnInit {
     let options = this.globals.avaibleBillActivityOption(bill.activity ? bill.activity.action : '');
 
     options.forEach(option => {
-      actions.push({ code: Object.keys(option)[0], name: option[Object.keys(option)[0]]});
+      actions.push({ code: Object.keys(option)[0], name: option[Object.keys(option)[0]] });
     });
 
     console.log(bill);
@@ -435,9 +417,8 @@ export class BillsComponent implements OnInit {
       data: { actions: actions, employees: this.employees, currentAction: currentAction }
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result)
-      {
-        this.updateAction(bill,result.action,result.employee,result.note);
+      if (result) {
+        this.updateAction(bill, result.action, result.employee, result.note);
         // alert(JSON.stringify(result));
         console.log(result);
       }
@@ -531,29 +512,6 @@ export class BillsComponent implements OnInit {
     }
   }
 
-  async filterByCustomerId(customerId) {
-    // try {
-    //   console.log('action', customerId)
-    //   this.bills = new BehaviorSubject<any[]>([]);
-    //   let query = {
-    //     fields: ["$all", {
-    //       customer: ["$all"],
-    //       activity: ["action"]
-    //     }],
-    //     filter: {
-    //       "$customer.id$": customerId
-    //     }
-    //   }
-    //   console.log('query', query)
-    //   this.bills = await this.innoway.getAll('bill', query);
-    //   console.log('bills', this.bills.getValue())
-    //   // alert(JSON.stringify(this.bills));
-    // } catch (err) {
-    //   try { await this.alertItemNotFound() } catch (err) { }
-    //   console.log("ERRRR", err);
-    // }
-  }
-
   //set a property that holds a random color for our style.
   randomcolor = this.getRandomColor();
 
@@ -587,11 +545,19 @@ export class BillsComponent implements OnInit {
 
   setStyles() {
     let styles = {
-      // CSS property names
       'font-style': this.someProperty ? 'italic' : 'normal',     // italic
       'font-weight': this.anotherProperty ? 'bold' : 'normal',  // normal
     };
     return styles;
+  }
+
+  formatBillCode(code): string {
+    let output = "DH";
+    for (let i of [0, 7 - code.length]) {
+      output += "0";
+    }
+    output += code
+    return output;
   }
 
 }

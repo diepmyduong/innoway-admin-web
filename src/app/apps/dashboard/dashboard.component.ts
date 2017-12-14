@@ -9,6 +9,7 @@ import { Globals } from "./../../globals"
 import { SelectComponent } from "ng2-select";
 import { SharedDataService } from "./../../services/shared-data/shared-data.service";
 
+import * as moment from 'moment';
 declare let swal: any
 
 @Component({
@@ -806,9 +807,9 @@ export class DashboardComponent implements OnInit {
   async getSummaryInformation() {
     try {
       let data = await this.innowayApi.bill.summaryBill({
-        startTime: "2017-10-10",
-        endTime: "2017-12-13"
-      });
+        startTime: moment(Date.now()).format("YYYY-MM-DD"),
+        endTime: moment(Date.now()).add(1, 'days').format('YYYY-MM-DD')
+      })
       this.summary = data;
 
       this.top_right_infos.push({
