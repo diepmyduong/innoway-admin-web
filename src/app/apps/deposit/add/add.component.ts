@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 
 import { ColorPickerService } from 'ngx-color-picker';
 
@@ -18,7 +18,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  brandService: any;
 
   name: string;
   color: string = "#127bdc";
@@ -41,8 +40,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     private router: Router,
     private ref: ChangeDetectorRef,
     private cpService: ColorPickerService,
-    public innoway: InnowayService) {
-    this.brandService = innoway.getService('brand');
+    public innowayApi: InnowayApiService) {
   }
 
   ngOnInit(): void {
@@ -76,9 +74,9 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.brandService.get(this.id, {
-        fields: ["$all"]
-      });
+      let data = await this.innowayApi.brand.getItem(this.id, {
+        query: { fields: ["$all"] }
+      })
       this.name = data.name
       this.color = data.color
       this.logo = data.logo
@@ -146,7 +144,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { name, color, logo, trail_expire, status } = this;
-      await this.brandService.add({ name, color, logo, trail_expire, status })
+      await this.innowayApi.brand.add({ name, color, logo, trail_expire, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData);
@@ -158,7 +156,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { name, color, logo, trail_expire, status } = this;
-      await this.brandService.update(this.id, { name, color, logo, trail_expire, status })
+      await this.innowayApi.brand.update(this.id, { name, color, logo, trail_expire, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 
 declare let swal:any
 
@@ -21,9 +21,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     private route: ActivatedRoute,
     private router: Router,
       private ref: ChangeDetectorRef,
-    public innoway: InnowayService
+    public innowayApi: InnowayApiService
   ) {
-    this.brandService = innoway.getService('brand');
   }
 
   ngOnInit() {
