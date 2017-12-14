@@ -248,11 +248,11 @@ export class BillsComponent implements OnInit {
     let index = 0;
     data.items.forEach(item => {
       tableContent += "<tr class='small-text text-right'>";
-      tableContent += '<td>' + (index++) + '</td>'; 
-      tableContent += '<td>' + item.product.name + '</td>'; 
-      tableContent += '<td>' + item.amount + '</td>'; 
-      tableContent += '<td>' + this.addSpace(item.product_price) + '</td>'; 
-      tableContent += '<td>' + this.addSpace(item.total_price) + '</td>'; 
+      tableContent += '<td>' + (index++) + '</td>';
+      tableContent += '<td>' + item.product.name + '</td>';
+      tableContent += '<td>' + item.amount + '</td>';
+      tableContent += '<td>' + this.addSpace(item.product_price) + '</td>';
+      tableContent += '<td>' + this.addSpace(item.total_price) + '</td>';
       tableContent += '</tr>';
     });
 
@@ -347,6 +347,7 @@ export class BillsComponent implements OnInit {
           customer: ["$all"]
         }]
       });
+      console.log("bills",JSON.stringify(this.bills));
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -422,7 +423,6 @@ export class BillsComponent implements OnInit {
 
   async changeStatusBill(bill) {
 
-
     let actions = [];
     let options = this.globals.avaibleBillActivityOption(bill.activity ? bill.activity.action : '');
 
@@ -446,59 +446,6 @@ export class BillsComponent implements OnInit {
         console.log(result);
       }
     })
-
-    // let action;
-    // let result = await swal({
-    //   title: 'Chọn trạng thái',
-    //   html:
-    //   '<input id="swal-input1" class="swal2-input" placeholder="aaaa">' +
-    //   '<input id="swal-input2" class="swal2-input" placeholder="aaaa">',
-    //   input: 'select',
-    //   inputOptions: avaiavle_options,
-    //   inputPlaceholder: 'Chọn trạng thái',
-    //   showCancelButton: true,
-    //   inputValidator: function(value) {
-    //     return new Promise(function(resolve, reject) {
-    //       action = value;
-    //       alert(JSON.stringify(value) + " - " + $('#swal-input1').val() + " - " + $('#swal-input2').val());
-    //       resolve();
-    //     })
-    //   }
-    // },
-    //   {
-    //     input: 'url',
-    //     inputPlaceholder: 'Enter the URL'
-    //   })
-
-    // console.log("result", result)
-
-    // await swal({
-    //   type: 'success',
-    //   html: 'Cập nhật trạng thái: ' + this.detectActionName(result)
-    // })
-    // this.updateAction(bill, action);
-
-
-
-
-
-    // const { value: formValues } = await swal({
-    //   title: 'Multiple inputs',
-    //   html:
-    //   '<input id="swal-input1" class="swal2-input">' +
-    //   '<input id="swal-input2" class="swal2-input">',
-    //   focusConfirm: false,
-    //   preConfirm: function() {
-    //     return [
-    //       $('#swal-input1').val(),
-    //       $('#swal-input2').val()
-    //     ]
-    //   }
-    // })
-    //
-    // if (formValues) {
-    //   swal(JSON.stringify(formValues))
-    // }
   }
 
   async updateAction(bill, action, employee, note) {

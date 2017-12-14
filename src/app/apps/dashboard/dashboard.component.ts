@@ -9,7 +9,7 @@ import { Globals } from "./../../globals"
 import { SelectComponent } from "ng2-select";
 import { SharedDataService } from "./../../services/shared-data/shared-data.service";
 
-declare let swal:any
+declare let swal: any
 
 @Component({
   templateUrl: 'dashboard.component.html',
@@ -34,19 +34,19 @@ export class DashboardComponent implements OnInit {
   employeeData: any;
   branch: any = {};
 
-  summary: any;
+  summary: any = {};
   filter: any;
   area: any;
 
-  get billFilterInfo():any { 
-    return this.sharedDataService.billFilterInfo; 
-  } 
-  set billFilterInfo(value: any) { 
-    this.sharedDataService.billFilterInfo = value; 
+  get billFilterInfo(): any {
+    return this.sharedDataService.billFilterInfo;
+  }
+  set billFilterInfo(value: any) {
+    this.sharedDataService.billFilterInfo = value;
   }
 
   get employees(): BehaviorSubject<any[]> {
-    return this.sharedDataService.employees; 
+    return this.sharedDataService.employees;
   }
 
   set employees(value: BehaviorSubject<any[]>) {
@@ -72,49 +72,49 @@ export class DashboardComponent implements OnInit {
   });
 
   top_right_infos = [
-    {
-      number: 78744,  
-      text: 'Khách hàng',
-    },
-    {
-      number: 12333,  
-      text: 'Phản hồi',
-    },
-    {
-      number: 8684234,  
-      text: 'Đơn hàng',
-    },
-    {
-      number: 45654,  
-      text: 'Truy cập',
-    },
+    // {
+    //   number: 78744,
+    //   text: 'Khách hàng',
+    // },
+    // {
+    //   number: 12333,
+    //   text: 'Phản hồi',
+    // },
+    // {
+    //   number: 8684234,
+    //   text: 'Đơn hàng',
+    // },
+    // {
+    //   number: 45654,
+    //   text: 'Truy cập',
+    // },
   ];
 
   sub_header_infos = [
-    {
-      number: 56,
-      text: 'THÀNH CÔNG',
-    },
-    {
-      number: 23,
-      text: 'ĐANG XỬ LÝ',
-    },
-    {
-      number: 78,
-      text: 'ĐÃ CHUẨN BỊ',
-    },
-    {
-      number: 12,
-      text: 'ĐANG GIAO',
-    },
-    {
-      number: 411,
-      text: 'THANH TOÁN',
-    },
-    {
-      number: 19,
-      text: 'ĐÃ HỦY',
-    },
+    // {
+    //   number: 56,
+    //   text: 'THÀNH CÔNG',
+    // },
+    // {
+    //   number: 23,
+    //   text: 'ĐANG XỬ LÝ',
+    // },
+    // {
+    //   number: 78,
+    //   text: 'ĐÃ CHUẨN BỊ',
+    // },
+    // {
+    //   number: 12,
+    //   text: 'ĐANG GIAO',
+    // },
+    // {
+    //   number: 411,
+    //   text: 'THANH TOÁN',
+    // },
+    // {
+    //   number: 19,
+    //   text: 'ĐÃ HỦY',
+    // },
   ];
 
   constructor(private router: Router,
@@ -125,11 +125,11 @@ export class DashboardComponent implements OnInit {
     toasterService: ToasterService,
     private dashboardService: DashboardService,
     public auth: AuthService,
-    public sharedDataService:SharedDataService) {
+    public sharedDataService: SharedDataService) {
     this.billService = innoway.getService('bill');
     this.branchService = innoway.getService('branch');
     this.shipAreaService = innoway.getService('brand_ship');
-    this.customerService=innoway.getService('customer');
+    this.customerService = innoway.getService('customer');
 
     this.employeeData = this.auth.service.userInfo;
     this.toasterService = toasterService;
@@ -155,6 +155,7 @@ export class DashboardComponent implements OnInit {
     this.loadAreaData();
     this.loadEmployeeDataByBranchData();
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
+    this.getSummaryInformation();
   }
 
   async loadEmployeeDataByBranchData() {
@@ -807,8 +808,92 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  refreshFilterValue(){
+  refreshFilterValue() {
 
   }
 
+  async getSummaryInformation() {
+    try {
+      let request = {
+        start_time: "2017-10-10",
+        end_time: "2017-12-13"
+      }
+      let data = await this.billService.summaryBill(request);
+      this.summary = data;
+
+      this.top_right_infos.push({
+        number: data.total_of_pay_amount,
+        text: "Tiền đã thu"
+      });
+
+      this.top_right_infos.push({
+        number: data.total_of_remain_amount,
+        text: "Tiền còn thiếu"
+      });
+
+      /*
+      {
+        number: 56,
+        text: 'THÀNH CÔNG',
+      },
+      {
+        number: 23,
+        text: 'ĐANG XỬ LÝ',
+      },
+      {
+        number: 78,
+        text: 'ĐÃ CHUẨN BỊ',
+      },
+      {
+        number: 12,
+        text: 'ĐANG GIAO',
+      },
+      {
+        number: 411,
+        text: 'THANH TOÁN',
+      },
+      {
+        number: 19,
+        text: 'ĐÃ HỦY',
+      },
+      */
+
+      this.sub_header_infos.push({
+        number: data.number_of_bill_sent_successfully,
+        text: 'THÀNH CÔNG',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_bill_processing,
+        text: 'ĐANG XỬ LÝ',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_bill_prepared,
+        text: 'ĐÃ CHUẨN BỊ',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_bill_delivering,
+        text: 'ĐANG GIAO',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_bill_paid,
+        text: 'THÀNH CÔNG',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_bill_cancel,
+        text: 'ĐÃ HỦY',
+      })
+
+      // this.top_right_infos.push({
+      //
+      // });
+      // alert(JSON.stringify(data));
+    } catch (err) {
+
+    }
+  }
 }

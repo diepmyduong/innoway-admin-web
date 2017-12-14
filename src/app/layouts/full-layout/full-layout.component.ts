@@ -721,7 +721,7 @@ export class FullLayoutComponent implements OnInit {
     {
       type: 'single',
       name: 'Thiết lập',
-      link: "./setting",
+      link: "./settings/config",
       icon: 'fa fa-cog',
     },
     {

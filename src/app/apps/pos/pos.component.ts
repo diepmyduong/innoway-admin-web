@@ -47,7 +47,7 @@ export class PosComponent implements OnInit {
   categoryData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   productData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   customerData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  promotionData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  promotionData: any;//BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   responseOrderAtStore: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
   employeeService: any;
@@ -160,6 +160,7 @@ export class PosComponent implements OnInit {
   channelOnline: string;
   channelOnlines: any[] = [];
 
+  brand: any;
   promotion: any;
   branch: any;
   employee: any;
@@ -180,6 +181,9 @@ export class PosComponent implements OnInit {
   deliveryMethods: any[] = [];
 
   isVAT: boolean = false;
+  isSelectBillAtStoreTab: boolean = true;
+  isPickAtStore: boolean;
+  vatValue: number;
 
   @ViewChild(TemplateRef) template: TemplateRef<any>;
 
@@ -270,7 +274,7 @@ export class PosComponent implements OnInit {
     console.log("bambi auth: " + JSON.stringify(this.employee));
 
     this.getBrandData(this.employee.brand_id);
-    this.getPromotionData();
+    // this.getPromotionData();
     this.getBranchData(this.employee.branch_id);
     this.setAutocompleteMap();
   }
@@ -282,6 +286,9 @@ export class PosComponent implements OnInit {
           'brand_ship': ['$all']
         }]
       })
+      console.log("brand", JSON.stringify(data));
+      this.brand = data;
+      this.vatValue = data.vat_value == null || data.vat_value == 0 || data.vat_value == "0" ? 1 : Number.parseFloat(data.vat_value);
       if (data.brand_ship != null) {
         if (data.brand_ship.allow_ship) {
           this.deliveryMethods.push(this.globals.DELIVERY_METHODS[0]);
@@ -290,6 +297,16 @@ export class PosComponent implements OnInit {
           this.deliveryMethods.push(this.globals.DELIVERY_METHODS[1]);
         }
         this.deliveryMethod = this.deliveryMethods[0].code;
+
+        switch (this.deliveryMethod) {
+          case this.globals.DELIVERY_METHODS[0].code:
+            this.isPickAtStore = false;
+            break;
+          case this.globals.DELIVERY_METHODS[1].code:
+            this.isPickAtStore = true;
+            break;
+        }
+
         this.ref.detectChanges();
       }
     } catch (err) {
@@ -306,25 +323,26 @@ export class PosComponent implements OnInit {
       this.branch = data;
       this.branchId = this.branch.id;
       this.branchName = this.branch.name;
+      console.log("address branch", JSON.stringify(data));
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
     }
   }
 
-  async getPromotionData() {
-    try {
-      let data = await this.innoway.getAll('promotion', {
-        fields: ["$all"]
-      });
-      this.promotionData = data;
-      this.promotion = data._value[0].code;
-      console.log("bambi promotion: " + JSON.stringify(data));
-    } catch (err) {
-      try { await this.alertItemNotFound() } catch (err) { }
-      console.log("ERRRR", err);
-    }
-  }
+  // async getPromotionData() {
+  //   try {
+  //     let data = await this.innoway.getAll('promotion', {
+  //       fields: ["$all"]
+  //     });
+  //     this.promotionData = data;
+  //     this.promotion = data._value[0].code;
+  //     console.log("bambi promotion: " + JSON.stringify(data));
+  //   } catch (err) {
+  //     try { await this.alertItemNotFound() } catch (err) { }
+  //     console.log("ERRRR", err);
+  //   }
+  // }
 
   async getProductData() {
     try {
@@ -572,10 +590,10 @@ export class PosComponent implements OnInit {
     this.selectedProduct.forEach(item => {
       total += Number.parseInt(item.total);
     })
-    this.totalAmount = total.toString();
+    // this.totalAmount = total.toString();
     this.outputAmountOfPriceItems = total;
     if (this.isVAT == true) {
-      this.outputVAT = this.outputAmountOfPriceItems * 5 / 100;
+      this.outputVAT = this.outputAmountOfPriceItems * this.vatValue;
     } else {
       this.outputVAT = 0;
     }
@@ -589,7 +607,7 @@ export class PosComponent implements OnInit {
     this.outputSubFee = this.globals.convertStringToPrice(event);
   }
 
-  private calculateRemainAndReturnAmount(event) {
+  private calculateRemainAndReturnAmount() {
     let totalAmount = this.globals.convertStringToPrice(this.totalAmount);
     let receiveAmount = this.globals.convertStringToPrice(this.receiveAmount);
     let payAmount = this.globals.convertStringToPrice(this.payAmount);
@@ -604,11 +622,32 @@ export class PosComponent implements OnInit {
   }
 
   private calculateAmountOfPurchase() {
+
+    this.outputPromotion = 0;
+    if (this.promotion != null) {
+      this.promotionData.forEach(data => {
+        if (data.id == this.promotion) {
+          switch (data.promotion_type) {
+            case this.globals.PROMOTION_TYPES[0].code:
+              this.outputPromotion = data.value;
+              break;
+            case this.globals.PROMOTION_TYPES[1].code:
+              this.outputPromotion = this.outputAmountOfPriceItems * data.value / 100;
+              break;
+          }
+        }
+      })
+    }
+
     this.outputAmountOfPurchase = this.outputAmountOfPriceItems
       + this.outputShipFee
       + this.outputSubFee
       + this.outputVAT
       - this.outputPromotion;
+
+    this.totalAmount = this.outputAmountOfPurchase.toString();
+
+    this.calculateRemainAndReturnAmount();
   }
 
   displaySearchProduct(value: any): string {
@@ -630,10 +669,14 @@ export class PosComponent implements OnInit {
           let place: google.maps.places.PlaceResult = autocomplete.getPlace();
 
           if (place.geometry === undefined || place.geometry === null) {
+            this.shipFee = "0";
             return;
           }
 
           this.address = place.formatted_address;
+          this.longitude = place.geometry.location.lng().toString();
+          this.latitude = place.geometry.location.lat().toString();
+
           console.log(place.geometry.location.lng() + " --- " + place.geometry.location.lat());
           this.calculateShipFee(place.geometry.location.lng(), place.geometry.location.lat());
 
@@ -643,16 +686,48 @@ export class PosComponent implements OnInit {
     });
   }
 
+  selectDeliveryMethod(data) {
+    console.log("delivery method", JSON.stringify(data));
+    switch (data) {
+      case this.globals.DELIVERY_METHODS[0].code: {
+        this.isPickAtStore = false;
+        this.shipFee = "0";
+        this.outputShipFee = Number.parseInt(this.shipFee);
+        this.address = null;
+        this.longitude = null;
+        this.latitude = null;
+      }
+        break;
+      case this.globals.DELIVERY_METHODS[1].code: {
+        this.isPickAtStore = true;
+        this.shipFee = "0";
+        this.outputShipFee = 0;
+        this.address = this.branch.address;
+        this.longitude = this.branch.longitude;
+        this.latitude = this.branch.latitude;
+        console.log("address", this.branch.adress);
+      }
+        break;
+    }
+    this.ref.detectChanges();
+    this.updateTotalAmount();
+  }
+
   async calculateShipFee(longitude, latitude) {
     try {
       let data = {
         "longitude": longitude,
         "latitude": latitude
       }
-      console.log("request: " + JSON.stringify(data));
       let fee = await this.billService.calculateShipFee(data);
-      console.log("shipFee: " + JSON.stringify(fee));
-      this.outputShipFee = fee.fee;
+      this.shipFee = fee.fee;
+      if (!this.isSelectBillAtStoreTab) {
+        this.outputShipFee = Number.parseInt(this.shipFee);
+      } else {
+        this.outputShipFee = 0;
+      }
+      this.ref.detectChanges();
+      this.updateTotalAmount();
     } catch (err) {
 
     }
@@ -666,9 +741,13 @@ export class PosComponent implements OnInit {
       }
       this.customer = await this.customerService.getCustomerByPhone(data);
 
+      this.promotion = null;
       if (this.customer != null && this.customer.code != 500) {
         this.customerNameAtStore = this.customer.fullname ? this.customer.fullname : "Chưa cập nhật";
         this.getPromotionsByCustomerId(this.customer.id);
+        this.customerId = this.customer.id;
+      } else {
+        this.customerId = null;
       }
 
       this.ref.detectChanges();
@@ -682,17 +761,36 @@ export class PosComponent implements OnInit {
   async createNewCustomer(input: any) {
 
   }
+
   async getPromotionsByCustomerId(customerId) {
     try {
-      let promotion = await this.customerService.getPromotions(customerId);
-      console.log("detect phone: " + customerId);
-      if (promotion != null) {
-        alert(JSON.stringify(promotion));
-      }
-
+      let data = await this.customerService.getPromotions(customerId, {
+        fields: ["$all"]
+      });
+      this.promotionData = data;
+      console.log("promotion", JSON.stringify(data));
+      this.ref.detectChanges();
+      // alert(JSON.stringify(data))
     } catch (err) {
-
+      alert(err.toString())
     }
+  }
+
+  selectCustomerPromotion(event) {
+    this.promotionId = event;
+    this.updateTotalAmount();
+  }
+
+  selectBillAtStoreTab() {
+    this.outputShipFee = 0;
+    this.isSelectBillAtStoreTab = true;
+    this.updateTotalAmount();
+  }
+
+  selectBillOnlineTab() {
+    this.outputShipFee = this.shipFee ? Number.parseInt(this.shipFee) : 0;
+    this.isSelectBillAtStoreTab = false;
+    this.updateTotalAmount();
   }
 
   public selected(value: any): void {
@@ -825,6 +923,11 @@ export class PosComponent implements OnInit {
 
   async orderAtStore() {
     try {
+
+      this.address = this.branch.address;
+      this.longitude = this.branch.longitude;
+      this.latitude = this.branch.latitude;
+
       let request = {
         "address": this.address,
         "longitude": this.longitude,
@@ -832,8 +935,8 @@ export class PosComponent implements OnInit {
         "sub_fee": this.globals.convertStringToPrice(this.subFee),
         "sub_fee_note": this.subFeeNote,
         "channel": this.channel,
-        "payAmount": this.globals.convertStringToPrice(this.payAmount),
-        "receiveAmount": this.globals.convertStringToPrice(this.receiveAmount),
+        "pay_amount": this.globals.convertStringToPrice(this.payAmount),
+        "receive_amount": this.globals.convertStringToPrice(this.receiveAmount),
         "branch_id": this.branchId,
         "employee_id": this.employee.id,
         "note": this.note,
@@ -867,23 +970,23 @@ export class PosComponent implements OnInit {
 
   async orderOnline() {
 
-    // address, longitude, latitude, sub_fee, sub_fee_note, channel,
-    //   payAmount, receiveAmount, products, branch_id, employee_id,
-    //   promotion_id, customer_id, received_time, is_vat, ship_method, note,
-    //   receiver_name, receiver_phone, receiver_address, receiver_note,
-    //   payer_name, payer_phone, payer_address, payer_note
-    //
-
     try {
+
+      if (this.isPickAtStore) {
+        this.shipMethod = "pick_at_store"
+      } else {
+        this.shipMethod = this.brand.brand_ship.ship_method;
+      }
+
       let request = {
         "address": this.address,
         "longitude": this.longitude,
         "latitude": this.latitude,
-        "sub_fee": this.subFee,
+        "sub_fee": this.globals.convertStringToPrice(this.subFee),
         "sub_fee_note": this.subFeeNote,
         "channel": this.channel,
-        "payAmount": this.payAmount,
-        "receiveAmount": this.receiveAmount,
+        "pay_amount": this.globals.convertStringToPrice(this.payAmount),
+        "receive_amount": this.globals.convertStringToPrice(this.receiveAmount),
         "branch_id": this.branchId,
         "employee_id": this.employeeId,
         "promotion_id": this.promotionId,
@@ -914,9 +1017,12 @@ export class PosComponent implements OnInit {
       });
 
       request.products = products;
+
+      alert(JSON.stringify(request));
+
       console.log("bambi-request: " + JSON.stringify(request));
 
-      let responseOrderAtStore = await this.billService.orderAtStore(request);
+      let responseOrderAtStore = await this.billService.orderOnlineByEmployee(request);
       // alert(JSON.stringify(responseOrderAtStore));
 
     } catch (err) {
@@ -965,7 +1071,10 @@ export class PosComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
+        this.receiverName = result.receiverName ? result.receiverName : "";
+        this.receiverPhone = result.receiverPhone ? result.receiverPhone : "";
+        this.receiverAddress = result.receiverAddress ? result.receiverAddress : "";
+        this.receiverNote = result.receiverNote ? result.receiverNote : "";
       }
     })
   }
@@ -1009,7 +1118,10 @@ export class PosComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
+        this.payerName = result.payerName ? result.payerName : "";
+        this.payerAddress = result.payerAddress ? result.payerAddress : "";
+        this.payerPhone = result.payerPhone ? result.payerPhone : "";
+        this.payerNote = result.payerNote ? result.payerNote : "";
       }
     })
   }

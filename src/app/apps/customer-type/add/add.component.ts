@@ -30,6 +30,7 @@ export class AddComponent implements OnInit {
   numberOfBill: string = "0";
   amountOfPurchase: string = "0";
   sex: string = null;
+  genders: any[];
   status: number = 1;
 
   numberMask = createNumberMask({
@@ -47,6 +48,7 @@ export class AddComponent implements OnInit {
     public innoway: InnowayService
   ) {
     this.customerTypeService = innoway.getService('customer_type');
+    this.genders = this.globals.GENDERS;
     //this.lastDateOrder = moment(Date.now()).format('MM/DD/yyyy hh:mm');
   }
 
@@ -88,15 +90,19 @@ export class AddComponent implements OnInit {
 
       this.name = data.name
       this.description = data.description
-      this.lastDateOrder = data.last_date_order.toString()
-      this.numberOfBill = data.number_of_bill.toString()
-      this.amountOfPurchase = data.amount_of_purchase.toString()
-      this.sex = data.sex.toString()
+      this.lastDateOrder = data.last_date_order ? data.last_date_order.toString() : null
+      this.numberOfBill = data.number_of_bill ? data.number_of_bill.toString() : "0"
+      this.amountOfPurchase = data.amount_of_purchase ? data.amount_of_purchase.toString() : "0"
+      this.sex = data.sex ? data.sex.toString() : null
       this.status = data.status
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       this.backToList()
     }
+  }
+
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
   }
 
   backToList() {
@@ -152,9 +158,11 @@ export class AddComponent implements OnInit {
   }
 
   async addItem(form: NgForm) {
-    if (form.valid && this.lastDateOrder.toString().toLowerCase().indexOf("invalid") == -1) {
+    if (form.valid && (this.lastDateOrder == null
+      || this.lastDateOrder.toString().toLowerCase().indexOf("invalid") == -1)) {
       let { lastDateOrder, numberOfBill, amountOfPurchase, sex, name, description, status } = this;
-      let last_date_order = new Date(lastDateOrder);
+      sex = sex == null || sex == "null" ? null : sex;
+      let last_date_order = lastDateOrder ? new Date(lastDateOrder) : null;
       let number_of_bill = numberOfBill;
       let amount_of_purchase = this.globals.convertStringToPrice(amountOfPurchase);
       await this.customerTypeService.add({ last_date_order, number_of_bill, amount_of_purchase, sex, name, description, status })
@@ -167,15 +175,17 @@ export class AddComponent implements OnInit {
   }
 
   async updateItem(form: NgForm) {
-    if (form.valid && this.lastDateOrder.toString().toLowerCase().indexOf("invalid") == -1) {
+    if (form.valid && (this.lastDateOrder == null
+      || this.lastDateOrder.toString().toLowerCase().indexOf("invalid") == -1)) {
       let { lastDateOrder, numberOfBill, amountOfPurchase, sex, name, description, status } = this;
-      let last_date_order = new Date(lastDateOrder);
+      sex = sex == null || sex == "null" ? null : sex;
+      let last_date_order = lastDateOrder ? new Date(lastDateOrder) : null;
       let number_of_bill = numberOfBill;
       let amount_of_purchase = this.globals.convertStringToPrice(amountOfPurchase);
       await this.customerTypeService.update(this.id, { last_date_order, number_of_bill, amount_of_purchase, sex, name, description, status })
       this.alertUpdateSuccess();
       form.reset();
-      form.resetForm(this.setDefaultData());
+      this.backToList();
     } else {
       this.alertFormNotValid();
     }
@@ -197,7 +207,7 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       await this.addItem(form);
-      this.backToList();
+      this.backToListForAddNew();
     } catch (err) {
       this.alertAddFailed()
     } finally {

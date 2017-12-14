@@ -6,8 +6,10 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { NgForm } from "@angular/forms";
 import { Globals } from "./../../../globals";
+import { MatDialog } from '@angular/material';
+import { ChangePasswordDialog } from "../../../modal/change-password/change-password.component";
 
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-add',
@@ -23,7 +25,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   employeeService: any;
   branchService: any;
 
-  name: string;
   phone: string;
   email: string;
   address: string;
@@ -40,11 +41,13 @@ export class AddComponent implements OnInit, AddPageInterface {
   branchData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   employeeType: any;
   employeeTypeData: any;
+  isValidPhone: boolean = false;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private globals: Globals,
     private ref: ChangeDetectorRef,
+    public dialog: MatDialog,
     public innoway: InnowayService) {
     this.employeeService = innoway.getService('employee');
     this.branchService = innoway.getService('branch');
@@ -55,7 +58,6 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.id = this.route.snapshot.params['id'];
 
     await this.loadBranchData();
-    await this.loadEmployeeTypeData();
 
     if (this.id == null) {
       this.isEdit = false;
@@ -100,6 +102,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.branch = data.branch_id
       this.status = data.status
       this.employeeType = data.employee_type
+      this.isValidPhone = true
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -117,15 +120,8 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
-  async loadEmployeeTypeData() {
-    // try {
-    //   this.employeeTypeData = await this.innoway.getAll('employee_type', {
-    //     fields: ["id", "name"]
-    //   });
-    // } catch (err) {
-    //   try { await this.alertItemNotFound() } catch (err) { }
-    //   console.log("ERRRR", err);
-    // }
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
   }
 
   backToList() {
@@ -181,14 +177,17 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   async addItem(form: NgForm) {
-    if (form.valid) {
-      let { name, phone, email, fullname, password, address, avatar, status } = this;
+    if (form.valid && this.password != null && this.password == this.repassword) {
+      let { username, phone, email, fullname, password, address, avatar, status } = this;
       let employee_type = this.employeeType;
       let branch_id = this.branch;
-      await this.employeeService.add({ name, phone, email, branch_id, fullname, password, address, avatar, employee_type, status })
+      await this.employeeService.add({
+        username, phone, email, branch_id, fullname,
+        password, address, avatar, employee_type, status
+      })
       this.alertAddSuccess();
       form.reset();
-      form.controls["status"].setValue(1);
+      form.resetForm(this.setDefaultData())
     } else {
       this.alertFormNotValid();
     }
@@ -196,10 +195,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, phone, email, fullname, address, avatar, status } = this;
+      let { username, phone, email, fullname, address, avatar, status } = this;
       let employee_type = this.employeeType;
       let branch_id = this.branch;
-      await this.employeeService.update(this.id, { name, phone, email, branch_id, fullname, address, avatar, employee_type, status })
+      await this.employeeService.update(this.id, {
+        username, phone, email, branch_id, fullname,
+        address, avatar, employee_type, status
+      })
       this.alertUpdateSuccess();
       form.reset();
     } else {
@@ -224,7 +226,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.submitting = true;
     try {
       await this.addItem(form);
-      this.backToList();
+      this.backToListForAddNew();
     } catch (err) {
       this.alertAddFailed()
     } finally {
@@ -244,4 +246,52 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
+  onBlurMethodPhone(event) {
+    if (event.isTrusted) {
+      let data = this.globals.convertStringToFormatPhone(this.phone);
+      this.phone = data.phone;
+      this.isValidPhone = data.isValid;
+    }
+  }
+
+  showChangePasswordDialog() {
+    let data = {
+      title: "Đổi mật khẩu nhân viên",
+      button_yes: "Cập nhật",
+      button_no: "Bỏ qua",
+      inputs: [
+        {
+          title: "Mật khẩu",
+          property: "password",
+          type: "text",
+        },
+        {
+          title: "Xác nhận mật khẩu",
+          property: "repassword",
+          type: "text",
+        }
+      ]
+    };
+
+    let dialogRef = this.dialog.open(ChangePasswordDialog, {
+      width: '500px',
+      data: data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.password == result.repassword) {
+          this.changePassword(result.password);
+        }
+      }
+    })
+  }
+
+  async changePassword(password: string) {
+    try {
+      await this.employeeService.update(this.id, { password })
+      this.alertUpdateSuccess();
+    } catch (err) {
+      this.alertAddFailed();
+    }
+  }
 }

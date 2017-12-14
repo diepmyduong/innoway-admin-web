@@ -4,11 +4,13 @@ import { ListPageInterface } from "app/apps/interface/listPageInterface";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayService } from "app/services";
-
-declare let swal:any
+import { Globals } from "./../../Globals"
+declare let swal: any
+declare var accounting:any;
 
 @Component({
   selector: 'app-promotion',
+  providers: [Globals],
   templateUrl: './promotion.component.html',
   styleUrls: ['./promotion.component.scss']
 })
@@ -16,21 +18,20 @@ export class PromotionComponent implements OnInit, ListPageInterface {
   items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   itemCount: number = 0;
   thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";;
-  itemFields: any = ["$all",{
-    promotion_type:["name"]
-  }];
+  itemFields: any = ["$all", { customer_types: ["$all", {customer_type: ["$all"]}] }];
   query: any = {};
   searchTimeOut: number = 250;
   searchRef: any;
 
   promotionService: any;
 
-  @ViewChild(DataTable) itemsTable;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
+    private globals: Globals,
     public innoway: InnowayService,
+    private route: ActivatedRoute,
     private ref: ChangeDetectorRef
   ) {
     this.promotionService = innoway.getService('promotion');
@@ -51,8 +52,10 @@ export class PromotionComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
+    console.log("bibi: " + JSON.stringify(query));
     this.items = await this.innoway.getAll('promotion', query);
     this.itemCount = this.promotionService.currentPageCount;
+    this.items.subscribe(items => console.log(items))
     this.ref.detectChanges();
     return this.items;
   }
@@ -121,6 +124,9 @@ export class PromotionComponent implements OnInit, ListPageInterface {
   }
 
   async deleteAll() {
+    if (this.itemsTable.selectedRows.length == 0)
+      return;
+
     let rows = this.itemsTable.selectedRows;
     let ids = [];
     rows.forEach(row => {
@@ -140,8 +146,6 @@ export class PromotionComponent implements OnInit, ListPageInterface {
         row.item.deleting = false;
       });
     }
-
-
   }
 
   onSearch(e) {
@@ -156,5 +160,66 @@ export class PromotionComponent implements OnInit, ListPageInterface {
       }
       this.getItems();
     }, this.searchTimeOut);
+  }
+
+  getNamePromotionType(code: string): string {
+    let output = this.globals.detectPromotionTypeByCode(code);
+    return output ? output.name : "";
+  }
+
+  getValuePromotion(value: string, code: string): string {
+    let output = null;
+    let promotionType = this.globals.detectPromotionTypeByCode(code);
+    switch (promotionType) {
+      case this.globals.PROMOTION_TYPES[0]:
+        output = this.transformMoney(value);
+        break;
+      case this.globals.PROMOTION_TYPES[1]:
+        output = this.transformPercent(value);
+        break;
+    }
+    return output ? output : "";
+  }
+
+  transformMoney(value: any, options = {}) {
+    var number: number;
+    options = Object.assign({
+      symbol: "đ",
+      decimal: ",",
+      thousand: ".",
+      precision: 0,
+      format: "%v %s"
+    }, options);
+    try {
+      if (typeof (value) === "string") {
+        number = parseFloat(value);
+      } else if (typeof (value) === "number") {
+        number = value;
+      }
+      return accounting.formatMoney(number,options);
+    } catch (err) {
+      return "NAN";
+    }
+  }
+
+  transformPercent(value: any, options = {}) {
+    var number: number;
+    options = Object.assign({
+      symbol: "%",
+      decimal: ",",
+      thousand: ".",
+      precision: 0,
+      format: "%v %s"
+    }, options);
+    try {
+      if (typeof (value) === "string") {
+        number = parseFloat(value);
+      } else if (typeof (value) === "number") {
+        number = value;
+      }
+      return accounting.formatMoney(number,options);
+    } catch (err) {
+      return "NAN";
+    }
   }
 }

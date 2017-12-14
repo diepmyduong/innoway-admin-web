@@ -1,14 +1,16 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { ListPageInterface } from "app/apps/interface/listPageInterface";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayService } from "app/services";
-import { ListPageInterface } from "app/apps/interface/listPageInterface";
-
-declare let swal:any;
+import { Globals } from "./../../Globals"
+declare let swal: any
+declare var accounting:any;
 
 @Component({
   selector: 'app-customer',
+  providers: [Globals],
   templateUrl: './customer.component.html',
   styleUrls: ['./customer.component.scss']
 })
@@ -21,17 +23,18 @@ export class CustomerComponent implements OnInit, ListPageInterface {
   searchTimeOut: number = 250;
   searchRef: any;
 
-  unitService: any;
+  customerService: any;
 
-  @ViewChild(DataTable) itemsTable;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
+    private globals: Globals,
     public innoway: InnowayService,
+    private route: ActivatedRoute,
     private ref: ChangeDetectorRef
   ) {
-    this.unitService = innoway.getService('customer');
+    this.customerService = innoway.getService('customer');
   }
 
   ngOnInit() {
@@ -49,8 +52,10 @@ export class CustomerComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
+    console.log("bibi: " + JSON.stringify(query));
     this.items = await this.innoway.getAll('customer', query);
-    this.itemCount = this.unitService.currentPageCount;
+    this.itemCount = this.customerService.currentPageCount;
+    this.items.subscribe(items => console.log(items))
     this.ref.detectChanges();
     return this.items;
   }
@@ -64,15 +69,15 @@ export class CustomerComponent implements OnInit, ListPageInterface {
   }
 
   addItem() {
-    this.router.navigate(['../add'], { relativeTo : this.route});
+    this.router.navigate(['../add'], { relativeTo: this.route });
   }
 
   editItem(item) {
-    this.router.navigate(['../add', item.id], { relativeTo : this.route});
+    this.router.navigate(['../add', item.id], { relativeTo: this.route });
   }
 
   viewItem(item) {
-    this.router.navigate(['../detail', item.id], { relativeTo : this.route});
+    this.router.navigate(['../detail', item.id], { relativeTo: this.route });
   }
 
   async confirmDelete() {
@@ -108,7 +113,7 @@ export class CustomerComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.unitService.delete(item.id)
+      await this.customerService.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -119,6 +124,9 @@ export class CustomerComponent implements OnInit, ListPageInterface {
   }
 
   async deleteAll() {
+    if (this.itemsTable.selectedRows.length == 0)
+      return;
+
     let rows = this.itemsTable.selectedRows;
     let ids = [];
     rows.forEach(row => {
@@ -127,7 +135,7 @@ export class CustomerComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.unitService.deleteAll(ids)
+      await this.customerService.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
@@ -138,8 +146,6 @@ export class CustomerComponent implements OnInit, ListPageInterface {
         row.item.deleting = false;
       });
     }
-
-
   }
 
   onSearch(e) {

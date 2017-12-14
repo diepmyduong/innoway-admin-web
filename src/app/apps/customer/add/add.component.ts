@@ -25,10 +25,14 @@ export class AddComponent implements OnInit, AddPageInterface {
   fullname: string;
   password: string;
   phone: string;
-  sex: string = "0";
-  genders: any;
+  sex: string = null;
+  genders: any[];
   status: number = 1;
   trustPoint: number = 3;
+
+  isExisted: boolean = false;
+  isValidPhone: boolean = false;
+  currentPhone: string;
 
   dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
@@ -61,7 +65,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   setDefaultData() {
     this.status = 1;
     this.trustPoint = 3;
-    this.sex = "0";
+    this.sex = null;
 
     return {
       status: this.status,
@@ -81,14 +85,20 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.fullname = data.fullname
       this.password = data.password
       this.phone = data.phone
-      this.sex = data.sex ? data.sex.toString() : "0"
+      this.currentPhone = data.phone
+      this.sex = data.sex ? data.sex.toString() : null
       this.status = data.status
       this.trustPoint = data.trust_point ? data.trust_point : 3
+      this.isValidPhone = true
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
       this.backToList()
     }
+  }
+
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
   }
 
   backToList() {
@@ -144,31 +154,27 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   async addItem(form: NgForm) {
-    if (form.valid) {
-      let { name, avatar, email, fullname, password, phone, sex, status } = this;
+    if (form.valid && !this.isExisted && this.isValidPhone) {
+      let { name, avatar, email, fullname, phone, sex, status } = this;
       let trust_point = this.trustPoint;
-      let birthday = null;
-      if (!this.birthday) {
-        birthday = new Date(this.birthday);
-      }
-      await this.customerService.add({ name, avatar, birthday, email, fullname, password, phone, sex, status, trust_point })
+      let birthday = this.birthday ? new Date(this.birthday) : null;
+      sex = sex == null || sex == "null" ? null : sex;
+      await this.customerService.add({ name, avatar, birthday, email, fullname, phone, sex, status, trust_point })
       this.alertAddSuccess();
       form.reset();
-      form.resetForm(this.setDefaultData);
+      form.resetForm(this.setDefaultData());
     } else {
       this.alertFormNotValid();
     }
   }
 
   async updateItem(form: NgForm) {
-    if (form.valid) {
-      let { name, avatar, email, fullname, password, phone, sex, status } = this;
+    if (form.valid && !this.isExisted && this.isValidPhone) {
+      let { name, avatar, email, fullname, phone, sex, status } = this;
       let trust_point = this.trustPoint;
-      let birthday = null;
-      if (!this.birthday) {
-        birthday = new Date(this.birthday);
-      }
-      await this.customerService.update(this.id, { name, avatar, birthday, email, fullname, password, phone, sex, status, trust_point })
+      let birthday = this.birthday ? new Date(this.birthday) : null;
+      sex = sex == null || sex == "null" ? null : sex;
+      await this.customerService.update(this.id, { name, avatar, birthday, email, fullname, phone, sex, status, trust_point })
       this.alertUpdateSuccess();
       form.reset();
     } else {
@@ -193,9 +199,9 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.submitting = true;
     try {
       await this.addItem(form);
-      this.backToList();
+      this.backToListForAddNew();
     } catch (err) {
-      this.alertAddFailed()
+      this.alertAddFailed();
     } finally {
       this.submitting = false;
     }
@@ -213,9 +219,34 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
-  open(date) {
-    // let newDate = new Date(date);
-    // alert(newDate);
+  async validateCustomerByPhone(phone: string) {
+    try {
+      let data = {
+        phone: phone.toString()
+      }
+      let response = await this.customerService.getCustomerByPhone(data);
+
+      if (response != null && response.code != 500) {
+        console.log(JSON.stringify(response));
+        if (this.currentPhone != null && this.currentPhone == phone) {
+          this.isExisted = false;
+        } else {
+          this.isExisted = true;
+        }
+      } else {
+        this.isExisted = false;
+      }
+    } catch (err) {
+      this.isExisted = false;
+    }
   }
 
+  onBlurMethodPhone(event) {
+    if (event.isTrusted) {
+      let data = this.globals.convertStringToFormatPhone(this.phone);
+      this.phone = data.phone;
+      this.isValidPhone = data.isValid;
+      this.validateCustomerByPhone(this.phone);
+    }
+  }
 }

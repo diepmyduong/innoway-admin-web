@@ -27,32 +27,43 @@ export class Globals {
 
   GENDERS = [
     {
-      code: 0,
+      code: "male",
       name: "Nam"
     },
     {
-      code: 1,
+      code: "female",
       name: "Nữ"
+    },
+    {
+      code: "other",
+      name: "Khác"
     }
   ]
 
   PROMOTION_TYPES = [
     {
-      code: "PROMOTION_COST",
-      name: "Khuyến mãi theo giá cố định"
+      code: "discount_by_price",
+      name: "Khuyến mãi theo giá cố định",
+      active: "true"
     }, {
-      code: "PROMOTION_PERCENT",
-      name: "Khuyến mãi theo phần trăm"
+      code: "discount_by_percent",
+      name: "Khuyến mãi theo phần trăm",
+      active: "true"
     }
+    // , {
+    //   code:"discount_by_gift",
+    //   name: "Khuyến mãi theo quả tặng",
+    //   active: "false"
+    // }
   ]
 
   DELIVERY_METHODS = [
     {
-      code: "DELIVERY",
+      code: "delivery",
       name: "Giao hàng"
     },
     {
-      code: "PICK_AT_STORE",
+      code: "pick_at_store",
       name: "Nhận tại quán"
     }
   ]
@@ -217,66 +228,66 @@ export class Globals {
     },
   ];
 
-    //bill status
-    BILL_ACTIVITY_OPTIONS_OBJECT = [
-      {
-        code: 'BILL_SENT_SUCCESSFULLY',
-        display: 'Gửi thành công'
-      },
-  
-      {
-        code: 'BILL_DISTRIBUTED',
-        display: 'Đã điều phối'
-      },
-  
-      {
-        code: 'BILL_WAITING_FOR_CONFIRMATION',
-        display: 'Chờ xác nhận'
-      },
-      {
-        code: 'BILL_CONFIRMED',
-        display: 'Đã xác nhận'
-      },
-      {
-        code: 'BILL_PICKING_UP',
-        display: 'Đang lấy hàng'
-      },
-  
-      {
-        code: 'BILL_RECEIVED',
-        display: 'Đã nhận hàng'
-      },
-  
-      {
-        code: 'BILL_PROCESSING',
-        display: 'Đang xử lý'
-      },
-  
-      {
-        code: 'BILL_PREPARED',
-        display: 'Đã chuẩn bị'
-      },
-  
-      {
-        code: 'BILL_SENT_SHIPPER',
-        display: 'Gửi giao hàng'
-      },
-  
-      {
-        code: 'BILL_DELIVERING',
-        display: 'Đang giao hàng'
-      },
-  
-      {
-        code: 'BILL_PAID',
-        display: 'Đã thanh toán'
-      },
-  
-      {
-        code: 'BILL_COLLECTED_MONEY',
-        display: 'Đã thu tiền'
-      },
-    ];
+  //bill status
+  BILL_ACTIVITY_OPTIONS_OBJECT = [
+    {
+      code: 'BILL_SENT_SUCCESSFULLY',
+      display: 'Gửi thành công'
+    },
+
+    {
+      code: 'BILL_DISTRIBUTED',
+      display: 'Đã điều phối'
+    },
+
+    {
+      code: 'BILL_WAITING_FOR_CONFIRMATION',
+      display: 'Chờ xác nhận'
+    },
+    {
+      code: 'BILL_CONFIRMED',
+      display: 'Đã xác nhận'
+    },
+    {
+      code: 'BILL_PICKING_UP',
+      display: 'Đang lấy hàng'
+    },
+
+    {
+      code: 'BILL_RECEIVED',
+      display: 'Đã nhận hàng'
+    },
+
+    {
+      code: 'BILL_PROCESSING',
+      display: 'Đang xử lý'
+    },
+
+    {
+      code: 'BILL_PREPARED',
+      display: 'Đã chuẩn bị'
+    },
+
+    {
+      code: 'BILL_SENT_SHIPPER',
+      display: 'Gửi giao hàng'
+    },
+
+    {
+      code: 'BILL_DELIVERING',
+      display: 'Đang giao hàng'
+    },
+
+    {
+      code: 'BILL_PAID',
+      display: 'Đã thanh toán'
+    },
+
+    {
+      code: 'BILL_COLLECTED_MONEY',
+      display: 'Đã thu tiền'
+    },
+  ];
 
   public avaibleBillActivityOption(code: string): any {
     let result = null;
@@ -813,5 +824,31 @@ export class Globals {
 
   public convertStringToPrice(input: string): number {
     return Number.parseInt(input.toString().replace(/[^\d]/g, ''));
+  }
+
+  public convertStringToFormatPhone(phone: string): any {
+    let output = {
+      phone: phone,
+      isValid: true
+    };
+    phone = phone.replace(/\s/g, '')
+    if (phone.startsWith("+84")) {
+      phone = phone.slice(3)
+    }
+    if (phone.startsWith("+840")) {
+      phone = phone.slice(4)
+    }
+    if (phone.startsWith("0")) {
+      phone = phone.slice(1)
+    }
+    if ((phone.length == 9 && /\d\d\d\d\d\d\d\d\d/g.test(phone))
+      || (phone.length == 10 && /\d\d\d\d\d\d\d\d\d\d/g.test(phone))) {
+      output.phone = '+84' + phone
+      output.isValid = true
+    } else {
+      output.phone = phone
+      output.isValid = false
+    }
+    return output;
   }
 }

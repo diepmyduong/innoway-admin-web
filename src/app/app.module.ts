@@ -37,6 +37,7 @@ import { UpdateBillStatusComponentComponent } from './apps/ui-component/update-b
 
 import { EditOrderStatusDialog } from "./modal/edit-order-status/edit-order-status.component";
 import { EditInfoDialog } from "./modal/edit-info/edit-info.component";
+import { ChangePasswordDialog } from "./modal/change-password/change-password.component";
 
 
 @NgModule({
@@ -66,6 +67,7 @@ import { EditInfoDialog } from "./modal/edit-info/edit-info.component";
     UpdateBillStatusComponentComponent,
     EditOrderStatusDialog,
     EditInfoDialog,
+    ChangePasswordDialog
   ],
   providers: [{
     provide: LocationStrategy,
@@ -74,7 +76,8 @@ import { EditInfoDialog } from "./modal/edit-info/edit-info.component";
   bootstrap: [AppComponent],
   entryComponents: [
     EditOrderStatusDialog,
-    EditInfoDialog
+    EditInfoDialog,
+    ChangePasswordDialog
   ]
 })
 export class AppModule { }

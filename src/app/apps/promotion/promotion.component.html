@@ -1,24 +1,43 @@
 <div class="animated fadeIn">
+
   <div class="row">
-    <fieldset class="form-group col-sm-12">
-      <div class="input-group">
-        <span class="input-group-addon"> Tìm kiếm </span>
-        <input type="text" class="form-control" (keyup)="onSearch($event)">
-        <span (click)="deleteAll()" *ngIf="itemsTable.selectedRows && itemsTable.selectedRows.length > 0" class="input-group-addon btn-danger"><i class="fa fa-trash"></i> Xoá tất cả</span>
-        <span (click)="addItem()" class="input-group-addon btn-success"><i class="fa fa-plus"></i> Thêm</span>
-      </div>
-    </fieldset>
+    <h3 class="col-6">Danh sách khuyến mãi</h3>
+    <div class="col-6">
+      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm khuyến mãi</button>
+      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()"
+      [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa khuyến mãi</button>
+    </div>
   </div>
-  <div style="margin: auto; max-width: 1000px; margin-bottom: 50px;">
-    <data-table id="persons-grid" #itemsTable headerTitle="Danh sách" indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true"
-      [substituteRows]="false" [selectOnRowClick]="false" [showReloading]="true" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
+
+  <div class="table-wrapper">
+    <div class="search-bar">
+      <p>Tìm kiếm</p>
+      <input type="text" class="input-control form-control">
+    </div>
+    <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async"
+    [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true"
+    [multiSelect]="true" [substituteRows]="false" [selectOnRowClick]="true"
+    [showReloading]="true" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
       <data-table-column property="name" header="Tên" [sortable]="true">
       </data-table-column>
-      <data-table-column property="description" header="Mô tả" [visible]="false" [resizable]="true">
-      </data-table-column>
-      <data-table-column property="type" header="Loại khuyến mại" [resizable]="true" [sortable]="true">
+      <data-table-column property="type" header="Khuyến mãi" [resizable]="true" [sortable]="true">
         <template #dataTableCell let-item="item">
-            {{item.promotion_type?.name?item.promotion_type.name:""}}
+            {{getNamePromotionType(item.promotion_type)}}
+          </template>
+      </data-table-column>
+      <data-table-column property="type" header="Giá trị" [resizable]="true" [sortable]="true">
+        <template #dataTableCell let-item="item">
+            {{getValuePromotion(item.value,item.promotion_type)}}
+          </template>
+      </data-table-column>
+      <data-table-column property="type" header="Thời gian" [resizable]="true" [sortable]="true">
+        <template #dataTableCell let-item="item">
+            <p style="text-align: center">{{item.start_date | date:'dd/MM/yyyy hh:mm'}} <br> đến <br> {{item.end_date | date:'dd/MM/yyyy hh:mm'}}</p>
+          </template>
+      </data-table-column>
+      <data-table-column property="type" header="Khách hàng" [resizable]="true" [sortable]="true">
+        <template #dataTableCell let-item="item">
+            {{item.customer_types?(item.customer_types[0].customer_type?item.customer_types[0].customer_type.name:"không có"):"không có"}}
           </template>
       </data-table-column>
       <data-table-column property="status" header="Trạng thái" [sortable]="true">
@@ -28,15 +47,7 @@
       </data-table-column>
       <data-table-column header="Actions">
         <template #dataTableCell let-item="item">
-                <span class="btn-group">
-                    <button (click)="viewItem(item)"
-                        type="button" class="btn btn-sm"><i class="icon-eye icons font-xl p-q d-block"></i></button>
-                    <button (click)="editItem(item)"
-                        type="button" class="btn btn-sm btn-info"><i class="icon-pencil icons font-xl p-q d-block"></i></button>
-                    <button (click)="deleteItem(item)"
-                        type="button" class="btn btn-sm btn-danger btn-ladda"
-                        data-style="expand-right" [ladda]='item.deleting?true:false'><i class="icon-trash icons font-xl p-q d-block"></i></button>
-                </span>
+              <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
             </template>
       </data-table-column>
     </data-table>
