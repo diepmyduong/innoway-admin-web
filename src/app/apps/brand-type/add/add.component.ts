@@ -2,8 +2,8 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, NgZone } f
 import { NgForm } from "@angular/forms";
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
-
+import { InnowayApiService } from "app/services/innoway";
+import * as _ from 'lodash'
 import { FormControl } from '@angular/forms';
 import { } from 'googlemaps';
 import { MapsAPILoader } from '@agm/core';
@@ -19,7 +19,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  branchService: any;
 
   name: string;
   status: number = 1;
@@ -40,10 +39,9 @@ export class AddComponent implements OnInit, AddPageInterface {
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone) {
-    this.branchService = innoway.getService('branch');
   }
 
   ngOnInit(): void {
@@ -123,13 +121,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.branchService.get(this.id, {
-        fields: ["$all"]
-      });
+      let data = await this.innowayApi.branch.getItem(this.id, {
+        query: { fields: ["$all"] }
+      })
       this.name = data.name
       this.address = data.address;
-      this.longitude = data.longitude;
-      this.latitude = data.latitude;
+      this.longitude = _.toString(data.longitude);
+      this.latitude = _.toString(data.latitude);
       this.employee_id = data.employee_id;
       this.phone = data.phone;
       this.type = data.type;
@@ -195,7 +193,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { name, address, longitude, latitude, employee_id, phone, type, status } = this;
-      await this.branchService.add({ name, address, longitude, latitude, employee_id, phone, type, status })
+      await this.innowayApi.branch.add({ name, address, longitude: _.toNumber(longitude), latitude: _.toNumber(latitude), employee_id, phone, type, status })
       this.alertAddSuccess();
       form.reset();
       this.setDefaultData();
@@ -207,7 +205,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { name, address, longitude, latitude, employee_id, phone, type, status } = this;
-      await this.branchService.update(this.id, { name, address, longitude, latitude, employee_id, phone, type, status })
+      await this.innowayApi.branch.update(this.id, { name, address, longitude: _.toNumber(longitude), latitude: _.toNumber(latitude), employee_id, phone, type, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {
