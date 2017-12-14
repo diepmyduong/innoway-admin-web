@@ -21,10 +21,6 @@ import { AppRoutingModule } from './app.routing';
 import { ModalModule } from 'ngx-modialog';
 import { BootstrapModalModule } from 'ngx-modialog/plugins/bootstrap';
 
-import { ModalCardTypesComponent } from './apps/chatbot/modals/modal-card-types/modal-card-types.component';
-
-import { ChatbotModule } from './apps/chatbot/chatbot.module';
-
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 
 import { ServicesModule } from './services';
@@ -52,7 +48,6 @@ import { ChangePasswordDialog } from "./modal/change-password/change-password.co
     TabsModule.forRoot(),
     // Ng2ModalModule.forRoot(),
     ChartsModule,
-    ChatbotModule.forRoot(),
     SimpleNotificationsModule.forRoot(),
     PushNotificationsModule,
     ServicesModule,

@@ -5,11 +5,8 @@ import { p404Component } from './404.component';
 import { p500Component } from './500.component';
 import { LoginComponent } from './login.component';
 import { RegisterComponent } from './register.component';
-import { ChatbotLoginComponent } from './chatbot-login.component';
 import { LoginLauncherComponent } from './login-launcher/login-launcher.component';
-
-import { UnAuthGuard } from '../apps/chatbot/services/auth.guard';
-import { AnonymousGuard, AuthGuard } from 'app/services';
+import { AuthGuard } from 'app/services';
 
 const routes: Routes = [
   {
@@ -37,12 +34,6 @@ const routes: Routes = [
     data: {
       title: 'Login Page'
     },
-    canActivate: [AnonymousGuard]
-  },
-  {
-    path: 'chatbot-login',
-    component: ChatbotLoginComponent,
-    canActivate: [AuthGuard,UnAuthGuard]
   }
 ];
 

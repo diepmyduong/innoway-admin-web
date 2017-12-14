@@ -1,10 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { NgForm } from "@angular/forms";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-
+import * as _ from 'lodash'
+import * as moment from 'moment'
 declare let swal:any
 
 @Component({
@@ -16,9 +17,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  promotionService: any;
-  customerTypeService: any;
-  promotionTypeService: any;
 
   name: string;
   amount: string;
@@ -26,21 +24,18 @@ export class AddComponent implements OnInit, AddPageInterface {
   customer_type_id: number = 1;
   customer_types = new BehaviorSubject<any[]>([]);
   description: string;
-  end_date: string;
-  start_date: string;
-  limit: string;
+  end_date: Date;
+  start_date: Date;
+  limit: number;
   promotion_type_id: number = 1;
   promotion_types = new BehaviorSubject<any[]>([]);
-  value: string;
+  value: number;
   status: number = 1;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService) {
-    this.promotionService = innoway.getService('promotion');
-    this.promotionTypeService = innoway.getService('promotion_type');
-    this.customerTypeService = innoway.getService('customer_type');
+    public innowayApi: InnowayApiService) {
   }
 
   ngOnInit(): void {
@@ -63,18 +58,18 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.promotionService.get(this.id, {
-        fields: ["$all"]
-      });
+      let data = await this.innowayApi.promotion.getItem(this.id, {
+        query: { fields: ["$all"] }
+      })
       this.name = data.name
-      this.amount = data.amount
+      this.amount = _.toString(data.amount)
       this.code = data.code
       this.customer_type_id = data.customer_type_id
       this.description = data.description
       this.end_date = data.end_date
       this.start_date = data.start_date
       this.limit = data.limit
-      this.promotion_type_id = data.promotion_type_id
+      // this.promotion_type_id = data.promotion_type
       this.value = data.value
       this.status = data.status
 
@@ -148,7 +143,10 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { name, amount, code, customer_type_id, description, end_date, start_date, limit, promotion_type_id, value, status } = this;
-      await this.promotionService.add({ name, amount, code, customer_type_id, description, end_date, start_date, limit, promotion_type_id, value, status })
+      this.innowayApi.promotion.add({ 
+        name, code, customer_type_id, description, end_date, start_date, limit, value, status,  
+        amount: _.toNumber(amount) 
+      })
       this.alertAddSuccess();
       form.reset();
       form.controls["status"].setValue(1);
@@ -160,7 +158,10 @@ export class AddComponent implements OnInit, AddPageInterface {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { name, amount, code, customer_type_id, description, end_date, start_date, limit, promotion_type_id, value, status } = this;
-      await this.promotionService.update(this.id, { name, amount, code, customer_type_id, description, end_date, start_date, limit, promotion_type_id, value, status })
+      await this.innowayApi.promotion.update(this.id, { 
+        name, code, customer_type_id, description, end_date, start_date, limit, value, status,  
+        amount: _.toNumber(amount) 
+      })
       this.alertUpdateSuccess();
       form.reset();
     } else {

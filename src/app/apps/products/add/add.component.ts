@@ -1,11 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm, NgModel } from '@angular/forms';
-import { InnowayService } from 'app/services';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Subscription } from 'rxjs/Subscription'
 import { SelectComponent } from 'ng2-select';
 import * as Ajv from 'ajv';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+import { InnowayApiService } from 'app/services/innoway'
 
 declare var swal, _: any;
 
@@ -19,13 +20,6 @@ export class AddComponent implements OnInit {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-
-  categoryService: any;
-  toppingService: any;
-  unitService: any;
-  attributeService: any;
-  productService: any;
-  productTypeService: any;
 
   name: string;
   public description;
@@ -68,18 +62,14 @@ export class AddComponent implements OnInit {
     prevButton: '.swiper-button-prev',
     spaceBetween: 10
   };
+  subscriptions: Subscription[] = []
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService
+    public innowayApi: InnowayApiService
   ) {
-    this.categoryService = innoway.getService('product_category');
-    this.toppingService = innoway.getService('topping');
-    this.productService = innoway.getService('product');
-    this.unitService = innoway.getService('unit');
-    this.productTypeService = innoway.getService('product_type')
   }
 
   async ngOnInit() {
@@ -99,6 +89,12 @@ export class AddComponent implements OnInit {
     if (this.isEdit) {
       this.setData();
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach( subscription => {
+      subscription.unsubscribe()
+    })
   }
 
   setDefaultData() {
@@ -139,9 +135,12 @@ export class AddComponent implements OnInit {
 
   async loadCategoryData() {
     try {
-      this.categories = await this.innoway.getAll('product_category', {
-        fields: ["id", "name"]
-      });
+      this.categories.next(await this.innowayApi.productCategory.getList({
+        local: true, query: {
+          fields: ["id", "name"],
+          limit: 0
+        }
+      }))
     } catch (err) {
       console.error('Cannot load category', err);
     }
@@ -149,9 +148,12 @@ export class AddComponent implements OnInit {
 
   async loadProductTypeData() {
     try {
-      this.productTypes = await this.innoway.getAll('product_type', {
-        fields: ["id", "name"]
-      });
+      this.productTypes.next(await this.innowayApi.productType.getList({
+        local: true, query: {
+          fields: ["id", "name"],
+          limit: 0
+        }
+      }))
     } catch (err) {
       console.error('Cannot load product_type', err);
     }
@@ -159,10 +161,8 @@ export class AddComponent implements OnInit {
 
   async loadToppingData() {
     try {
-      this.toppings = await this.innoway.getAll('topping', {
-        fields: ["id", "name"]
-      });
-      this.toppings.subscribe(toppings => {
+    
+      this.subscriptions.push(this.toppings.subscribe(toppings => {
         let items = toppings.map(topping => {
           return {
             text: topping.name,
@@ -170,7 +170,13 @@ export class AddComponent implements OnInit {
           }
         })
         this.topping_items.next(items);
-      });
+      }))
+      this.toppings.next(await this.innowayApi.topping.getList({
+        local: true, query: {
+          fields: ["id", "name"],
+          limit: 0
+        }
+      }))
     } catch (err) {
       console.error("cannot load toppings", err);
     }
@@ -178,9 +184,12 @@ export class AddComponent implements OnInit {
 
   async loadUnitData() {
     try {
-      this.units = await this.innoway.getAll('unit', {
-        fields: ["id", "name"]
-      });
+      this.units.next(await this.innowayApi.unit.getList({
+        local: true, query: {
+          fields: ["id", "name"],
+          limit: 0
+        }
+      }))
     } catch (err) {
       console.error("cannot load units", err);
     }
@@ -188,11 +197,13 @@ export class AddComponent implements OnInit {
 
   async getToppingValues(topping_id: string) {
     try {
-      let topping = await this.toppingService.get(topping_id, {
-        fields: [{
-          values: ["$all"]
-        }]
-      });
+      let topping = await this.innowayApi.topping.getItem(topping_id, {
+        local: true, reload: true, query: {
+          fields: [{
+            values: ["$all"]
+          }]
+        }
+      })
       return topping.values;
     } catch (err) {
       console.log('cannot load values', err)
@@ -202,21 +213,23 @@ export class AddComponent implements OnInit {
 
   async setData() {
     try {
-      let product = await this.productService.get(this.id, {
-        fields: ["$all", {
-          toppings: ["id", {
-            topping: ["id", "name", {
-              values: ["$all"]
+      let product = await this.innowayApi.product.getItem(this.id, {
+        local: true, reload: true, query: {
+          fields: ["$all", {
+            toppings: ["id", {
+              topping: ["id", "name", {
+                values: ["$all"]
+              }]
             }]
           }]
-        }]
-      });
+        }
+      })
       this.name = product.name
       this.thumb = product.thumb
       this.description = product.description
       this.shortDescription = product.short_description
-      this.price = product.price
-      this.base_price = product.base_price
+      this.price = _.toString(product.price)
+      this.base_price = _.toString(product.base_price)
       this.unit = product.unit_id ? product.unit_id : "Không có dữ liệu"
       this.status = product.status
       this.category = product.category_id
@@ -241,7 +254,7 @@ export class AddComponent implements OnInit {
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route });
+    this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -301,7 +314,7 @@ export class AddComponent implements OnInit {
       confirmButtonText: 'Nhập',
       showLoaderOnConfirm: true,
       preConfirm: ((image) => {
-        return new Promise((function(resolve, reject) {
+        return new Promise((function (resolve, reject) {
           let ajv = new Ajv();
           let valid = ajv.validate({ type: "string", format: 'url' }, image);
           if (!valid) {
@@ -349,16 +362,17 @@ export class AddComponent implements OnInit {
     try {
       if (form.valid) {
         let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status } = this;
+        
         let category_id = this.category;
         let short_description = this.shortDescription;
         let unit_id = this.unit;
         let product_type_id = this.product_type;
-        let product = await this.productService.add({ name, short_description, description, thumb, price, base_price, unit, status, category_id, unit_id, product_type_id, list_image })
+        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: _.toNumber(price), base_price: _.toNumber(base_price) , status, category_id, unit_id, product_type_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
         if (toppings.length > 0) {
-          await this.productService.addToppings(product.id, toppings);
+          await this.innowayApi.product.addToppings(product.id, toppings)
         }
         this.alertAddSuccess();
         form.resetForm(this.setDefaultData());
@@ -382,12 +396,12 @@ export class AddComponent implements OnInit {
         let short_description = this.shortDescription;
         let unit_id = this.unit;
         let product_type_id = this.product_type;
-        let product = await this.productService.add({ name, short_description, description, thumb, price, base_price, unit, status, category_id, unit_id, product_type_id, list_image })
+        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: _.toNumber(price), base_price: _.toNumber(base_price) , status, category_id, unit_id, product_type_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
         if (toppings.length > 0) {
-          await this.productService.addToppings(product.id, toppings);
+          await this.innowayApi.product.addToppings(product.id, toppings)
         }
         this.alertAddSuccess();
         this.backToList();
@@ -410,16 +424,17 @@ export class AddComponent implements OnInit {
     }
     try {
       if (form.valid) {
-        let { name, description, list_image, thumb, price, base_price, unit, status } = this;
+        let { name, description, list_image, thumb, price, base_price, unit, status, shortDescription } = this;
         let category_id = this.category;
         let unit_id = this.unit;
         let product_type_id = this.product_type;
-        let product = await this.productService.update(this.id, { name, description, thumb, price, base_price, unit, status, category_id, unit_id, product_type_id, list_image })
+        let short_description = this.shortDescription;
+        let product = await this.innowayApi.product.update(this.id, { name, short_description, description, thumb, price: _.toNumber(price), base_price: _.toNumber(base_price) , status, category_id, unit_id, product_type_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
         if (toppings.length > 0) {
-          await this.productService.updateToppings(this.id, toppings);
+          await this.innowayApi.product.updateToppings(this.id, toppings)
         }
         this.alertUpdateSuccess();
         this.backToList();

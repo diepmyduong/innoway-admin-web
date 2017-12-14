@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router, ActivatedRoute } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { ListPageInterface } from "app/apps/interface/listPageInterface";
 
 declare let swal:any;
@@ -21,17 +21,14 @@ export class UnitComponent implements OnInit, ListPageInterface {
   searchTimeOut: number = 250;
   searchRef: any;
 
-  unitService: any;
-
   @ViewChild(DataTable) itemsTable;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private ref: ChangeDetectorRef
   ) {
-    this.unitService = innoway.getService('unit');
   }
 
   ngOnInit() {
@@ -49,8 +46,8 @@ export class UnitComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('unit', query);
-    this.itemCount = this.unitService.currentPageCount;
+    this.items.next(await this.innowayApi.unit.getList({ query }))
+    this.itemCount = this.innowayApi.unit.pagination.totalItems
     this.ref.detectChanges();
     return this.items;
   }
@@ -108,7 +105,7 @@ export class UnitComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.unitService.delete(item.id)
+      await this.innowayApi.unit.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -127,7 +124,7 @@ export class UnitComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.unitService.deleteAll(ids)
+      await this.innowayApi.unit.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();

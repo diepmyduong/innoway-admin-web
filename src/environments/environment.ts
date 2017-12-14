@@ -8,5 +8,19 @@ export const environment = {
   chatbot: {
     host: "http://localhost:5000",
     version: "v1"
+  },
+  innoway: {
+    host: "http://localhost:3000",
+    version: "v1",
+    firebase: {
+      apiKey: "AIzaSyCV7iiP9I8axVH3zT1AzltHlvcDWYoOySs",
+      authDomain: "dashboard-version-2-0.firebaseapp.com",
+      databaseURL: "https://dashboard-version-2-0.firebaseio.com",
+      projectId: "dashboard-version-2-0",
+      storageBucket: "dashboard-version-2-0.appspot.com",
+      messagingSenderId: "16906134069"
+    },
+    uiHost: 'http://localhost:4200',
+    fcmServiceWorkerPath: '/assets/firebase-messaging-sw.js'
   }
 };

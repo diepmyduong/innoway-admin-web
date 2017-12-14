@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService, iBrand } from "app/services/innoway";
 
 declare let swal:any
 
@@ -16,12 +16,11 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  brandService: any;
 
   name: string;
   color: string = "#127bdc";
   logo: string;
-  trail_expire: string;
+  trial_expire: string;
   status: number = 1;
 
   dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
@@ -29,8 +28,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService) {
-    this.brandService = innoway.getService('brand');
+    public innowayApi: InnowayApiService) {
   }
 
   ngOnInit(): void {
@@ -56,13 +54,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.brandService.get(this.id, {
-        fields: ["$all"]
-      });
+      let data = await this.innowayApi.brand.getItem(this.id, {
+        query: { fields: ["$all"] }
+      })
       this.name = data.name
       this.color = data.color
       this.logo = data.logo
-      this.trail_expire = data.trail_expire
+      this.trial_expire = data.trial_expire
       this.status = data.status
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
@@ -72,7 +70,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route });
+    this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -125,8 +123,8 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, color, logo, trail_expire, status } = this;
-      await this.brandService.add({ name, color, logo, trail_expire, status })
+      let { name, color, logo, trial_expire, status } = this;
+      await this.innowayApi.brand.add({ name, color, logo, trial_expire, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData);
@@ -137,8 +135,8 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, color, logo, trail_expire, status } = this;
-      await this.brandService.update(this.id, { name, color, logo, trail_expire, status })
+      let { name, color, logo, trial_expire, status } = this;
+      await this.innowayApi.brand.update(this.id, { name, color, logo, trial_expire, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {

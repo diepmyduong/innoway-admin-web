@@ -1,31 +1,32 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot,Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { AuthService } from '../auth.service';
-
+import { InnowayAuthService } from 'app/services/innoway'
+import * as Console from 'console-prefix'
 @Injectable()
 export class AuthGuard implements CanActivate {
 
   constructor(
-    public auth:AuthService,
+    public innowayAuth: InnowayAuthService,
     public router: Router
-  ){
-    
+  ) {
+    this.log('On Auth Guard')
   }
+
+  get log() { return Console(`[Auth Guard]`).log }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return new Observable<boolean>(sub =>{
-      this.auth.getAuthState().then(obState =>{
-        obState.subscribe(state =>{
-          if(state){
-          }else{
-            this.router.navigate(['/login'])
-          }
-          sub.next(state);
-        })
-      })
+      this.log('state', state)
+    return this.innowayAuth.authenticated.then(state => {
+      this.log('auth state', state)
+      if (state == false) {
+        this.router.navigate(['/login'])
+      } else if (!this.innowayAuth.firebaseUser.emailVerified) {
+        this.innowayAuth.logout()
+      }
+      return state
     })
   }
 }

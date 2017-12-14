@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import * as moment from 'moment';
 
 import { Globals } from './../../../globals';
@@ -14,9 +14,6 @@ declare let swal: any
   styleUrls: ['./bill-detail.component.scss']
 })
 export class BillDetailComponent implements OnInit {
-
-  billService: any;
-  billActitivyService: any;
 
   id: string;
   item: any = {};
@@ -36,11 +33,9 @@ export class BillDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private globals: Globals,
   ) {
-    this.billService = innoway.getService('bill');
-    this.billActitivyService = innoway.getService('bill_activity');
   }
 
   ngOnInit() {
@@ -69,9 +64,9 @@ export class BillDetailComponent implements OnInit {
 
   async setData() {
     try {
-      this.item = await this.billService.get(this.id, {
-        fields: this.itemFields
-      });
+      this.item = await this.innowayApi.bill.getItem(this.id, {
+        query: { fields: this.itemFields }
+      })
       console.log("billdata:"+JSON.stringify(this.item));
     } catch (err) {
       this.alertItemNotFound()
@@ -97,7 +92,7 @@ export class BillDetailComponent implements OnInit {
 
   async changeStatusBill(bill) {
 
-    let options = [
+    let options = [ // #FIX
       { '-2': 'Chỉnh sửa' },
       { '-1': ' Đã hủy' },
       { '0': 'Đặt hàng thành công' },
@@ -130,14 +125,14 @@ export class BillDetailComponent implements OnInit {
       type: 'success',
       html: 'Cập nhật trạng thái: ' + this.detectActionName(result)
     })
-    this.updateAction(Number.parseInt(result));
+    this.updateAction(Number.parseInt(result)); // #FIX
   }
 
-  async updateAction(action: number) {
+  async updateAction(action: number) { // #FIX
     try {
       let bill_id = this.item.id;
       let employee_id;
-      await this.billActitivyService.add({ bill_id, action })
+      await this.innowayApi.billActivity.add({ bill_id, action: action as any })
       this.alertAddSuccess();
       this.item = {};
       this.setData();

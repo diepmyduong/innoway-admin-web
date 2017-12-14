@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { InnowayService } from 'app/services';
-
+import { InnowayApiService, iCustomerType } from 'app/services/innoway';
+import * as _ from 'lodash'
 declare let swal: any
 import * as Ajv from 'ajv';
 import * as moment from 'moment';
@@ -22,7 +22,6 @@ export class AddComponent implements OnInit {
   isEdit: boolean = false;
 
   submitting: boolean = false;
-  customerTypeService: any;
 
   name: string;
   description: string;
@@ -45,9 +44,8 @@ export class AddComponent implements OnInit {
     private router: Router,
     private globals: Globals,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService
+    public innowayApi: InnowayApiService
   ) {
-    this.customerTypeService = innoway.getService('customer_type');
     this.genders = this.globals.GENDERS;
     //this.lastDateOrder = moment(Date.now()).format('MM/DD/yyyy hh:mm');
   }
@@ -84,9 +82,9 @@ export class AddComponent implements OnInit {
 
   async setData() {
     try {
-      let data = await this.customerTypeService.get(this.id, {
-        fields: ["$all"]
-      });
+      let data = await this.innowayApi.customerType.getItem(this.id, {
+        query: { fields: ["$all"] }
+      })
 
       this.name = data.name
       this.description = data.description
@@ -165,7 +163,7 @@ export class AddComponent implements OnInit {
       let last_date_order = lastDateOrder ? new Date(lastDateOrder) : null;
       let number_of_bill = numberOfBill;
       let amount_of_purchase = this.globals.convertStringToPrice(amountOfPurchase);
-      await this.customerTypeService.add({ last_date_order, number_of_bill, amount_of_purchase, sex, name, description, status })
+      await this.innowayApi.customerType.add({ last_date_order, number_of_bill: _.toNumber(number_of_bill), amount_of_purchase, sex: sex as any, name, description, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -182,7 +180,7 @@ export class AddComponent implements OnInit {
       let last_date_order = lastDateOrder ? new Date(lastDateOrder) : null;
       let number_of_bill = numberOfBill;
       let amount_of_purchase = this.globals.convertStringToPrice(amountOfPurchase);
-      await this.customerTypeService.update(this.id, { last_date_order, number_of_bill, amount_of_purchase, sex, name, description, status })
+      await this.innowayApi.customerType.update(this.id, { last_date_order, number_of_bill: _.toNumber(number_of_bill), amount_of_purchase, sex: sex as any, name, description, status })
       this.alertUpdateSuccess();
       form.reset();
       this.backToList();

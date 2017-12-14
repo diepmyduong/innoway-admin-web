@@ -5,7 +5,7 @@ import { DetailPageInterface } from '../../interface/detailPageInterface';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from "ng2-validation/dist";
-import { InnowayService } from 'app/services'
+import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 declare let swal:any;
@@ -17,7 +17,6 @@ declare let swal:any;
 })
 export class DetailComponent implements OnInit, DetailPageInterface {
 
-  toppingTypeService: any;
   id: string;
   item: any;
   itemFields: any = ['$all'];
@@ -25,9 +24,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public innoway:InnowayService
+    public innowayApi: InnowayApiService
   ) {
-    this.toppingTypeService = innoway.getService('topping');
   }
 
   ngOnInit() {
@@ -44,8 +42,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async setData(){
     try {
-      this.item = await this.toppingTypeService.get(this.id,{
-        fields: this.itemFields
+      this.item = await this.innowayApi.topping.getItem(this.id, {
+        query: { fields: this.itemFields }
       })
     }catch(err){
       this.alertItemNotFound()
@@ -80,7 +78,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   // private toppingService: any;
   //
   // constructor(
-  //   public innoway: InnowayService,
+  //   public innowayApi: InnowayApiService,
   //   private zone: NgZone,
   //   private route: ActivatedRoute,
   //   private router: Router,

@@ -5,7 +5,6 @@ import { SharedModule } from 'app/shared'
 
 import { SimpleLayoutComponent } from './simple-layout/simple-layout.component';
 import { FullLayoutComponent } from './full-layout/full-layout.component';
-import { ChatbotLayoutComponent } from './chatbot-layout/chatbot-layout.component';
 import { LauncherLayoutComponent } from './launcher-layout/launcher-layout.component';
 
 //import { BsDropdownModule } from 'ng2-bs-dropdown';
@@ -27,6 +26,6 @@ import { BranchLayoutComponent } from './branch-layout/branch-layout.component';
     //BsDropdownModule,
     ToasterModule
   ],
-  declarations: [SimpleLayoutComponent, FullLayoutComponent, ChatbotLayoutComponent, LauncherLayoutComponent, ProductLayoutComponent, EmployeeLayoutComponent, CustomerLayoutComponent, BillLayoutComponent, SettingLayoutComponent, PromotionLayoutComponent, BranchLayoutComponent]
+  declarations: [SimpleLayoutComponent, FullLayoutComponent, LauncherLayoutComponent, ProductLayoutComponent, EmployeeLayoutComponent, CustomerLayoutComponent, BillLayoutComponent, SettingLayoutComponent, PromotionLayoutComponent, BranchLayoutComponent]
 })
 export class LayoutsModule { }

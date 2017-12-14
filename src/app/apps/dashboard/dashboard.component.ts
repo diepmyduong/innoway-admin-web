@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
-import { InnowayService, AuthService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { ToasterModule, ToasterService, ToasterConfig } from 'angular2-toaster/angular2-toaster';
 import { Subscription } from "rxjs/Subscription";
@@ -24,12 +24,6 @@ export class DashboardComponent implements OnInit {
   public brandInfo: string = '#63c2de';
   public brandWarning: string = '#f8cb00';
   public brandDanger: string = '#f86c6b';
-
-  employeeService: any;
-  branchService: any;
-  customerService: any;
-  billService: any;
-  shipAreaService: any;
 
   employee: any;
   employeeData: any;
@@ -120,19 +114,14 @@ export class DashboardComponent implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private ref: ChangeDetectorRef,
     private globals: Globals,
     toasterService: ToasterService,
     private dashboardService: DashboardService,
-    public auth: AuthService,
     public sharedDataService: SharedDataService) {
-    this.billService = innoway.getService('bill');
-    this.branchService = innoway.getService('branch');
-    this.shipAreaService = innoway.getService('brand_ship');
-    this.customerService = innoway.getService('customer');
 
-    this.employeeData = this.auth.service.userInfo;
+    this.employeeData = this.innowayApi.innowayAuth.innowayUser
     this.toasterService = toasterService;
 
     //init actions
@@ -161,9 +150,9 @@ export class DashboardComponent implements OnInit {
 
   async loadEmployeeDataByBranchData() {
     try {
-      this.employees = await this.innoway.getAll('employee', {
-        fields: ["$all"]
-      });
+      this.employees.next(await this.innowayApi.employee.getList({
+        query: { fields: ["$all"] }
+      }))
     } catch (err) {
       // try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -172,9 +161,9 @@ export class DashboardComponent implements OnInit {
 
   async loadAreaData() {
     try {
-      this.areas = await this.innoway.getAll('ship_area', {
-        fields: ["$all"]
-      });
+      this.areas.next(await this.innowayApi.shipArea.getList({
+        query: { fields: ["$all"]}
+      }))
     } catch (err) {
       // try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -183,8 +172,8 @@ export class DashboardComponent implements OnInit {
 
   async loadBranchByEmployeeData(branchId: string) {
     try {
-      this.branch = await this.branchService.get(branchId, {
-        fields: ["$all"]
+      this.branch = await this.innowayApi.branch.getItem(branchId, {
+        query: { fields: ["$all"] }
       })
       this.ref.detectChanges();
     } catch (err) {
@@ -763,15 +752,16 @@ export class DashboardComponent implements OnInit {
 
   async detectChangeSelect(event) {
     console.log("bambi bambi: " + JSON.stringify(event));
-    const customerService = this.innoway.getService('customer');
     let limit = 5;
-    this.customerData = await customerService.getAllWithQuery({
-      fields: ["$all"],
-      limit: limit,
-      filter: {
-        phone: { $iLike: `%${event}%` }
+    this.customerData.next(await this.innowayApi.customer.getList({
+      query: {
+        fields: ["$all"],
+        limit: limit,
+        filter: {
+          phone: { $iLike: `%${event}%` }
+        }
       }
-    })
+    }))
 
     this.autocompleteCustomerData = new Array<any>();
 
@@ -787,15 +777,16 @@ export class DashboardComponent implements OnInit {
 
   async detectChangeNameSelect(event) {
     console.log("bambi bambi: " + JSON.stringify(event));
-    const customerService = this.innoway.getService('customer');
     let limit = 5;
-    this.customerNameData = await customerService.getAllWithQuery({
-      fields: ["$all"],
-      limit: limit,
-      filter: {
-        fullname: { $iLike: `%${event}%` }
+    this.customerNameData.next(await this.innowayApi.customer.getList({
+      query: {
+        fields: ["$all"],
+        limit: limit,
+        filter: {
+          fullname: { $iLike: `%${event}%` }
+        }
       }
-    })
+    }))
 
     this.autocompleteCustomerNameData = new Array<any>();
 
@@ -815,11 +806,10 @@ export class DashboardComponent implements OnInit {
 
   async getSummaryInformation() {
     try {
-      let request = {
-        start_time: moment(Date.now()).format("YYYY-MM-DD"),
-        end_time: moment(Date.now()).add(1, 'days').format('YYYY-MM-DD')    
-      }
-      let data = await this.billService.summaryBill(request);
+      let data = await this.innowayApi.bill.summaryBill({
+        startTime: moment(Date.now()).format("YYYY-MM-DD"),
+        endTime: moment(Date.now()).add(1, 'days').format('YYYY-MM-DD')
+      })
       this.summary = data;
 
       this.top_right_infos.push({

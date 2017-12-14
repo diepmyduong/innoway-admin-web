@@ -12,9 +12,7 @@ export const routes: Routes = [
   },
   layout.SimpleLayoutRouting,
   layout.FullLayoutRouting,
-  layout.ChatbotLayoutRouting,
   layout.LauncherLayoutRouting,
-  layout.ChatGutLayoutRouting,
   layout.PosLayoutRouting,
   layout.BrandRegisterLayoutRouting,
   layout.ToolLayoutRouting,
@@ -24,11 +22,11 @@ export const routes: Routes = [
   layout.SettingLayoutRouting,
   layout.PromotionLayoutRouting,
   layout.BillLayoutRouting,
-  layout.BranchLayoutRouting
-  // {
-  //   path: '**',
-  //   redirectTo: '404'
-  // }
+  layout.BranchLayoutRouting,
+  {
+    path: '**',
+    redirectTo: '404'
+  }
 ];
 
 @NgModule({

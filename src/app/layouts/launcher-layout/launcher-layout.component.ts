@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
-import { AuthService, InnowayService } from "app/services";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs/Observable";
 import { ToasterModule, ToasterService, ToasterConfig } from 'angular2-toaster/angular2-toaster';
+import { InnowayApiService } from 'app/services/innoway'
 
 @Component({
   selector: 'app-launcher-layout',
@@ -32,15 +32,13 @@ export class LauncherLayoutComponent implements OnInit {
 
     constructor(private router: Router,
       private route: ActivatedRoute,
-      private innoway: InnowayService,
       private ref: ChangeDetectorRef,
       toasterService: ToasterService,
-      private auth: AuthService,
-      private zone: NgZone
+      private zone: NgZone,
+      public innowayApi: InnowayApiService
     ) {
-      this.employee = this.auth.service.userInfo;
+      this.employee = this.innowayApi.innowayAuth.innowayUser;
       this.toasterService = toasterService;
-      this.billService = innoway.getService('bill');
     }
 
     async ngOnInit() {
@@ -49,10 +47,10 @@ export class LauncherLayoutComponent implements OnInit {
     }
 
     async subscribeTopicByFCM() {
-      this.billChangeObservable = await this.billService.subscribe();
-      this.subscribers.bill = this.billChangeObservable.subscribe(data => {
-        this.getDataBillChange(data.id);
-      });
+      // this.billChangeObservable = await this.billService.subscribe();
+      // this.subscribers.bill = this.billChangeObservable.subscribe(data => {
+      //   this.getDataBillChange(data.id);
+      // });
     }
 
     itemFields: any = ['$all', {
@@ -69,25 +67,25 @@ export class LauncherLayoutComponent implements OnInit {
     }];
 
     async getDataBillChange(id: string) {
-      try {
-        let bill = await this.billService.get(id, {
-          fields: ['$all', {
-            activities: ['$all', {
-              employee: ['$all']
-            }],
-            bill_ship_detail: ['$all'],
-            items: ['$all', {
-              Branch: ['$all', '$paranoid'],
-              topping_values: ['$all', '$paranoid']
-            }],
-            customer: ['$all'],
-            activity: ['$all']
-          }]
-        });
-        console.log("bambi: " + JSON.stringify(bill));
-      } catch (err) {
+      // try {
+      //   let bill = await this.billService.get(id, {
+      //     fields: ['$all', {
+      //       activities: ['$all', {
+      //         employee: ['$all']
+      //       }],
+      //       bill_ship_detail: ['$all'],
+      //       items: ['$all', {
+      //         Branch: ['$all', '$paranoid'],
+      //         topping_values: ['$all', '$paranoid']
+      //       }],
+      //       customer: ['$all'],
+      //       activity: ['$all']
+      //     }]
+      //   });
+      //   console.log("bambi: " + JSON.stringify(bill));
+      // } catch (err) {
 
-      }
+      // }
     }
 
     showSuccess() {
@@ -108,7 +106,7 @@ export class LauncherLayoutComponent implements OnInit {
     }
 
     logout() {
-      this.auth.service.logout();
+      this.innowayApi.innowayAuth.logout()
     }
 
     navigations = [

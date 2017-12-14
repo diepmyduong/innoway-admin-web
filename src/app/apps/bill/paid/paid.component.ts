@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Globals } from './../../../globals';
-import { InnowayService, AuthService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgForm } from "@angular/forms";
-
+import * as _ from 'lodash'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 declare let swal:any
@@ -20,7 +20,6 @@ export class PaidComponent implements OnInit {
   private isEdit: boolean;
   private submitting: boolean = false;
 
-  private PaidHistoryService: any;
   private transaction_time: string = "1";
   private total_amount: string = "10000000";
   private receive_amount: string = "0";
@@ -43,10 +42,8 @@ export class PaidComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    private innoway: InnowayService,
-    private auth: AuthService) {
-    this.PaidHistoryService = innoway.getService('paid_history');
-    this.employee = this.auth.service.userInfo;
+    private innowayApi: InnowayApiService) {
+    this.employee = this.innowayApi.innowayAuth.innowayUser
   }
 
   async ngOnInit() {
@@ -139,7 +136,7 @@ export class PaidComponent implements OnInit {
   }
 
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route });
+    this.router.navigate(['../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -254,7 +251,14 @@ export class PaidComponent implements OnInit {
       let { transaction_time, total_amount, pay_amount, return_amount, remain_amount } = this;
       let employee_id = this.employee.id;
       let bill_id = this.id;
-      await this.PaidHistoryService.add({ employee_id, bill_id, transaction_time, total_amount, pay_amount, return_amount, remain_amount })
+      // #FIX
+      await this.innowayApi.paidHistory.add({ 
+        employee_id, bill_id, transaction_time, 
+        total_amount: _.toNumber(total_amount), 
+        pay_amount: _.toNumber(pay_amount), 
+        return_amount: _.toNumber(return_amount), 
+        remain_amount: _.toNumber(remain_amount)
+      })
       this.alertAddSuccess();
       form.resetForm(this.setDefaultData());
     } else {

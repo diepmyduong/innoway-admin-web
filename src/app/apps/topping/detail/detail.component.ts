@@ -6,7 +6,7 @@ import { DetailPageInterface } from '../../interface/detailPageInterface';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from "ng2-validation/dist";
-import { InnowayService } from 'app/services'
+import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
@@ -20,7 +20,6 @@ declare let swal:any
 })
 export class DetailComponent implements OnInit, DetailPageInterface {
 
-  toppingValueService: any;
   id: string;
   item: any;
   itemFields: any = ["$all", {
@@ -35,9 +34,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public innoway: InnowayService
+    public innowayApi: InnowayApiService
   ) {
-    this.toppingValueService = innoway.getService('topping_value');
   }
 
   ngOnInit() {
@@ -54,8 +52,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async setData() {
     try {
-      this.item = await this.toppingValueService.get(this.id, {
-        fields: this.itemFields
+      this.item = await this.innowayApi.toppingValue.getItem(this.id, {
+        query: { fields: this.itemFields }
       })
     } catch (err) {
       this.alertItemNotFound()

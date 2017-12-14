@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 
 declare let swal:any
 
@@ -12,7 +12,6 @@ declare let swal:any
 })
 export class DetailComponent implements OnInit, DetailPageInterface {
 
-  employeeTypeService: any;
   id: string;
   item: any;
   itemFields: any = ['$all'];
@@ -20,9 +19,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public innoway: InnowayService
+    public innowayApi: InnowayApiService
   ) {
-    this.employeeTypeService = innoway.getService('customer_type');
   }
 
   ngOnInit() {
@@ -39,8 +37,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async setData() {
     try {
-      this.item = await this.employeeTypeService.get(this.id, {
-        fields: this.itemFields
+      this.item = await this.innowayApi.customerType.getItem(this.id, {
+        query: { fields: this.itemFields }
       })
     } catch (err) {
       this.alertItemNotFound()

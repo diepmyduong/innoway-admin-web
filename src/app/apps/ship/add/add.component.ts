@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { NgForm } from "@angular/forms";
 
 declare var innoway2: any;
@@ -17,24 +17,20 @@ export class AddComponent implements OnInit, AddPageInterface {
   brand_ship_id: string;
   isEdit: boolean = false;
   submitting: boolean = false;
-  brandService: any;
-  brandShipService: any;
 
-  allow_pick_at_store: number = 0;
-  allow_ship: number = 0;
-  ship_method: number = 0;
-  ship_fee_per_km: string;
+  allow_pick_at_store: boolean;
+  allow_ship: boolean;
+  ship_method: 'distance' | 'area';
+  ship_fee_per_km: number;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService) {
-    this.brandService = innoway.getService('brand');
-    this.brandShipService = innoway.getService('brand_ship');
+    public innowayApi: InnowayApiService) {
   }
 
   ngOnInit(): void {
-    this.id = innoway2.config.get("brand_id");
+    this.id = this.innowayApi.innowayAuth.innowayUser.brand_id
     if (this.id == null) {
       this.isEdit = false;
       this.setDefaultData();
@@ -53,11 +49,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.brandService.get(this.id, {
-        fields: ["$all", {
-          brand_ship: ["$all"]
-        }]
-      });
+      let data = await this.innowayApi.brand.getItem(this.id, {
+        query: { 
+          fields: ["$all", {
+            brand_ship: ["$all"]
+          }]
+        }
+      })
       this.brand_ship_id = data.brand_ship.id
       if (data.brand_ship.allow_pick_at_store == null) {
         data.brand_ship.allow_pick_at_store = false;
@@ -134,7 +132,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km } = this;
-      await this.brandService.add({ name, allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km })
+      await this.innowayApi.brand.add({ name, allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km })
       this.alertAddSuccess();
       form.reset();
       form.controls["status"].setValue(1);
@@ -146,7 +144,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km } = this;
-      await this.brandShipService.update(this.brand_ship_id, { allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km })
+      await this.innowayApi.brandShip.update(this.brand_ship_id, { allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km })
       this.alertUpdateSuccess();
       // form.reset();
     } else {

@@ -36,10 +36,6 @@ export const FullLayoutRouting = {
       loadChildren: 'app/apps/employee/employee.module#EmployeeModule'
     },
     {
-      path: 'employee-type',
-      loadChildren: 'app/apps/employee-type/employee-type.module#EmployeeTypeModule'
-    },
-    {
       path: 'product-type',
       loadChildren: 'app/apps/product-type/product-type.module#ProductTypeModule'
     },

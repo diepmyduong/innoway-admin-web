@@ -3,7 +3,7 @@ import { ListPageInterface } from "app/apps/interface/listPageInterface";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router, ActivatedRoute } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { MatDialog } from '@angular/material';
 import { ChangePasswordDialog } from "./../../modal/change-password/change-password.component";
 import { ModalModule } from './../../modal/modal.module';
@@ -26,18 +26,15 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
   searchTimeOut: number = 250;
   searchRef: any;
 
-  employeeService: any;
-
   @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
     private router: Router,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private route: ActivatedRoute,
     private ref: ChangeDetectorRef,
     public dialog: MatDialog,
   ) {
-    this.employeeService = innoway.getService('employee');
   }
 
   ngOnInit() {
@@ -55,9 +52,8 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('employee', query);
-    this.itemCount = this.employeeService.currentPageCount;
-    this.items.subscribe(items => console.log(items))
+    this.items.next(await this.innowayApi.employee.getList({ query }))
+    this.itemCount = this.innowayApi.employee.pagination.totalItems
     this.ref.detectChanges();
     return this.items;
   }
@@ -115,7 +111,7 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.employeeService.delete(item.id)
+      await this.innowayApi.employee.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -137,7 +133,7 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.employeeService.deleteAll(ids)
+      await this.innowayApi.employee.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
@@ -197,7 +193,7 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
 
   async changePassword(data: any, password) {
     try {
-      await this.employeeService.update(data.id, { password })
+      await this.innowayApi.employee.update(data.id, { password })
     } catch (err) {
     }
   }

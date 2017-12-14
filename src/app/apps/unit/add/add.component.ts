@@ -5,7 +5,7 @@ import { AddPageInterface } from "app/apps/interface/addPageInterface"
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators, NgForm } from "@angular/forms";
 import { CustomValidators } from "ng2-validation/dist";
-import { InnowayService } from 'app/services'
+import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 
@@ -21,16 +21,14 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  unitService: any;
   name: string;
-  offset: string;
+  offset: number;
   status: number = 1;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService) {
-    this.unitService = innoway.getService('unit');
+    public innowayApi: InnowayApiService) {
   }
 
   ngOnInit(): void {
@@ -53,9 +51,9 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.unitService.get(this.id, {
-        fields: ["$all"]
-      });
+      let data = await this.innowayApi.unit.getItem(this.id, {
+        query: { fields: ["$all"] }
+      })
       this.name = data.name
       this.offset = data.offset
       this.status = data.status
@@ -121,7 +119,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { name, offset, status } = this;
-      await this.unitService.add({ name, offset, status })
+      await this.innowayApi.unit.add({ name, offset, status })
       this.alertAddSuccess();
       form.reset();
       form.controls["status"].setValue(1);
@@ -133,7 +131,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { name, offset, status } = this;
-      await this.unitService.update(this.id, { name, offset, status })
+      await this.innowayApi.unit.update(this.id, { name, offset, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {

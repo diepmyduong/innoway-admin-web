@@ -3,8 +3,9 @@ import { ListPageInterface } from "app/apps/interface/listPageInterface";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { Globals } from './../../../globals';
+import { Subscription } from 'rxjs/Subscription'
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
@@ -24,22 +25,22 @@ export class PaidListComponent implements OnInit, ListPageInterface {
   query: any = {};
   searchTimeOut: number = 250;
   searchRef: any;
-
-  paidHistoryService: any;
-
+  subscriptions: Subscription[] = []
   @ViewChild(DataTable) itemsTable;
 
   constructor(
     private globals: Globals,
     private router: Router,
     private route: ActivatedRoute,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private ref: ChangeDetectorRef
   ) {
-    this.paidHistoryService = innoway.getService('paid_history');
   }
 
   ngOnInit() {
+    this.subscriptions.push(this.innowayApi.paidHistory.items.subscribe(items => {
+      this.items.next(items)
+    }))
   }
 
   async reloadItems(params) {
@@ -54,8 +55,8 @@ export class PaidListComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('paid_history', query);
-    this.itemCount = this.paidHistoryService.currentPageCount;
+    this.items.next(await this.innowayApi.paidHistory.getList({ query }))
+    this.itemCount = this.innowayApi.paidHistory.pagination.totalItems
     this.ref.detectChanges();
     return this.items;
   }
@@ -127,7 +128,7 @@ export class PaidListComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.paidHistoryService.delete(item.id)
+      await this.innowayApi.paidHistory.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -146,7 +147,7 @@ export class PaidListComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.paidHistoryService.deleteAll(ids)
+      await this.innowayApi.paidHistory.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();

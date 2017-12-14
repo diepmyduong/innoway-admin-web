@@ -5,7 +5,7 @@ import { AddPageInterface } from "../../interface/addPageInterface"
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators, NgForm } from "@angular/forms";
 import { CustomValidators } from "ng2-validation/dist";
-import { InnowayService } from 'app/services'
+import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 declare let swal:any
@@ -20,7 +20,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  toppingTypeService: any;
   name: string;
   description: string;
   status: number = 1;
@@ -28,8 +27,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService) {
-    this.toppingTypeService = innoway.getService('topping');
+    public innowayApi: InnowayApiService) {
   }
 
   ngOnInit(): void {
@@ -55,9 +53,9 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let category = await this.toppingTypeService.get(this.id, {
-        fields: ["name", "description", "status"]
-      });
+      let category = await this.innowayApi.topping.getItem(this.id, {
+        query: { fields: ["name", "description", "status"] }
+      })
       this.name = category.name
       this.description = category.description
       this.status = category.status
@@ -122,7 +120,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { name, description, status } = this;
-      await this.toppingTypeService.add({ name, description, status })
+      await this.innowayApi.topping.add({ name, description, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -134,7 +132,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { name, description, status } = this;
-      await this.toppingTypeService.update(this.id, { name, description, status })
+      await this.innowayApi.topping.update(this.id, { name, description, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {
@@ -193,7 +191,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   // private toppingService: any;
   //
   // constructor(
-  //   public innoway: InnowayService,
+  //   public innowayApi: InnowayApiService,
   //   private modal: Modal,
   //   private pageService: PageService,
   //   private zone: NgZone,

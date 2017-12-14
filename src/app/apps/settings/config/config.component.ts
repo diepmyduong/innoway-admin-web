@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { NgForm } from "@angular/forms";
 import * as moment from 'moment';
 import { Globals } from "./../../../globals";
-import { InnowayService, AuthService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 
 declare var swal: any
 
@@ -17,7 +17,6 @@ export class ConfigComponent implements OnInit {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  brandService: any;
   employee: any;
 
   name: string;
@@ -76,10 +75,8 @@ export class ConfigComponent implements OnInit {
     private router: Router,
     private ref: ChangeDetectorRef,
     private globals: Globals,
-    private auth: AuthService,
-    public innoway: InnowayService) {
-    this.brandService = innoway.getService('brand');
-    this.employee = this.auth.service.userInfo;
+    public innowayApi: InnowayApiService) {
+    this.employee = this.innowayApi.innowayAuth.innowayUser;
   }
 
   ngOnInit(): void {
@@ -95,10 +92,9 @@ export class ConfigComponent implements OnInit {
 
   async setData(brandId) {
     try {
-      let data = await this.brandService.get(brandId, {
-        fields: ["$all"]
-      });
-      console.log("brand", JSON.stringify(data));
+      let data = await this.innowayApi.brand.getItem(this.id, {
+        query: { fields: ["$all"] }
+      })
       this.name = data.name
       this.color = data.color
       this.logo = data.logo
@@ -189,6 +185,7 @@ export class ConfigComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
+      
       let { name, color, logo, trialExpire, address, vatValue, openHour, closeHour, status } = this;
       let trial_expire = trialExpire;
       let vat_value = vatValue
@@ -200,7 +197,7 @@ export class ConfigComponent implements OnInit {
           open_days_of_week.push(day.code);
         }
       });
-      await this.brandService.add({
+      await this.innowayApi.brand.add({
         name, color, logo, trial_expire, address, vat_value,
         open_hour_online, close_hour_online, open_days_of_week, status
       })
@@ -226,7 +223,7 @@ export class ConfigComponent implements OnInit {
             open_days_of_week.push(day.code);
           }
         });
-        await this.brandService.update(this.employee.brand_id, {
+        await this.innowayApi.brand.update(this.employee.brand_id, {
           name, color, logo, trial_expire, address, vat_value, phone,
           open_hour_online, close_hour_online, open_days_of_week, status
         })
