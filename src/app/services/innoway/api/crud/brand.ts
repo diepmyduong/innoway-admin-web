@@ -3,8 +3,7 @@ import { CrudAPI, iCrud } from '../crud'
 import { InnowayApiService } from '../../innoway-api.service'
 
 export interface iBrand extends iCrud {
-    thirdparty_kiotviet_id: string,
-
+    thirdparty_kiotviet_id?: string,
     color?: string,
     logo?: string,
     name?: string,

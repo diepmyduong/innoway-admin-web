@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 
 declare let swal:any
 
@@ -12,7 +12,6 @@ declare let swal:any
 })
 export class DetailComponent implements OnInit, DetailPageInterface {
 
-  brandService: any;
   id: string;
   item: any;
   itemFields: any = ['$all'];
@@ -21,9 +20,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     private route: ActivatedRoute,
     private router: Router,
       private ref: ChangeDetectorRef,
-    public innoway: InnowayService
+    public innowayApi: InnowayApiService
   ) {
-    this.brandService = innoway.getService('brand');
   }
 
   ngOnInit() {
@@ -40,8 +38,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async setData() {
     try {
-      this.item = await this.brandService.get(this.id, {
-        fields: this.itemFields
+      this.item = await this.innowayApi.brand.getItem(this.id, {
+        query: { fields: this.itemFields }
       })
       this.ref.detectChanges();
     } catch (err) {
