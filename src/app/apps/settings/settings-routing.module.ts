@@ -6,6 +6,7 @@ import { AreaComponent } from './area/area.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { SellComponent } from './sell/sell.component';
+import { ConfigComponent } from "app/apps/settings/config/config.component";
 
 const routes: Routes = [
   {
@@ -45,6 +46,13 @@ const routes: Routes = [
         component: SellComponent,
         data: {
           title: "Thiết lập bán hàng"
+        }
+      },
+      {
+        path: 'config',
+        component: ConfigComponent,
+        data: {
+          title: "Thiết lập thương hiệu"
         }
       },
     ]
