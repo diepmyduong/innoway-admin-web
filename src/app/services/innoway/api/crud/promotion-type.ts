@@ -2,16 +2,16 @@ import { CrudAPI, iCrud } from '../crud'
 
 import { InnowayApiService } from '../../innoway-api.service'
 
-export interface iUnit extends iCrud {
+export interface iPromotionType extends iCrud {
     brand_id?: string,
+    description?: string,
     name?: string,
-    offset?: number,
 }
 
-export class Unit extends CrudAPI<iUnit> {
+export class PromotionType extends CrudAPI<iPromotionType> {
     constructor(
         public api: InnowayApiService
     ) {
-        super(api, 'unit')
+        super(api, 'promotion_type')
     }
 }

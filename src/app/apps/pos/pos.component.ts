@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription'
 import * as _ from 'lodash'
 import * as moment from 'moment';
 import { Globals } from "./../../globals";
-import { InnowayService, AuthService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
@@ -49,14 +49,6 @@ export class PosComponent implements OnInit {
   customerData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   promotionData: any;//BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   responseOrderAtStore: BehaviorSubject<any> = new BehaviorSubject<any>({});
-
-  employeeService: any;
-  branchService: any;
-  categoryService: any;
-  productService: any;
-  customerService: any;
-  brandService: any;
-  billService: any;
 
   subscriptions: any = {};
 
@@ -187,10 +179,9 @@ export class PosComponent implements OnInit {
 
   @ViewChild(TemplateRef) template: TemplateRef<any>;
 
-  constructor(private innoway: InnowayService,
+  constructor(public innowayApi: InnowayApiService,
     private globals: Globals,
     private ref: ChangeDetectorRef,
-    private auth: AuthService,
     public zone: NgZone,
     public dialog: MatDialog,
     @Inject(DOCUMENT) doc: any,
@@ -204,15 +195,8 @@ export class PosComponent implements OnInit {
       grabCursor: true
     }
     this.itemsChange = new BehaviorSubject<any[]>([]);
-    this.employeeService = innoway.getService('employee');
-    this.branchService = innoway.getService('branch');
-    this.categoryService = innoway.getService('category');
-    this.productService = innoway.getService('product');
-    this.customerService = innoway.getService('customer');
-    this.brandService = innoway.getService('brand');
-    this.billService = innoway.getService('bill');
 
-    this.employee = this.auth.service.userInfo;
+    this.employee = this.innowayApi.innowayAuth.innowayUser;
 
     this.channels = [this.globals.CHANNELS[0]];
     this.channel = this.channels[0].code;
@@ -281,14 +265,15 @@ export class PosComponent implements OnInit {
 
   async getBrandData(id: string) {
     try {
-      let data = await this.brandService.get(id, {
-        fields: ['$all', {
-          'brand_ship': ['$all']
-        }]
+      let data = await this.innowayApi.brand.getItem(id, {
+        query: { 
+          fields: ['$all', {
+            'brand_ship': ['$all']
+          }]
+        }
       })
-      console.log("brand", JSON.stringify(data));
       this.brand = data;
-      this.vatValue = data.vat_value == null || data.vat_value == 0 || data.vat_value == "0" ? 1 : Number.parseFloat(data.vat_value);
+      this.vatValue = data.vat_value == null || data.vat_value == 0 ? 1 : data.vat_value;
       if (data.brand_ship != null) {
         if (data.brand_ship.allow_ship) {
           this.deliveryMethods.push(this.globals.DELIVERY_METHODS[0]);
@@ -317,8 +302,8 @@ export class PosComponent implements OnInit {
   async getBranchData(id: string) {
     console.log("branch_id: " + id);
     try {
-      let data = await this.branchService.get(id, {
-        fields: ["$all", "$paranoid"]
+      let data = await this.innowayApi.branch.getItem(id, {
+        query: { fields: ["$all", "$paranoid"] }
       })
       this.branch = data;
       this.branchId = this.branch.id;
@@ -346,12 +331,12 @@ export class PosComponent implements OnInit {
 
   async getProductData() {
     try {
-      let data = await this.innoway.getAll('product', {
-        fields: ["$all"],
-        limit: 0,
-      });
-
-      this.productData = data;
+      this.productData.next(await this.innowayApi.product.getList({
+        query: {
+          fields: ["$all"],
+          limit: 0,
+        }
+      }))
       return this.productData.getValue()
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
@@ -361,9 +346,9 @@ export class PosComponent implements OnInit {
 
   async getCustomerData() {
     try {
-      let data = await this.innoway.getAll('customer', {
-        fields: ["$all"]
-      });
+      await this.innowayApi.customer.getList({
+        query: { fields: ["$all"] }
+      })
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -372,9 +357,9 @@ export class PosComponent implements OnInit {
 
   async getEmployeeData() {
     try {
-      let data = await this.innoway.getAll('employee', {
-        fields: ["$all"]
-      });
+      await this.innowayApi.employee.getList({
+        query: { fields: ["$all"] }
+      })
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -383,15 +368,17 @@ export class PosComponent implements OnInit {
 
   async getToppings(productId) {
     try {
-      let data = await this.productService.get(productId, {
-        fields: ["id", {
-          toppings: ["id", {
-            topping: ["id", "name", {
-              values: ["id", "name", "price"]
+      let data = await this.innowayApi.product.getItem(productId, {
+        query: { 
+          fields: ["id", {
+            toppings: ["id", {
+              topping: ["id", "name", {
+                values: ["id", "name", "price"]
+              }]
             }]
           }]
-        }]
-      });
+        }
+      })
       this.selectedTopping = data.toppings != null ? data.toppings : null;
       if (this.selectedTopping != null) {
         this.openToppingDialog(productId, data.toppings);
@@ -533,17 +520,18 @@ export class PosComponent implements OnInit {
   }
 
   async searchProduct(key: string) {
-    const productService = this.innoway.getService('product');
     let limit = 5;
     if (key == null || key == "" || this.isChose) {
       this.isChose = false;
       return this.productData.next(this.allProductData);
     } else {
-      return await productService.getAllWithQuery({
-        fields: ["$all"],
-        limit: limit,
-        filter: {
-          name: { $iLike: `%${key}%` }
+      return await this.innowayApi.product.getList({
+        query: {
+          fields: ["$all"],
+          limit: limit,
+          filter: {
+            name: { $iLike: `%${key}%` }
+          }
         }
       })
     }
@@ -719,7 +707,7 @@ export class PosComponent implements OnInit {
         "longitude": longitude,
         "latitude": latitude
       }
-      let fee = await this.billService.calculateShipFee(data);
+      let fee = await this.innowayApi.bill.calculateShipFee(data);
       this.shipFee = fee.fee;
       if (!this.isSelectBillAtStoreTab) {
         this.outputShipFee = Number.parseInt(this.shipFee);
@@ -739,7 +727,7 @@ export class PosComponent implements OnInit {
       let data = {
         phone: phone.toString()
       }
-      this.customer = await this.customerService.getCustomerByPhone(data);
+      this.customer = await this.innowayApi.customer.getCustomerByPhone(data);
 
       this.promotion = null;
       if (this.customer != null && this.customer.code != 500) {
@@ -765,11 +753,10 @@ export class PosComponent implements OnInit {
 
   async getPromotionsByCustomerId(customerId) {
     try {
-      let data = await this.customerService.getPromotions(customerId, {
+      let data = await this.innowayApi.customer.getPromotions(customerId, {
         fields: ["$all"]
-      });
+      })
       this.promotionData = data;
-      console.log("promotion", JSON.stringify(data));
       this.ref.detectChanges();
       // alert(JSON.stringify(data))
     } catch (err) {
@@ -803,8 +790,8 @@ export class PosComponent implements OnInit {
 
       let request = {
         "address": this.address,
-        "longitude": this.longitude,
-        "latitude": this.latitude,
+        "longitude": _.toNumber(this.longitude),
+        "latitude": _.toNumber(this.latitude),
         "sub_fee": this.globals.convertStringToPrice(this.subFee),
         "sub_fee_note": this.subFeeNote,
         "channel": this.channel,
@@ -837,7 +824,7 @@ export class PosComponent implements OnInit {
       request.products = products;
       console.log("bambi-request: " + JSON.stringify(request));
 
-      let responseOrderAtStore = await this.billService.orderAtStore(request);
+      let responseOrderAtStore = await this.innowayApi.bill.orderAtStore(request);
       // alert(JSON.stringify(responseOrderAtStore));
 
     } catch (err) {
@@ -904,7 +891,7 @@ export class PosComponent implements OnInit {
       request.products = products;
       console.log("bambi-request: " + JSON.stringify(request));
 
-      let responseOrderAtStore = await this.billService.orderOnlineByEmployee(request);
+      let responseOrderAtStore = await this.innowayApi.bill.orderOnlineByEmployee(request);
       // alert(JSON.stringify(responseOrderAtStore));
 
     } catch (err) {

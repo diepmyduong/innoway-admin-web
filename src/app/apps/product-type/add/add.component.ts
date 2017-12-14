@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { InnowayService } from 'app/services';
+import { InnowayApiService } from 'app/services/innoway';
 
 declare let swal:any
 
@@ -16,7 +16,6 @@ export class AddComponent implements OnInit {
   isEdit: boolean = false;
 
   submitting: boolean = false;
-  productTypeService: any;
 
   name: string;
   description: string;
@@ -27,9 +26,8 @@ export class AddComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService
+    public innowayApi: InnowayApiService
   ) {
-    this.productTypeService = innoway.getService('product_type');
   }
 
   ngOnInit() {
@@ -55,9 +53,9 @@ export class AddComponent implements OnInit {
 
   async setData() {
     try {
-      let product_type = await this.productTypeService.get(this.id, {
-        fields: ["name", "description", "status"]
-      });
+      let product_type = await this.innowayApi.productType.getItem(this.id, {
+        query: { fields: ["name", "description", "status"] }
+      })
       this.name = product_type.name
       this.description = product_type.description
       this.status = product_type.status
@@ -122,7 +120,7 @@ export class AddComponent implements OnInit {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { name, description, status } = this;
-      await this.productTypeService.add({ name, description, status })
+      await this.innowayApi.productType.add({ name, description, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -134,7 +132,7 @@ export class AddComponent implements OnInit {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { name, description, status } = this;
-      await this.productTypeService.update(this.id, { name, description, status })
+      await this.innowayApi.productType.update(this.id, { name, description, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {

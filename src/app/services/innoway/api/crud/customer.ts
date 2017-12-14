@@ -42,4 +42,21 @@ export class Customer extends CrudAPI<iCustomer> {
         const row = res.results.object
         return row;
     }
+
+    async getPromotions(id: string, query: any = {}) {
+        let access_token = await this.getAccessToken()
+        query = this._paserQuery(query);
+        let settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": this.url(`/${id}/promotion`, query),
+            "method": "GET",
+            "headers": {
+                "access_token": access_token
+            }
+        }
+        let res: any = await this.exec(settings);
+        let rows = res.results.objects.rows
+        return rows;
+    }
 }

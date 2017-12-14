@@ -60,7 +60,7 @@ export class Bill extends CrudAPI<iBill> {
         note: string
     }) {
         let { activity, employeeId, note } = params
-        let setting:any = {
+        let setting: any = {
             method: 'POST',
             headers: { //headers
                 'User-Agent': 'Request-Promise',
@@ -171,13 +171,65 @@ export class Bill extends CrudAPI<iBill> {
                 'access_token': this.api.innowayAuth.adminToken
             },
             json: true,
-            body: { 
-                start_time: startTime, 
+            body: {
+                start_time: startTime,
                 end_time: endTime
             }
         }
         var res: any = await this.exec(setting);
         var row = res.results.object;
         return row;
-      }
+    }
+
+    async calculateShipFee(params: {
+        longitude: number,
+        latitude: number
+    }) {
+        let { longitude, latitude } = params;
+        let setting = {
+            method: 'POST',
+            uri: this.apiUrl(`calculate_ship_fee`),
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'access_token': this.api.innowayAuth.adminToken
+            },
+            json: true,
+            body: { longitude, latitude }
+        }
+        var res: any = await this.exec(setting);
+        var row = res.results.object;
+        return row;
+    }
+
+    async orderAtStore(params: any) {
+        let setting = {
+            method: 'POST',
+            uri: this.apiUrl(`order_at_store`),
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'access_token': this.api.innowayAuth.adminToken
+            },
+            json: true,
+            body: params
+        }
+        var res: any = await this.exec(setting);
+        var row = res.results.object;
+        return row;
+    }
+
+    async orderOnlineByEmployee(params: any) {
+        let setting = {
+            method: 'POST',
+            uri: this.apiUrl(`order_online_by_employee`),
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'access_token': this.api.innowayAuth.adminToken
+            },
+            json: true,
+            body: params
+        }
+        var res: any = await this.exec(setting);
+        var row = res.results.object;
+        return row;
+    }
 }

@@ -5,7 +5,7 @@ import { ListPageInterface } from './../interface/listPageInterface';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from "ng2-validation/dist";
-import { InnowayService } from 'app/services'
+import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4";
 
@@ -26,17 +26,14 @@ export class ToppingTypeComponent implements OnInit, ListPageInterface {
   searchTimeOut: number = 250;
   searchRef: any;
 
-  toppingTypeService: any;
-
   @ViewChild(DataTable) itemsTable;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private ref: ChangeDetectorRef
   ) {
-    this.toppingTypeService = innoway.getService('topping');
   }
 
   ngOnInit() {
@@ -54,8 +51,8 @@ export class ToppingTypeComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('topping', query);
-    this.itemCount = this.toppingTypeService.currentPageCount;
+    this.items.next(await this.innowayApi.topping.getList({ query }))
+    this.itemCount = this.innowayApi.topping.pagination.totalItems
     this.ref.detectChanges();
     return this.items;
   }
@@ -113,7 +110,7 @@ export class ToppingTypeComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.toppingTypeService.delete(item.id)
+      await this.innowayApi.topping.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -132,7 +129,7 @@ export class ToppingTypeComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.toppingTypeService.deleteAll(ids)
+      await this.innowayApi.topping.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
@@ -185,7 +182,7 @@ export class ToppingTypeComponent implements OnInit, ListPageInterface {
   // private form: FormGroup;
   // private toppingService: any;
   //
-  // constructor(public innoway: InnowayService,
+  // constructor(public innowayApi: InnowayApiService,
   //   private modal: Modal,
   //   private pageService: PageService,
   //   private zone: NgZone,

@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CustomValidators } from "ng2-validation/dist";
-import { InnowayService } from 'app/services'
+import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
@@ -21,9 +21,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-
-  employeeService: any;
-  branchService: any;
 
   phone: string;
   email: string;
@@ -48,9 +45,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     private globals: Globals,
     private ref: ChangeDetectorRef,
     public dialog: MatDialog,
-    public innoway: InnowayService) {
-    this.employeeService = innoway.getService('employee');
-    this.branchService = innoway.getService('branch');
+    public innowayApi: InnowayApiService) {
     this.employeeTypeData = this.globals.ACTORS;
   }
 
@@ -88,11 +83,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.employeeService.get(this.id, {
-        fields: ["$all", {
-          branch: ["id", "name"]
-        }]
-      });
+      let data = await this.innowayApi.employee.getItem(this.id, {
+        query: { 
+          fields: ["$all", {
+            branch: ["id", "name"]
+          }]
+        }
+      })
       this.fullname = data.fullname
       this.username = data.username
       this.password = data.password
@@ -111,9 +108,11 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async loadBranchData() {
     try {
-      this.branchData = await this.innoway.getAll('branch', {
-        fields: ["id", "name"]
-      });
+      this.branchData.next(await this.innowayApi.branch.getList({
+        query: {
+          fields: ["id", "name"]
+        }
+      }))
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -181,7 +180,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       let { username, phone, email, fullname, password, address, avatar, status } = this;
       let employee_type = this.employeeType;
       let branch_id = this.branch;
-      await this.employeeService.add({
+      await this.innowayApi.employee.add({
         username, phone, email, branch_id, fullname,
         password, address, avatar, employee_type, status
       })
@@ -198,7 +197,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       let { username, phone, email, fullname, address, avatar, status } = this;
       let employee_type = this.employeeType;
       let branch_id = this.branch;
-      await this.employeeService.update(this.id, {
+      await this.innowayApi.employee.update(this.id, {
         username, phone, email, branch_id, fullname,
         address, avatar, employee_type, status
       })
@@ -288,7 +287,7 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async changePassword(password: string) {
     try {
-      await this.employeeService.update(this.id, { password })
+      await this.innowayApi.employee.update(this.id, { password })
       this.alertUpdateSuccess();
     } catch (err) {
       this.alertAddFailed();

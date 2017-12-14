@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { NgForm } from "@angular/forms";
-
+import * as _ from 'lodash'
 declare let swal:any
 
 @Component({
@@ -15,7 +15,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  customerService: any;
 
   name: string;
   account_type: string;
@@ -26,14 +25,13 @@ export class AddComponent implements OnInit, AddPageInterface {
   fullname: string;
   password: string;
   phone: string;
-  sex: number = 1;
+  sex: string // #FIX
   status: number = 1;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService) {
-    this.customerService = innoway.getService('customer');
+    public innowayApi: InnowayApiService) {
   }
 
   ngOnInit(): void {
@@ -59,14 +57,14 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.customerService.get(this.id, {
-        fields: ["$all"]
-      });
+      let data = await this.innowayApi.customer.getItem(this.id, {
+        query: { fields: ["$all"] }
+      })
       this.name = data.name
       this.account_type = data.account_type
       this.active_code = data.active_code
       this.avatar = data.avatar
-      this.birthday = data.birthday
+      this.birthday = _.toString(data.birthday)
       this.email = data.email
       this.fullname = data.fullname
       this.password = data.password
@@ -135,7 +133,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { name, avatar, birthday, email, fullname, password, phone, sex, status } = this;
-      await this.customerService.add({ name, avatar, birthday, email, fullname, password, phone, sex, status })
+      await this.innowayApi.customer.add({ name, avatar, birthday: new Date(birthday), email, fullname, password, phone, sex: sex as any, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData);
@@ -147,7 +145,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { name, avatar, birthday, email, fullname, password, phone, sex, status } = this;
-      await this.customerService.update(this.id, { name, avatar, birthday, email, fullname, password, phone, sex, status })
+      await this.innowayApi.customer.update(this.id, { name, avatar, birthday: new Date(birthday), email, fullname, password, phone, sex: sex as any, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {

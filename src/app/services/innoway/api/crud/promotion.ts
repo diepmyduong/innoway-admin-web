@@ -24,4 +24,51 @@ export class Promotion extends CrudAPI<iPromotion> {
     ) {
         super(api, 'promotion')
     }
+
+    async addCustomerTypes(id: string, customer_type_ids: string[]) {
+        let setting = {
+            method: 'POST',
+            uri: this.apiUrl(`${id}/customer_types`),
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'access_token': this.api.innowayAuth.adminToken
+            },
+            json: true,
+            body: { customer_type_ids }
+        }
+        let res: any = await this.exec(setting);
+        let rows = res.results.object.rows
+        return rows;
+    }
+
+    async updateCustomerType(id: string, customer_type_ids: string[]) {
+        let setting = {
+            method: 'PUT',
+            uri: this.apiUrl(`${id}/customer_types`),
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'access_token': this.api.innowayAuth.adminToken
+            },
+            json: true,
+            body: { customer_type_ids }
+        }
+        let res: any = await this.exec(setting);
+        let rows = res.results.object.rows
+        return rows;
+    }
+
+    async sendPromotionToMessenger(id:string, message: string) {
+        let setting = {
+            method: 'PUT',
+            uri: this.apiUrl(`${id}/customer_types`),
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'access_token': this.api.innowayAuth.adminToken
+            },
+            json: true,
+            body: { message }
+        }
+        let res: any = await this.exec(setting);
+        return res;
+    }
 }

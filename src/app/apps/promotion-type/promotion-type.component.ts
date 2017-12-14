@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router, ActivatedRoute } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { ListPageInterface } from "app/apps/interface/listPageInterface";
 
 declare let swal:any;
@@ -21,17 +21,14 @@ export class PromotionTypeComponent implements OnInit, ListPageInterface {
   searchTimeOut: number = 250;
   searchRef: any;
 
-  promotionTypeService: any;
-
   @ViewChild(DataTable) itemsTable;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private ref: ChangeDetectorRef
   ) {
-    this.promotionTypeService = innoway.getService('promotion_type');
   }
 
   ngOnInit() {
@@ -49,8 +46,8 @@ export class PromotionTypeComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('promotion_type', query);
-    this.itemCount = this.promotionTypeService.currentPageCount;
+    this.items.next(await this.innowayApi.promotionType.getList({ query }))
+    this.itemCount = this.innowayApi.promotionType.pagination.totalItems
     this.ref.detectChanges();
     return this.items;
   }
@@ -108,7 +105,7 @@ export class PromotionTypeComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.promotionTypeService.delete(item.id)
+      await this.innowayApi.promotionType.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -127,7 +124,7 @@ export class PromotionTypeComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.promotionTypeService.deleteAll(ids)
+      await this.innowayApi.promotionType.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();

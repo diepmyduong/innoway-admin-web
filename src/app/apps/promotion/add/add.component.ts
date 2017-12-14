@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CustomValidators } from "ng2-validation/dist";
-import { InnowayService } from 'app/services'
+import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
@@ -23,11 +23,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   isEdit: boolean = false;
   submitting: boolean = false;
 
-  promotionService: any;
-  customerTypeService: any;
-  // promotionTypeService: any;
-  customerTypePromotionService: any;
-
   dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/];
 
   name: string;
@@ -41,7 +36,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   endDate: string;
   value: number = 0;
   customerType: string;
-  promotionType: string;
+  promotionType: 'discount_by_percent' | 'discount_by_price' | 'discount_by_gift';
   promotionTypes: any[];
   status: number = 1;
   customerTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
@@ -51,10 +46,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     private router: Router,
     private ref: ChangeDetectorRef,
     private globals: Globals,
-    public innoway: InnowayService) {
-    this.promotionService = innoway.getService('promotion');
-    this.customerTypeService = innoway.getService('customer_type');
-    this.customerTypePromotionService = innoway.getService('customer_type_promotion');
+    public innowayApi: InnowayApiService) {
 
     this.promotionTypes = this.globals.PROMOTION_TYPES;
     this.promotionType = this.promotionTypes[0].code;
@@ -113,12 +105,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.promotionService.get(this.id, {
-        fields: ["$all", {
-          customer_types: ["$all"]
-        }]
-      });
-      console.log(JSON.stringify(data));
+      let data = await this.innowayApi.promotion.getItem(this.id, {
+        query: { 
+          fields: ["$all", {
+            customer_types: ["$all"]
+          }]
+        }
+      })
       this.name = data.name
       this.amount = data.amount
       this.code = data.code
@@ -141,9 +134,9 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async loadCustomerTypeData() {
     try {
-      this.customerTypeData = await this.innoway.getAll('customer_type', {
-        fields: ["id", "name"]
-      });
+      this.customerTypeData.next(await this.innowayApi.customerType.getList({
+        query: { fields: ["id", "name"] }
+      }))
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -228,14 +221,14 @@ export class AddComponent implements OnInit, AddPageInterface {
       let end_date = moment(this.endDate, "MM/DD/YYYY hh:mm").format();
       let customer_type_id = this.customerType;
       let promotion_type = this.promotionType;
-      let promotion = await this.promotionService.add({
+      let promotion = await this.innowayApi.promotion.add({
         name, amount, code, limit, short_description,
-        description, start_date, end_date, value, promotion_type, status, image
+        description, start_date: new Date(start_date), end_date: new Date(end_date), value, promotion_type, status, image
       })
 
       let customer_type_ids: string[] = [];
       customer_type_ids.push(customer_type_id);
-      await this.promotionService.addCustomerTypes(promotion.id, customer_type_ids);
+      await this.innowayApi.promotion.addCustomerTypes(promotion.id, customer_type_ids);
 
       this.alertAddSuccess();
       form.reset();
@@ -255,14 +248,14 @@ export class AddComponent implements OnInit, AddPageInterface {
       let end_date = moment(this.endDate, "MM/DD/YYYY hh:mm").format();
       let customer_type_id = this.customerType;
       let promotion_type = this.promotionType;
-      let promotion = await this.promotionService.update(this.id, {
+      let promotion = await this.innowayApi.promotion.update(this.id, {
         name, amount, code, limit, short_description,
-        description, start_date, end_date, value, customer_type_id, promotion_type, status, image
+        description, start_date: new Date(start_date), end_date: new Date(end_date), value, customer_type_id, promotion_type, status, image
       })
 
       let customer_type_ids: string[] = [];
       customer_type_ids.push(customer_type_id);
-      await this.promotionService.updateCustomerType(promotion.id, customer_type_ids);
+      await this.innowayApi.promotion.updateCustomerType(promotion.id, customer_type_ids);
 
       this.alertUpdateSuccess();
       form.reset();
@@ -313,7 +306,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     let customer_type_ids: string[] = [];
     // alert(JSON.stringify(this.customerType));
     // customer_type_ids.push(this.customerType);
-    await this.promotionService.sendPromotionToMessenger(this.id, "BCSBCS");
+    await this.innowayApi.promotion.sendPromotionToMessenger(this.id, "BCSBCS");
   }
 
 

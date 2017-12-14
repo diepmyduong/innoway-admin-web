@@ -2,16 +2,18 @@ import { CrudAPI, iCrud } from '../crud'
 
 import { InnowayApiService } from '../../innoway-api.service'
 
-export interface iUnit extends iCrud {
+export interface iToppingValue extends iCrud {
     brand_id?: string,
+    description?: string,
     name?: string,
-    offset?: number,
+    price?: number,
+    topping_id?: string,
 }
 
-export class Unit extends CrudAPI<iUnit> {
+export class ToppingValue extends CrudAPI<iToppingValue> {
     constructor(
         public api: InnowayApiService
     ) {
-        super(api, 'unit')
+        super(api, 'topping_value')
     }
 }

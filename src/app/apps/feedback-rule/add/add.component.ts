@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { NgForm } from "@angular/forms";
-
+import * as _ from 'lodash'
 declare let swal:any
 
 @Component({
@@ -15,20 +15,18 @@ export class AddComponent implements OnInit, AddPageInterface {
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
-  customerTypeService: any;
 
   name: string;
   amount_of_purchase: string;
   last_date_order: string;
   number_of_bill: string;
-  sex: number = 1;
+  sex: string; //#FIX 
   status: number = 1;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innoway: InnowayService) {
-    this.customerTypeService = innoway.getService('customer_type');
+    public innowayApi: InnowayApiService) {
   }
 
   ngOnInit(): void {
@@ -54,13 +52,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.customerTypeService.get(this.id, {
-        fields: ["$all"]
-      });
+      let data = await this.innowayApi.customerType.getItem(this.id, {
+        query: { fields: ["$all"] }
+      })
       this.name = data.name
-      this.amount_of_purchase = data.amount_of_purchase
-      this.number_of_bill = data.number_of_bill
-      this.last_date_order = data.last_date_order
+      this.amount_of_purchase = _.toString(data.amount_of_purchase)
+      this.number_of_bill = _.toString(data.number_of_bill)
+      this.last_date_order = _.toString(data.last_date_order)
       this.sex = data.sex
       this.status = data.status
     } catch (err) {
@@ -124,7 +122,11 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { name, amount_of_purchase, number_of_bill, last_date_order, sex, status } = this;
-      await this.customerTypeService.add({ name, amount_of_purchase, number_of_bill, last_date_order, sex, status })
+      await this.innowayApi.customerType.add({ name, 
+        amount_of_purchase: _.toNumber(amount_of_purchase), 
+        number_of_bill: _.toNumber(number_of_bill), 
+        last_date_order: new Date(last_date_order), 
+        sex: sex as any, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -136,7 +138,11 @@ export class AddComponent implements OnInit, AddPageInterface {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { name, amount_of_purchase, number_of_bill, last_date_order, sex, status } = this;
-      await this.customerTypeService.update(this.id, { name, amount_of_purchase, number_of_bill, last_date_order, sex, status })
+      await this.innowayApi.customerType.update(this.id, { name, 
+        amount_of_purchase: _.toNumber(amount_of_purchase), 
+        number_of_bill: _.toNumber(number_of_bill), 
+        last_date_order: new Date(last_date_order), 
+        sex: sex as any, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {

@@ -19,6 +19,9 @@ import { Promotion } from './api/crud/promotion'
 import { CustomerType } from './api/crud/customer-type'
 import { Customer } from './api/crud/customer'
 import { BrandShip } from './api/crud/brand-ship';
+import { PromotionType } from './api/crud/promotion-type'
+import { ToppingValue } from './api/crud/topping-value'
+import { CustomerTypePromotion } from './api/crud/customer-type-promotion'
 @Injectable()
 export class InnowayApiService {
 
@@ -46,4 +49,7 @@ export class InnowayApiService {
   customerType = new CustomerType(this)
   customer = new Customer(this)
   brandShip = new BrandShip(this)
+  promotionType = new PromotionType(this)
+  toppingValue = new ToppingValue(this)
+  customerTypePromotion = new CustomerTypePromotion(this)
 }
