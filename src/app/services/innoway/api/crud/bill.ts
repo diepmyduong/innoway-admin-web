@@ -29,6 +29,7 @@ export class Bill extends CrudAPI<iBill> {
     ) {
         super(api, 'bill')
         this.fcmSubscription = this.api.fcm.onMessage.subscribe(message => {
+            if(message === undefined) return
             if (message.topic == 'bills') {
                 this.log('on bill change', message.json)
                 this.onBillChange.next(message.json)

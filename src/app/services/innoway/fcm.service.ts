@@ -31,7 +31,7 @@ export class FcmService {
       this.messaging.useServiceWorker(this.fcmRegistration)
       try {
         this.log('Request Notify Permission')
-        await this.messaging.requestPermission()
+        this.messaging.requestPermission()
         this.fcmHasNotifyPermission = true
         this.handleRefeshToken()
         this.messaging.onMessage(this.handleMessages.bind(this))

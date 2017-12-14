@@ -754,7 +754,7 @@ export class PosComponent implements OnInit {
   async getPromotionsByCustomerId(customerId) {
     try {
       let data = await this.innowayApi.customer.getPromotions(customerId, {
-        fields: ["$all"]
+        query: { fields: ["$all"] } 
       })
       this.promotionData = data;
       this.ref.detectChanges();

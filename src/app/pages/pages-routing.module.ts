@@ -6,7 +6,7 @@ import { p500Component } from './500.component';
 import { LoginComponent } from './login.component';
 import { RegisterComponent } from './register.component';
 import { LoginLauncherComponent } from './login-launcher/login-launcher.component';
-import { AnonymousGuard, AuthGuard } from 'app/services';
+import { AuthGuard } from 'app/services';
 
 const routes: Routes = [
   {
@@ -34,7 +34,6 @@ const routes: Routes = [
     data: {
       title: 'Login Page'
     },
-    canActivate: [AnonymousGuard]
   }
 ];
 

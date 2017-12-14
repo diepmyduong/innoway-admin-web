@@ -1,16 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InnowayService } from './innoway.service';
-import { AuthService } from './auth.service';
 
 //Guard
 import { AuthGuard } from './guards/auth.guard';
-import { AnonymousGuard } from './guards/anonymous.guard';
 import { FirebaseAuthGuard } from './innoway/firebase-auth.guard'
 import { InnowayConfigService } from './innoway/innoway-config.service';
 import { InnowayAuthService } from './innoway/innoway-auth.service';
 import { InnowayApiService } from './innoway/innoway-api.service';
-
+import { FcmService } from './innoway/fcm.service'
 import { SharedDataService } from './shared-data/shared-data.service'
 
 @NgModule({
@@ -19,15 +16,13 @@ import { SharedDataService } from './shared-data/shared-data.service'
   ],
   declarations: [],
   providers: [
-    InnowayService,
-    AuthService,
     AuthGuard,
-    AnonymousGuard,
     InnowayConfigService,
     InnowayAuthService,
     InnowayApiService,
     SharedDataService,
     FirebaseAuthGuard,
+    FcmService
   ]
 })
 export class ServicesModule { }

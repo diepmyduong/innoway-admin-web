@@ -1,4 +1,4 @@
-import { CrudAPI, iCrud } from '../crud'
+import { CrudAPI, iCrud, crudOptions } from '../crud'
 
 import { InnowayApiService } from '../../innoway-api.service'
 
@@ -43,19 +43,18 @@ export class Customer extends CrudAPI<iCustomer> {
         return row;
     }
 
-    async getPromotions(id: string, query: any = {}) {
-        let access_token = await this.getAccessToken()
-        query = this._paserQuery(query);
-        let settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": this.url(`/${id}/promotion`, query),
-            "method": "GET",
-            "headers": {
-                "access_token": access_token
-            }
+    async getPromotions(id: string, options: crudOptions = {}) {
+        const setting = {
+            method: 'GET',
+            qs: this._paserQuery(options.query),
+            uri: this.apiUrl(`${id}/promotion`),
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'access_token': this.api.innowayAuth.adminToken
+            },
+            json: true,
         }
-        let res: any = await this.exec(settings);
+        let res: any = await this.exec(setting);
         let rows = res.results.objects.rows
         return rows;
     }

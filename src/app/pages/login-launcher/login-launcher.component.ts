@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService } from 'app/services';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { Router } from '@angular/router';
 import { InnowayApiService } from 'app/services/innoway'
 import * as Console from 'console-prefix'
 declare var swal: any;
@@ -25,8 +25,8 @@ declare var swal: any;
 export class LoginLauncherComponent implements OnInit {
 
   constructor(
-    private auth: AuthService,
-    public innowayApi: InnowayApiService
+    public innowayApi: InnowayApiService,
+    public router: Router
   ) { }
 
   email: string;
@@ -36,7 +36,17 @@ export class LoginLauncherComponent implements OnInit {
 
   get log() { return Console(`[Login Page]`).log }
 
-  ngOnInit() {
+  async ngOnInit() {
+    if (await this.innowayApi.innowayAuth.authenticated) {
+      this.log('already login success', 'firebase token', this.innowayApi.innowayAuth.firebaseToken)
+      this.toDashboard()
+    } else {
+      this.log('user not login')
+    }
+  }
+
+  toDashboard() {
+    this.router.navigate(["launcher"])
   }
 
   async signIn(form: NgForm) {
@@ -52,6 +62,7 @@ export class LoginLauncherComponent implements OnInit {
         let { email, password, brandName } = this;
         let user = await this.innowayApi.innowayAuth.loginEmailAndPassword(email, password, brandName)
         this.log('success', user)
+        this.toDashboard()
         // let user = await this.auth.loginWithEmailAndPassword(email,password);
       } catch (err) {
         this.log(err.code)
@@ -79,7 +90,7 @@ export class LoginLauncherComponent implements OnInit {
             if(err.error.type === "Wrong brand") {
               this.alertAuthError("Cửa hàng không tồn tại")
             } else if(err.error.type === "Email not verified"){
-              this.alertAuthError("Email của bạn chưa được xác thực. Vui lòng kiểm tra email.")
+              await this.checkEmailVerified()
             } else {
               this.alertAuthError("Đăng nhập không thành công");
             }
@@ -116,6 +127,36 @@ export class LoginLauncherComponent implements OnInit {
     if (event.keyCode == 13) {
       this.signIn(form)
     }
+  }
+
+  checkEmailVerified() {
+    return new Promise((resolve, reject) => {
+      const firebaseUser = this.innowayApi.innowayAuth.firebaseUser
+      if(!firebaseUser.emailVerified) {
+        swal({
+          title: 'Email chưa được xác thực',
+          text: "Vui lòng kiểm tra lại họp thư",
+          showCancelButton: true,
+          confirmButtonText: 'Tôi chưa nhận được email',
+          showLoaderOnConfirm: true,
+          preConfirm: () => {
+            return this.innowayApi.innowayAuth.sendVerifyEmail()
+          },
+          allowOutsideClick: false
+        }).then(() => {
+          return swal({
+            type: 'info',
+            title: 'Email đã được gửi',
+            text: `Email đã được gửi đén hộp thư ${firebaseUser.email}. Vui lòng kiểm tra lại hộp thư`
+          })
+        }).then(() => {
+          this.innowayApi.innowayAuth.logout()
+          reject()
+        })
+      } else {
+        resolve(true)
+      }
+    })
   }
 
 }

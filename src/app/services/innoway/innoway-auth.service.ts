@@ -1,19 +1,16 @@
 import { Injectable } from '@angular/core';
 import { InnowayConfigService } from './innoway-config.service'
-import { InnowayService } from '../innoway.service'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import * as request from 'request-promise'
 import * as firebase from 'firebase'
 import { environment } from '@environments'
 import * as Console from 'console-prefix'
 import * as _ from 'lodash'
-declare var innoway2: any
 @Injectable()
 export class InnowayAuthService {
 
   constructor(
     public innowayConfig: InnowayConfigService,
-    public innoway1: InnowayService
   ) {
     // firebase.auth().useDeviceLanguage()
     this.firebaseApp = firebase.initializeApp(environment.innoway.firebase)
@@ -127,9 +124,8 @@ export class InnowayAuthService {
       let res = await this.exec(option)
       this.innowayUser = res.results.object
       this.adminToken = this.innowayUser.access_token
-      this.innoway1.setAccessToken(this.innowayUser.access_token)
-      innoway2.api.module('auth').loginWithToken(this.adminToken)
       this.onAuthStateChange.next(true)
+      return this.innowayUser
     } else {
       this.onAuthStateChange.next(false)
       return null
@@ -145,16 +141,19 @@ export class InnowayAuthService {
     this.googleToken = undefined
     this.innowayUser = undefined
     this.onAuthStateChange.next(false)
+    location.reload()
     return true
   }
 
   get authenticated(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (this.onAuthStateChange.getValue() != undefined) {
+        this.log("authenticated", this.onAuthStateChange.getValue())
         resolve(this.onAuthStateChange.getValue() as boolean)
       } else {
         let subscription = this.onAuthStateChange.subscribe(state => {
-          if (state && subscription) {
+          this.log("onAuthStateChange", state)
+          if (subscription) {
             resolve(state as boolean)
             subscription.unsubscribe()
           }
