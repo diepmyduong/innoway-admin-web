@@ -3,7 +3,7 @@ import { DetailPageInterface } from 'app/apps/interface/detailPageInterface';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CustomValidators } from "ng2-validation/dist";
-import { InnowayService } from 'app/services'
+import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { MapsAPILoader } from "@agm/core";
 
@@ -15,7 +15,6 @@ declare let swal:any
 })
 export class DetailComponent implements OnInit, DetailPageInterface {
 
-  branchService: any;
   id: string;
   item: any;
   itemFields: any = ['$all'];
@@ -27,11 +26,10 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private mapsAPILoader: MapsAPILoader,
     private ref: ChangeDetectorRef
   ) {
-    this.branchService = innoway.getService('branch');
   }
 
   ngOnInit() {
@@ -48,9 +46,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async setData() {
     try {
-      this.item = await this.branchService.get(this.id, {
-        fields: this.itemFields
-      });
+      this.item = await this.innowayApi.branch.getItem(this.id, {
+        query: { fields: this.itemFields }
+      })
       this.longitudeMap = Number.parseFloat(this.item.longitude);
       this.latitudeMap = Number.parseFloat(this.item.latitude);
       this.zoomMap = 12;

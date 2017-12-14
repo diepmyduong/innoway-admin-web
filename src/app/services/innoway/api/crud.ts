@@ -73,6 +73,7 @@ export class CrudAPI<T> extends BaseAPI {
         }
     }
     activeHashQuery: string
+    activeQuery: crudQuery = {}
 
     async getList(options?: crudOptions): Promise<T[]> {
         options = _.merge({}, this.options, options)
@@ -87,12 +88,12 @@ export class CrudAPI<T> extends BaseAPI {
         }
         const hashedQuery = hash(options.query)
         this.activeHashQuery = hashedQuery
-        this.log('hashed query', hashedQuery, this.hashCache)
+        this.activeQuery = options.query
+        
         if (options.local && this.hashCache[hashedQuery] && this.localBrandName == this.api.innowayConfig.brandName) {
             let items = this.hashCache[hashedQuery].items
             this.pagination = this.hashCache[hashedQuery].pagination
             if (items.length > 1) { // If local empty, request to server
-                this.items.next(items)
                 return items
             }
         }
@@ -104,11 +105,11 @@ export class CrudAPI<T> extends BaseAPI {
         if (options.reload) {
             this.pagination = pagination
             this.pagination.totalItems = results.objects.count || 0
-            this.items.next(rows)
             this.hashCache[hashedQuery] = {
                 pagination: this.pagination,
                 items: rows
             }
+            this.items.next(rows)
         }
         return rows;
     }
@@ -145,11 +146,11 @@ export class CrudAPI<T> extends BaseAPI {
                 } else {
                     items.push(row)
                 }
-                this.items.next(items)
                 this.hashCache[this.activeHashQuery].items = items
                 this.hashCache = {
                     [this.activeHashQuery]: this.hashCache[this.activeHashQuery]
                 }
+                this.items.next(items)
             } else {
                 if(!this.hashCache[hashedQuery]) this.hashCache[hashedQuery] = {
                     pagination: {},
@@ -185,9 +186,12 @@ export class CrudAPI<T> extends BaseAPI {
         let row = res.results.object as T;
         if (options.reload) {
             let items = this.items.getValue()
-            items.push(row)
-            this.items.next(items)
-            this.hashCache[this.activeHashQuery].items = items
+            if(items.length < this.pagination.limit) {
+                this.items.next(items)
+                this.hashCache[this.activeHashQuery].items = items
+                items.push(row)
+                
+            }
             this.hashCache = {
                 [this.activeHashQuery]: this.hashCache[this.activeHashQuery]
             }
@@ -218,11 +222,9 @@ export class CrudAPI<T> extends BaseAPI {
             let index = _.findIndex(items, { id: id })
             if (index > -1) {
                 items[index] = row
-            } else {
-                items.push(row)
+                this.hashCache[this.activeHashQuery].items = items
+                this.items.next(items)
             }
-            this.items.next(items)
-            this.hashCache[this.activeHashQuery].items = items
             this.hashCache = {
                 [this.activeHashQuery]: this.hashCache[this.activeHashQuery]
             }
@@ -248,17 +250,21 @@ export class CrudAPI<T> extends BaseAPI {
        
         if (options.reload) {
             let items = this.items.getValue()
-            _.remove(items, function (item) {
+            const removed = _.remove(items, function (item) {
                 return item.id == id;
             })
-            this.log('items', items)
-            this.log('hash',this.hashCache,this.activeHashQuery)
-            this.items.next(items)
-            this.hashCache[this.activeHashQuery].items = items
+            if(removed.length > 0) {
+                this.hashCache[this.activeHashQuery].items = items
+                this.hashCache = {
+                    [this.activeHashQuery]: this.hashCache[this.activeHashQuery]
+                }
+                this.items.next(items)
+            }else {
+                await this.getList({ local: false, query: this.activeQuery })
+            }
             this.hashCache = {
                 [this.activeHashQuery]: this.hashCache[this.activeHashQuery]
             }
-            this.log(this.hashCache)
         }
         return true
     }
@@ -281,11 +287,18 @@ export class CrudAPI<T> extends BaseAPI {
         let res: any = await this.exec(setting)
         if (options.reload) {
             let items = this.items.getValue()
-            _.remove(items, function (item) {
+            const removed = _.remove(items, function (item) {
                 return _.indexOf(ids, item.id) !== -1
             });
-            this.items.next(items)
-            this.hashCache[this.activeHashQuery].items = items
+            if(removed.length > 0) {
+                this.hashCache[this.activeHashQuery].items = items
+                this.hashCache = {
+                    [this.activeHashQuery]: this.hashCache[this.activeHashQuery]
+                }
+                this.items.next(items)
+            }else {
+                await this.getList({ local: false, query: this.activeQuery })
+            }
             this.hashCache = {
                 [this.activeHashQuery]: this.hashCache[this.activeHashQuery]
             }

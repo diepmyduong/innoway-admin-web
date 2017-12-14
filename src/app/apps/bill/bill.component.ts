@@ -51,9 +51,6 @@ export class BillComponent implements OnInit, ListPageInterface {
   }
 
   ngOnInit() {
-    this.subscriptions.push(this.innowayApi.bill.items.subscribe(items => {
-      this.getItems()
-    }))
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
     this.loadBrandByEmployeeData(this.employeeData.brand_id);
 

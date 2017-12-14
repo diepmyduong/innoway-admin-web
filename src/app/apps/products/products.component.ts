@@ -37,9 +37,6 @@ export class ProductsComponent implements OnInit {
   @ViewChild(DataTable) itemsTable;
 
   ngOnInit() {
-    this.subscriptions.push(this.innowayApi.product.items.subscribe(items => {
-      this.getItems()
-    }))
   }
 
   ngOnDestroy() {

@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router, ActivatedRoute } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { ListPageInterface } from "app/apps/interface/listPageInterface";
-
+import { Subscription } from 'rxjs/Subscription'
 declare let swal:any;
 
 @Component({
@@ -20,18 +20,15 @@ export class BranchComponent implements OnInit, ListPageInterface {
   query: any = {};
   searchTimeOut: number = 250;
   searchRef: any;
-
-  branchService: any;
-
+  subscriptions: Subscription[] = []
   @ViewChild(DataTable) itemsTable;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private ref: ChangeDetectorRef
   ) {
-    this.branchService = innoway.getService('branch');
   }
 
   ngOnInit() {
@@ -49,8 +46,8 @@ export class BranchComponent implements OnInit, ListPageInterface {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items = await this.innoway.getAll('branch', query);
-    this.itemCount = this.branchService.currentPageCount;
+    this.items.next(await this.innowayApi.branch.getList({ query }))
+    this.itemCount = this.innowayApi.branch.pagination.totalItems
     this.ref.detectChanges();
     return this.items;
   }
@@ -108,7 +105,7 @@ export class BranchComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.branchService.delete(item.id)
+      await this.innowayApi.branch.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -127,7 +124,7 @@ export class BranchComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.branchService.deleteAll(ids)
+      await this.innowayApi.branch.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
