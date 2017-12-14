@@ -43,6 +43,9 @@ export class InnowayAuthService {
       }
     })
 
+    // Firebase Cloud Message Setup
+
+
   }
 
   get log() { return Console('[innowayAuth]').log }
@@ -58,7 +61,7 @@ export class InnowayAuthService {
   googleToken: string
   innowayUser: iInnowayUser
   manuallyLogin: boolean = false
-
+  
   async exec(option: any) {
     if (!option) throw new Error("option undefined in exec")
     try {
@@ -108,7 +111,7 @@ export class InnowayAuthService {
 
   async loginInnoway() {
     if (this.firebaseToken && this.innowayConfig.brandName) {
-      this.log('uid',this.firebaseUser.uid, this.firebaseUser)
+      this.log('uid', this.firebaseUser.uid, this.firebaseUser)
       const option = {
         method: 'POST',
         uri: this.innowayConfig.apiUrl('auth/login_with_firebase'),
@@ -185,7 +188,6 @@ export class InnowayAuthService {
       url: this.innowayConfig.config.uiHost
     })
   }
-
 }
 
 export interface iUserRecord {

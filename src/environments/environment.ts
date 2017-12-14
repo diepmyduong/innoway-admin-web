@@ -20,6 +20,7 @@ export const environment = {
       storageBucket: "dashboard-version-2-0.appspot.com",
       messagingSenderId: "16906134069"
     },
-    uiHost: 'http://localhost:4200'
+    uiHost: 'http://localhost:4200',
+    fcmServiceWorkerPath: '/assets/firebase-messaging-sw.js'
   }
 };

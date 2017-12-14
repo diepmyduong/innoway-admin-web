@@ -1,6 +1,9 @@
 import { CrudAPI, iCrud } from '../crud'
 
 import { InnowayApiService } from '../../innoway-api.service'
+import { BehaviorSubject } from 'rxjs/BehaviorSubject'
+import { Subscription } from 'rxjs/Subscription';
+import { ActivityEnum } from './bill-activity'
 
 export interface iBill extends iCrud {
     address?: string,
@@ -25,5 +28,156 @@ export class Bill extends CrudAPI<iBill> {
         public api: InnowayApiService
     ) {
         super(api, 'bill')
+        this.fcmSubscription = this.api.fcm.onMessage.subscribe(message => {
+            if (message.topic == 'bills') {
+                this.log('on bill change', message.json)
+                this.onBillChange.next(message.json)
+            }
+        })
     }
+    onBillChange = new BehaviorSubject<any>(undefined)
+    fcmSubscription: Subscription
+
+    async subscribe() {
+        const registrationToken = await this.api.fcm.getMessageToken()
+        let setting = {
+            method: 'POST',
+            uri: this.apiUrl(`subscribe`),
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'access_token': this.api.innowayAuth.adminToken
+            },
+            json: true,
+            body: { registration_token: registrationToken }
+        }
+        let res: any = await this.exec(setting);
+        return this.onBillChange
+    }
+
+    async changeActivity(billId: string, params: {
+        activity: string,
+        employeeId: string,
+        note: string
+    }) {
+        let { activity, employeeId, note } = params
+        let setting:any = {
+            method: 'POST',
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'access_token': this.api.innowayAuth.adminToken
+            },
+            json: true,
+            body: { employee_id: employeeId, note }
+        }
+        switch (activity) {
+            case ActivityEnum.BILL_SENT_SUCCESSFULLY:
+                setting.uri = this.apiUrl(`${billId}/activity/sentSuccessfullyBillStatus`);
+                break;
+            case ActivityEnum.BILL_DISTRIBUTED:
+                setting.uri = this.apiUrl(`${billId}/activity/distributedBillStatus`);
+                break;
+            case ActivityEnum.BILL_WAITING_FOR_CONFIRMATION:
+                setting.uri = this.apiUrl(`${billId}/activity/waitingForConfirmationBillStatus`);
+                break;
+            case ActivityEnum.BILL_MODIFIED_AT_WAITING_FOR_CONFIRMATION:
+                setting.uri = this.apiUrl(`${billId}/activity/waitingForConfirmationBillStatus/modified`);
+                break;
+            case ActivityEnum.BILL_CANCELLED_AT_WAITING_FOR_CONFIRMATION:
+                setting.uri = this.apiUrl(`${billId}/activity/waitingForConfirmationBillStatus/cancelled`);
+                break;
+            case ActivityEnum.BILL_CONFIRMED:
+                setting.uri = this.apiUrl(`${billId}/activity/confirmedBillStatus`);
+                break;
+            case ActivityEnum.BILL_MODIFIED_AT_BILL_CONFIRMED:
+                setting.uri = this.apiUrl(`${billId}/activity/confirmedBillStatus/modified`);
+                break;
+            case ActivityEnum.BILL_CANCELLED_AT_BILL_CONFIRMED:
+                setting.uri = this.apiUrl(`${billId}/activity/confirmedBillStatus/cancelled`);
+                break;
+            case ActivityEnum.BILL_PICKING_UP:
+                setting.uri = this.apiUrl(`${billId}/activity/pickingUpBillStatus`);
+                break;
+            case ActivityEnum.BILL_MODIFIED_AT_PICKING_UP:
+                setting.uri = this.apiUrl(`${billId}/activity/pickingUpBillStatus/modified`);
+                break;
+            case ActivityEnum.BILL_CANCELLED_AT_PICKING_UP:
+                setting.uri = this.apiUrl(`${billId}/activity/pickingUpBillStatus/cancelled`);
+                break;
+            case ActivityEnum.BILL_RECEIVED:
+                setting.uri = this.apiUrl(`${billId}/activity/receivedBillStatus`);
+                break;
+            case ActivityEnum.BILL_MODIFIED_AT_RECEIVED:
+                setting.uri = this.apiUrl(`${billId}/activity/receivedBillStatus/modified`);
+                break;
+            case ActivityEnum.BILL_CANCELLED_AT_RECEIVED:
+                setting.uri = this.apiUrl(`${billId}/activity/receivedBillStatus/cancelled`);
+                break;
+            case ActivityEnum.BILL_PROCESSING:
+                setting.uri = this.apiUrl(`${billId}/activity/processingBillStatus`);
+                break;
+            case ActivityEnum.BILL_MODIFIED_AT_PROCESSING:
+                setting.uri = this.apiUrl(`${billId}/activity/processingBillStatus/modified`);
+                break;
+            case ActivityEnum.BILL_CANCELLED_AT_PROCESSING:
+                setting.uri = this.apiUrl(`${billId}/activity/processingBillStatus/deleted`);
+                break;
+            case ActivityEnum.BILL_PREPARED:
+                setting.uri = this.apiUrl(`${billId}/activity/preparedBillStatus`);
+                break;
+            case ActivityEnum.BILL_MODIFIED_AT_PREPARED:
+                setting.uri = this.apiUrl(`${billId}/activity/preparedBillStatus/modified`);
+                break;
+            case ActivityEnum.BILL_CANCELLED_AT_PREPARED:
+                setting.uri = this.apiUrl(`${billId}/activity/preparedBillStatus/cancelled`);
+                break;
+            case ActivityEnum.BILL_SENT_SHIPPER:
+                setting.uri = this.apiUrl(`${billId}/activity/sentShipperBillStatus`);
+                break;
+            case ActivityEnum.BILL_MODIFIED_AT_SENT_SHIPPER:
+                setting.uri = this.apiUrl(`${billId}/activity/sentShipperBillStatus/modified`);
+                break;
+            case ActivityEnum.BILL_CANCELLED_AT_SENT_SHIPPER:
+                setting.uri = this.apiUrl(`${billId}/activity/sentShipperBillStatus/cancelled`);
+                break;
+            case ActivityEnum.BILL_PAID:
+                setting.uri = this.apiUrl(`${billId}/activity/paidBillStatus`);
+                break;
+            case ActivityEnum.BILL_MODIFIED_AT_PAID:
+                setting.uri = this.apiUrl(`${billId}/activity/paidBillStatus/modified`);
+                break;
+            case ActivityEnum.BILL_COLLECTED_MONEY:
+                setting.uri = this.apiUrl(`${billId}/activity/collectedMoneyBillStatus`);
+                break;
+            case ActivityEnum.BILL_MODIFIED_AT_COLLECTED_MONEY:
+                setting.uri = this.apiUrl(`${billId}/activity/collectedMoneyBillStatus/modified`);
+                break;
+            default:
+                throw new Error('This activity not allow for this bill');
+        }
+
+        let res: any = await this.exec(setting);
+        return res;
+    }
+
+    async summaryBill(params: {
+        startTime: string, endTime: string
+    }) {
+        let { startTime, endTime } = params;
+        let setting = {
+            method: 'POST',
+            uri: this.apiUrl(`summary_daily`),
+            headers: { //headers
+                'User-Agent': 'Request-Promise',
+                'access_token': this.api.innowayAuth.adminToken
+            },
+            json: true,
+            body: { 
+                start_time: startTime, 
+                end_time: endTime
+            }
+        }
+        var res: any = await this.exec(setting);
+        var row = res.results.object;
+        return row;
+      }
 }

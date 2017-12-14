@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { InnowayAuthService } from './innoway-auth.service'
 import { InnowayConfigService } from './innoway-config.service'
+import { FcmService } from './fcm.service'
 import { Attribute } from './api/crud/attribute'
 import { Product } from './api/crud/product'
 import { ProductCategory } from './api/crud/product-category'
@@ -17,12 +18,14 @@ import { PaidHistory } from './api/crud/paid-history'
 import { Promotion } from './api/crud/promotion'
 import { CustomerType } from './api/crud/customer-type'
 import { Customer } from './api/crud/customer'
+import { BrandShip } from './api/crud/brand-ship';
 @Injectable()
 export class InnowayApiService {
 
   constructor(
     public innowayConfig: InnowayConfigService,
-    public innowayAuth: InnowayAuthService
+    public innowayAuth: InnowayAuthService,
+    public fcm: FcmService
   ) { 
 
   }
@@ -42,4 +45,5 @@ export class InnowayApiService {
   promotion = new Promotion(this)
   customerType = new CustomerType(this)
   customer = new Customer(this)
+  brandShip = new BrandShip(this)
 }

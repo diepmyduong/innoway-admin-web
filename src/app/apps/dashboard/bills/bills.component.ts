@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
-import { InnowayService, AuthService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import * as Ajv from 'ajv';
 import * as _ from 'lodash';
 import { DashboardService } from "app/apps/dashboard/DashboardService";
@@ -15,6 +15,7 @@ import { SharedDataService } from '../../../services/shared-data/shared-data.ser
 
 import { Globals } from './../../../globals';
 import * as moment from 'moment';
+import { Behavior } from 'ng2-select';
 declare let swal: any;
 
 @Component({
@@ -39,9 +40,7 @@ export class BillsComponent implements OnInit {
   successColor: string = "#2ecc71";
   cancelColor: string = "#e74c3c";
 
-  billService: any;
-  billActitivyService: any;
-  billChangeObservable: Observable<any>;
+  billChangeObservable: BehaviorSubject<any>;
   bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   //employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
@@ -57,8 +56,6 @@ export class BillsComponent implements OnInit {
   selectedCustomerName: any;
 
   employeeData: any;
-  branchService: any;
-  brandService: any;
   branch: any;
   brand: any;
 
@@ -82,19 +79,13 @@ export class BillsComponent implements OnInit {
     private router: Router,
     private dashboardService: DashboardService,
     private route: ActivatedRoute,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private ref: ChangeDetectorRef,
-    public auth: AuthService,
     public zone: NgZone,
     public dialog: MatDialog,
     public sharedDataService:SharedDataService
   ) {
-    this.billService = innoway.getService('bill');
-    this.billActitivyService = innoway.getService('bill_activity');
-
-    this.employeeData = this.auth.service.userInfo;
-    this.branchService = innoway.getService('branch');
-    this.brandService = innoway.getService('brand');
+    this.employeeData = this.innowayApi.innowayAuth.innowayUser
     //this.subscribeDashboardParent();
   }
 
@@ -102,16 +93,14 @@ export class BillsComponent implements OnInit {
     this.loadBillData();
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
     this.loadBrandByEmployeeData(this.employeeData.brand_id);
-    console.log(this.employeeData.brand_id)
     this.subscribeTopicByFCM();
   }
 
   async loadBrandByEmployeeData(brandId: string) {
     try {
-      this.brand = await this.brandService.get(brandId, {
-        fields: ["$all"]
+      this.brand = await this.innowayApi.brand.getItem(brandId, {
+        query: { fields: ["$all"] }
       })
-      console.log("abc",JSON.stringify(this.brand));
       this.ref.detectChanges();
     } catch (err) {
 
@@ -120,10 +109,9 @@ export class BillsComponent implements OnInit {
 
   async loadBranchByEmployeeData(branchId: string) {
     try {
-      this.branch = await this.branchService.get(branchId, {
-        fields: ["$all"]
+      this.branch = await this.innowayApi.branch.getItem(branchId, {
+        query: { fields: ["$all"] }
       })
-      console.log("abc",JSON.stringify(this.branch));
       this.ref.detectChanges();
     } catch (err) {
 
@@ -134,7 +122,6 @@ export class BillsComponent implements OnInit {
     this.dashboardService.selectedAction.subscribe(
       data => {
         this.selectedAction = data;
-        // alert(JSON.stringify(data));
         if (this.selectedAction != null && this.selectedAction != '') {
           this.filter(this.selectedAction);
         }
@@ -181,7 +168,7 @@ export class BillsComponent implements OnInit {
   }
 
   async subscribeTopicByFCM() {
-    this.billChangeObservable = await this.billService.subscribe();
+    this.billChangeObservable = await this.innowayApi.bill.subscribe()
     this.subscribers.bill = this.billChangeObservable.subscribe(data => {
       // this.onBillChange.bind(this)
     });
@@ -195,13 +182,15 @@ export class BillsComponent implements OnInit {
   }
 
   async onBillChange(bill) {
-    let item = await this.billService.get(bill.id, {
-      fields: ["$all", {
-        activities: ["$all", {
-          employee: ["$all"]
-        }],
-        customer: ["$all"]
-      }]
+    let item = await this.innowayApi.bill.getItem(bill.id, {
+      query: {
+        fields: ["$all", {
+          activities: ["$all", {
+            employee: ["$all"]
+          }],
+          customer: ["$all"]
+        }]
+      }
     })
     console.log('on bill change', item)
     let bills = this.bills.getValue()
@@ -222,15 +211,17 @@ export class BillsComponent implements OnInit {
 
   async loadDetailedBill(id: string, isPrint: boolean, popupWin: any) {
     try {
-      let data = await this.billService.get(id, {
-        fields: ["$all", {
-          items: ['$all', {
-            product: ['$all', '$paranoid'],
-            topping_values: ['$all', '$paranoid']
-          }],
-          bill_ship_detail: ["$all"],
-        }]
-      });
+      let data = await this.innowayApi.bill.getItem(id, {
+        query: {
+          fields: ["$all", {
+            items: ['$all', {
+              product: ['$all', '$paranoid'],
+              topping_values: ['$all', '$paranoid']
+            }],
+            bill_ship_detail: ["$all"],
+          }]
+        }
+      })
       if (isPrint && data.items != null) {
         this.printBill(data, popupWin);
       }
@@ -339,15 +330,16 @@ export class BillsComponent implements OnInit {
 
   async loadEmployeeData() {
     try {
-      this.bills = await this.innoway.getAll('bill', {
-        fields: ["$all", {
-          activities: ["$all", {
-            employee: ["$all"]
-          }],
-          customer: ["$all"]
-        }]
-      });
-      console.log("bills",JSON.stringify(this.bills));
+      this.bills.next(await this.innowayApi.bill.getList({
+        query: {
+          fields: ["$all", {
+            activities: ["$all", {
+              employee: ["$all"]
+            }],
+            customer: ["$all"]
+          }]
+        }
+      }))
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -364,17 +356,19 @@ export class BillsComponent implements OnInit {
 
   async queryBill(query: string) {
     try {
-      this.bills = await this.innoway.getAll('bill', {
-        fields: ["$all", {
-          activities: ["$all", {
-            employee: ["$all"]
+      this.bills.next(await this.innowayApi.bill.getList({
+        query: {
+          fields: ["$all", {
+            activities: ["$all", {
+              employee: ["$all"]
+            }],
+            customer: ["$all"],
+            activity: ["$all"],
+            bill_ship_detail: ["$all"],
           }],
-          customer: ["$all"],
-          activity: ["$all"],
-          bill_ship_detail: ["$all"],
-        }],
-        order: [["updated_at", "desc"]]
-      });
+          order: [["updated_at", "desc"]]
+        }
+      }))
       // alert(JSON.stringify(this.bills));
       console.log('bills', this.bills.getValue())
     } catch (err) {
@@ -385,17 +379,19 @@ export class BillsComponent implements OnInit {
 
   async loadBillData() {
     try {
-      this.bills = await this.innoway.getAll('bill', {
-        fields: ["$all", {
-          activities: ["$all", {
-            employee: ["$all"]
+      this.bills.next(await this.innowayApi.bill.getList({
+        query: {
+          fields: ["$all", {
+            activities: ["$all", {
+              employee: ["$all"]
+            }],
+            customer: ["$all"],
+            activity: ["$all"],
+            bill_ship_detail: ["$all"],
           }],
-          customer: ["$all"],
-          activity: ["$all"],
-          bill_ship_detail: ["$all"],
-        }],
-        order: [["updated_at", "desc"]]
-      });
+          order: [["updated_at", "desc"]]
+        }
+      }))
       console.log(this.bills.getValue());
       // alert(JSON.stringify(this.bills));
       // console.log('bills', this.bills.getValue())
@@ -451,16 +447,14 @@ export class BillsComponent implements OnInit {
   async updateAction(bill, action, employee, note) {
     console.log("bambi: updateAction " + bill.id + " ---- " + action);
     try {
-      let bill_id = bill.id;
-      let data = {
-        activity: action,
-        employee_id: employee,
-        note: note,
-      };
       // await this.billActitivyService.add({ bill_id, action });
-      await this.billService.changeActivity(bill_id, data);
+      await this.innowayApi.bill.changeActivity(bill.id, {
+        activity: action,
+        employeeId: employee,
+        note
+      })
       this.alertAddSuccess();
-      this.bills = new BehaviorSubject<any[]>([]);
+      this.bills.next([])
       this.loadBillData();
     }
     catch (err) {
@@ -520,7 +514,6 @@ export class BillsComponent implements OnInit {
   async filter(action) {
     try {
       console.log('action', action)
-      this.bills = new BehaviorSubject<any[]>([]);
       let query = {
         fields: ["$all", {
           customer: ["$all"],
@@ -530,9 +523,7 @@ export class BillsComponent implements OnInit {
           "$activity.action$": action
         }
       }
-      console.log('query', query)
-      this.bills = await this.innoway.getAll('bill', query);
-      console.log('bills', this.bills.getValue())
+      this.bills.next(await this.innowayApi.bill.getList({ query }))
       // alert(JSON.stringify(this.bills));
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
