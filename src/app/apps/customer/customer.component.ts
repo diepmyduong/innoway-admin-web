@@ -3,7 +3,7 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { ListPageInterface } from "app/apps/interface/listPageInterface";
 import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router, ActivatedRoute } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService } from "app/services/innoway";
 import { Globals } from "./../../Globals"
 declare let swal: any
 declare var accounting:any;
@@ -23,18 +23,15 @@ export class CustomerComponent implements OnInit, ListPageInterface {
   searchTimeOut: number = 250;
   searchRef: any;
 
-  customerService: any;
-
   @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
     private router: Router,
     private globals: Globals,
-    public innoway: InnowayService,
+    public innowayApi: InnowayApiService,
     private route: ActivatedRoute,
     private ref: ChangeDetectorRef
   ) {
-    this.customerService = innoway.getService('customer');
   }
 
   ngOnInit() {
@@ -53,8 +50,8 @@ export class CustomerComponent implements OnInit, ListPageInterface {
       fields: this.itemFields
     }, this.query);
     console.log("bibi: " + JSON.stringify(query));
-    this.items = await this.innoway.getAll('customer', query);
-    this.itemCount = this.customerService.currentPageCount;
+    this.items.next(await this.innowayApi.customer.getList({ query }))
+    this.itemCount = this.innowayApi.customer.pagination.totalItems
     this.items.subscribe(items => console.log(items))
     this.ref.detectChanges();
     return this.items;
@@ -113,7 +110,7 @@ export class CustomerComponent implements OnInit, ListPageInterface {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.customerService.delete(item.id)
+      await this.innowayApi.customer.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -135,7 +132,7 @@ export class CustomerComponent implements OnInit, ListPageInterface {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.customerService.deleteAll(ids)
+      await this.innowayApi.customer.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();

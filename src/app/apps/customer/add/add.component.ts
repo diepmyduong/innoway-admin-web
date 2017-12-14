@@ -1,10 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InnowayService } from "app/services";
+import { InnowayApiService, iCustomer } from "app/services/innoway";
 import { NgForm } from "@angular/forms";
 import { Globals } from "./../../../globals";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import * as _ from 'lodash'
 declare let swal: any
 
 @Component({
@@ -36,14 +37,11 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
-  customerService: any;
-
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
     private globals: Globals,
-    public innoway: InnowayService) {
-    this.customerService = innoway.getService('customer');
+    public innowayApi: InnowayApiService) {
     this.genders = this.globals.GENDERS;
   }
 
@@ -76,11 +74,11 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let data = await this.customerService.get(this.id, {
-        fields: ["$all"]
-      });
+      let data = await this.innowayApi.customer.getItem(this.id, {
+        query: { fields: ["$all"] }
+      })
       this.avatar = data.avatar
-      this.birthday = data.birthday
+      this.birthday = _.toString(data.birthday)
       this.email = data.email
       this.fullname = data.fullname
       this.password = data.password
@@ -159,7 +157,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       let trust_point = this.trustPoint;
       let birthday = this.birthday ? new Date(this.birthday) : null;
       sex = sex == null || sex == "null" ? null : sex;
-      await this.customerService.add({ name, avatar, birthday, email, fullname, phone, sex, status, trust_point })
+      await this.innowayApi.customer.add({ name, avatar, birthday, email, fullname, phone, sex: sex as any, status, trust_point })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -174,7 +172,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       let trust_point = this.trustPoint;
       let birthday = this.birthday ? new Date(this.birthday) : null;
       sex = sex == null || sex == "null" ? null : sex;
-      await this.customerService.update(this.id, { name, avatar, birthday, email, fullname, phone, sex, status, trust_point })
+      await this.innowayApi.customer.update(this.id, { name, avatar, birthday, email, fullname, phone, sex: sex as any, status, trust_point })
       this.alertUpdateSuccess();
       form.reset();
     } else {
@@ -221,11 +219,9 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async validateCustomerByPhone(phone: string) {
     try {
-      let data = {
-        phone: phone.toString()
-      }
-      let response = await this.customerService.getCustomerByPhone(data);
-
+      let response = await this.innowayApi.customer.getCustomerByPhone({
+        phone: _.toString(phone)
+      })
       if (response != null && response.code != 500) {
         console.log(JSON.stringify(response));
         if (this.currentPhone != null && this.currentPhone == phone) {

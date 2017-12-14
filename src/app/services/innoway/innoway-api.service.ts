@@ -16,6 +16,7 @@ import { Employee } from './api/crud/employee'
 import { PaidHistory } from './api/crud/paid-history'
 import { Promotion } from './api/crud/promotion'
 import { CustomerType } from './api/crud/customer-type'
+import { Customer } from './api/crud/customer'
 @Injectable()
 export class InnowayApiService {
 
@@ -40,4 +41,5 @@ export class InnowayApiService {
   paidHistory = new PaidHistory(this)
   promotion = new Promotion(this)
   customerType = new CustomerType(this)
+  customer = new Customer(this)
 }
