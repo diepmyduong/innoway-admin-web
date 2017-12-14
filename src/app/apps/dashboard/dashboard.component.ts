@@ -9,6 +9,7 @@ import { Globals } from "./../../globals"
 import { SelectComponent } from "ng2-select";
 import { SharedDataService } from "./../../services/shared-data/shared-data.service";
 
+import * as moment from 'moment';
 declare let swal: any
 
 @Component({
@@ -815,8 +816,8 @@ export class DashboardComponent implements OnInit {
   async getSummaryInformation() {
     try {
       let request = {
-        start_time: "2017-10-10",
-        end_time: "2017-12-13"
+        start_time: moment(Date.now()).format("YYYY-MM-DD"),
+        end_time: moment(Date.now()).add(1, 'days').format('YYYY-MM-DD')    
       }
       let data = await this.billService.summaryBill(request);
       this.summary = data;

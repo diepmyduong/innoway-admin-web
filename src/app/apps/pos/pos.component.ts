@@ -593,7 +593,7 @@ export class PosComponent implements OnInit {
     // this.totalAmount = total.toString();
     this.outputAmountOfPriceItems = total;
     if (this.isVAT == true) {
-      this.outputVAT = this.outputAmountOfPriceItems * this.vatValue;
+      this.outputVAT = (this.outputAmountOfPriceItems + this.outputSubFee) * this.vatValue;
     } else {
       this.outputVAT = 0;
     }
@@ -632,7 +632,7 @@ export class PosComponent implements OnInit {
               this.outputPromotion = data.value;
               break;
             case this.globals.PROMOTION_TYPES[1].code:
-              this.outputPromotion = this.outputAmountOfPriceItems * data.value / 100;
+              this.outputPromotion = (this.outputAmountOfPriceItems + this.outputSubFee) * data.value / 100;
               break;
           }
         }
@@ -754,6 +754,7 @@ export class PosComponent implements OnInit {
     } catch (err) {
       this.customerNameAtStore = null;
       this.customer = null;
+      this.customerId = null;
       console.log("detect phone: " + err);
     }
   }
@@ -793,134 +794,6 @@ export class PosComponent implements OnInit {
     this.updateTotalAmount();
   }
 
-  public selected(value: any): void {
-    console.log('Selected value is: ' + value);
-  }
-
-  public removed(value: any): void {
-    console.log('Removed value is: ' + value);
-  }
-
-  public refreshValue(value: any): void {
-    // this.value = value;
-    console.log("bambi customer 2: " + JSON.stringify(value));
-  }
-
-  public selectedName(value: any): void {
-    console.log('Selected value is: ' + value);
-  }
-
-  public removedName(value: any): void {
-    console.log('Removed value is: ' + value);
-  }
-
-  public refreshValueName(value: any): void {
-    // this.value = value;
-    console.log("bambi customer 2: " + JSON.stringify(value));
-  }
-
-  @ViewChild('customerSelect') select: SelectComponent;
-  @ViewChild('customerNameSelect') selectName: SelectComponent;
-
-  addToItems() {
-    this.autocompleteCustomerData.push({ id: "", text: this.newItem });
-    this.select.items = this.autocompleteCustomerData;
-    this.select.active = [{ id: "4", text: this.newItem }];
-    this.ref.detectChanges();
-    // this.select.item.ngOnInit();
-  }
-
-  addToNameItems() {
-    this.autocompleteCustomerData.push({ id: "", text: this.newNameItem });
-    this.selectName.items = this.autocompleteCustomerNameData;
-    this.selectName.active = [{ id: "4", text: this.newNameItem }];
-    this.ref.detectChanges();
-    // this.select.item.ngOnInit();
-  }
-
-  newItem: string = '';
-  newNameItem: string = '';
-
-  public onChangeCustomer(event) {
-    this.newItem = event;
-    console.log("bambi customer: " + JSON.stringify(event));
-  }
-
-  public onChangeCustomerName(event) {
-    this.newNameItem = event;
-    console.log("bambi customer: " + JSON.stringify(event));
-  }
-
-  public test(event) {
-    console.log("bambi customer 1: " + JSON.stringify(event));
-  }
-
-  public itemsToString(value: Array<any> = []): string {
-    return value
-      .map((item: any) => {
-        return item.text;
-      }).join(',');
-  }
-
-  public itemsToStringName(value: Array<any> = []): string {
-    return value
-      .map((item: any) => {
-        return item.text;
-      }).join(',');
-  }
-
-  async detectChangeSelect(event) {
-    console.log("bambi bambi: " + JSON.stringify(event));
-    const customerService = this.innoway.getService('customer');
-    let limit = 5;
-    this.customerData = await customerService.getAllWithQuery({
-      fields: ["$all"],
-      limit: limit,
-      filter: {
-        phone: { $iLike: `%${event}%` }
-      }
-    })
-
-    this.autocompleteCustomerData = new Array<any>();
-
-    this.customerData.forEach(data => {
-      let item: any = data;
-      let imp = {
-        text: item.phone,
-        id: item.phone
-      };
-      this.autocompleteCustomerData.push(imp);
-    })
-  }
-
-  async detectChangeNameSelect(event) {
-    console.log("bambi bambi: " + JSON.stringify(event));
-    const customerService = this.innoway.getService('customer');
-    let limit = 5;
-    this.customerData = await customerService.getAllWithQuery({
-      fields: ["$all"],
-      limit: limit,
-      filter: {
-        fullname: { $iLike: `%${event}%` }
-      }
-    })
-
-    this.autocompleteCustomerNameData = new Array<any>();
-
-    this.customerData.forEach(data => {
-      let item: any = data;
-      let imp = {
-        text: item.fullname,
-        id: item.fullname
-      };
-      this.autocompleteCustomerNameData.push(imp);
-    })
-  }
-
-  async validateECustomerByPhone(phone: string) {
-
-  }
-
   async orderAtStore() {
     try {
 
@@ -950,8 +823,14 @@ export class PosComponent implements OnInit {
         let item = {
           product_id: product.id,
           amount: product.amount,
-          topping_value_ids: product.toppings
+          topping_value_ids: []
         }
+        let toppings = [];
+        product.toppings.forEach(topping => {
+          toppings.push(topping.id)
+        });
+
+        item.topping_value_ids = toppings;
         products.push(item);
       });
 
@@ -1011,15 +890,18 @@ export class PosComponent implements OnInit {
         let item = {
           product_id: product.id,
           amount: product.amount,
-          topping_value_ids: product.toppings
+          topping_value_ids: []
         }
+        let toppings = [];
+        product.toppings.forEach(topping => {
+          toppings.push(topping.id)
+        });
+
+        item.topping_value_ids = toppings;
         products.push(item);
       });
 
       request.products = products;
-
-      alert(JSON.stringify(request));
-
       console.log("bambi-request: " + JSON.stringify(request));
 
       let responseOrderAtStore = await this.billService.orderOnlineByEmployee(request);
