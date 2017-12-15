@@ -65,9 +65,9 @@ export class InnowayAuthService {
       let { uri, ...anohter } = option
       return await request(uri, anohter)
     } catch (resError) {
-      if (resError.error.type === "Email not verified" || resError.error.type === "Wrong brand") {
-        this.logout()
-      }
+      // if (resError.error.type === "Email not verified" || resError.error.type === "Wrong brand") {
+      //   this.logout()
+      // }
       this.log("Innoway Auth ERROR", resError.error.message)
       throw resError;
     }
