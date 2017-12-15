@@ -14,7 +14,11 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "dev": "ng serve",
-    "prod": "ng serve -e prod"
+    "prod": "ng serve -e prod",
+    "build": "ng build -e prod --prod --aot false && npm run firebase:sync",
+    "firebase:sync": "sudo rsync -avh ./dist/ ./firebase/public/ --delete",
+    "firebase:serve": "cd ./firebase && sudo firebase serve",
+    "firebase:deploy": "cd ./firebase && sudo firebase deploy"
   },
   "private": true,
   "dependencies": {
