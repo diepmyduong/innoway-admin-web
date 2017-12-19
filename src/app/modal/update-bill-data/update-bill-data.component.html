@@ -1,0 +1,79 @@
+<h2 class="title">{{data.title}}</h2>
+<tabset class="tabset-control">
+  <tab>
+    <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Cập nhật trạng thái</ng-template>
+    <div class="row">
+      <p class="col-4 header-text">Trạng thái đơn hàng hiện tại</p>
+      <div class="col-8">
+        <span><strong>{{globals.detectBillActivityByCode(currentActivity)}}</strong></span>
+      </div>
+    </div>
+    <div class="row">
+      <p class="col-4 header-text" *ngIf="this.billActivity">Trạng thái đơn hàng</p>
+      <div class="col-8">
+        <select [(ngModel)]="billActivity" class="select-control form-control">
+    <option *ngFor="let e of billActivities" [value]="e.code">
+      {{ e.name }}
+    </option>
+  </select>
+      </div>
+    </div>
+    <div class="row">
+      <p class="col-4 header-text" *ngIf="this.billActivity">Nhân viên phụ trách</p>
+      <div class="col-8">
+        <select [(ngModel)]="employee" class="select-control form-control">
+    <option *ngFor="let e of employees" [value]="e.id">
+      {{ e.fullname }}
+    </option>
+  </select>
+      </div>
+    </div>
+    <div class="row">
+      <p class="col-4 header-text">Ghi chú thay đổi</p>
+      <div class="col-8">
+        <input type="text" [(ngModel)]="noteBillActivity" class="input-control form-control" placeholder="Nhập ghi chú thay đổi">
+      </div>
+    </div>
+    <div style="padding-bottom:20px;text-align:center;" *ngIf="error!=null">
+      <small class="text-muted danger">
+    {{error}}
+  </small>
+    </div>
+    <div class="bottom-btn-group">
+      <button class="btn-confirm btn btn-md" [disabled]="!isValid" [mat-dialog-close]="info" (click)="confirmBillStatus()">{{data.button_yes}}</button>
+      <button class="btn-cancel btn btn-md" (click)="onNoClick()">{{data.button_no}}</button>
+    </div>
+  </tab>
+  <tab *ngIf="isShowEditInfo">
+    <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Cập nhật phụ thu</ng-template>
+    <div class="row" *ngIf="isShowEditInfo">
+      <p class="col-4 header-text">Phụ thu</p>
+      <div class="col-8">
+        <input type="text" [textMask]="{mask: numberMask}" [(ngModel)]="subFee" class="input-control form-control">
+      </div>
+    </div>
+    <div class="row" *ngIf="isShowEditInfo">
+      <p class="col-4 header-text">Nội dung phụ thu</p>
+      <div class="col-8">
+        <input type="text" [(ngModel)]="subFeeNote" class="input-control form-control" placeholder="Nhập ghi chú phụ thu">
+      </div>
+    </div>
+    <div class="bottom-btn-group">
+      <button class="btn-confirm btn btn-md" [disabled]="!isValid" [mat-dialog-close]="info" (click)="confirmSubFee()">{{data.button_yes}}</button>
+      <button class="btn-cancel btn btn-md" (click)="onNoClick()">{{data.button_no}}</button>
+    </div>
+  </tab>
+  <tab *ngIf="isShowEditInfo">
+    <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Cập nhật ghi chú</ng-template>
+    <div class="row" *ngIf="isShowEditInfo">
+      <p class="col-4 header-text">Ghi chú</p>
+      <div class="col-8">
+        <input type="text" [(ngModel)]="note" class="input-control form-control" placeholder="Nhập ghi chú">
+      </div>
+    </div>
+    <div class="bottom-btn-group">
+      <button class="btn-confirm btn btn-md" [disabled]="!isValid" [mat-dialog-close]="info" (click)="confirmNote()">{{data.button_yes}}</button>
+      <button class="btn-cancel btn btn-md" (click)="onNoClick()">{{data.button_no}}</button>
+    </div>
+  </tab>
+</tabset>

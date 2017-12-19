@@ -38,7 +38,10 @@ import { UpdateBillStatusComponentComponent } from './apps/ui-component/update-b
 import { EditOrderStatusDialog } from "./modal/edit-order-status/edit-order-status.component";
 import { EditInfoDialog } from "./modal/edit-info/edit-info.component";
 import { ChangePasswordDialog } from "./modal/change-password/change-password.component";
-
+import { ConfigChatbotStoryDialog } from "./modal/config-chatbot-story/config-chatbot-story.component";
+import { UpdateBillDataDialog } from "./modal/update-bill-data/update-bill-data.component";
+import { UpdatePaidHistoryDialog } from "./modal/update-paid-history/update-paid-history.component";
+import { TextMaskModule } from 'angular2-text-mask';
 
 @NgModule({
   imports: [
@@ -58,6 +61,7 @@ import { ChangePasswordDialog } from "./modal/change-password/change-password.co
     SharedModule,
     LayoutsModule,
     FormsModule,
+    TextMaskModule,
     // BsDropdownModule.forRoot(),
     ColorPickerModule,
   ],
@@ -67,7 +71,10 @@ import { ChangePasswordDialog } from "./modal/change-password/change-password.co
     UpdateBillStatusComponentComponent,
     EditOrderStatusDialog,
     EditInfoDialog,
-    ChangePasswordDialog
+    ChangePasswordDialog,
+    ConfigChatbotStoryDialog,
+    UpdateBillDataDialog,
+    UpdatePaidHistoryDialog
   ],
   providers: [{
     provide: LocationStrategy,
@@ -77,7 +84,10 @@ import { ChangePasswordDialog } from "./modal/change-password/change-password.co
   entryComponents: [
     EditOrderStatusDialog,
     EditInfoDialog,
-    ChangePasswordDialog
+    ChangePasswordDialog,
+    ConfigChatbotStoryDialog,
+    UpdateBillDataDialog,
+    UpdatePaidHistoryDialog
   ]
 })
 export class AppModule { }

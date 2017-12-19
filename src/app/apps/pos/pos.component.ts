@@ -155,6 +155,7 @@ export class PosComponent implements OnInit {
   brand: any;
   promotion: any;
   branch: any;
+  selectedBranch: any = null;
   employee: any;
   customer: any;
 
@@ -259,6 +260,7 @@ export class PosComponent implements OnInit {
 
     this.getBrandData(this.employee.brand_id);
     // this.getPromotionData();
+    this.getAllBranchData();
     this.getBranchData(this.employee.branch_id);
     this.setAutocompleteMap();
   }
@@ -266,7 +268,7 @@ export class PosComponent implements OnInit {
   async getBrandData(id: string) {
     try {
       let data = await this.innowayApi.brand.getItem(id, {
-        query: { 
+        query: {
           fields: ['$all', {
             'brand_ship': ['$all']
           }]
@@ -315,19 +317,19 @@ export class PosComponent implements OnInit {
     }
   }
 
-  // async getPromotionData() {
-  //   try {
-  //     let data = await this.innoway.getAll('promotion', {
-  //       fields: ["$all"]
-  //     });
-  //     this.promotionData = data;
-  //     this.promotion = data._value[0].code;
-  //     console.log("bambi promotion: " + JSON.stringify(data));
-  //   } catch (err) {
-  //     try { await this.alertItemNotFound() } catch (err) { }
-  //     console.log("ERRRR", err);
-  //   }
-  // }
+  async getAllBranchData() {
+    try {
+      this.branchData.next(await this.innowayApi.branch.getList({
+        query: {
+          fields: ["$all"],
+          limit: 0,
+        }
+      }))
+    } catch (err) {
+      try { await this.alertItemNotFound() } catch (err) { }
+      console.log("ERRRR", err);
+    }
+  }
 
   async getProductData() {
     try {
@@ -344,32 +346,10 @@ export class PosComponent implements OnInit {
     }
   }
 
-  async getCustomerData() {
-    try {
-      await this.innowayApi.customer.getList({
-        query: { fields: ["$all"] }
-      })
-    } catch (err) {
-      try { await this.alertItemNotFound() } catch (err) { }
-      console.log("ERRRR", err);
-    }
-  }
-
-  async getEmployeeData() {
-    try {
-      await this.innowayApi.employee.getList({
-        query: { fields: ["$all"] }
-      })
-    } catch (err) {
-      try { await this.alertItemNotFound() } catch (err) { }
-      console.log("ERRRR", err);
-    }
-  }
-
   async getToppings(productId) {
     try {
       let data = await this.innowayApi.product.getItem(productId, {
-        query: { 
+        query: {
           fields: ["id", {
             toppings: ["id", {
               topping: ["id", "name", {
@@ -595,6 +575,12 @@ export class PosComponent implements OnInit {
     this.outputSubFee = this.globals.convertStringToPrice(event);
   }
 
+  fillFullPayAmount() {
+    this.receiveAmount = this.totalAmount;
+    this.payAmount = this.totalAmount;
+    this.calculateRemainAndReturnAmount();
+  }
+
   private calculateRemainAndReturnAmount() {
     let totalAmount = this.globals.convertStringToPrice(this.totalAmount);
     let receiveAmount = this.globals.convertStringToPrice(this.receiveAmount);
@@ -747,14 +733,19 @@ export class PosComponent implements OnInit {
     }
   }
 
-  async createNewCustomer(input: any) {
+  async createNewCustomerAccount(data: any) {
+    try {
+      let response = this.innowayApi.customer.add(data);
+      console.log("create new customer", JSON.stringify(response));
+    } catch (err) {
 
+    }
   }
 
   async getPromotionsByCustomerId(customerId) {
     try {
       let data = await this.innowayApi.customer.getPromotions(customerId, {
-        query: { fields: ["$all"] } 
+        query: { fields: ["$all"] }
       })
       this.promotionData = data;
       this.ref.detectChanges();
@@ -795,13 +786,14 @@ export class PosComponent implements OnInit {
         "sub_fee": this.globals.convertStringToPrice(this.subFee),
         "sub_fee_note": this.subFeeNote,
         "channel": this.channel,
+        "is_vat": this.isVAT,
         "pay_amount": this.globals.convertStringToPrice(this.payAmount),
         "receive_amount": this.globals.convertStringToPrice(this.receiveAmount),
         "branch_id": this.branchId,
-        "employee_id": this.employee.id,
+        "employee_id": this.employeeId,
         "note": this.note,
-        "promotion_id": this.promotionId,
-        "customer_id": this.customerId,
+        "promotion_id": this.promotionId ? this.promotionId : undefined,
+        "customer_id": this.customerId ? this.customerId : undefined,
         "products": []
       }
 
@@ -827,10 +819,11 @@ export class PosComponent implements OnInit {
       let responseOrderAtStore = await this.innowayApi.bill.orderAtStore(request);
       // alert(JSON.stringify(responseOrderAtStore));
 
+      this.alertAddSuccess();
     } catch (err) {
       console.log("bambi: " + err.toString());
-      // this.alertAddFailed();
-      alert(JSON.stringify(err));
+      this.alertAddFailed();
+      // alert(JSON.stringify(err));
     }
   }
 
@@ -849,8 +842,8 @@ export class PosComponent implements OnInit {
 
       let request = {
         "address": this.address,
-        "longitude": this.longitude,
-        "latitude": this.latitude,
+        "longitude": _.toNumber(this.longitude),
+        "latitude": _.toNumber(this.latitude),
         "sub_fee": this.globals.convertStringToPrice(this.subFee),
         "sub_fee_note": this.subFeeNote,
         "channel": this.channelOnline,
@@ -858,8 +851,8 @@ export class PosComponent implements OnInit {
         "receive_amount": this.globals.convertStringToPrice(this.receiveAmount),
         "branch_id": this.branchId,
         "employee_id": this.employeeId,
-        "promotion_id": this.promotionId,
-        "customer_id": this.customerId,
+        "promotion_id": this.promotionId ? this.promotionId : undefined,
+        "customer_id": this.customerId ? this.customerId : undefined,
         "received_time": this.receivedTime,
         "is_vat": this.isVAT,
         "ship_method": this.shipMethod,
@@ -896,12 +889,38 @@ export class PosComponent implements OnInit {
 
       let responseOrderAtStore = await this.innowayApi.bill.orderOnlineByEmployee(request);
       // alert(JSON.stringify(responseOrderAtStore));
-
+      this.alertAddSuccess()
     } catch (err) {
       console.log("bambi: " + err.toString());
-      // this.alertAddFailed();
-      alert(JSON.stringify(err));
+      this.alertAddFailed();
+      // alert(JSON.stringify(err));
     }
+  }
+
+  resetDefaultValue() {
+    this.selectedProduct = null;
+    this.promotion = null;
+    this.address = null;
+    this.longitude = null;
+    this.latitude = null;
+    this.customer = null;
+
+    this.outputVAT = 0;
+    this.outputSubFee = 0;
+    this.outputShipFee = 0;
+    this.outputPromotion = 0;
+    this.outputAmountOfPurchase = 0;
+    this.outputAmountOfPriceItems = 0;
+
+    this.receiveAmount = "0";
+    this.payAmount = "0";
+    this.returnAmount = "0";
+    this.remainAmount = "0";
+    this.paidType = this.globals.PAID_HISTORY_TYPES[0].code;
+
+    this.receivedTime = "0";
+
+    this.ref.detectChanges();
   }
 
   openUpdateReceiverInfoDialog() {

@@ -4,49 +4,79 @@
       <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin đơn hàng</ng-template>
       <div class="row">
         <div class="col-md-12">
-          <div class="card">
+          <div class="card" style="border: 1px solid #e1e6ef">
             <div class="card-header">
               <div class="float-left">
-                <div>Đơn hàng: <strong>{{item.id}}</strong></div>
-                <div>Ngày nhận: {{changeDateFormat(item.bill_ship_detail?.received_time, 'DD-MM-YYYY HH:mm')}}</div>
+                <div>Đơn hàng: <strong>{{formatBillCode(bill.code?bill.code:"")}}</strong></div>
               </div>
-              <a class="btn btn-sm btn-gray-info float-right" (click)="print(item)"><i class="fa fa-print"></i> In hóa đơn</a>
-              <a class="btn btn-sm btn-gray-info float-right mr-h"><i class="fa fa-save"></i> Đã thu tiền</a>
+              <a class="btn btn-sm btn-gray-info float-right" (click)="print(bill)"><i class="fa fa-print"></i> In hóa đơn</a>
+              <a class="btn btn-sm btn-gray-info float-right mr-h" (click)="showEditInfoDialog(bill, employee, employees)"><i class="fa fa-flag"></i> Cập nhật trạng thái</a>
+              <a class="btn btn-sm btn-gray-info float-right mr-h" (click)="showUpdatePaidHistoryDialog(bill)"><i class="fa fa-edit"></i> Cập nhật chi phí</a>
             </div>
-            <div class="card-block" id="print_content">
+            <div class="card-block" style="padding: 1.5rem 1rem 1rem;">
               <div class="row mb-2">
 
                 <div class="col-sm-4 info-column">
-                  <h6><i class="fa fa-address-card-o"></i> Khách hàng 
-                    <i class="fa fa-pencil btn-editor" *ngIf="load_done.getValue()" (click)="editInfo()"></i></h6>
-                  <div>Họ và tên: <strong>{{item.customer?.fullname}}</strong>
-                    <i class='muted' *ngIf="!item.customer?.fullname">Không có</i></div>
-                  <div>Địa chỉ: {{item.address}}</div>
-                  <div>SĐT: {{item.customer?.phone}}</div>
-                </div>
-                <!--/.col-->
-
-                <div class="col-sm-4 info-column">
-                  <h6><i class="fa fa-truck"></i> Nhân viên giao hàng</h6>
-                  <div>Họ và tên: <strong>{{item.employee?.fullname}}</strong>
-                    <i class='muted' *ngIf="!item.employee?.fullname">Không có</i>
-                  </div>
-                  <div>Phone: {{item.employee?.phone}}
-                    <i class='muted' *ngIf="!item.employee?.phone">Không có</i>
-                  </div>
-                  <div>Email: {{item.employee?.email}}
-                    <i class='muted' *ngIf="!item.employee?.email">Không có</i>
-                  </div>
-                </div>
-                <!--/.col-->
-
-                <div class="col-sm-4 info-column">
                   <h6><i class="fa fa-file-text-o"></i> Thông tin đơn hàng</h6>
-                  <div> Tổng tiền đơn hàng: {{item.bill_items_total_price | accounting}}</div>
-                  <div> Tổng tiền phải trả: {{item.total_price | accounting}}</div>
-                  <div> Khuyến mãi: <i class='muted'>Không có</i></div>
+                  <div>Ngày nhận: {{changeDateFormat(bill.created_at, 'DD-MM-YYYY HH:mm')}}</div>
+                  <div> Tổng tiền đơn hàng: {{bill.total_price | accounting}}</div>
+                  <div> Tổng tiền đã thanh toán: {{payAmount | accounting}}</div>
+                  <div> Khuyến mãi: {{bill.promotion_id?"có":"không có"}}</div>
+                  <div> Ghi chú: {{bill.note?bill.note:"không có"}}</div>
                 </div>
                 <!--/.col-->
+
+                <div class="col-sm-4 info-column">
+                  <h6><i class="fa fa-truck"></i> Thông tin xử lý</h6>
+                  <div>Thời gian giao hàng: {{changeDateFormat(bill.bill_ship_detail?.received_time, 'DD-MM-YYYY HH:mm')}}</div>
+                  <div>Nhân viên đang xử lý: <strong>{{bill.activity?.employee?.fullname?bill.activity.employee.fullname:"không có"}}</strong></div>
+                  <div>Tình trạng đơn hàng: <strong>{{globals.detectBillActivityByCode(bill.activity?bill.activity.action:"không có")}}</strong></div>
+                  <div>Tình trạng thanh toán: <strong>{{this.isFullPayment==true?"Đã thanh toán":"Chưa thanh toán đủ"}}</strong></div>
+
+                </div>
+                <!--/.col-->
+
+                <div class="col-sm-4 info-column">
+                  <h6><i class="fa fa-address-card-o"></i> Khách hàng</h6>
+                  <div>Họ và tên: <strong>{{bill.customer?.fullname}}</strong>
+                    <i class='muted' *ngIf="!bill.customer?.fullname">Không có</i></div>
+                  <div>Địa chỉ: {{bill.address}}</div>
+                  <div *ngIf="isMember">SĐT: {{bill.customer?bill.customer.phone:"không có"}}</div>
+                  <div>
+                    Kênh: {{globals.detectChannelByCode(bill.channel)}}
+                  </div>
+                </div>
+                <!--/.col-->
+
+              </div>
+
+              <hr *ngIf="bill.related_people">
+              <div class="row mb-2" *ngIf="bill.related_people">
+
+                <div class="col-sm-4 info-column">
+                  <h6><i class="fa fa-user"></i> Thông tin người nhận
+                  <i class="fa fa-pencil editor" *ngIf="load_done.getValue()" (click)="openUpdateReceiverInfoDialog()"></i></h6>
+                  <div>Họ tên: {{bill.related_people.receiver_name?bill.related_people.receiver_name:"không có"}}</div>
+                  <div>Số điện thoại: {{bill.related_people.receiver_phone?bill.related_people.receiver_phone:"không có"}}</div>
+                  <div>Địa chỉ: {{bill.related_people.receiver_address?bill.related_people.receiver_address:"không có"}}</div>
+                  <div>Ghi chú: {{bill.related_people.receiver_note?bill.related_people.receiver_note:"không có"}}</div>
+                </div>
+                <!--/.col-->
+
+                <div class="col-sm-4 info-column">
+                </div>
+                <!--/.col-->
+
+                <div class="col-sm-4 info-column">
+                  <h6><i class="fa fa-user"></i> Thông tin người trả
+                  <i class="fa fa-pencil editor" *ngIf="load_done.getValue()" (click)="openUpdatePayerInfoDialog()"></i></h6>
+                  <div>Họ tên: {{bill.related_people.payer_name?bill.related_people.receiver_name:"không có"}}</div>
+                  <div>Số điện thoại: {{bill.related_people.payer_phone?bill.related_people.payer_phone:"không có"}}</div>
+                  <div>Địa chỉ: {{bill.related_people.payer_address?bill.related_people.payer_address:"không có"}}</div>
+                  <div>Ghi chú: {{bill.related_people.payer_note?bill.related_people.payer_note:"không có"}}</div>
+                </div>
+                <!--/.col-->
+
 
               </div>
               <!--/.row-->
@@ -64,7 +94,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let v of item.items; let i=index">
+                    <tr *ngFor="let v of bill.items; let i=index">
                       <td class="center">{{i+1}}</td>
                       <td class="left"><img src="{{v.product.thumb?.url?v.product.thumb:thumbDefault}}" height="50px" /></td>
                       <td class="left">{{v.product.name}}</td>
@@ -79,7 +109,7 @@
               <div class="row">
 
                 <div class="col-lg-4 col-sm-5">
-                    <!-- <div class="row">
+                  <!-- <div class="row">
                         <button class="btn btn-sm btn-edit">
                           <i class="fa fa-thermometer-three-quarters"></i> Thay đổi trạng thái
                         </button>
@@ -102,27 +132,27 @@
                     <tbody>
                       <tr>
                         <td class="price-title">Tổng đơn hàng</td>
-                        <td class="text-right">{{item.total_price | accounting}}</td>
+                        <td class="text-right">{{bill.total_price | accounting}}</td>
                       </tr>
                       <tr>
                         <td class="price-title">Khuyến mãi</td>
-                        <td class="text-right">- 0 đ</td>
+                        <td class="text-right">- {{bill.amount_of_promotion | accounting}}</td>
                       </tr>
                       <tr>
-                        <td class="price-title">VAT (10%)</td>
-                        <td class="text-right">+ {{item.vat_fee | accounting}}</td>
+                        <td class="price-title">VAT</td>
+                        <td class="text-right">+ {{bill.vat_fee | accounting}}</td>
                       </tr>
                       <tr>
                         <td class="price-title">Phí ship</td>
-                        <td class="text-right">+ {{item.bill_ship_detail?.fee | accounting}}</td>
+                        <td class="text-right">+ {{bill.bill_ship_detail?.fee | accounting}}</td>
                       </tr>
                       <tr>
                         <td class="price-title">Phí phụ thu</td>
-                        <td class="text-right">+ 15.000 đ</td>
+                        <td class="text-right">+ {{bill.amount_of_sub_fee | accounting}}</td>
                       </tr>
                       <tr>
                         <td class="price-title"><strong>Tổng</strong></td>
-                        <td class="text-right"><strong>{{item.total_price | accounting}}</strong></td>
+                        <td class="text-right"><strong>{{bill.total_price | accounting}}</strong></td>
                       </tr>
                     </tbody>
                   </table>
@@ -138,53 +168,29 @@
       </div>
     </tab>
     <tab>
-      <ng-template tabHeading class="tab-header"><i class="fa fa-history"></i> Lịch sử đơn hàng</ng-template>
+      <ng-template tabHeading class="tab-header"><i class="fa fa-history"></i> Lịch sử hoạt động</ng-template>
       <div class="row">
         <div class="col-lg-12">
-          <!-- <div class="card"> -->
-            <!-- <div class="card-header">
-              <div class="row">
-                <div class="col-lg-4 mt-h">
-                  <span><i class="fa fa-align-justify px-1 mt-h"></i> Lịch sử đơn hàng</span>
-                </div>
-                <div class="col-lg-8 col-xs-12 mt-h">
-
-                  <form class="form-inline float-right px-2">
-                    <label class="form-control-label mr-1" for="text-input">Số lượng:  </label>
-                    <select class="form-control input-sm">
-												<option value="10">10</option>
-												<option value="25">25</option>
-												<option value="50">50</option>
-												<option value="100">100</option>
-											</select>
-                    <i class="fa fa-search px-1"></i>
-                    <input class="form-control" type="text" placeholder="Search...">
-                  </form>
-
-                </div>
-              </div>
-            </div> -->
+          <div class="card">
             <div class="card-block">
               <table class="table table-bordered">
                 <thead>
                   <tr>
                     <th class="text-center">Mã đơn hàng</th>
                     <th class="text-center">Người đặt</th>
-                    <th class="text-center">Người giao</th>
-                    <th class="text-center">Địa chỉ</th>
+                    <th class="text-center">Nhân viên</th>
                     <th class="text-center">Thời gian</th>
-                    <th class="text-center">Kênh</th>
+                    <th class="text-center">Ghi chú</th>
                     <th class="text-center">Trạng thái</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let v of item.activities;let i=index">
-                    <td class="text-center">{{item.id}}</td>
-                    <td class="text-center">{{item.employee?v.employee.phone:'Không có'}}</td>
+                  <tr *ngFor="let v of bill.activities | orderBy: 'updated_at';let i=index">
+                    <td class="text-center">{{formatBillCode(bill.code?bill.code:"")}}</td>
+                    <td class="text-center">{{bill.employee?v.employee.phone:'Khách vãng lai'}}</td>
                     <td class="text-center">{{v.employee?v.employee.fullname:'Không có'}}</td>
-                    <td class="text-center">{{item.address}}</td>
-                    <td class="text-center">{{v.updated_at | date:'dd/MM/yyyy hh:mm:ss'}}</td>
-                    <td class="text-center">{{globals.detectChannelByCode(item.channel)}}</td>
+                    <td class="text-center">{{v.updated_at | date:'dd/MM/yyyy HH:mm'}}</td>
+                    <td class="text-center">{{v.note?v.note:'Không có'}}</td>
                     <td class="text-center">
                       <span class="badge badge-success p-h">{{globals.detectBillActivityByCode(v.action)}}</span>
                     </td>
@@ -192,7 +198,36 @@
                 </tbody>
               </table>
             </div>
-          <!-- </div> -->
+          </div>
+        </div>
+      </div>
+    </tab>
+    <tab>
+      <ng-template tabHeading class="tab-header"><i class="fa fa-money"></i> Lịch sử thanh toán</ng-template>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-block">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th class="text-center">Tiền còn thiếu</th>
+                    <th class="text-center">Tiền đã trả</th>
+                    <th class="text-center">Nhân viên xử lý</th>
+                    <th class="text-center">Thời gian</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let v of bill.paid_historys | orderBy: 'created_at';let i=index">
+                    <td class="text-center">{{v.remain_amount | accounting}}</td>
+                    <td class="text-center">{{v.pay_amount | accounting}}</td>
+                    <td class="text-center">{{v.employee?v.employee.fullname:'không có'}}</td>
+                    <td class="text-center">{{v.created_at | date:'dd/MM/yyyy HH:mm'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </tab>

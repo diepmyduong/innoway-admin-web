@@ -28,7 +28,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-4 header-text form-control input-control-label" layout-fill layout-align="center center" for="text-input">Chi nhánh</label>
+                <label class="col-md-4 header-text form-control input-control-label" layout-fill layout-align="center center" for="text-input">Chi nhánh nhân viên</label>
                 <div class="col-md-8">
                   <input type="text" #branchNameControl="ngModel" [(ngModel)]="branchName" name="branchName" class="form-control input-control" readonly/>
                 </div>
@@ -63,16 +63,17 @@
                   <input type="checkbox" #isVATControl="ngModel" [(ngModel)]="isVAT" name="isVAT" (ngModelChange)="checkVAT($event)" class="form-control input-control checkbox">
                 </div>
               </div>
-              <!-- <div class="form-group row">
+              <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Chi nhánh</label>
                 <div class="col-md-8">
-                  <select id="channelSelect" #branchControl="ngModel" [(ngModel)]="branch" name="branch" class="form-control input-control">
+                  <select #branchControl="ngModel" [(ngModel)]="branch" name="branch" class="form-control input-control">
+                        <option value=null [selected]="true">Chọn chi nhánh</option>
                         <option *ngFor="let v of branchData | async" [value]="v.id">
                           {{v.name}}
                         </option>
                       </select>
                 </div>
-              </div> -->
+              </div>
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Ghi chú</label>
                 <div class="col-md-8">
@@ -116,7 +117,12 @@
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Pay amount</label>
                 <div class="col-md-8">
-                  <input type="text" #payAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="payAmount" name="payAmount" class="form-control input-control" (ngModelChange)="calculateRemainAndReturnAmount()" required/>
+                  <div class="input-group">
+                    <input type="text" #payAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="payAmount" name="payAmount" class="form-control input-control" (ngModelChange)="calculateRemainAndReturnAmount()" required/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary input-control" type="button" (click)="fillFullPayAmount()">Trả hết</button>
+                    </span>
+                  </div>
                 </div>
               </div>
               <div class="form-group row">
@@ -199,11 +205,11 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-4 header-text form-control input-control-label" layout-fill layout-align="center center" for="text-input">Chi nhánh</label>
+                <label class="col-md-4 header-text form-control input-control-label" layout-fill layout-align="center center" for="text-input">Chi nhánh nhân viên</label>
                 <div class="col-md-8">
                   <input type="text" #branchNameControl="ngModel" [(ngModel)]="branchName" name="branchName" class="form-control input-control" readonly/>
                 </div>
-              </div>              
+              </div>
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Số điện thoại</label>
                 <div class="col-md-8">
@@ -227,11 +233,19 @@
                 </div>
               </div>
               <div class="form-group row">
+                <label class="col-md-4 header-text form-control input-control-label" for="text-input">Chi nhánh</label>
+                <div class="col-md-8">
+                  <select #branchControl="ngModel" [(ngModel)]="branch" name="branch" class="form-control input-control">
+                        <option *ngFor="let v of branchData | async" [value]="v.id">
+                          {{v.name}}
+                        </option>
+                      </select>
+                </div>
+              </div>
+              <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Địa chỉ</label>
                 <div class="col-md-8">
-                  <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control input-control" [placeholder]="'Nhập địa chỉ'"
-                  required autocorrect="off" autocapitalize="off" spellcheck="off" #addressInput
-                  [readonly]="isPickAtStore" >
+                  <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control input-control" [placeholder]="'Nhập địa chỉ'" required autocorrect="off" autocapitalize="off" spellcheck="off" #addressInput [readonly]="isPickAtStore">
                 </div>
               </div>
               <div class="form-group row">
@@ -320,7 +334,12 @@
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Pay amount</label>
                 <div class="col-md-8">
-                  <input type="text" #payAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="payAmount" name="payAmount" class="form-control input-control" (ngModelChange)="calculateRemainAndReturnAmount($event)" required/>
+                  <div class="input-group">
+                    <input type="text" #payAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="payAmount" name="payAmount" class="form-control input-control" (ngModelChange)="calculateRemainAndReturnAmount()" required/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary input-control" type="button" (click)="fillFullPayAmount()">Trả hết</button>
+                    </span>
+                  </div>
                 </div>
               </div>
               <div class="form-group row">
@@ -333,6 +352,12 @@
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Remain amount</label>
                 <div class="col-md-8">
                   <input type="text" #remainAmountControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="remainAmount" name="remainAmount" class="form-control input-control" readonly/>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-4 header-text form-control input-control-label" for="text-input">Tình trạng</label>
+                <div class="col-md-8">
+                  <input type="text" #paidTypeControl="ngModel" [(ngModel)]="paidType" name="paidType" class="form-control input-control" readonly/>
                 </div>
               </div>
               <hr>

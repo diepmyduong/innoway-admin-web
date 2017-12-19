@@ -810,6 +810,8 @@ export class DashboardComponent implements OnInit {
         startTime: moment(Date.now()).format("YYYY-MM-DD"),
         endTime: moment(Date.now()).add(1, 'days').format('YYYY-MM-DD')
       })
+
+      console.log("summary",JSON.stringify(data));
       this.summary = data;
 
       this.top_right_infos.push({
@@ -821,33 +823,6 @@ export class DashboardComponent implements OnInit {
         number: data.total_of_remain_amount,
         text: "Tiền còn thiếu"
       });
-
-      /*
-      {
-        number: 56,
-        text: 'THÀNH CÔNG',
-      },
-      {
-        number: 23,
-        text: 'ĐANG XỬ LÝ',
-      },
-      {
-        number: 78,
-        text: 'ĐÃ CHUẨN BỊ',
-      },
-      {
-        number: 12,
-        text: 'ĐANG GIAO',
-      },
-      {
-        number: 411,
-        text: 'THANH TOÁN',
-      },
-      {
-        number: 19,
-        text: 'ĐÃ HỦY',
-      },
-      */
 
       this.sub_header_infos.push({
         number: data.number_of_bill_sent_successfully,

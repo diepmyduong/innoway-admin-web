@@ -140,7 +140,7 @@ export class Globals {
       name: 'tại cửa hàng'
     },
     {
-      code: 'hotline',
+      code: 'hot_line',
       name: 'hotline'
     },
     {
@@ -517,7 +517,7 @@ export class Globals {
         case 'BILL_CANCELLED_AT_DELIVERING': {
           break;
         }
-        case 'c': {
+        case 'BILL_PAID': {
           subRules = [
             this.BILL_ACTIVITY_OPTIONS[11],
           ];
@@ -801,11 +801,11 @@ export class Globals {
   PAID_HISTORY_TYPES = [
     {
       code: 'Partical',
-      name: 'partical',
+      name: 'còn thiếu',
     },
     {
       code: 'Full',
-      name: 'full'
+      name: 'đầy đủ'
     }
   ]
 

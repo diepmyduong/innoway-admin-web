@@ -16,6 +16,8 @@ import { SharedDataService } from '../../../services/shared-data/shared-data.ser
 import { Globals } from './../../../globals';
 import * as moment from 'moment';
 import { Behavior } from 'ng2-select';
+import { UpdatePaidHistoryDialog } from "../../../modal/update-paid-history/update-paid-history.component";
+import { UpdateBillDataDialog } from "app/modal/update-bill-data/update-bill-data.component";
 declare let swal: any;
 
 @Component({
@@ -43,7 +45,7 @@ export class BillsComponent implements OnInit {
   billChangeObservable: BehaviorSubject<any>;
   bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
-  //employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  employees: any[];
   areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   thumbDefault: string = "https://s11.favim.com/mini/160421/snowball-movie-the-secret-life-of-pets-cute-Favim.com-4234326.jpeg";
@@ -66,13 +68,13 @@ export class BillsComponent implements OnInit {
     this.sharedDataService.billFilterInfo = value;
   }
 
-  get employees(): BehaviorSubject<any[]> {
-    return this.sharedDataService.employees;
-  }
-
-  set employees(value: BehaviorSubject<any[]>) {
-    this.sharedDataService.employees = value;
-  }
+  // get employees(): BehaviorSubject<any[]> {
+  //   return this.sharedDataService.employees;
+  // }
+  //
+  // set employees(value: BehaviorSubject<any[]>) {
+  //   this.sharedDataService.employees = value;
+  // }
 
   constructor(
     private globals: Globals,
@@ -93,6 +95,7 @@ export class BillsComponent implements OnInit {
     this.loadBillData();
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
     this.loadBrandByEmployeeData(this.employeeData.brand_id);
+    this.loadEmployeeData();
     this.subscribeTopicByFCM();
   }
 
@@ -219,6 +222,7 @@ export class BillsComponent implements OnInit {
               topping_values: ['$all', '$paranoid']
             }],
             bill_ship_detail: ["$all"],
+            paid_history: ["$all"]
           }]
         }
       })
@@ -287,7 +291,7 @@ export class BillsComponent implements OnInit {
 
                     <div class='title padding-4'>Phiếu thanh toán</div>
 
-                    <div class='normal-text text-left'>Mã đơn hàng: ` + data.id + `</div>
+                    <div class='normal-text text-left'>Mã đơn hàng: ` + this.formatBillCode(data.code) + `</div>
                     <div class='normal-text text-left'>Nhân viên giao hàng: Uy Minh</div>
 
                     <hr style="border: none; border-top: dashed 1px;" />
@@ -328,14 +332,6 @@ export class BillsComponent implements OnInit {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
 
-  async loadBranchData() {
-
-  }
-
-  async loadAreaData() {
-
-  }
-
   async queryBill(query: string) {
     try {
       this.bills.next(await this.innowayApi.bill.getList({
@@ -351,7 +347,6 @@ export class BillsComponent implements OnInit {
           order: [["updated_at", "desc"]]
         }
       }))
-      // alert(JSON.stringify(this.bills));
       console.log('bills', this.bills.getValue())
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
@@ -362,6 +357,7 @@ export class BillsComponent implements OnInit {
   async loadBillData() {
     try {
       this.bills.next(await this.innowayApi.bill.getList({
+        local: false,
         query: {
           fields: ["$all", {
             activities: ["$all", {
@@ -370,13 +366,18 @@ export class BillsComponent implements OnInit {
             customer: ["$all"],
             activity: ["$all"],
             bill_ship_detail: ["$all"],
+            paid_history: ["$all"]
           }],
+          filter: {
+            created_at: {
+              $gt: moment(Date.now()).format("YYYY-MM-DD"),
+              $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+            }
+          },
           order: [["updated_at", "desc"]]
         }
       }))
-      console.log(this.bills.getValue());
-      // alert(JSON.stringify(this.bills));
-      // console.log('bills', this.bills.getValue())
+      this.ref.detectChanges();
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -385,6 +386,10 @@ export class BillsComponent implements OnInit {
 
   viewDetail(bill) {
     this.router.navigate(['../bills/', bill.id], { relativeTo: this.route });
+  }
+
+  createBill() {
+    this.router.navigate(['../../../pos/'], { relativeTo: this.route });
   }
 
   detectChannelName(channel): string {
@@ -399,50 +404,50 @@ export class BillsComponent implements OnInit {
     return result;
   }
 
-  async changeStatusBill(bill) {
-
-    let actions = [];
-    let options = this.globals.avaibleBillActivityOption(bill.activity ? bill.activity.action : '');
-
-    options.forEach(option => {
-      actions.push({ code: Object.keys(option)[0], name: option[Object.keys(option)[0]] });
-    });
-
-    console.log(bill);
-    let currentAction = this.globals.detectBillActivityByCode(bill.activity.action);
-    console.log(bill.activity.action)
-
-    let dialogRef = this.dialog.open(EditOrderStatusDialog, {
-      width: '500px',
-      data: { actions: actions, employees: this.employees, currentAction: currentAction }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.updateAction(bill, result.action, result.employee, result.note);
-        // alert(JSON.stringify(result));
-        console.log(result);
-      }
-    })
-  }
-
-  async updateAction(bill, action, employee, note) {
-    console.log("bambi: updateAction " + bill.id + " ---- " + action);
-    try {
-      // await this.billActitivyService.add({ bill_id, action });
-      await this.innowayApi.bill.changeActivity(bill.id, {
-        activity: action,
-        employeeId: employee,
-        note
-      })
-      this.alertAddSuccess();
-      this.bills.next([])
-      this.loadBillData();
-    }
-    catch (err) {
-      console.log("bambi: " + err.toString());
-      this.alertAddFailed();
-    }
-  }
+  // async changeStatusBill(bill) {
+  //
+  //   let actions = [];
+  //   let options = this.globals.avaibleBillActivityOption(bill.activity ? bill.activity.action : '');
+  //
+  //   options.forEach(option => {
+  //     actions.push({ code: Object.keys(option)[0], name: option[Object.keys(option)[0]] });
+  //   });
+  //
+  //   console.log(bill);
+  //   let currentAction = this.globals.detectBillActivityByCode(bill.activity.action);
+  //   console.log(bill.activity.action)
+  //
+  //   let dialogRef = this.dialog.open(EditOrderStatusDialog, {
+  //     width: '500px',
+  //     data: { actions: actions, employees: this.employees, currentAction: currentAction }
+  //   });
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (result) {
+  //       this.updateAction(bill, result.action, result.employee, result.note);
+  //       // alert(JSON.stringify(result));
+  //       console.log(result);
+  //     }
+  //   })
+  // }
+  //
+  // async updateAction(bill, action, employee, note) {
+  //   console.log("bambi: updateAction " + bill.id + " ---- " + action);
+  //   try {
+  //     // await this.billActitivyService.add({ bill_id, action });
+  //     await this.innowayApi.bill.changeActivity(bill.id, {
+  //       activity: action,
+  //       employeeId: employee,
+  //       note: note,
+  //     })
+  //     this.alertAddSuccess();
+  //     this.bills.next([]);
+  //     this.loadBillData();
+  //   }
+  //   catch (err) {
+  //     console.log("bambi: " + err.toString());
+  //     this.alertAddFailed();
+  //   }
+  // }
 
   alertItemNotFound() {
     swal({
@@ -551,6 +556,10 @@ export class BillsComponent implements OnInit {
     return styles;
   }
 
+  editBill(data) {
+    this.router.navigate(['../../bill/detail', data.id], { relativeTo: this.route });
+  }
+
   formatBillCode(code): string {
     let output = "DH";
     for (let i of [0, 7 - code.length]) {
@@ -560,4 +569,171 @@ export class BillsComponent implements OnInit {
     return output;
   }
 
+  formatChannelStyle(data): string {
+    return this.globals.detectChannelByCode(data);
+  }
+
+  formatBillActivityStyle(data): string {
+    return this.globals.detectBillActivityByCode(data);
+  }
+
+  async showUpdatePaidHistoryDialog(bill) {
+
+    let data = {
+      title: "Cập nhật thông tin",
+      button_yes: "Cập nhật",
+      button_no: "Bỏ qua",
+      total_amount: bill.paid_history ? bill.paid_history.remain_amount : 0,
+      transaction_type: bill.paid_history ? bill.paid_history.transaction_status : null,
+    };
+
+    let dialogRef = this.dialog.open(UpdatePaidHistoryDialog, {
+      width: '500px',
+      data: data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        //alert(JSON.stringify(result));
+        this.updatePaidHistory({
+          bill_id: bill.id,
+          receive_amount: result.receiveAmount,
+          pay_amount: result.payAmount
+        });
+      }
+    })
+  }
+
+  async updatePaidHistory(data) {
+    try {
+      console.log("updatePaidHistory request", JSON.stringify(data));
+      let response = await this.innowayApi.paidHistory.updatePaidHistory(data);
+      this.loadBillData();
+      this.alertUpdateSuccess();
+    } catch (err) {
+      this.alertUpdateFailed();
+      console.log("updatePaidHistory", JSON.stringify(err));
+    }
+  }
+
+  detectPaidHistoryStatus(bill): boolean {
+    if (bill.paid_history.transaction_status == this.globals.PAID_HISTORY_TYPES[1].code) {
+      return false;
+    }
+    return true;
+  }
+
+  async loadEmployeeData() {
+    try {
+      this.employees = await this.innowayApi.employee.getList({
+        query: {
+          fields: ["$all"],
+        },
+      })
+    } catch (err) {
+
+    }
+  }
+
+  showEditInfoDialog(bill, employee, employees) {
+
+    let data = {
+      title: "Cập nhật thông tin",
+      button_yes: "Cập nhật",
+      button_no: "Bỏ qua",
+      subFee: bill.sub_fee ? bill.sub_fee : 0,
+      subFeeNote: bill.sub_fee_note ? bill.sub_fee_note : "",
+      employee: employee,
+      employees: employees,
+      activity: bill.activity ? bill.activity.action : null,
+    };
+
+    let dialogRef = this.dialog.open(UpdateBillDataDialog, {
+      width: '560px',
+      data: data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        this.editBillInformation(bill, result);
+      }
+    })
+  }
+
+  async editBillInformation(bill, data: any) {
+    try {
+      switch (data.action) {
+        case "updateBillStatus": {
+          this.updateBillActivity(bill, {
+            activity: data.billActivity,
+            employeeId: data.employee,
+            note: data.noteBillActivity,
+          })
+          break;
+        }
+        case "updateSubFee": {
+          this.updateSubFee(bill, {
+            price: this.globals.convertStringToPrice(data.subFee),
+            description: data.subFeeNote,
+          })
+          break;
+        }
+        case "updateNote": {
+          this.updateNoteBill(bill, {
+            note: data.note
+          })
+          break;
+        }
+      }
+    }
+    catch (err) {
+      this.alertUpdateFailed();
+    }
+  }
+
+  async updateBillActivity(bill, data: any) {
+    try {
+      let response = await this.innowayApi.bill.changeActivity(bill.id, data)
+      console.log("updateBillActivity", JSON.stringify(response))
+      this.alertUpdateSuccess();
+      this.loadBillData();
+    } catch (err) {
+      this.alertUpdateFailed();
+    }
+  }
+
+  async updateSubFee(bill, data: any) {
+    try {
+      if (bill.sub_fees != null && bill.sub_fees.length > 0) {
+        let response = await this.innowayApi.bill.updateSubFee(bill.id, bill.sub_fees[0].id, data);
+        this.alertUpdateSuccess();
+        this.loadBillData();
+        console.log("updateSubFee", JSON.stringify(response));
+      }
+    } catch (err) {
+      this.alertUpdateFailed();
+    }
+  }
+
+  async updateNoteBill(bill, data: any) {
+    try {
+      let response = await this.innowayApi.bill.update(bill.id, data)
+      console.log("updateBillActivity", JSON.stringify(response))
+      this.alertUpdateSuccess();
+      this.loadBillData();
+    } catch (err) {
+      this.alertUpdateFailed();
+    }
+  }
+  detectBillActivityStatus(bill): boolean {
+    if (bill.activity.action == "BILL_COLLECTED_MONEY"
+      || bill.activity.action == "BILL_MODIFIED_AT_COLLECTED_MONEY") {
+      return false;
+    }
+    return true;
+  }
+
+  timeFromNow(time) {
+    return moment(time).fromNow();
+  }
 }

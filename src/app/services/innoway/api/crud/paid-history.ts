@@ -18,4 +18,25 @@ export class PaidHistory extends CrudAPI<iPaidHistory> {
     ) {
         super(api, 'paid_history')
     }
+
+    async updatePaidHistory(params: {
+      bill_id: string,
+      receive_amount: number,
+      pay_amount: number
+    }) {
+      let { bill_id, receive_amount, pay_amount } = params;
+      let setting = {
+        method: 'POST',
+        uri: this.apiUrl(`update_paid_history`),
+        headers: { //headers
+          'User-Agent': 'Request-Promise',
+          'access_token': this.api.innowayAuth.adminToken
+        },
+        json: true,
+        body: { bill_id, receive_amount, pay_amount }
+      }
+      var res: any = await this.exec(setting);
+      var row = res.results.object;
+      return row;
+    }
 }

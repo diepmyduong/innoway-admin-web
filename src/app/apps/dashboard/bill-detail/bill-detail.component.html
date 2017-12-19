@@ -1,37 +1,64 @@
 <div class="toolbar">
-  <button type="button" class="btn btn-secondary"><span class="fa fa-reply" (click)="backToList()"></span></button>
   <span class="btn-group">
-        <button type="button" class="btn btn-secondary" (click)="viewLocationBillDetail()"><span class="fa fa-map-marker"></span></button>
+  <button type="button" class="btn btn-secondary"><span class="fa fa-reply" (click)="backToList()"></span></button>
+  <!-- <button type="button" class="btn btn-secondary" (click)="viewLocationBillDetail()"><span class="fa fa-map-marker"></span></button> -->
   <button type="button" class="btn btn-secondary"><span class="fa fa-phone"></span></button>
   </span>
   <span class="btn-group pull-right">
-  <button (click)="editBill()" class="btn btn-sm btn-primary btn-ladda mr-h">Chỉnh sửa</button>
-  <button (click)="changeStatusBill(item)" class="btn btn-sm btn-primary btn-ladda">Cập nhật trạng thái</button>
+      <button (click)="print(item)" class="btn btn-sm btn-primary btn-ladda mr-h">In đơn hàng</button>
+      <button (click)="viewDetail(item)" class="btn btn-sm btn-primary btn-ladda mr-h">Xem đơn hàng</button>
+      <button (click)="showEditInfoDialog(item,employee,employees)" *ngIf="detectBillActivityStatus(item)" class="btn btn-sm btn-primary btn-ladda mr-h">Cập nhật thông tin</button>
+      <button (click)="showUpdatePaidHistoryDialog(item)" *ngIf="detectPaidHistoryStatus(item)" class="btn btn-sm btn-primary btn-ladda mr-h">Cập nhật chi phí</button>
+  <!-- <button (click)="editBill()" class="btn btn-sm btn-primary btn-ladda mr-h">Chỉnh sửa</button> -->
+  <!-- <button (click)="changeStatusBill(item)" class="btn btn-sm btn-primary btn-ladda">Cập nhật trạng thái</button> -->
   </span>
 </div>
 <div class="content animated fadeIn">
-  <h4>Thông tin đơn hàng <span class="badge badge-warning pull-right">{{item.activity?detectActionName(item.activitiy.action):''}}</span></h4>
+  <h4>Thông tin đơn hàng</h4>
   <table class="table">
     <tbody>
       <tr>
-        <td style="width:120px">Đơn hàng</td>
-        <td>: {{item.id}}</td>
+        <td style="width:160px">Đơn hàng</td>
+        <td>: {{formatBillCode(item.code?item.code:"")}}</td>
       </tr>
       <tr>
-        <td>Khách hàng</td>
-        <td>: {{item.customer?item.customer.fullname:''}}</td>
+        <td style="width:160px">Trạng thái đơn hàng</td>
+        <td>: <strong>{{item.activity?detectActionName(item.activity.action):''}}</strong></td>
       </tr>
       <tr>
-        <td>Điện thoại</td>
-        <td>: {{item.customer?item.customer.phone:''}}</td>
+        <td style="width:160px">Khách hàng</td>
+        <td>: {{item.customer?item.customer.fullname:'không có'}}</td>
       </tr>
       <tr>
-        <td>Địa chỉ</td>
+        <td style="width:160px">Điện thoại</td>
+        <td>: {{item.customer && item.customer.fullname!="Khách Vãng Lai"?item.customer.phone:'không có'}}</td>
+      </tr>
+      <tr>
+        <td style="width:160px">Địa chỉ</td>
         <td>: {{item.address}}</td>
       </tr>
       <tr>
-        <td>Kênh</td>
+        <td style="width:160px">Kênh</td>
         <td>: {{detectChannelName(item.channel)}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4>Sản phẩm</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Tên</th>
+        <th>Số lượng</th>
+        <th>Giá (VNĐ)</th>
+        <th>Thành tiền (VNĐ)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let v of item.items">
+        <td>{{v.product?v.product.name:v.id}}</td>
+        <td>{{v.amount}}</td>
+        <td>{{v.product_price | accounting}}</td>
+        <td>{{v.total_price | accounting}}</td>
       </tr>
     </tbody>
   </table>
@@ -42,30 +69,34 @@
         <th>Trạng thái</th>
         <th>Thời gian</th>
         <th>Nhân viên</th>
+        <th>Ghi chú</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let v of item.activities">
+      <tr *ngFor="let v of item.activities | orderBy: 'created_at';let i=index">
         <td>{{detectActionName(v.action)}}</td>
-        <td>{{v.updated_at | date:'dd/MM/yyyy hh:mm:ss'}}</td>
-        <td>{{v.employee?v.employee.fullname:employee_id}}</td>
+        <td>{{v.updated_at | date:'dd/MM/yyyy hh:mm'}}</td>
+        <td>{{v.employee?v.employee.fullname:"không có"}}</td>
+        <td>{{v.note!=null?v.note:"không có"}}</td>
       </tr>
     </tbody>
   </table>
-  <h4>Sản phẩm</h4>
+  <h4>Lịch sử thanh toán</h4>
   <table class="table">
     <thead>
       <tr>
-        <th>Tên</th>
-        <th>Số lượng</th>
-        <th>Thành tiền (VNĐ)</th>
+        <th>Tiền còn thiếu</th>
+        <th>Tiền đã trả</th>
+        <th>Nhân viên xử lý</th>
+        <th>Thời gian</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let v of item.items">
-        <td>{{v.product?v.product.name:v.id}}</td>
-        <td>{{v.amount}}</td>
-        <td>{{v.total_price | accounting}}</td>
+      <tr *ngFor="let v of item.paid_historys | orderBy: 'created_at';let i=index">
+        <td>{{v.remain_amount | accounting}}</td>
+        <td>{{v.pay_amount | accounting}}</td>
+        <td>{{v.employee?v.employee.fullname:'không có'}}</td>
+        <td>{{v.created_at | date:'dd/MM/yyyy HH:mm'}}</td>
       </tr>
     </tbody>
   </table>

@@ -92,9 +92,10 @@ export class ConfigComponent implements OnInit {
 
   async setData(brandId) {
     try {
-      let data = await this.innowayApi.brand.getItem(this.id, {
+      let data = await this.innowayApi.brand.getItem(brandId, {
         query: { fields: ["$all"] }
       })
+
       this.name = data.name
       this.color = data.color
       this.logo = data.logo
@@ -127,7 +128,7 @@ export class ConfigComponent implements OnInit {
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
-      this.backToList()
+      // this.backToList()
     }
   }
 
@@ -185,7 +186,7 @@ export class ConfigComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      
+
       let { name, color, logo, trialExpire, address, vatValue, openHour, closeHour, status } = this;
       let trial_expire = trialExpire;
       let vat_value = vatValue
@@ -266,9 +267,7 @@ export class ConfigComponent implements OnInit {
     this.submitting = true;
     try {
       await this.updateItem(form);
-      this.backToList();
     } catch (err) {
-      alert(err.toString());
       this.alertUpdateFailed();
     } finally {
       this.submitting = false;

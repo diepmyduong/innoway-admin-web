@@ -22,6 +22,9 @@ import { BrandShip } from './api/crud/brand-ship';
 import { PromotionType } from './api/crud/promotion-type'
 import { ToppingValue } from './api/crud/topping-value'
 import { CustomerTypePromotion } from './api/crud/customer-type-promotion'
+import { BillSubFee } from './api/crud/bill-sub-fee'
+import { BillRelatedPeople } from './api/crud/bill-related-people'
+
 @Injectable()
 export class InnowayApiService {
 
@@ -29,7 +32,7 @@ export class InnowayApiService {
     public innowayConfig: InnowayConfigService,
     public innowayAuth: InnowayAuthService,
     public fcm: FcmService
-  ) { 
+  ) {
 
   }
   attribute = new Attribute(this)
@@ -52,4 +55,6 @@ export class InnowayApiService {
   promotionType = new PromotionType(this)
   toppingValue = new ToppingValue(this)
   customerTypePromotion = new CustomerTypePromotion(this)
+  billSubFee = new BillSubFee(this)
+  billRelatedPeople = new BillRelatedPeople(this)
 }

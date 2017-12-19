@@ -1,0 +1,45 @@
+<h2 class="title">{{data.title}}</h2>
+<div class="row">
+  <p class="col-4 header-text">Tổng tiền đơn hàng</p>
+  <div class="col-8">
+    <input type="text" [textMask]="{mask: numberMask}" [(ngModel)]="totalAmount" class="input-control form-control" readonly>
+  </div>
+</div>
+<div class="row">
+  <p class="col-4 header-text">Tiền khách hàng gửi</p>
+  <div class="col-8">
+    <input type="text" [textMask]="{mask: numberMask}" [(ngModel)]="receiveAmount" (ngModelChange)="validateInputData()" class="input-control form-control">
+  </div>
+</div>
+<div class="row">
+  <p class="col-4 header-text">Tiền khách hàng trả</p>
+  <div class="col-8">
+    <div class="input-group">
+      <input type="text" [textMask]="{mask: numberMask}" [(ngModel)]="payAmount" (ngModelChange)="validateInputData()" class="input-control form-control">
+      <span class="input-group-btn">
+          <button class="btn btn-primary input-control" type="button" (click)="fillFullPayAmount()">Trả hết</button>
+      </span>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <p class="col-4 header-text">Tiền còn lại</p>
+  <div class="col-8">
+    <input type="text" [textMask]="{mask: numberMask}" [(ngModel)]="remainAmount" class="input-control form-control" readonly>
+  </div>
+</div>
+<div class="row">
+  <p class="col-4 header-text">Trạng thái</p>
+  <div class="col-8">
+    <input type="text" [value]="transactionType.name" class="input-control form-control" readonly>
+  </div>
+</div>
+<div style="padding-bottom:20px;text-align:center;" *ngIf="error!=null">
+  <small class="text-muted danger">
+    {{error}}
+  </small>
+</div>
+<div class="bottom-btn-group">
+  <button class="btn-confirm btn btn-md" [disabled]="!isValid" [mat-dialog-close]="info" (click)="onYesClick()">{{data.button_yes}}</button>
+  <button class="btn-cancel btn btn-md" (click)="onNoClick()">{{data.button_no}}</button>
+</div>
