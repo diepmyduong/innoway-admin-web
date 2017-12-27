@@ -7,36 +7,36 @@
         </div>
         <div class="card-block">
           <div class="form-group row">
-            <label class="col-md-4 form-control-label" for="text-input">Tên</label>
-            <div class="col-md-8">
-              <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control" [placeholder]="'Nhập tên'" required/>
+            <label class="col-md-2 header-text" for="text-input">Tên</label>
+            <div class="col-md-10">
+              <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Nhập tên'" required/>
               <small *ngIf="nameControl.errors?.required" class="text-muted danger">
                   (Không được bỏ trống)
                 </small>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 form-control-label" for="text-input">Phí</label>
-            <div class="col-md-8">
-              <input type="text" #feeControl="ngModel" [(ngModel)]="fee" name="fee" class="form-control" [placeholder]="'Nhập phí'" required/>
+            <label class="col-md-2 header-text" for="text-input">Phí</label>
+            <div class="col-md-10">
+              <input type="text" #feeControl="ngModel" [(ngModel)]="fee" name="fee" class="form-control input-control" [placeholder]="'Nhập phí'" required/>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 form-control-label" for="text-input">Khu vực</label>
-            <div class="col-md-8">
-              <input type="text" #areaControl="ngModel" [(ngModel)]="area" name="area" class="form-control" [placeholder]="'Nhập khu vực'" required/>
+            <label class="col-md-2 header-text" for="text-input">Khu vực</label>
+            <div class="col-md-10">
+              <input type="text" #areaControl="ngModel" [(ngModel)]="area" name="area" class="form-control input-control" [placeholder]="'Nhập khu vực'" required/>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 form-control-label" for="text-input">Thành phố</label>
-            <div class="col-md-8">
-              <input type="text" #cityControl="ngModel" [(ngModel)]="city" name="city" class="form-control" [placeholder]="'Nhập thành phố'" required/>            
+            <label class="col-md-2 header-text" for="text-input">Thành phố</label>
+            <div class="col-md-10">
+              <input type="text" #cityControl="ngModel" [(ngModel)]="city" name="city" class="form-control input-control" [placeholder]="'Nhập thành phố'" required/>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
-            <div class="col-md-8">
-              <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
+            <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
+            <div class="col-md-10">
+              <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">
                   <option *ngFor="let v of [0,1]" [value]="v">
                     {{ v===1?"Hoạt động":"Không hoạt động"}}
                   </option>

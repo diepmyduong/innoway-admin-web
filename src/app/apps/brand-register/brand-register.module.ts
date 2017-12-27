@@ -8,6 +8,8 @@ import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { TextMaskModule } from 'angular2-text-mask';
 
+import { TabsModule } from 'ngx-bootstrap/tabs';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 
@@ -19,6 +21,8 @@ import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-not
     LaddaModule,
     DataTableModule,
     TextMaskModule,
+
+    TabsModule,
 
     FormsModule,
     ReactiveFormsModule,

@@ -69,6 +69,10 @@ export class AddComponent implements OnInit {
     }
   }
 
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
+  }
+
   backToList() {
     this.router.navigate(['../../list'], { relativeTo: this.route });
   }
@@ -162,7 +166,7 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       await this.addItem(form);
-      this.backToList();
+      this.backToListForAddNew();
     } catch (err) {
       this.alertAddFailed()
     } finally {

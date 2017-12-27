@@ -3,45 +3,52 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class DashboardService {
-    private actionSource = new BehaviorSubject<string>("");
-    selectedAction = this.actionSource.asObservable();
+  private actionSource = new BehaviorSubject<string>("");
+  selectedAction = this.actionSource.asObservable();
 
-    private employeeSource = new BehaviorSubject<string>("");
-    selectedEmployee = this.employeeSource.asObservable();
+  private employeeSource = new BehaviorSubject<string>("");
+  selectedEmployee = this.employeeSource.asObservable();
 
-    private areaSource = new BehaviorSubject<number>(0);
-    selectedArea = this.areaSource.asObservable();
+  private areaSource = new BehaviorSubject<number>(0);
+  selectedArea = this.areaSource.asObservable();
 
-    private customerSource = new BehaviorSubject<any>({});
-    selectedCustomer = this.customerSource.asObservable();
+  private customerSource = new BehaviorSubject<any>({});
+  selectedCustomer = this.customerSource.asObservable();
 
-    private customerNameSource = new BehaviorSubject<any>({});
-    selectedCustomerName = this.customerNameSource.asObservable();
+  private customerNameSource = new BehaviorSubject<any>({});
+  selectedCustomerName = this.customerNameSource.asObservable();
 
-    private billSource = new BehaviorSubject<string>("");
-    selectedBill = this.billSource.asObservable();
+  private billSource = new BehaviorSubject<string>("");
+  selectedBill = this.billSource.asObservable();
 
-    updateAction(update: any) {
-        this.actionSource.next(update);
-    }
+  private loadDailySummarySource = new BehaviorSubject<boolean>(false);
+  loadDailySummary = this.loadDailySummarySource.asObservable();
 
-    updateEmployee(update: any) {
-        this.employeeSource.next(update);
-    }
+  updateAction(update: any) {
+    this.actionSource.next(update);
+  }
 
-    updateArea(update: any) {
-        this.areaSource.next(update);
-    }
+  updateEmployee(update: any) {
+    this.employeeSource.next(update);
+  }
 
-    updateCustomer(update: any) {
-        this.customerSource.next(update);
-    }
+  updateArea(update: any) {
+    this.areaSource.next(update);
+  }
 
-    updateCustomerName(update: any) {
-        this.customerNameSource.next(update);
-    }
+  updateCustomer(update: any) {
+    this.customerSource.next(update);
+  }
 
-    updateBill(update: any) {
-        this.billSource.next(update);
-    }
+  updateCustomerName(update: any) {
+    this.customerNameSource.next(update);
+  }
+
+  updateBill(update: any) {
+    this.billSource.next(update);
+  }
+
+  updateDailySummary(update: any) {
+    this.loadDailySummarySource.next(update)
+  }
 }

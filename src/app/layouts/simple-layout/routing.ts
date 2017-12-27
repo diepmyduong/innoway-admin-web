@@ -17,7 +17,6 @@ export const PosLayoutRouting = {
 export const BrandRegisterLayoutRouting = {
   path: 'brand-register',
   component: SimpleLayoutComponent,
-  canActivate: [AuthGuard],
   loadChildren: 'app/apps/brand-register/brand-register.module#BrandRegisterModule'
 }
 

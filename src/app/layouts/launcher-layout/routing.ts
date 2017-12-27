@@ -14,6 +14,10 @@ export const LauncherLayoutRouting = {
     {
       path: 'tool',
       loadChildren: 'app/apps/tool/tool.module#ToolModule'
+    },
+    {
+      path: 'brand-register',
+      loadChildren: 'app/apps/brand-register/brand-register.module#BrandRegisterModule'
     }
   ]
 }

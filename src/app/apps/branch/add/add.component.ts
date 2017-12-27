@@ -122,7 +122,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async setData() {
     try {
       let data = await this.innowayApi.branch.getItem(this.id, {
-        query: { fields: ["$all"] } 
+        query: { fields: ["$all"] }
       })
       this.name = data.name
       this.address = data.address;
@@ -138,8 +138,12 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
+  }
+
   backToList() {
-    this.router.navigate(['../list'],{ relativeTo : this.route});
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -193,9 +197,9 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { name, address, longitude, latitude, employee_id, phone, type, status } = this;
-      await this.innowayApi.branch.add({ 
+      await this.innowayApi.branch.add({
         name, address, employee_id, phone, type, status,
-        longitude: _.toNumber(longitude), 
+        longitude: _.toNumber(longitude),
         latitude: _.toNumber(latitude)
       })
       this.alertAddSuccess();
@@ -209,9 +213,9 @@ export class AddComponent implements OnInit, AddPageInterface {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { name, address, longitude, latitude, employee_id, phone, type, status } = this;
-      await this.innowayApi.branch.update(this.id, { 
+      await this.innowayApi.branch.update(this.id, {
         name, address, employee_id, phone, type, status,
-        longitude: _.toNumber(longitude), 
+        longitude: _.toNumber(longitude),
         latitude: _.toNumber(latitude)
       })
       this.alertUpdateSuccess();
@@ -238,7 +242,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.submitting = true;
     try {
       await this.addItem(form);
-      this.backToList();
+      this.backToListForAddNew();
     } catch (err) {
       this.alertAddFailed()
     } finally {

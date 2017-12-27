@@ -10,10 +10,29 @@ import { AhamoveComponent } from './ahamove/ahamove.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { MitekComponent } from './mitek/mitek.component';
 
+import { TabsModule } from 'ngx-bootstrap/tabs';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LaddaModule } from 'angular2-ladda';
+import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { AgmCoreModule } from '@agm/core';
+
+import { MatTooltipModule } from '@angular/material';
+import { TooltipModule } from 'ngx-bootstrap';
+
 @NgModule({
   imports: [
     CommonModule,
-    IntegrationRoutingModule
+    IntegrationRoutingModule,
+
+    TabsModule,
+
+    FormsModule,
+    ReactiveFormsModule,
+    DataTableModule,
+    LaddaModule,
+    MatTooltipModule,
+    TooltipModule.forRoot(),
   ],
   declarations: [IntegrationComponent, KiotvietComponent, ApiAiComponent, GiaohangnhanhComponent, AhamoveComponent, ChatbotComponent, MitekComponent]
 })

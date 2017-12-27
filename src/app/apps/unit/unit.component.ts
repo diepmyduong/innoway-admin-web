@@ -21,7 +21,7 @@ export class UnitComponent implements OnInit, ListPageInterface {
   searchTimeOut: number = 250;
   searchRef: any;
 
-  @ViewChild(DataTable) itemsTable;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
     private router: Router,

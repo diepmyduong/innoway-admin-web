@@ -1,0 +1,22 @@
+<h2 class="title">{{data.title}}</h2>
+<div class="row">
+  <p class="col-4 header-text">Tin nhắn</p>
+  <div class="col-8">
+    <textarea type="text" [(ngModel)]="contentInput" class="input-control form-control"></textarea>
+  </div>
+</div>
+<div class="row">
+  <p class="col-4 header-text">Link hình media</p>
+  <div class="col-8">
+    <input type="text" [(ngModel)]="mediaLinkInput" class="input-control form-control">
+  </div>
+</div>
+<div style="padding-bottom:20px;text-align:center;" *ngIf="error!=null">
+  <small class="text-muted danger">
+    {{error}}
+  </small>
+</div>
+<div class="bottom-btn-group">
+  <button class="btn-confirm btn btn-md" [disabled]="!isValid" [mat-dialog-close]="info" (click)="onYesClick()">{{data.button_yes}}</button>
+  <button class="btn-cancel btn btn-md" (click)="onNoClick()">{{data.button_no}}</button>
+</div>

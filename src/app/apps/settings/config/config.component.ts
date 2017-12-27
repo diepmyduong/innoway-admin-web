@@ -224,8 +224,9 @@ export class ConfigComponent implements OnInit {
             open_days_of_week.push(day.code);
           }
         });
+
         await this.innowayApi.brand.update(this.employee.brand_id, {
-          name, color, logo, trial_expire, address, vat_value, phone,
+          name,color, logo, trial_expire, address, vat_value, phone,
           open_hour_online, close_hour_online, open_days_of_week, status
         })
         this.alertUpdateSuccess();

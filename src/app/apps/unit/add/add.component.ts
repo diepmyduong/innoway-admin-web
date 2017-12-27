@@ -9,7 +9,7 @@ import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-add',
@@ -22,7 +22,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   isEdit: boolean = false;
   submitting: boolean = false;
   name: string;
-  offset: number;
+  offset: number = 1;
   status: number = 1;
 
   constructor(private route: ActivatedRoute,
@@ -47,6 +47,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   setDefaultData() {
     this.status = 1;
+    this.offset = 1;
+    this.name = null;
+    return {
+      status: this.status,
+      offset: this.offset,
+      name: this.name
+    }
   }
 
   async setData() {
@@ -64,8 +71,12 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
+  }
+
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route});
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -122,7 +133,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       await this.innowayApi.unit.add({ name, offset, status })
       this.alertAddSuccess();
       form.reset();
-      form.controls["status"].setValue(1);
+      form.resetForm(this.setDefaultData())
     } else {
       this.alertFormNotValid();
     }
@@ -156,7 +167,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.submitting = true;
     try {
       await this.addItem(form);
-      this.backToList();
+      this.backToListForAddNew();
     } catch (err) {
       this.alertAddFailed()
     } finally {

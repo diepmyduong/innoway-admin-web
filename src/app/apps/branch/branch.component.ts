@@ -21,7 +21,7 @@ export class BranchComponent implements OnInit, ListPageInterface {
   searchTimeOut: number = 250;
   searchRef: any;
   subscriptions: Subscription[] = []
-  @ViewChild(DataTable) itemsTable;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
     private router: Router,

@@ -89,7 +89,7 @@ export class CrudAPI<T> extends BaseAPI {
         const hashedQuery = hash(options.query)
         this.activeHashQuery = hashedQuery
         this.activeQuery = options.query
-        
+
         if (options.local && this.hashCache[hashedQuery] && this.localBrandName == this.api.innowayConfig.brandName) {
             let items = this.hashCache[hashedQuery].items
             this.pagination = this.hashCache[hashedQuery].pagination
@@ -190,7 +190,7 @@ export class CrudAPI<T> extends BaseAPI {
                 this.items.next(items)
                 this.hashCache[this.activeHashQuery].items = items
                 items.push(row)
-                
+
             }
             this.hashCache = {
                 [this.activeHashQuery]: this.hashCache[this.activeHashQuery]
@@ -247,7 +247,7 @@ export class CrudAPI<T> extends BaseAPI {
             json: true // Automatically parses the JSON string in the response
         }
         let res = await this.exec(setting)
-       
+
         if (options.reload) {
             let items = this.items.getValue()
             const removed = _.remove(items, function (item) {
@@ -271,6 +271,7 @@ export class CrudAPI<T> extends BaseAPI {
 
     async deleteAll(ids: string[], options?: crudOptions) {
         if (!ids) throw new Error('ids undefined in deleteAll')
+        options = _.merge({}, this.options, options)
         let setting = {
             method: 'DELETE',
             uri: this.apiUrl(),

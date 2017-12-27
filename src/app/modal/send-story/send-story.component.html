@@ -1,0 +1,20 @@
+<h2 class="title">Gửi tin nhắn</h2>
+<div class="row">
+  <p class="col-4 header-text" *ngIf="this.billActivity">Danh sách kịch bản</p>
+  <div class="col-8">
+    <select [(ngModel)]="story" class="select-control form-control">
+      <option *ngFor="let v of stories" [value]="v.id">
+        {{ v.name }}
+      </option>
+    </select>
+  </div>
+</div>
+<div style="padding-bottom:20px;text-align:center;" *ngIf="error!=null">
+  <small class="text-muted danger">
+    {{error}}
+  </small>
+</div>
+<div class="bottom-btn-group">
+  <button class="btn-confirm btn btn-md" [mat-dialog-close]="info" (click)="onYesClick()">Gửi tin nhắn</button>
+  <button class="btn-cancel btn btn-md" (click)="onNoClick()">Bỏ qua</button>
+</div>

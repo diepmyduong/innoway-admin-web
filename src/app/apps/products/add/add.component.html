@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
-            <div class="card">
+            <div class="card n-mb-card">
               <div class="card-header">
                 Nhập thông tin
               </div>
@@ -35,7 +35,7 @@
           </div>
 
           <div class="col-md-12">
-            <div class="card">
+            <div class="card n-mb-card">
               <div class="card-header">
                 Thiết lập
               </div>
@@ -65,7 +65,7 @@
             </div>
           </div>
           <div class="col-md-12" [hidden]="true">
-            <div class="card">
+            <div class="card n-mb-card">
               <div class="card-header">
                 Mã sản phẩm
               </div>
@@ -87,7 +87,7 @@
           </div>
 
           <div class="col-md-12">
-            <div class="card">
+            <div class="card n-mb-card">
               <div class="card-header">
                 Chi phí
               </div>
@@ -111,7 +111,7 @@
             </div>
           </div>
           <div class="col-md-12">
-            <div class="card">
+            <div class="card n-mb-card">
               <div class="card-header">
                 Trạng thái sản phẩm
               </div>
@@ -131,7 +131,7 @@
             </div>
           </div>
           <div class="col-md-12">
-            <div class="card">
+            <div class="card n-mb-card">
               <div class="card-header">
                 Đơn vị tính
               </div>
@@ -151,7 +151,7 @@
             </div>
           </div>
           <div class="col-md-12">
-            <div class="card">
+            <div class="card n-mb-card">
               <div class="card-header">
                 Hình ảnh
                 <button type="submit" class="btn btn-sm btn-primary float-right" (click)="addImage()"> Thêm</button>
@@ -163,7 +163,7 @@
                 <swiper [config]="imageConfig" #imageSwiper id="product-swiper">
                   <div class="swiper-wrapper">
                     <div class="swiper-slide" *ngFor="let image of list_image; let i = index" (mouseenter)="image_on_hover = i" (mouseleave)="image_on_hover = -1">
-                      <div class="card">
+                      <div class="card n-mb-card">
                         <div class="card-block p-0">
                           <div class="product-swiper-image" [style.background-image]="'url('+image+')'">
                             <div class="btn-group pull-right" *ngIf="image_on_hover == i">
@@ -186,7 +186,7 @@
           </div>
 
           <div class="col-md-12" *ngIf="thumb">
-            <div class="card">
+            <div class="card n-mb-card">
               <div class="card-header">
                 Ảnh đại diện
               </div>
@@ -196,8 +196,8 @@
             </div>
           </div>
 
-          <div class="col-md-12">
-            <div class="card">
+          <div class="col-md-12 remove-pb">
+            <div class="card n-mb-card remove-pb">
               <div class="card-header">
                 Topping
               </div>
@@ -224,31 +224,25 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <!--/.col-->
-      <div class="col-md-12">
-        <div class="row">
           <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                Thêm sản phẩm
-              </div>
-              <div class="card-block">
-                <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
-                  Submit &amp; New
-                </button>
-                <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-sm btn-success btn-ladda" data-style="expand-right" [ladda]='submitting'>
-                  Submit &amp; Close
-                </button>
-                <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]='submitting'>
-                  Update &amp; Close
-                </button>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    Thêm sản phẩm
+                  </div>
+                  <div class="card-block">
+                    <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
+                    <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
+                    <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <!--/.col-->
     </div>
   </form>
 </div>

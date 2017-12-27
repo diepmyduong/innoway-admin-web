@@ -14,7 +14,7 @@ declare var accounting:any;
   templateUrl: './promotion.component.html',
   styleUrls: ['./promotion.component.scss']
 })
-export class PromotionComponent implements OnInit, ListPageInterface {
+export class PromotionComponent implements OnInit {
   items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   itemCount: number = 0;
   thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";;

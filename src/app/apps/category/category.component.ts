@@ -22,16 +22,16 @@ export class CategoryComponent implements OnInit {
   ) {
   }
   public items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  public itemCount = 0; // item total  count
+  public itemCount = 0;
   public thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
-  public itemFields = ["$all"]; //Get All field
+  public itemFields = ["$all"];
 
-  //Search bar
-  public query: any = {} //query to search and paging items
-  public searchTimeOut = 250; //milisecond
+
+  public query: any = {}
+  public searchTimeOut = 250;
   public searchRef: any;
 
-  @ViewChild(DataTable) itemsTable;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   ngOnInit() {
   }

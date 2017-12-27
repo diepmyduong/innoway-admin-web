@@ -1,66 +1,94 @@
-<div class="animated fadeIn">
-  <div class="row">
-    <div class="col-md-12">
-      <form #registerForm="ngForm">
-        <div id="logo"></div>
-        <h4 id="login-title">Thông tin doanh nghiệp</h4>
-        <div class="form-group row">
-          <label class="col-md-4 form-control-label" for="text-input">Tên doanh nghiệp</label>
-          <div class="col-md-8">
-            <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tên doanh nghiệp">
-          </div>
+<div id="fundo" class="absolute-center-container">
+  <div class="circle-outline"></div>
+  <div class="circle-outline"></div>
+  <div class="circle-outline"></div>
+  <form #loginForm="ngForm" class="absolute-center">
+    <!-- (keyup)="keyDownFunction($event,loginForm)" -->
+    <img id="logo" src="../../assets/img/logo-white.svg" />
+    <!-- <h1 id="login-title">ĐĂNG KÝ</h1> -->
+    <tabset class="tabset-control">
+      <tab>
+        <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin doanh nghiệp</ng-template>
+        <div class="input-row">
+          <i class="input-icon material-icons md-36">store</i>
+          <input type="text" #brandNameControl="ngModel" [(ngModel)]="brandName" name="brandName" placeholder="Tên doanh nghiệp" maxlength="70" tabindex="1" required>
         </div>
-        <div class="form-group row">
-          <label class="col-md-4 form-control-label" for="text-input">Số điện thoại</label>
-          <div class="col-md-8">
-            <input type="number" id="text-input" name="text-input" class="form-control" placeholder="Số điện thoại">
-          </div>
+        <small [style.visibility]="brandNameControl.errors?.required?'visible':'hidden'" class="text-muted danger">
+          (Không được bỏ trống)
+        </small>
+        <div class="input-row">
+          <i class="input-icon material-icons md-36">local_phone</i>
+          <input type="text" #brandPhoneControl="ngModel" [(ngModel)]="brandPhone" name="brandPhone" placeholder="Số điện thoại" maxlength="70" tabindex="1" required>
         </div>
-        <div class="form-group row">
-          <label class="col-md-4 form-control-label" for="text-input">Địa chỉ</label>
-          <div class="col-md-8">
-            <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Địa chỉ">
-          </div>
+        <small [style.visibility]="brandPhoneControl.errors?.required?'visible':'hidden'" class="text-muted danger">
+          (Không được bỏ trống)
+        </small>
+        <div class="input-row">
+          <i class="input-icon material-icons md-36">address</i>
+          <input type="text" #brandAddressControl="ngModel" [(ngModel)]="brandAddress" name="brandAddress" placeholder="Địa chỉ" maxlength="70" tabindex="1" required>
         </div>
-
-        <hr>
-        <h4 id="login-title">Tài khoản quản trị</h4>
-        <div class="form-group row">
-          <label class="col-md-4 form-control-label" for="text-input">Tên quản trị</label>
-          <div class="col-md-8">
-            <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tên quản trị">
-          </div>
+        <small [style.visibility]="brandAddressControl.errors?.required?'visible':'hidden'" class="text-muted danger">
+          (Không được bỏ trống)
+        </small>
+        <div class="input-row">
+          <i class="input-icon material-icons md-36">code</i>
+          <input type="text" #brandCodeControl="ngModel" [(ngModel)]="brandCode" name="brandCode" placeholder="Mã doanh nghiệp" maxlength="70" tabindex="1" required>
         </div>
-        <div class="form-group row">
-          <label class="col-md-4 form-control-label" for="text-input">Số điện thoại</label>
-          <div class="col-md-8">
-            <input type="number" id="text-input" name="text-input" class="form-control" placeholder="Số điện thoại">
-          </div>
+        <small [style.visibility]="brandCodeControl.errors?.required?'visible':'hidden'" class="text-muted danger">
+          (Không được bỏ trống)
+        </small>
+        <div class="input-row">
+          <i class="input-icon material-icons md-36">work</i>
+          <input type="text" #brandCategoryControl="ngModel" [(ngModel)]="brandCategory" name="brandCategory" placeholder="Loại dịch vụ" maxlength="70" tabindex="1" required>
         </div>
-        <div class="form-group row">
-          <label class="col-md-4 form-control-label" for="text-input">Email</label>
-          <div class="col-md-8">
-            <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Email">
-          </div>
+        <small [style.visibility]="brandCategoryControl.errors?.required?'visible':'hidden'" class="text-muted danger">
+          (Không được bỏ trống)
+        </small>
+      </tab>
+      <tab>
+        <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Tài khoản quản trị</ng-template>
+        <div class="input-row">
+          <i class="input-icon material-icons md-36">account_circle</i>
+          <input type="text" #adminFullnameControl="ngModel" [(ngModel)]="adminFullname" name="adminFullname" placeholder="Tên quản trị" maxlength="70" tabindex="1" required>
         </div>
-
-        <div class="form-group row">
-          <label class="col-md-4 form-control-label" for="text-input">Mật khẩu</label>
-          <div class="col-md-8">
-            <input type="password" id="text-input" name="text-input" class="form-control" placeholder="Mật khẩu">
-          </div>
+        <small [style.visibility]="adminFullnameControl.errors?.required?'visible':'hidden'" class="text-muted danger">
+          (Không được bỏ trống)
+        </small>
+        <div class="input-row">
+          <i class="input-icon material-icons md-36">phone</i>
+          <input type="text" #adminPhoneControl="ngModel" [(ngModel)]="adminPhone" name="adminPhone" placeholder="Số điện thoại" maxlength="70" tabindex="1" required>
         </div>
-
-        <div class="form-group row">
-          <label class="col-md-4 form-control-label" for="text-input">Xác nhận</label>
-          <div class="col-md-8">
-            <input type="password" id="text-input" name="text-input" class="form-control" placeholder="Xác nhận mật khẩu">
-          </div>
+        <small [style.visibility]="adminPhoneControl.errors?.required?'visible':'hidden'" class="text-muted danger">
+          (Không được bỏ trống)
+        </small>
+        <div class="input-row">
+          <i class="input-icon material-icons md-36">email</i>
+          <input type="text" #adminEmailControl="ngModel" [(ngModel)]="adminEmail" name="adminEmail" placeholder="Email" maxlength="70" tabindex="1" required>
         </div>
-
-        <hr>
-        <button type="submit" class="btn btn-sm btn-primary" [routerLink]="['/product-layout/dashboard']"><i class="fa fa-dot-circle-o"></i> Đăng ký</button>
-      </form>
-    </div>
-  </div>
+        <small [style.visibility]="adminEmailControl.errors?.required?'visible':'hidden'" class="text-muted danger">
+          (Không được bỏ trống)
+        </small>
+        <div class="input-row">
+          <i class="input-icon material-icons md-36">lock</i>
+          <input type="password" #adminPasswordControl="ngModel" [(ngModel)]="adminPassword" name="adminPassword" placeholder="Mật khẩu" maxlength="70" tabindex="1" required>
+        </div>
+        <small [style.visibility]="adminPasswordControl.errors?.required?'visible':'hidden'" class="text-muted danger">
+          (Không được bỏ trống)
+        </small>
+        <div class="input-row">
+          <i class="input-icon material-icons md-36">lock</i>
+          <input type="password" #adminRepasswordControl="ngModel" [(ngModel)]="adminRepassword" name="adminRepassword" placeholder="Xác nhận mật khẩu" maxlength="70" tabindex="1" required>
+        </div>
+        <small [style.visibility]="adminRepasswordControl.errors?.required?'visible':'hidden'" class="text-muted danger">
+          (Không được bỏ trống)
+        </small>
+      </tab>
+    </tabset>
+    <button type="button" class="btn btn-login" (click)="registerNewBrand(ngForm)">
+      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner"
+        style="font-size:24px"></i>
+      <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng ký</span>
+    </button>
+    <!-- <button type="submit" class="btn btn-sm btn-primary" (click)="registerNewBrand()"><i class="fa fa-dot-circle-o"></i> Đăng ký</button> -->
+  </form>
 </div>

@@ -69,8 +69,12 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
+  }
+
   backToList() {
-    this.router.navigate(['../list'], { relativeTo: this.route });
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -161,7 +165,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.submitting = true;
     try {
       await this.addItem(form);
-      this.backToList();
+      this.backToListForAddNew();
     } catch (err) {
       this.alertAddFailed()
     } finally {

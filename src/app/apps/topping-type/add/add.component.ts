@@ -5,14 +5,16 @@ import { AddPageInterface } from "../../interface/addPageInterface"
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators, NgForm } from "@angular/forms";
 import { CustomValidators } from "ng2-validation/dist";
+import { Globals } from "../../../Globals"
 import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
+  providers: [Globals],
   styleUrls: ['./add.component.scss']
 })
 
@@ -65,8 +67,12 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
+  }
+
   backToList() {
-    this.router.navigate(['../../list'], { relativeTo: this.route});
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -156,7 +162,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.submitting = true;
     try {
       await this.addItem(form);
-      this.backToList();
+      this.backToListForAddNew();
     } catch (err) {
       this.alertAddFailed()
     } finally {

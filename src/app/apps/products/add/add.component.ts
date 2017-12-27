@@ -7,6 +7,7 @@ import { SelectComponent } from 'ng2-select';
 import * as Ajv from 'ajv';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import { InnowayApiService } from 'app/services/innoway'
+import { Globals } from './../../../globals';
 
 declare var swal, _: any;
 
@@ -68,7 +69,8 @@ export class AddComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    public innowayApi: InnowayApiService
+    public innowayApi: InnowayApiService,
+    public globals: Globals
   ) {
   }
 
@@ -92,7 +94,7 @@ export class AddComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach( subscription => {
+    this.subscriptions.forEach(subscription => {
       subscription.unsubscribe()
     })
   }
@@ -130,6 +132,11 @@ export class AddComponent implements OnInit {
       base_price: this.base_price,
       description: this.description,
       shortDescription: this.shortDescription,
+      toppings: this.toppings,
+      list_image: this.list_image,
+      thumb: this.thumb,
+      unit: this.unit,
+      product_type: this.product_type
     }
   }
 
@@ -161,7 +168,7 @@ export class AddComponent implements OnInit {
 
   async loadToppingData() {
     try {
-    
+
       this.subscriptions.push(this.toppings.subscribe(toppings => {
         let items = toppings.map(topping => {
           return {
@@ -224,17 +231,19 @@ export class AddComponent implements OnInit {
           }]
         }
       })
+
+      console.log("setdata", JSON.stringify(product))
       this.name = product.name
       this.thumb = product.thumb
       this.description = product.description
       this.shortDescription = product.short_description
       this.price = _.toString(product.price)
       this.base_price = _.toString(product.base_price)
-      this.unit = product.unit_id ? product.unit_id : "Không có dữ liệu"
+      this.unit = product.unit_id ? product.unit_id : null
       this.status = product.status
-      this.category = product.category_id
+      this.category = product.category_id ? product.category_id : null
       this.list_image = product.list_image
-      this.product_type = product.product_type_id ? product.product_type_id : "Không có dữ liệu"
+      this.product_type = product.product_type_id ? product.product_type_id : null
       let toppings = this.toppings.getValue();
       this.toppingSelecter.active = product.toppings.map(product_topping => {
         let index = _.findIndex(toppings, { id: product_topping.topping.id });
@@ -246,6 +255,7 @@ export class AddComponent implements OnInit {
         }
       })
       this.toppings.next(toppings);
+      this.ref.detectChanges();
     } catch (err) {
       console.log('ERROR', err);
       try { await this.alertItemNotFound() } catch (err) { }
@@ -253,8 +263,12 @@ export class AddComponent implements OnInit {
     }
   }
 
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
+  }
+
   backToList() {
-    this.router.navigate(['../list'], { relativeTo: this.route });
+    this.router.navigate(['../../list'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -314,7 +328,7 @@ export class AddComponent implements OnInit {
       confirmButtonText: 'Nhập',
       showLoaderOnConfirm: true,
       preConfirm: ((image) => {
-        return new Promise((function (resolve, reject) {
+        return new Promise((function(resolve, reject) {
           let ajv = new Ajv();
           let valid = ajv.validate({ type: "string", format: 'url' }, image);
           if (!valid) {
@@ -355,19 +369,15 @@ export class AddComponent implements OnInit {
 
   async submitAndNew(form: NgForm) {
     this.submitting = true;
-    this.price = this.price.toString().replace(/[^\d]/g, '');
-    if (this.base_price != null) {
-      this.base_price = this.base_price.toString().replace(/[^\d]/g, '');
-    }
     try {
       if (form.valid) {
         let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status } = this;
-        
-        let category_id = this.category;
+
+        let category_id = this.category ? this.category : undefined;
         let short_description = this.shortDescription;
-        let unit_id = this.unit;
-        let product_type_id = this.product_type;
-        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: _.toNumber(price), base_price: _.toNumber(base_price) , status, category_id, unit_id, product_type_id, list_image })
+        let unit_id = this.unit ? this.unit : undefined;
+        let product_type_id = this.product_type ? this.product_type : undefined;
+        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -392,11 +402,11 @@ export class AddComponent implements OnInit {
     try {
       if (form.valid) {
         let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status } = this;
-        let category_id = this.category;
+        let category_id = this.category ? this.category : undefined;
         let short_description = this.shortDescription;
-        let unit_id = this.unit;
-        let product_type_id = this.product_type;
-        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: _.toNumber(price), base_price: _.toNumber(base_price) , status, category_id, unit_id, product_type_id, list_image })
+        let unit_id = this.unit ? this.unit : undefined;
+        let product_type_id = this.product_type ? this.product_type : undefined;
+        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -404,7 +414,7 @@ export class AddComponent implements OnInit {
           await this.innowayApi.product.addToppings(product.id, toppings)
         }
         this.alertAddSuccess();
-        this.backToList();
+        this.backToListForAddNew();
       } else {
         this.alertFormNotValid();
       }
@@ -418,20 +428,16 @@ export class AddComponent implements OnInit {
 
   async updateAndClose(form: NgForm) {
     this.submitting = true;
-    this.price = this.price.toString().replace(/[^\d]/g, '');
-    if (this.base_price != null) {
-      this.base_price = this.base_price.toString().replace(/[^\d]/g, '');
-    }
     try {
       if (form.valid) {
         let { name, description, list_image, thumb, price, base_price, unit, status, shortDescription } = this;
-        let category_id = this.category;
-        let unit_id = this.unit;
-        let product_type_id = this.product_type;
+        let category_id = this.category ? this.category : undefined;
+        let unit_id = this.unit ? this.unit : undefined;
+        let product_type_id = this.product_type ? this.product_type : undefined;
         let short_description = this.shortDescription;
-        let product = await this.innowayApi.product.update(this.id, { name, short_description, description, thumb, price: _.toNumber(price), base_price: _.toNumber(base_price) , status, category_id, unit_id, product_type_id, list_image })
+        let product = await this.innowayApi.product.update(this.id, { name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image })
         let toppings = this.toppingSelecter.active.map(item => {
-          return item.id
+          return item.id ? item.id : undefined
         })
         if (toppings.length > 0) {
           await this.innowayApi.product.updateToppings(this.id, toppings)

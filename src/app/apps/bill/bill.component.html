@@ -17,7 +17,7 @@
       <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async"
       [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true"
       [multiSelect]="true" [substituteRows]="false" [selectOnRowClick]="true"
-      [showReloading]="true" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
+      [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
         <data-table-column property="address" header="Địa điểm" [sortable]="true" [visible]="false">
         </data-table-column>
         <data-table-column property="customer.phone" header="Khách hàng" [resizable]="true" [sortable]="true">

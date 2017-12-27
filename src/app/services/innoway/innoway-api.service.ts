@@ -24,6 +24,8 @@ import { ToppingValue } from './api/crud/topping-value'
 import { CustomerTypePromotion } from './api/crud/customer-type-promotion'
 import { BillSubFee } from './api/crud/bill-sub-fee'
 import { BillRelatedPeople } from './api/crud/bill-related-people'
+import { ThirdPartyChatbot } from './api/crud/thirdparty-chatbot'
+import { DailySummary } from './api/crud/daily-summary'
 
 @Injectable()
 export class InnowayApiService {
@@ -57,4 +59,6 @@ export class InnowayApiService {
   customerTypePromotion = new CustomerTypePromotion(this)
   billSubFee = new BillSubFee(this)
   billRelatedPeople = new BillRelatedPeople(this)
+  thirdpartyChatbot = new ThirdPartyChatbot(this)
+  dailySummary = new DailySummary(this)
 }

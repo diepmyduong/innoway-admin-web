@@ -9,11 +9,13 @@ import { CustomValidators } from "ng2-validation/dist";
 import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+import { Globals } from "../../../Globals"
 import * as _ from 'lodash'
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-add',
+  providers: [Globals],
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
@@ -37,6 +39,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private globals: Globals,
     private ref: ChangeDetectorRef,
     public innowayApi: InnowayApiService) {
   }
@@ -85,13 +88,14 @@ export class AddComponent implements OnInit, AddPageInterface {
   async setData() {
     try {
       let data = await this.innowayApi.toppingValue.getItem(this.id, {
-        query: { fields: ["name", "topping_id", "description", "price", "status"] }
+        query: { fields: ["$all"] }
       })
+      console.log("topping",JSON.stringify(data));
       this.name = data.name;
       if (data.topping_id == null) {
         data.topping_id = this.toppings.getValue()[0].id;
       }
-      this.topping_id = data.topping_id;
+      this.topping_id = data.topping_id ? data.topping_id : null;
       this.description = data.description;
       this.price = _.toString(data.price);
       this.status = data.status;
@@ -99,6 +103,10 @@ export class AddComponent implements OnInit, AddPageInterface {
       try { await this.alertItemNotFound() } catch (err) { }
       this.backToList()
     }
+  }
+
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
   }
 
   backToList() {
@@ -155,9 +163,8 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      this.price = this.price.toString().replace(/[^\d]/g, '');
       let { name, topping_id, description, price, status } = this;
-      await this.innowayApi.toppingValue.add({ name, topping_id, description, price: _.toNumber(price), status })
+      await this.innowayApi.toppingValue.add({ name, topping_id, description, price: this.globals.convertStringToPrice(price), status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -168,9 +175,8 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      this.price = this.price.toString().replace(/[^\d]/g, '');
       let { name, topping_id, description, price, status } = this;
-      await this.innowayApi.toppingValue.update(this.id, { name, topping_id, description, price: _.toNumber(price), status })
+      await this.innowayApi.toppingValue.update(this.id, { name, topping_id, description, price: this.globals.convertStringToPrice(price), status })
       this.alertUpdateSuccess();
       form.reset();
     } else {
@@ -194,7 +200,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.submitting = true;
     try {
       await this.addItem(form);
-      this.backToList();
+      this.backToListForAddNew();
     } catch (err) {
       this.alertAddFailed()
     } finally {

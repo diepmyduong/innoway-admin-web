@@ -56,6 +56,8 @@ export class DashboardComponent implements OnInit {
   autocompleteCustomerData: Array<any> = new Array<any>();
   autocompleteCustomerNameData: Array<any> = new Array<any>();
 
+  callLoadDailySummary: boolean = false;
+
   actions: any;
 
   private toasterService: ToasterService;
@@ -145,7 +147,9 @@ export class DashboardComponent implements OnInit {
     this.loadAreaData();
     this.loadEmployeeDataByBranchData();
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
-    this.getSummaryInformation();
+    // this.getSummaryInformation();
+    this.loadDailySummary();
+    this.subscribeLoadDailySummary();
   }
 
   async loadEmployeeDataByBranchData() {
@@ -162,7 +166,7 @@ export class DashboardComponent implements OnInit {
   async loadAreaData() {
     try {
       this.areas.next(await this.innowayApi.shipArea.getList({
-        query: { fields: ["$all"]}
+        query: { fields: ["$all"] }
       }))
     } catch (err) {
       // try { await this.alertItemNotFound() } catch (err) { }
@@ -652,6 +656,18 @@ export class DashboardComponent implements OnInit {
     // return this.items;
   }
 
+  private subscribeLoadDailySummary() {
+    this.dashboardService.loadDailySummary.subscribe(
+      data => {
+        console.log("subscribeLoadDailySummary", data);
+        this.callLoadDailySummary = data;
+        if (this.callLoadDailySummary != null && this.callLoadDailySummary == true) {
+          console.log("subscribeLoadDailySummary", "loadDailySummary");
+          this.loadDailySummary();
+        }
+      });
+  }
+
   onChangeEmployee(value) {
     this.dashboardService.updateEmployee(value);
   }
@@ -811,7 +827,7 @@ export class DashboardComponent implements OnInit {
         endTime: moment(Date.now()).add(1, 'days').format('YYYY-MM-DD')
       })
 
-      console.log("summary",JSON.stringify(data));
+      console.log("summary", JSON.stringify(data));
       this.summary = data;
 
       this.top_right_infos.push({
@@ -860,6 +876,118 @@ export class DashboardComponent implements OnInit {
       // alert(JSON.stringify(data));
     } catch (err) {
 
+    }
+  }
+
+  async loadDailySummary() {
+    try {
+      let response: any = await this.innowayApi.dailySummary.getList({
+        query: {
+          fields: ["$all"],
+          filter: {
+            date: { $eq: moment(Date.now()).format("DD-MM-YYYY") }
+          }
+        }
+      })
+
+      console.log("daily summary", JSON.stringify(response));
+      let data = response[0];
+      this.top_right_infos = [];
+      this.sub_header_infos = [];
+
+      this.top_right_infos.push({
+        number: data.pay_amount,
+        text: "Tiền đã thu"
+      });
+
+      this.top_right_infos.push({
+        number: data.remain_amount,
+        text: "Tiền còn thiếu"
+      });
+
+      this.top_right_infos.push({
+        number: data.number_of_customer,
+        text: "Số khách hàng"
+      });
+
+      this.top_right_infos.push({
+        number: data.number_of_customer_using_promotion,
+        text: "Số khuyến mãi được dùng"
+      });
+
+      this.top_right_infos.push({
+        number: data.number_of_bill,
+        text: "Số đơn hàng"
+      });
+
+      this.sub_header_infos.push({
+        number: data.number_of_sent_successfully_status,
+        text: 'THÀNH CÔNG',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_distributed_status,
+        text: 'ĐÃ ĐIỀU PHỐI',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_waiting_for_confirmation_status,
+        text: 'ĐANG CHỜ XÁC NHẬN',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_bill_confirmed_status,
+        text: 'ĐÃ XÁC NHẬN',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_picking_up_status,
+        text: 'ĐANG LẤY HÀNG',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_received_status,
+        text: 'ĐÃ NHẬN HÀNG',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_processing_status,
+        text: 'ĐANG XỬ LÝ',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_prepared_status,
+        text: 'ĐÃ CHUẨN BỊ',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_sent_shipper_status,
+        text: 'ĐÃ GỬI GIAO HÀNG',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_delivering_status,
+        text: 'ĐANG GIAO',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_paid_status,
+        text: 'ĐÃ THANH TOÁN',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_collected_money_status,
+        text: 'ĐÃ NHẬN TIỀN',
+      })
+
+      this.sub_header_infos.push({
+        number: data.number_of_cancelled_status,
+        text: 'ĐÃ HỦY',
+      })
+
+      this.ref.detectChanges();
+    } catch (err) {
+      console.log("bi-summary", err)
     }
   }
 }

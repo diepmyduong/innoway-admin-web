@@ -32,7 +32,7 @@ export class ProductTypeComponent implements OnInit {
   public searchTimeOut = 250; //milisecond
   public searchRef: any;
 
-  @ViewChild(DataTable) itemsTable;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   ngOnInit() {
   }

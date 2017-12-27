@@ -165,6 +165,9 @@ export const FullLayoutRouting = {
     }, {
       path: 'tool',
       loadChildren: 'app/apps/tool/tool.module#ToolModule'
+    }, {
+      path: 'integration',
+      loadChildren: 'app/apps/integration/integration.module#IntegrationModule'
     },
   ],
 

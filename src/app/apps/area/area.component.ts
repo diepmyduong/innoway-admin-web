@@ -22,7 +22,7 @@ export class AreaComponent implements OnInit, ListPageInterface {
   subscriptions: Subscription[] = []
 
 
-  @ViewChild(DataTable) itemsTable;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
     private router: Router,

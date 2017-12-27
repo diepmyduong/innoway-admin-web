@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { InnowayApiService } from 'app/services/innoway'
 import { DataTable } from 'angular-2-data-table-bootstrap4';
 import { Subscription } from 'rxjs/Subscription'
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-products',
@@ -34,9 +34,10 @@ export class ProductsComponent implements OnInit {
   public searchRef: any;
   subscriptions: Subscription[] = []
 
-  @ViewChild(DataTable) itemsTable;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   ngOnInit() {
+
   }
 
   ngOnDestroy() {
@@ -57,7 +58,8 @@ export class ProductsComponent implements OnInit {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items.next(await this.innowayApi.product.getList({local: true, query }))
+    console.log("bibi: " + JSON.stringify(query));
+    this.items.next(await this.innowayApi.product.getList({ query }))
     this.itemCount = this.innowayApi.product.pagination.totalItems
     this.ref.detectChanges();
     return this.items;
@@ -115,11 +117,14 @@ export class ProductsComponent implements OnInit {
   async deleteItem(item) {
     item.deleting = true;
     try {
-      try { await this.confirmDelete() } catch (err) { return };
+      // try { await this.confirmDelete() } catch (err) { return };
+      console.log("deleteItem", JSON.stringify(item))
+      console.log("deleteItem", JSON.stringify(item.id))
       await this.innowayApi.product.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
+      console.log("deleteItem", err);
       this.alertCannotDelete();
     } finally {
       item.deleting = false;
@@ -127,6 +132,9 @@ export class ProductsComponent implements OnInit {
   }
 
   async deleteAll() {
+    if (this.itemsTable.selectedRows.length == 0)
+      return;
+
     let rows = this.itemsTable.selectedRows;
     let ids = [];
     rows.forEach(row => {
@@ -134,20 +142,24 @@ export class ProductsComponent implements OnInit {
       ids.push(row.item.id);
     });
     try {
-      try { await this.confirmDelete() } catch (err) { return };
-      await this.innowayApi.product.deleteAll(ids)
+      try { await this.confirmDelete() } catch (err) {
+        console.log("deleteAll", err)
+        return
+      };
+
+      console.log("deleteAll", JSON.stringify(ids));
+      let data = await this.innowayApi.product.deleteAll(ids)
+      console.log("deleteAll", JSON.stringify(data));
       this.itemsTable.selectAllCheckbox = false;
-      this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
+      console.log("deleteAll 1", err)
       this.alertCannotDelete();
     } finally {
       rows.forEach(row => {
         row.item.deleting = false;
       });
     }
-
-
   }
 
   onSearch(e) {

@@ -9,6 +9,7 @@
               <div class="float-left">
                 <div>Đơn hàng: <strong>{{formatBillCode(bill.code?bill.code:"")}}</strong></div>
               </div>
+              <a class="btn btn-sm btn-gray-info float-right" (click)="showSendStoryDialog(bill)"><i class="fa fa-print"></i> Gửi tin nhắn</a>
               <a class="btn btn-sm btn-gray-info float-right" (click)="print(bill)"><i class="fa fa-print"></i> In hóa đơn</a>
               <a class="btn btn-sm btn-gray-info float-right mr-h" (click)="showEditInfoDialog(bill, employee, employees)"><i class="fa fa-flag"></i> Cập nhật trạng thái</a>
               <a class="btn btn-sm btn-gray-info float-right mr-h" (click)="showUpdatePaidHistoryDialog(bill)"><i class="fa fa-edit"></i> Cập nhật chi phí</a>

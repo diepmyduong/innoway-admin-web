@@ -17,6 +17,7 @@ import { BillLayoutComponent } from './bill-layout/bill-layout.component';
 import { SettingLayoutComponent } from './setting-layout/setting-layout.component';
 import { PromotionLayoutComponent } from './promotion-layout/promotion-layout.component';
 import { BranchLayoutComponent } from './branch-layout/branch-layout.component';
+import { IntegrationComponent } from './integration/integration.component';
 
 @NgModule({
   imports: [
@@ -26,6 +27,6 @@ import { BranchLayoutComponent } from './branch-layout/branch-layout.component';
     //BsDropdownModule,
     ToasterModule
   ],
-  declarations: [SimpleLayoutComponent, FullLayoutComponent, LauncherLayoutComponent, ProductLayoutComponent, EmployeeLayoutComponent, CustomerLayoutComponent, BillLayoutComponent, SettingLayoutComponent, PromotionLayoutComponent, BranchLayoutComponent]
+  declarations: [SimpleLayoutComponent, FullLayoutComponent, LauncherLayoutComponent, ProductLayoutComponent, EmployeeLayoutComponent, CustomerLayoutComponent, BillLayoutComponent, SettingLayoutComponent, PromotionLayoutComponent, BranchLayoutComponent, IntegrationComponent]
 })
 export class LayoutsModule { }

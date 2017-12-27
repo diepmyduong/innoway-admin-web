@@ -10,6 +10,8 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import { UpdatePaidHistoryDialog } from "../../../modal/update-paid-history/update-paid-history.component";
 import { UpdateBillDataDialog } from "../../../modal/update-bill-data/update-bill-data.component";
+import { SendMessageDialog } from "../../../modal/send-message/send-message.component";
+import { SendStoryDialog } from "../../../modal/send-story/send-story.component";
 
 declare let swal: any;
 
@@ -742,5 +744,41 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     } catch (err) {
       this.alertUpdateFailed();
     }
+  }
+
+  showSendMessageDialog(input: any){
+
+    let data={
+
+    }
+
+    let dialogRef = this.dialog.open(SendMessageDialog, {
+      width: '500px',
+      data: data,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log("response message",JSON.stringify(result))
+      }
+    })
+  }
+
+  showSendStoryDialog(input: any){
+
+    let data={
+
+    }
+
+    let dialogRef = this.dialog.open(SendStoryDialog, {
+      width: '500px',
+      data: data,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log("response message",JSON.stringify(result))
+      }
+    })
   }
 }

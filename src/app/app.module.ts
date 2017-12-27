@@ -41,6 +41,8 @@ import { ChangePasswordDialog } from "./modal/change-password/change-password.co
 import { ConfigChatbotStoryDialog } from "./modal/config-chatbot-story/config-chatbot-story.component";
 import { UpdateBillDataDialog } from "./modal/update-bill-data/update-bill-data.component";
 import { UpdatePaidHistoryDialog } from "./modal/update-paid-history/update-paid-history.component";
+import { SendMessageDialog } from "./modal/send-message/send-message.component";
+import { SendStoryDialog } from "./modal/send-story/send-story.component";
 import { TextMaskModule } from 'angular2-text-mask';
 
 @NgModule({
@@ -74,7 +76,9 @@ import { TextMaskModule } from 'angular2-text-mask';
     ChangePasswordDialog,
     ConfigChatbotStoryDialog,
     UpdateBillDataDialog,
-    UpdatePaidHistoryDialog
+    UpdatePaidHistoryDialog,
+    SendMessageDialog,
+    SendStoryDialog
   ],
   providers: [{
     provide: LocationStrategy,
@@ -87,7 +91,9 @@ import { TextMaskModule } from 'angular2-text-mask';
     ChangePasswordDialog,
     ConfigChatbotStoryDialog,
     UpdateBillDataDialog,
-    UpdatePaidHistoryDialog
+    UpdatePaidHistoryDialog,
+    SendMessageDialog,
+    SendStoryDialog
   ]
 })
 export class AppModule { }

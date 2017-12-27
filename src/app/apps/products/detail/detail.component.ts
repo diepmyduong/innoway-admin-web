@@ -18,7 +18,7 @@ declare var $:any;
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss']
 })
-export class DetailComponent implements OnInit, DetailPageInterface {
+export class DetailComponent implements OnInit {
   item: any;
   itemFields: any;
 

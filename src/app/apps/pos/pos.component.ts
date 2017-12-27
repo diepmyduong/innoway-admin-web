@@ -439,11 +439,14 @@ export class PosComponent implements OnInit {
         this.selectedProduct.splice(i, 1);
       }
     }
+    this.updateTotalAmount();
     this.ref.detectChanges();
   }
 
   removeAllProduct() {
     this.selectedProduct = new Array<any>();
+    this.updateTotalAmount();
+    this.ref.detectChanges();
   }
 
   alertItemNotFound() {

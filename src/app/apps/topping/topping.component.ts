@@ -10,7 +10,7 @@ import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataTable } from "angular-2-data-table-bootstrap4";
 
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-topping',
@@ -29,7 +29,7 @@ export class ToppingComponent implements OnInit, ListPageInterface {
   searchTimeOut: number = 250;
   searchRef: any;
 
-  @ViewChild(DataTable) itemsTable;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
     private router: Router,
@@ -53,6 +53,7 @@ export class ToppingComponent implements OnInit, ListPageInterface {
 
   async getItems() {
     let query = Object.assign({
+      local: false,
       fields: this.itemFields
     }, this.query);
     this.items.next(await this.innowayApi.toppingValue.getList({ query }))
@@ -70,15 +71,15 @@ export class ToppingComponent implements OnInit, ListPageInterface {
   }
 
   addItem() {
-    this.router.navigate(['../add'], { relativeTo : this.route});
+    this.router.navigate(['../add'], { relativeTo: this.route });
   }
 
   editItem(item) {
-    this.router.navigate(['../add', item.id], { relativeTo : this.route});
+    this.router.navigate(['../add', item.id], { relativeTo: this.route });
   }
 
   viewItem(item) {
-    this.router.navigate(['../detail', item.id], { relativeTo : this.route});
+    this.router.navigate(['../detail', item.id], { relativeTo: this.route });
   }
 
   async confirmDelete() {

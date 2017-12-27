@@ -3,6 +3,29 @@ import { Injectable } from '@angular/core';
 Injectable()
 export class Globals {
 
+  SEND_MESSAGE_METHODS_ON_CHATBOT = [
+    {
+      code: 'notification',
+      name: 'thông báo'
+    }, {
+      code: 'promotion',
+      name: 'khuyến mãi'
+    }, {
+      code: 'receipt',
+      name: 'hóa đơn'
+    }, {
+      code: 'bill',
+      name: 'đơn hàng'
+    },
+    {
+      code: 'product',
+      name: 'sản phẩm'
+    }, {
+      code: 'category',
+      name: 'loại sản phẩm'
+    }
+  ]
+
   BRAND_CATEGORIES = [
     {
       code: 'BAKERY',
@@ -299,8 +322,8 @@ export class Globals {
             this.BILL_ACTIVITY_OPTIONS[1],
             this.BILL_ACTIVITY_OPTIONS[2],
             this.BILL_ACTIVITY_OPTIONS[3],
-            // this.BILL_ACTIVITY_OPTIONS[4],
-            // this.BILL_ACTIVITY_OPTIONS[5],
+            this.BILL_ACTIVITY_OPTIONS[4],
+            this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -314,8 +337,8 @@ export class Globals {
           subRules = [
             this.BILL_ACTIVITY_OPTIONS[2],
             this.BILL_ACTIVITY_OPTIONS[3],
-            // this.BILL_ACTIVITY_OPTIONS[4],
-            // this.BILL_ACTIVITY_OPTIONS[5],
+            this.BILL_ACTIVITY_OPTIONS[4],
+            this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -328,8 +351,8 @@ export class Globals {
         case 'BILL_WAITING_FOR_CONFIRMATION': {
           subRules = [
             this.BILL_ACTIVITY_OPTIONS[3],
-            // this.BILL_ACTIVITY_OPTIONS[4],
-            // this.BILL_ACTIVITY_OPTIONS[5],
+            this.BILL_ACTIVITY_OPTIONS[4],
+            this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -342,8 +365,8 @@ export class Globals {
         case 'BILL_MODIFIED_AT_WAITING_FOR_CONFIRMATION': {
           subRules = [
             this.BILL_ACTIVITY_OPTIONS[3],
-            // this.BILL_ACTIVITY_OPTIONS[4],
-            // this.BILL_ACTIVITY_OPTIONS[5],
+            this.BILL_ACTIVITY_OPTIONS[4],
+            this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -358,8 +381,8 @@ export class Globals {
         }
         case 'BILL_CONFIRMED': {
           subRules = [
-            // this.BILL_ACTIVITY_OPTIONS[4],
-            // this.BILL_ACTIVITY_OPTIONS[5],
+            this.BILL_ACTIVITY_OPTIONS[4],
+            this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -371,8 +394,8 @@ export class Globals {
         }
         case 'BILL_MODIFIED_AT_BILL_CONFIRMED': {
           subRules = [
-            // this.BILL_ACTIVITY_OPTIONS[4],
-            // this.BILL_ACTIVITY_OPTIONS[5],
+            this.BILL_ACTIVITY_OPTIONS[4],
+            this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -387,7 +410,7 @@ export class Globals {
         }
         case 'BILL_PICKING_UP': {
           subRules = [
-            // this.BILL_ACTIVITY_OPTIONS[5],
+            this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -399,7 +422,7 @@ export class Globals {
         }
         case 'BILL_MODIFIED_AT_PICKING_UP': {
           subRules = [
-            // this.BILL_ACTIVITY_OPTIONS[5],
+            this.BILL_ACTIVITY_OPTIONS[5],
             this.BILL_ACTIVITY_OPTIONS[6],
             this.BILL_ACTIVITY_OPTIONS[7],
             this.BILL_ACTIVITY_OPTIONS[8],
@@ -698,8 +721,8 @@ export class Globals {
     activities.push(this.BILL_ACTIVITIES[1]);
     activities.push(this.BILL_ACTIVITIES[2]);
     activities.push(this.BILL_ACTIVITIES[5]);
-    // activities.push(this.BILL_ACTIVITIES[8]);
-    // activities.push(this.BILL_ACTIVITIES[11]);
+    activities.push(this.BILL_ACTIVITIES[8]);
+    activities.push(this.BILL_ACTIVITIES[11]);
     activities.push(this.BILL_ACTIVITIES[14]);
     activities.push(this.BILL_ACTIVITIES[17]);
     activities.push(this.BILL_ACTIVITIES[20]);

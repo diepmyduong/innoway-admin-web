@@ -14,7 +14,7 @@
       <input type="text" class="input-control form-control">
     </div>
     <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true" [substituteRows]="false"
-      [selectOnRowClick]="true" [showReloading]="true" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
+      [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
       <data-table-column property="avatar" header="Avatar">
         <template #dataTableCell let-item="item">
               <img height="50px" [src]="item.avatar?item.avatar:thumbDefault">

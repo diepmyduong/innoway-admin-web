@@ -36,6 +36,7 @@ export class Bill extends CrudAPI<iBill> {
       }
     })
   }
+
   onBillChange = new BehaviorSubject<any>(undefined)
   fcmSubscription: Subscription
 
@@ -253,5 +254,11 @@ export class Bill extends CrudAPI<iBill> {
     var res: any = await this.exec(setting);
     var row = res.results.object;
     return row;
+  }
+
+  async cancel(params:{
+    bill_id: string
+  }){
+
   }
 }

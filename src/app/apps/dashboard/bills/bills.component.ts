@@ -110,6 +110,11 @@ export class BillsComponent implements OnInit {
     }
   }
 
+  onLoadDailySummary(value) {
+    console.log("onLoadDailySummary");
+    this.dashboardService.updateDailySummary(value);
+  }
+
   async loadBranchByEmployeeData(branchId: string) {
     try {
       this.branch = await this.innowayApi.branch.getItem(branchId, {
@@ -170,10 +175,24 @@ export class BillsComponent implements OnInit {
       });
   }
 
+  // async loadDailySummary() {
+  //   try {
+  //     let data = this.innowayApi.dailySummary.getList({
+  //       query: {
+  //         fields: ["$all"]
+  //       }
+  //     })
+  //     console.log("bi-summary", JSON.stringify(data))
+  //   } catch (err) {
+  //     console.log("bi-summary", err)
+  //   }
+  // }
+
   async subscribeTopicByFCM() {
     this.billChangeObservable = await this.innowayApi.bill.subscribe()
     this.subscribers.bill = this.billChangeObservable.subscribe(data => {
       // this.onBillChange.bind(this)
+      console.log("subscribeTopicByFCM", JSON.stringify(data))
     });
   }
 
@@ -608,6 +627,7 @@ export class BillsComponent implements OnInit {
     try {
       console.log("updatePaidHistory request", JSON.stringify(data));
       let response = await this.innowayApi.paidHistory.updatePaidHistory(data);
+      this.onLoadDailySummary(true);
       this.loadBillData();
       this.alertUpdateSuccess();
     } catch (err) {
@@ -696,6 +716,7 @@ export class BillsComponent implements OnInit {
       let response = await this.innowayApi.bill.changeActivity(bill.id, data)
       console.log("updateBillActivity", JSON.stringify(response))
       this.alertUpdateSuccess();
+      this.onLoadDailySummary(true);
       this.loadBillData();
     } catch (err) {
       this.alertUpdateFailed();
@@ -707,6 +728,7 @@ export class BillsComponent implements OnInit {
       if (bill.sub_fees != null && bill.sub_fees.length > 0) {
         let response = await this.innowayApi.bill.updateSubFee(bill.id, bill.sub_fees[0].id, data);
         this.alertUpdateSuccess();
+        this.onLoadDailySummary(true);
         this.loadBillData();
         console.log("updateSubFee", JSON.stringify(response));
       }

@@ -132,3 +132,24 @@
         color: $brand-primary !important;
     }
 }
+
+/deep/ .tab-content,
+/deep/ .tabset-control a.nav-link.active {
+  border: none !important;
+}
+
+/deep/ tabset .card {
+  border: none;
+}
+
+/deep/ tabset .card .card-block {
+  padding: 0;
+}
+
+/deep/ tabset .card-block i {
+  margin: 0;
+}
+
+/deep/ tabset .editor {
+  margin-left: 1rem !important;
+}
