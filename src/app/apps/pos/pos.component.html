@@ -66,7 +66,7 @@
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Chi nhánh</label>
                 <div class="col-md-8">
-                  <select #branchControl="ngModel" [(ngModel)]="branch" name="branch" class="form-control input-control">
+                  <select #branchControl="ngModel" [(ngModel)]="branchDataName" name="branchDataName" class="form-control input-control">
                         <option value=null [selected]="true">Chọn chi nhánh</option>
                         <option *ngFor="let v of branchData | async" [value]="v.id">
                           {{v.name}}
@@ -235,7 +235,8 @@
               <div class="form-group row">
                 <label class="col-md-4 header-text form-control input-control-label" for="text-input">Chi nhánh</label>
                 <div class="col-md-8">
-                  <select #branchControl="ngModel" [(ngModel)]="branch" name="branch" class="form-control input-control">
+                  <select #branchControl="ngModel" [(ngModel)]="branchDataName" name="branchDataName" class="form-control input-control">
+                      <option value=null [selected]="true">Chọn chi nhánh</option>
                         <option *ngFor="let v of branchData | async" [value]="v.id">
                           {{v.name}}
                         </option>
@@ -435,15 +436,24 @@
 
     </ng-sidebar>
     <div ng-sidebar-content>
-      <data-table #itemsTable class="order-item-table" [header]="false" indexColumnHeader="STT" [items]="selectedProduct" [pagination]="false" [indexColumn]="true" [selectColumn]="false" [multiSelect]="false" [substituteRows]="false" [selectOnRowClick]="false"
-        [expandableRows]="true">
+      <data-table #itemsTable class="order-item-table" [header]="false" indexColumnHeader="STT" [items]="selectedProduct"
+      [pagination]="false" [indexColumn]="true" [selectColumn]="false"
+      [multiSelect]="false" [substituteRows]="false"
+        [selectOnRowClick]="true" [expandableRows]="true" [showReloading]="false"
+        (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)" [expandableRows]="true">
+        <!-- <data-table class="order-item-table" [header]="false" #itemsTable indexColumnHeader="STT" [items]="selectedProduct"
+        [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="false" [indexColumn]="true" [selectColumn]="true"
+        [multiSelect]="true" [substituteRows]="false" [selectOnRowClick]="true" [expandableRows]="true"
+        [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)"> -->
         <data-table-column header="Thông tin">
           <template #dataTableCell let-item="item">
             <p class="item-name">{{item?.name}}</p>
           </template>
           <template #dataTableExpand let-item="item" class="order-item-expand">
+            <small *ngIf="!item?.toppings || item?.toppings?.length==0" class="item-topping">không có thêm topping </small>
             <div class="item-name" *ngIf="item?.toppings!=null && item?.toppings?.length>0">
-            <small  class="item-topping" *ngFor="let topping of item.toppings">{{topping.name}}, </small></div>
+            <small  class="item-topping" *ngFor="let topping of item.toppings">{{topping.name}}, </small>
+          </div>
           </template>
         </data-table-column>
         <data-table-column header="Số lượng" width="100px">
@@ -464,12 +474,12 @@
           </template>
         </data-table-column>
         <data-table-column header="Actions">
-          <template #dataTableCell let-item="item">
+          <template #dataTableCell let-item="item" let-row="row">
                   <button (click)="getToppings(item.id)"
                 type="button" class="btn btn-sm btn-success btn-ladda btn-item"
                 data-style="expand-right" [ladda]='item.deleting?true:false'><i class="icon-plus icons font-xl p-q d-block"></i></button>
                     <span class="btn-group">
-                        <button (click)="removeProduct(item)"
+                        <button (click)="removeProduct(item, row.index)"
                             type="button" class="btn btn-sm btn-danger btn-ladda btn-item"
                             data-style="expand-right" [ladda]='item.deleting?true:false'><i class="icon-trash icons font-xl p-q d-block"></i></button>
                     </span>

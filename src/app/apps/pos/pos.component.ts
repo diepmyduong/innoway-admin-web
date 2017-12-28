@@ -23,6 +23,7 @@ import { MapsAPILoader } from "@agm/core";
 import { SelectComponent } from "ng2-select";
 
 import { EditInfoDialog } from "../../modal/edit-info/edit-info.component";
+import { DataTable } from "angular-2-data-table-bootstrap4";
 
 declare let swal: any;
 const defaultDialogConfig = new MatDialogConfig();
@@ -133,6 +134,7 @@ export class PosComponent implements OnInit {
 
   employeeName: string = "";
   branchName: string = "";
+  branchDataName: string = null;
 
   employeeId: string;
   customerId: string;
@@ -179,6 +181,7 @@ export class PosComponent implements OnInit {
   vatValue: number;
 
   @ViewChild(TemplateRef) template: TemplateRef<any>;
+  @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(public innowayApi: InnowayApiService,
     private globals: Globals,
@@ -378,7 +381,26 @@ export class PosComponent implements OnInit {
     let pos = -1;
 
     this.selectedProduct.forEach((item, index) => {
-      if (item.id == product.id) {
+      // let isSameTopping = false;
+      // let toppingItem: Set<any> = new Set<any>();
+      //
+      // if()
+      // item.toppings.forEach((topping, index) => {
+      //   toppingItem.add(topping);
+      // })
+      //
+      // let currentSize = toppingItem.size;
+      //
+      // product.toppings.forEach((topping, index) => {
+      //   toppingItem.add(topping);
+      // })
+      //
+      // if (toppingItem.size == currentSize) {
+      //   isSameTopping = true;
+      // }
+
+      if (item.id == product.id
+        && item.toppings.length == 0) {
         amount = item.amount;
         isAvaible = true;
         pos = index;
@@ -433,12 +455,44 @@ export class PosComponent implements OnInit {
     this.ref.detectChanges();
   }
 
-  removeProduct(product) {
-    for (var i = this.selectedProduct.length; i--;) {
-      if (this.selectedProduct[i].id === product.id) {
-        this.selectedProduct.splice(i, 1);
-      }
-    }
+  rowClick(event) {
+    console.log('Row clicked', event);
+  }
+
+  rowDoubleClick(event) {
+    console.log('Row double click', event);
+  }
+
+  removeProduct(product,index) {
+    // console.log(index.index)
+    // for (var i = this.selectedProduct.length; i--;) {
+    //   let item = this.selectedProduct[i];
+    //
+    //   let isSameTopping = false;
+    //   let toppingItem: Set<any> = new Set<any>();
+    //
+    //   if (item.toppings.length > 0) {
+    //     item.toppings.forEach((topping, index) => {
+    //       toppingItem.add(topping);
+    //     })
+    //
+    //     let currentSize = toppingItem.size;
+    //
+    //     product.toppings.forEach((topping, index) => {
+    //       toppingItem.add(topping);
+    //     })
+    //
+    //     if (toppingItem.size == currentSize) {
+    //       isSameTopping = true;
+    //     }
+    //   }
+    //
+    //   if (this.selectedProduct[i].id == product.id
+    //     && (isSameTopping || this.selectedProduct[i].toppings.length == 0)) {
+    //     this.selectedProduct.splice(i, 1);
+    //   }
+    // }
+    this.selectedProduct.splice(index, 1);
     this.updateTotalAmount();
     this.ref.detectChanges();
   }
@@ -531,10 +585,10 @@ export class PosComponent implements OnInit {
       }
     })
 
-    if (amount == 0) {
-      this.removeProduct(product);
-      return;
-    }
+    // if (amount == 0) {
+    //   this.removeProduct(product);
+    //   return;
+    // }
 
     let total = Number.parseInt(amount) * Number.parseInt(product.price);
 
