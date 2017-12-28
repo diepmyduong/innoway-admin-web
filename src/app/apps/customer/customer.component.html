@@ -11,7 +11,7 @@
   <div class="table-wrapper">
     <div class="search-bar">
       <p>Tìm kiếm</p>
-      <input type="text" class="input-control form-control">
+      <input type="text" class="input-control form-control" (keyup)="onSearch($event)">
     </div>
     <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true" [substituteRows]="false"
       [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
@@ -22,11 +22,16 @@
       </data-table-column>
       <data-table-column property="phone" header="Số điện thoại" [sortable]="true">
       </data-table-column>
-      <data-table-column property="birthday" header="Ngày sinh" [sortable]="true">
+      <data-table-column property="fullname" header="Họ và tên" [sortable]="true">
+        <template #dataTableCell let-item="item">
+              <span>{{item.fullname?item.fullname:"không có"}}</span>
+            </template>
+      </data-table-column>
+      <!-- <data-table-column property="birthday" header="Ngày sinh" [sortable]="true">
         <template #dataTableCell let-item="item">
               <span>{{item.birthday?(item.birthday | date:'dd/MM/yyyy'):"không có thông tin"}}</span>
             </template>
-      </data-table-column>
+      </data-table-column> -->
       <data-table-column property="status" header="Trạng thái" [sortable]="true">
         <template #dataTableCell let-item="item">
               <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status != 1}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>

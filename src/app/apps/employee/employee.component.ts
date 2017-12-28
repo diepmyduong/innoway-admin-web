@@ -152,8 +152,8 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
     this.searchRef = setTimeout(() => {
       this.query.filter = {
         $or: {
-          name: { $iLike: `%${key}%` },
-          description: { $iLike: `%${key}%` },
+          fullname: { $iLike: `%${key}%` },
+          email: { $iLike: `%${key}%` },
         }
       }
       this.getItems();

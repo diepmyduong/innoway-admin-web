@@ -163,6 +163,7 @@ export class ProductsComponent implements OnInit {
   }
 
   onSearch(e) {
+    console.log("search", e)
     const key = e.target.value;
     if (this.searchRef) clearTimeout(this.searchRef);
     this.searchRef = setTimeout(() => {
