@@ -14,6 +14,10 @@ export const BillLayoutRouting = {
     {
       path: 'bill',
       loadChildren: 'app/apps/bill/bill.module#BillModule'
+    },
+    {
+      path: 'pos',
+      loadChildren: 'app/apps/pos/pos.module#PosModule'
     }
   ],
 

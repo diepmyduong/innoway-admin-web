@@ -45,59 +45,14 @@ export class BillLayoutComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.subscribeTopicByFCM();
-    console.log("bambi: " + JSON.stringify(this.employee));
-  }
 
-  async subscribeTopicByFCM() {
-    // this.billChangeObservable = await this.billService.subscribe();
-    // this.subscribers.bill = this.billChangeObservable.subscribe(data => {
-    //   this.getDataBillChange(data.id);
-    // });
-  }
-
-  itemFields: any = ['$all', {
-    activities: ['$all', {
-      employee: ['$all']
-    }],
-    bill_ship_detail: ['$all'],
-    items: ['$all', {
-      Branch: ['$all', '$paranoid'],
-      topping_values: ['$all', '$paranoid']
-    }],
-    customer: ['$all'],
-    activity: ['$all']
-  }];
-
-  async getDataBillChange(id: string) {
-    // try {
-    //   let bill = await this.billService.get(id, {
-    //     fields: ['$all', {
-    //       activities: ['$all', {
-    //         employee: ['$all']
-    //       }],
-    //       bill_ship_detail: ['$all'],
-    //       items: ['$all', {
-    //         Branch: ['$all', '$paranoid'],
-    //         topping_values: ['$all', '$paranoid']
-    //       }],
-    //       customer: ['$all'],
-    //       activity: ['$all']
-    //     }]
-    //   });
-    //   console.log("bambi: " + JSON.stringify(bill));
-    //   this.showBillContent(bill);
-    // } catch (err) {
-
-    // }
   }
 
   async showBillContent(bill) {
-    this.zone.run(()=>{
+    this.zone.run(() => {
       let toast = this.toasterService.pop('success', 'Đơn hàng: ' + bill.id, "Đơn hàng " + this.globals.detectNameCurrentActivityOnBill(bill.activity.action));
     })
   }
-
 
   showSuccess() {
     console.log("bambi showSuccess()");
@@ -128,12 +83,34 @@ export class BillLayoutComponent implements OnInit {
       children: [
         {
           name: 'Thêm',
-          link: "./bill/add",
+          link: "../pos",
           icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
           link: "./bill/list",
+          icon: 'fa fa-list-ul'
+        },
+        {
+          name: 'Lịch sử hoạt động',
+          // link: "./bill/list",
+          icon: 'fa fa-send'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Thanh toán',
+      icon: 'fa fa-file-text-o',
+      children: [
+        {
+          name: 'Thêm',
+          // link: "./bill/list",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          // link: "./bill/list",
           icon: 'fa fa-list-ul'
         }
       ]

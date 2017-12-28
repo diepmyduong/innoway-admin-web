@@ -259,7 +259,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         this.isMember = false;
       }
 
-      if (this.bill.paid_history != null && this.bill.paid_history.transaction_type == this.globals.PAID_HISTORY_TYPES[1].code) {
+      if (this.bill.paid_history != null && (this.bill.paid_history.transaction_type == this.globals.PAID_HISTORY_TYPES[1].code
+        || this.bill.paid_history.remain_amount == 0)) {
         this.isFullPayment = true;
       } else {
         this.isFullPayment = false;
@@ -489,7 +490,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       if (result) {
         console.log(result);
         //alert(JSON.stringify(result));
-        this.updatePaidHistory(bill,{
+        this.updatePaidHistory(bill, {
           bill_id: bill.id,
           receive_amount: result.receiveAmount,
           pay_amount: result.payAmount
@@ -498,7 +499,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     })
   }
 
-  async updatePaidHistory(bill,data) {
+  async updatePaidHistory(bill, data) {
     try {
       console.log("updatePaidHistory request", JSON.stringify(data));
       let response = await this.innowayApi.paidHistory.updatePaidHistory(data)
@@ -746,9 +747,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     }
   }
 
-  showSendMessageDialog(input: any){
+  showSendMessageDialog(input: any) {
 
-    let data={
+    let data = {
 
     }
 
@@ -759,14 +760,14 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log("response message",JSON.stringify(result))
+        console.log("response message", JSON.stringify(result))
       }
     })
   }
 
-  showSendStoryDialog(input: any){
+  showSendStoryDialog(input: any) {
 
-    let data={
+    let data = {
 
     }
 
@@ -777,7 +778,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log("response message",JSON.stringify(result))
+        console.log("response message", JSON.stringify(result))
       }
     })
   }

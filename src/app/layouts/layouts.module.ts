@@ -18,6 +18,14 @@ import { SettingLayoutComponent } from './setting-layout/setting-layout.componen
 import { PromotionLayoutComponent } from './promotion-layout/promotion-layout.component';
 import { BranchLayoutComponent } from './branch-layout/branch-layout.component';
 import { IntegrationComponent } from './integration/integration.component';
+import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
+import { IntegrateChatbotLayoutComponent } from './integrate-chatbot-layout/integrate-chatbot-layout.component';
+import { IntegrateKiotvietLayoutComponent } from './integrate-kiotviet-layout/integrate-kiotviet-layout.component';
+import { SummaryLayoutComponent } from './summary-layout/summary-layout.component';
+import { ReportLayoutComponent } from './report-layout/report-layout.component';
+import { FeedbackLayoutComponent } from './feedback-layout/feedback-layout.component';
+import { BrandLayoutComponent } from './brand-layout/brand-layout.component';
+import { LicenseLayoutComponent } from './license-layout/license-layout.component';
 
 @NgModule({
   imports: [
@@ -27,6 +35,6 @@ import { IntegrationComponent } from './integration/integration.component';
     //BsDropdownModule,
     ToasterModule
   ],
-  declarations: [SimpleLayoutComponent, FullLayoutComponent, LauncherLayoutComponent, ProductLayoutComponent, EmployeeLayoutComponent, CustomerLayoutComponent, BillLayoutComponent, SettingLayoutComponent, PromotionLayoutComponent, BranchLayoutComponent, IntegrationComponent]
+  declarations: [SimpleLayoutComponent, FullLayoutComponent, LauncherLayoutComponent, ProductLayoutComponent, EmployeeLayoutComponent, CustomerLayoutComponent, BillLayoutComponent, SettingLayoutComponent, PromotionLayoutComponent, BranchLayoutComponent, IntegrationComponent, DashboardLayoutComponent, IntegrateChatbotLayoutComponent, IntegrateKiotvietLayoutComponent, SummaryLayoutComponent, ReportLayoutComponent, FeedbackLayoutComponent, BrandLayoutComponent, LicenseLayoutComponent]
 })
 export class LayoutsModule { }
