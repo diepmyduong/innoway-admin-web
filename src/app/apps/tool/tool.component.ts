@@ -17,7 +17,7 @@ export class ToolComponent implements OnInit {
       {
         title: "Trang điều phối",
         icon: "https://farm5.staticflickr.com/4574/38018893524_94f1d2622b_o.png",
-        link: "/super-admin/dashboard",
+        link: "/dashboard-layout",
       }, {
         title: "Chi nhánh",
         icon: "https://farm5.staticflickr.com/4536/38018893464_2243305580_o.png",
@@ -43,7 +43,7 @@ export class ToolComponent implements OnInit {
         title: "Khuyến mãi",
         icon: "https://farm5.staticflickr.com/4585/38018893044_97c6c9f5ed_o.png",
         link: "/promotion-layout",
-      },{
+      }, {
         title: "POS",
         icon: "https://farm5.staticflickr.com/4528/24866458148_a12c9693af_o.png",
         link: "/pos",
@@ -51,7 +51,7 @@ export class ToolComponent implements OnInit {
         title: "Phản hồi",
         icon: "https://farm5.staticflickr.com/4558/38018892994_1ef6928909_o.png",
         link: "/feedback-layout",
-      },{
+      }, {
         title: "Ticket",
         icon: "https://farm5.staticflickr.com/4586/37848509095_91f1c6899d_o.png",
         link: "/ticket-layout",
@@ -66,19 +66,19 @@ export class ToolComponent implements OnInit {
         title: "Báo cáo",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "/report-layout",
-      },{
+      }, {
         title: "Phân tích",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "/analyse-layout",
-      },{
+      }, {
         title: "Khảo sát",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "/survey-layout",
-      },{
+      }, {
         title: "Sự kiện",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "/event-layout",
-      },{
+      }, {
         title: "Tích hợp AI",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "/integrate-apiai-layout",
@@ -86,7 +86,7 @@ export class ToolComponent implements OnInit {
         title: "Tích hợp KiotViet",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "/integrate-kiotviet-layout",
-      },{
+      }, {
         title: "Tích hợp Chatbot",
         icon: "https://addons.cdn.mozilla.net/static/img/developers/new-landing/publish-my-addon.png",
         link: "/integrate-chatbot-layout",
@@ -97,6 +97,7 @@ export class ToolComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
   }
 
 }

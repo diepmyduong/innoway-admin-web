@@ -169,6 +169,10 @@ export const FullLayoutRouting = {
       path: 'integration',
       loadChildren: 'app/apps/integration/integration.module#IntegrationModule'
     },
+    {
+      path: 'smart-code',
+      loadChildren: 'app/apps/smart-code/smart-code.module#SmartCodeModule'
+    },
   ],
 
 }

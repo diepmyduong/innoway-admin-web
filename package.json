@@ -19,6 +19,7 @@
     "firebase:sync": "sudo rsync -avh ./dist/ ./firebase/public/ --delete",
     "firebase:serve": "cd ./firebase && sudo firebase serve",
     "firebase:deploy": "cd ./firebase && sudo firebase deploy"
+
   },
   "private": true,
   "dependencies": {
@@ -55,10 +56,10 @@
     "angular2-useful-swiper": "^4.0.6",
     "bootstrap-material-design": "^4.0.0-beta.3",
     "chart.js": "2.5.0",
-    "console-prefix": "^1.0.0",
     "core-js": "2.4.1",
     "dragula": "3.7.2",
     "firebase": "^4.8.0",
+    "console-prefix": "^1.0.0",
     "jquery": "^3.2.1",
     "moment": "2.18.1",
     "ng-pick-datetime": "^5.0.0-beta.5",

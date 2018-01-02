@@ -1,0 +1,144 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-4" [hidden]=true>
+      <div class="card">
+        <div class="card-header">
+          <strong>Logo</strong>
+        </div>
+        <div class="card-block">
+          <div class="col-md-12">
+            <img src="https://freeiconshop.com/wp-content/uploads/edd/person-flat.png" width="100%">
+          </div>
+          <div class="col-md-12 mt-h">
+            <input type="file" id="file-input" name="file-input">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Thông tin</strong>
+        </div>
+        <div class="card-block">
+          <form #itemFrm="ngForm">
+            <!-- <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Logo</label>
+              <div class="col-md-8">
+                <input type="text" #logoControl="ngModel" [(ngModel)]="logo" name="logo" url class="form-control" [placeholder]="image?'':'Nhập logo'" />
+                <small *ngIf="logoControl.errors?.url" class="text-muted danger">
+                    (Link không hợp lệ)
+                  </small>
+                <img *ngIf="logoControl.value && logoControl.valid" style="width:auto;height:80px;" [src]="logoControl.value" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #primaryControl="ngModel" [(ngModel)]="primary" name="primary" class="form-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #lightControl="ngModel" [(ngModel)]="light" name="light" class="form-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #darkControl="ngModel" [(ngModel)]="dark" name="dark" class="form-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Màu chủ đạo</label>
+              <div class="col-md-8">
+                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+              </div>
+            </div> -->
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="text-input">Nội dung JSON</label>
+              <div class="col-md-8">
+                <textarea type="text" #contentControl="ngModel" [(ngModel)]="contentJSON" name="contentJSON" class="form-control input-control" [placeholder]="JSON" ></textarea>
+                <small *ngIf="contentControl.errors?.url" class="text-muted danger">
+                    (Link không hợp lệ)
+                  </small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
+              <div class="col-md-8">
+                <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control">
+                  <option *ngFor="let v of [0,1]" [value]="v">
+                    {{ v===1?"Hoạt động":"Không hoạt động"}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button (click)="updateTheme()"class="btn btn-ladda btn-success ml-auto" data-style="expand-right"><i class="fa fa-plus"></i> Thêm và tạo mới</button>
+          <!-- <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button> -->
+        </div>
+
+      </div>
+      <!-- /.col -->
+    </div>
+  </div>
+  <!--/.col-->
+</div>

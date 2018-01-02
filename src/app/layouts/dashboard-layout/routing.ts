@@ -2,18 +2,18 @@ import { DashboardLayoutComponent } from './dashboard-layout.component'
 import { AuthGuard } from 'app/services'
 
 export const DashboardLayoutRouting = {
-  path: 'brand-layout',
+  path: 'dashboard-layout',
   component: DashboardLayoutComponent,
   canActivate: [AuthGuard],
   children: [
     {
       path: '',
-      redirectTo: 'brand/list',
+      redirectTo: 'dashboard',
       pathMatch: 'full',
     },
     {
-      path: 'brand',
-      loadChildren: 'app/apps/brand/brand.module#brandModule'
+      path: 'dashboard',
+      loadChildren: 'app/apps/dashboard/dashboard.module#DashboardModule'
     }
   ],
 

@@ -23,6 +23,7 @@ export const routes: Routes = [
   layout.PromotionLayoutRouting,
   layout.BillLayoutRouting,
   layout.BranchLayoutRouting,
+  layout.DashboardLayoutRouting,
   {
     path: '**',
     redirectTo: '404'

@@ -1,0 +1,111 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Thông tin mã code</strong>
+        </div>
+        <!-- code_type?: string,
+        is_connect_chatbot?: boolean,
+        code?: string,
+        strat_time?: string,
+        end_time?: string,
+        content?: string,
+        hide_content?: string,
+        link?: string,
+        qr_code_image?: string,
+        messenger_code_image?: string,
+        amount?: number,
+        limit?: number,
+        status?: number, -->
+        <div class="card-block">
+          <form #itemFrm="ngForm">
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Mã Code</label>
+              <div class="col-md-10">
+                <input type="text" #codeControl="ngModel" [(ngModel)]="code" name="code" class="form-control input-control" [placeholder]="'Mã code'" required>
+                <small *ngIf="codeControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="select">Loại mã code</label>
+              <div class="col-md-10">
+                <select #codeTypeControl="ngModel" [(ngModel)]="codeType" name="codeType" class="form-control input-control" required>
+                    <option *ngFor="let v of codeTypes" [value]="v.code">
+                      {{v.name}}
+                    </option>
+                  </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Thời gian bắt đầu</label>
+              <div class="col-md-10">
+                <input type="text" #startTimeControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="startTime" name="startTime" class="form-control input-control" [placeholder]="'Nhập ngày bắt đầu'" required>
+                <small *ngIf="startTimeControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Thời gian kết thúc</label>
+              <div class="col-md-10">
+                <input type="text" #endTimeControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="endTime" name="endTime" class="form-control input-control" [placeholder]="'Nhập ngày kết thúc'" required>
+                <small *ngIf="endTimeControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Nội dung</label>
+              <div class="col-md-10">
+                <input type="text" #contentModel="ngModel" [(ngModel)]="content" name="content" class="form-control input-control" [placeholder]="'Nội dung'" required>
+                <small *ngIf="contentModel.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Giới hạn</label>
+              <div class="col-md-10">
+                <input type="number" #limitModel="ngModel" [(ngModel)]="limit" name="limit" class="form-control input-control" [placeholder]="'Số lần sử dụng giới hạn'" required>
+                <small *ngIf="limitModel.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Số lượng</label>
+              <div class="col-md-10">
+                <input type="number" #amountControl="ngModel" [(ngModel)]="amount" name="amount" class="form-control input-control" [placeholder]="'Số lượng giới hạn'" required>
+                <small *ngIf="amountControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
+              <div class="col-md-10">
+                <select #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">
+                  <option *ngFor="let v of [0,1]" [value]="v">
+                    {{ v===1?"Hoạt động":"Không hoạt động"}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
+          <!-- <button (click)="send()" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda">
+            Send
+          </button> -->
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+</div>

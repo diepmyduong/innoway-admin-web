@@ -782,4 +782,32 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       }
     })
   }
+
+  async sendInvoiceToCustomer(){
+    try{
+      let params={
+        contentGreeting: {
+          text: "",
+        },
+        contentReceipt: {
+          total_price: 0,
+          vat_fee: 0,
+          amount_of_sub_fee: 0,
+          amount_of_promotion: 0,
+          ship_fee: 0,
+          ship_method: "",
+          created_at: "",
+          code: "",
+          brand: {},
+          branch: {},
+          address: "",
+          customer_fullname: "",
+          product: []
+        }
+      }
+      await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(params)
+    }catch(err){
+
+    }
+  }
 }

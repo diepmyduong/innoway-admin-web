@@ -20,6 +20,7 @@ import { ScheduleComponent } from './schedule/schedule.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { SellComponent } from './sell/sell.component';
 import { ConfigComponent } from './config/config.component';
+import { ThemeComponent } from './theme/theme.component';
 
 @NgModule({
   imports: [
@@ -35,6 +36,6 @@ import { ConfigComponent } from './config/config.component';
     CustomFormsModule,
     TextMaskModule
   ],
-  declarations: [SettingsComponent, AreaComponent, ScheduleComponent, ChatbotComponent, SellComponent, ConfigComponent],
+  declarations: [SettingsComponent, AreaComponent, ScheduleComponent, ChatbotComponent, SellComponent, ConfigComponent, ThemeComponent],
 })
 export class SettingsModule { }

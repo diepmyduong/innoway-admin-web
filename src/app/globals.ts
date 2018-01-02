@@ -48,6 +48,17 @@ export class Globals {
     }
   ]
 
+  SMART_CODE_TYPES = [
+    {
+      code: "promotion",
+      name: "Khuyến mãi"
+    },
+    {
+      code: "contact",
+      name: "Liên hệ"
+    }
+  ]
+
   GENDERS = [
     {
       code: "male",

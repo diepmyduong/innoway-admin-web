@@ -106,7 +106,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async setData() {
     try {
       let data = await this.innowayApi.promotion.getItem(this.id, {
-        query: { 
+        query: {
           fields: ["$all", {
             customer_types: ["$all"]
           }]
@@ -141,6 +141,10 @@ export class AddComponent implements OnInit, AddPageInterface {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
     }
+  }
+
+  backToListForAddNew() {
+    this.router.navigate(['./../list'], { relativeTo: this.route });
   }
 
   backToList() {
@@ -282,7 +286,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.submitting = true;
     try {
       await this.addItem(form);
-      this.backToList();
+      this.backToListForAddNew();
     } catch (err) {
       this.alertAddFailed()
     } finally {

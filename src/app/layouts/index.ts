@@ -11,6 +11,7 @@ import { CustomerLayoutRouting } from "./customer-layout/routing";
 import { PromotionLayoutRouting } from "./promotion-layout/routing";
 import { SettingLayoutRouting } from "./setting-layout/routing";
 import { BranchLayoutRouting } from "./branch-layout/routing";
+import { DashboardLayoutRouting } from "./dashboard-layout/routing";
 
 export {
     FullLayoutComponent,
@@ -28,5 +29,6 @@ export {
     BillLayoutRouting,
     PromotionLayoutRouting,
     SettingLayoutRouting,
-    BranchLayoutRouting
+    BranchLayoutRouting,
+    DashboardLayoutRouting
 }

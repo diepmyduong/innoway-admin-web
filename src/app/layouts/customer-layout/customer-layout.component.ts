@@ -48,46 +48,7 @@ export class CustomerLayoutComponent implements OnInit {
   }
 
   async subscribeTopicByFCM() {
-    // this.billChangeObservable = await this.billService.subscribe();
-    // this.subscribers.bill = this.billChangeObservable.subscribe(data => {
-    //   this.getDataBillChange(data.id);
-    // });
-  }
 
-  itemFields: any = ['$all', {
-    activities: ['$all', {
-      employee: ['$all']
-    }],
-    bill_ship_detail: ['$all'],
-    items: ['$all', {
-      Branch: ['$all', '$paranoid'],
-      topping_values: ['$all', '$paranoid']
-    }],
-    customer: ['$all'],
-    activity: ['$all']
-  }];
-
-  async getDataBillChange(id: string) {
-    // try {
-    //   let bill = await this.billService.get(id, {
-    //     fields: ['$all', {
-    //       activities: ['$all', {
-    //         employee: ['$all']
-    //       }],
-    //       bill_ship_detail: ['$all'],
-    //       items: ['$all', {
-    //         Branch: ['$all', '$paranoid'],
-    //         topping_values: ['$all', '$paranoid']
-    //       }],
-    //       customer: ['$all'],
-    //       activity: ['$all']
-    //     }]
-    //   });
-    //   console.log("bambi: " + JSON.stringify(bill));
-    //   this.showBillContent(bill);
-    // } catch (err) {
-
-    // }
   }
 
   async showBillContent(bill) {
@@ -95,7 +56,6 @@ export class CustomerLayoutComponent implements OnInit {
       let toast = this.toasterService.pop('success', 'Đơn hàng: ' + bill.id, "Đơn hàng " + this.globals.detectNameCurrentActivityOnBill(bill.activity.action));
     })
   }
-
 
   showSuccess() {
     console.log("bambi showSuccess()");

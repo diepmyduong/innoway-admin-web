@@ -141,6 +141,15 @@ export class Bill extends CrudAPI<iBill> {
       case ActivityEnum.BILL_CANCELLED_AT_SENT_SHIPPER:
         setting.uri = this.apiUrl(`${billId}/activity/sentShipperBillStatus/cancelled`);
         break;
+      case ActivityEnum.BILL_DELIVERING:
+        setting.uri = this.apiUrl(`${billId}/activity/deliveringBillStatus`);
+        break;
+      case ActivityEnum.BILL_MODIFIED_AT_DELIVERING:
+        setting.uri = this.apiUrl(`${billId}/activity/deliveringBillStatus/modified`);
+        break;
+      case ActivityEnum.BILL_CANCELLED_AT_DELIVERING:
+        setting.uri = this.apiUrl(`${billId}/activity/deliveringBillStatus/cancelled`);
+        break;
       case ActivityEnum.BILL_PAID:
         setting.uri = this.apiUrl(`${billId}/activity/paidBillStatus`);
         break;
@@ -256,9 +265,24 @@ export class Bill extends CrudAPI<iBill> {
     return row;
   }
 
-  async cancel(params:{
-    bill_id: string
-  }){
-
+  async cancel(params: {
+    billId: string
+  }) {
+    let { billId } = params;
+    let setting = {
+      method: 'PUT',
+      uri: this.apiUrl(`${billId}/cancel`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body: { billId }
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
   }
+
+
 }

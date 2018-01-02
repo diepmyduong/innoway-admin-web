@@ -50,6 +50,47 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
     return row;
   }
 
+  async requireCreateSmartCodeOnChatbot(params: {
+    smartCodeId: string
+  }) {
+    let { smartCodeId } = params;
+    let setting = {
+      method: 'PUT',
+      uri: this.apiUrl(`require_create_smart_code_on_chatbot`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body: { smartCodeId }
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
+
+  async integrateSmartCodeToChatbot(params: {
+    code: string,
+    messenger_code: string,
+    qr_code: string,
+    link: string
+  }) {
+    let { code, messenger_code, qr_code, link } = params;
+    let setting = {
+      method: 'PUT',
+      uri: this.apiUrl(`/integrate_smart_code_to_chatbot`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body: { code, messenger_code, qr_code, link }
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
+
   async sendStory(params: {
     story_id: string
   }) {

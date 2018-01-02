@@ -717,6 +717,23 @@ export class FullLayoutComponent implements OnInit {
       name: 'Hệ thống',
     },
     {
+      type: 'parent',
+      name: 'Smart Code',
+      icon: 'fa fa-usd',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./smart-code/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./smart-code/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
       type: 'single',
       name: 'Thiết lập',
       link: "./settings/config",

@@ -26,6 +26,8 @@ import { BillSubFee } from './api/crud/bill-sub-fee'
 import { BillRelatedPeople } from './api/crud/bill-related-people'
 import { ThirdPartyChatbot } from './api/crud/thirdparty-chatbot'
 import { DailySummary } from './api/crud/daily-summary'
+import { SmartCode } from './api/crud/smart-code'
+import { BrandTheme } from './api/crud/brand-theme'
 
 @Injectable()
 export class InnowayApiService {
@@ -61,4 +63,6 @@ export class InnowayApiService {
   billRelatedPeople = new BillRelatedPeople(this)
   thirdpartyChatbot = new ThirdPartyChatbot(this)
   dailySummary = new DailySummary(this)
+  smartCode = new SmartCode(this)
+  brandTheme = new BrandTheme(this)
 }

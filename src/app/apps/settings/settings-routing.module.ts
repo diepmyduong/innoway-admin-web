@@ -6,7 +6,8 @@ import { AreaComponent } from './area/area.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { SellComponent } from './sell/sell.component';
-import { ConfigComponent } from "app/apps/settings/config/config.component";
+import { ConfigComponent } from "./config/config.component";
+import { ThemeComponent } from "./theme/theme.component";
 
 const routes: Routes = [
   {
@@ -53,6 +54,13 @@ const routes: Routes = [
         component: ConfigComponent,
         data: {
           title: "Thiết lập thương hiệu"
+        }
+      },
+      {
+        path: 'theme',
+        component: ThemeComponent,
+        data: {
+          title: "Thiết lập giao diện"
         }
       },
     ]

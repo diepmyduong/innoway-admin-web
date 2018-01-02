@@ -719,6 +719,7 @@ export class BillsComponent implements OnInit {
       this.onLoadDailySummary(true);
       this.loadBillData();
     } catch (err) {
+      console.log("updateBillActivity",err);
       this.alertUpdateFailed();
     }
   }
