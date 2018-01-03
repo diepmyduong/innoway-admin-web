@@ -268,11 +268,17 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
       if (this.bill.paid_historys != null) {
         let payAmount = 0;
-        this.bill.paid_historys.forEach(data => {
+        this.bill.paid_historys.forEach((data, index) => {
+          let total_pay_amount = data.pay_amount;
+          for (let i = 0; i < index; i++) {
+            total_pay_amount += this.bill.paid_historys[i].pay_amount;
+          }
+          data.total_remain = total_pay_amount;
           payAmount += data.pay_amount;
         })
         this.payAmount = payAmount;
       }
+
 
       // receiverName: string;
       // receiverPhone: string;
@@ -783,9 +789,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     })
   }
 
-  async sendInvoiceToCustomer(){
-    try{
-      let params={
+  async sendInvoiceToCustomer() {
+    try {
+      let params = {
         contentGreeting: {
           text: "",
         },
@@ -806,7 +812,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         }
       }
       await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(params)
-    }catch(err){
+    } catch (err) {
 
     }
   }

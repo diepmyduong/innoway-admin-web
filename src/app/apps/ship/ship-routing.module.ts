@@ -8,13 +8,13 @@ import { DetailComponent } from './detail/detail.component';
 const routes: Routes = [
 	{
 		path: '',
-		redirectTo: 'list',
+		redirectTo: 'detail',
 		pathMatch: 'full'
 	},
   {
     path: '',
     data: {
-      title: 'Đơn vị'
+      title: 'Phí ship'
     },
     children:[
     	{

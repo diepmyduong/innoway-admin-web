@@ -134,18 +134,18 @@ export class FullLayoutComponent implements OnInit {
       type: 'title',
       name: 'Dịch vụ',
     },
-    {
-      type: 'single',
-      name: 'Đăng ký',
-      link: "./brand-register",
-      icon: 'fa fa-user-plus',
-    },
-    {
-      type: 'single',
-      name: 'Công cụ',
-      link: "./tool",
-      icon: 'fa fa-wrench',
-    },
+    // {
+    //   type: 'single',
+    //   name: 'Đăng ký',
+    //   link: "./brand-register",
+    //   icon: 'fa fa-user-plus',
+    // },
+    // {
+    //   type: 'single',
+    //   name: 'Công cụ',
+    //   link: "./tool",
+    //   icon: 'fa fa-wrench',
+    // },
     {
       type: 'parent',
       name: 'Thương hiệu',
@@ -163,57 +163,57 @@ export class FullLayoutComponent implements OnInit {
         }
       ]
     },
-    {
-      type: 'parent',
-      name: 'Loại thương hiệu',
-      icon: 'fa fa-star',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./brand-type/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./brand-type/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Ký Quỹ',
-      icon: 'fa fa-university',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./deposit/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./deposit/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Dịch vụ',
-      icon: 'fa fa-th',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./service/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./service/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
+    // {
+    //   type: 'parent',
+    //   name: 'Loại thương hiệu',
+    //   icon: 'fa fa-star',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./brand-type/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./brand-type/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
+    // {
+    //   type: 'parent',
+    //   name: 'Ký Quỹ',
+    //   icon: 'fa fa-university',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./deposit/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./deposit/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
+    // {
+    //   type: 'parent',
+    //   name: 'Dịch vụ',
+    //   icon: 'fa fa-th',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./service/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./service/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
     {
       type: 'parent',
       name: 'Chi nhánh',
@@ -231,23 +231,23 @@ export class FullLayoutComponent implements OnInit {
         }
       ]
     },
-    {
-      type: 'parent',
-      name: 'Loại chi nhánh',
-      icon: 'fa fa-star-o',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./branch-type/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./branch-type/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
+    // {
+    //   type: 'parent',
+    //   name: 'Loại chi nhánh',
+    //   icon: 'fa fa-star-o',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./branch-type/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./branch-type/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
     {
       type: 'title',
       name: 'Quản lý',
@@ -354,23 +354,23 @@ export class FullLayoutComponent implements OnInit {
         }
       ]
     },
-    {
-      type: 'parent',
-      name: 'Thuộc tính sản phẩm',
-      icon: 'fa fa-certificate',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./attribute/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./attribute/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
+    // {
+    //   type: 'parent',
+    //   name: 'Thuộc tính sản phẩm',
+    //   icon: 'fa fa-certificate',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./attribute/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./attribute/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
     {
       type: 'parent',
       name: 'Nhân viên',
@@ -388,23 +388,23 @@ export class FullLayoutComponent implements OnInit {
         }
       ]
     },
-    {
-      type: 'parent',
-      name: 'Loại nhân viên',
-      icon: 'fa fa-user',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./employee-type/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./employee-type/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
+    // {
+    //   type: 'parent',
+    //   name: 'Loại nhân viên',
+    //   icon: 'fa fa-user',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./employee-type/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./employee-type/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
     {
       type: 'parent',
       name: 'Đơn hàng',
@@ -422,18 +422,18 @@ export class FullLayoutComponent implements OnInit {
         }
       ]
     },
-    {
-      type: 'single',
-      name: 'Lịch sử thanh toán',
-      link: "./paid_history",
-      icon: 'fa fa-history',
-    },
-    {
-      type: 'single',
-      name: 'POS',
-      link: "../pos",
-      icon: 'fa fa-product-hunt',
-    },
+    // {
+    //   type: 'single',
+    //   name: 'Lịch sử thanh toán',
+    //   link: "./paid_history",
+    //   icon: 'fa fa-history',
+    // },
+    // {
+    //   type: 'single',
+    //   name: 'POS',
+    //   link: "../pos",
+    //   icon: 'fa fa-product-hunt',
+    // },
     {
       type: 'parent',
       name: 'Khách hàng',
@@ -502,216 +502,216 @@ export class FullLayoutComponent implements OnInit {
         }
       ]
     },
-    {
-      type: 'parent',
-      name: 'Thông báo',
-      icon: 'fa fa-exclamation-circle',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./notification/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./notification/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Loại thông báo',
-      icon: 'fa fa-exclamation',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./notification-type/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./notification-type/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Phản hồi',
-      icon: 'fa fa-commenting',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./feedback/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./feedback/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Tiêu chí phản hồi',
-      icon: 'fa fa-commenting-o',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./feedback-rule/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./feedback-rule/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Danh sách đen',
-      icon: 'fa fa-file',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./blacklist/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./blacklist/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Tiêu chí danh sách đen',
-      icon: 'fa fa-files-o',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./blacklist-rule/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./blacklist-rule/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Bài viết',
-      icon: 'fa fa-sticky-note',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./blog/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./blog/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Loại bài viết',
-      icon: 'fa fa-sticky-note-o',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./blog-type/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./blog-type/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Thống kê',
-      icon: 'fa fa-area-chart',
-      children: [
-        {
-          name: 'Chi phí',
-          link: "./statistic/add",
-          icon: 'fa fa-money'
-        },
-        {
-          name: 'Đơn hàng',
-          link: "./statistic/add",
-          icon: 'fa fa-file-text'
-        },
-        {
-          name: 'Sản phẩm',
-          link: "./statistic/add",
-          icon: 'fa fa-cube'
-        },
-        {
-          name: 'Nhân viên',
-          link: "./statistic/add",
-          icon: 'fa fa-user'
-        },
-        {
-          name: 'Hoạt động',
-          link: "./statistic/add",
-          icon: 'fa fa-code-fork'
-        },
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Báo cáo',
-      icon: 'fa fa-file-text-o',
-      children: [
-        {
-          name: 'Chi phí',
-          link: "./report/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Đơn hàng',
-          link: "./report/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Sản phẩm',
-          link: "./report/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Nhân viên',
-          link: "./report/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Hoạt động',
-          link: "./report/add",
-          icon: 'fa fa-plus'
-        },
-      ]
-    },
-    {
-      type: 'title',
-      name: 'Tiện ích',
-    },
-    {
-      type: 'single',
-      name: 'Chatbot',
-      link: "../mcommerce",
-      icon: 'fa fa-android',
-    },
+    // {
+    //   type: 'parent',
+    //   name: 'Thông báo',
+    //   icon: 'fa fa-exclamation-circle',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./notification/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./notification/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
+    // {
+    //   type: 'parent',
+    //   name: 'Loại thông báo',
+    //   icon: 'fa fa-exclamation',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./notification-type/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./notification-type/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
+    // {
+    //   type: 'parent',
+    //   name: 'Phản hồi',
+    //   icon: 'fa fa-commenting',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./feedback/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./feedback/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
+    // {
+    //   type: 'parent',
+    //   name: 'Tiêu chí phản hồi',
+    //   icon: 'fa fa-commenting-o',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./feedback-rule/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./feedback-rule/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
+    // {
+    //   type: 'parent',
+    //   name: 'Danh sách đen',
+    //   icon: 'fa fa-file',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./blacklist/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./blacklist/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
+    // {
+    //   type: 'parent',
+    //   name: 'Tiêu chí danh sách đen',
+    //   icon: 'fa fa-files-o',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./blacklist-rule/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./blacklist-rule/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
+    // {
+    //   type: 'parent',
+    //   name: 'Bài viết',
+    //   icon: 'fa fa-sticky-note',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./blog/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./blog/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
+    // {
+    //   type: 'parent',
+    //   name: 'Loại bài viết',
+    //   icon: 'fa fa-sticky-note-o',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./blog-type/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./blog-type/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
+    // {
+    //   type: 'parent',
+    //   name: 'Thống kê',
+    //   icon: 'fa fa-area-chart',
+    //   children: [
+    //     {
+    //       name: 'Chi phí',
+    //       link: "./statistic/add",
+    //       icon: 'fa fa-money'
+    //     },
+    //     {
+    //       name: 'Đơn hàng',
+    //       link: "./statistic/add",
+    //       icon: 'fa fa-file-text'
+    //     },
+    //     {
+    //       name: 'Sản phẩm',
+    //       link: "./statistic/add",
+    //       icon: 'fa fa-cube'
+    //     },
+    //     {
+    //       name: 'Nhân viên',
+    //       link: "./statistic/add",
+    //       icon: 'fa fa-user'
+    //     },
+    //     {
+    //       name: 'Hoạt động',
+    //       link: "./statistic/add",
+    //       icon: 'fa fa-code-fork'
+    //     },
+    //   ]
+    // },
+    // {
+    //   type: 'parent',
+    //   name: 'Báo cáo',
+    //   icon: 'fa fa-file-text-o',
+    //   children: [
+    //     {
+    //       name: 'Chi phí',
+    //       link: "./report/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Đơn hàng',
+    //       link: "./report/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Sản phẩm',
+    //       link: "./report/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Nhân viên',
+    //       link: "./report/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Hoạt động',
+    //       link: "./report/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //   ]
+    // },
+    // {
+    //   type: 'title',
+    //   name: 'Tiện ích',
+    // },
+    // {
+    //   type: 'single',
+    //   name: 'Chatbot',
+    //   link: "../mcommerce",
+    //   icon: 'fa fa-android',
+    // },
     {
       type: 'title',
       name: 'Hệ thống',
@@ -739,23 +739,23 @@ export class FullLayoutComponent implements OnInit {
       link: "./settings/config",
       icon: 'fa fa-cog',
     },
-    {
-      type: 'parent',
-      name: 'Thời gian làm việc',
-      icon: 'fa fa-clock-o',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./schedule/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./schedule/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    },
+    // {
+    //   type: 'parent',
+    //   name: 'Thời gian làm việc',
+    //   icon: 'fa fa-clock-o',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       link: "./schedule/add",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       link: "./schedule/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // },
     {
       type: 'parent',
       name: 'Khu vực',
@@ -786,7 +786,7 @@ export class FullLayoutComponent implements OnInit {
         {
           name: 'Sửa',
           link: "./ship/add",
-          icon: 'icon-pen'
+          icon: 'fa fa-edit'
         }
       ]
     },

@@ -891,97 +891,98 @@ export class DashboardComponent implements OnInit {
       })
 
       console.log("daily summary", JSON.stringify(response));
-      let data = response[0];
+      let data = response[0] ? response[0] : {};
+      this.summary = data;
       this.top_right_infos = [];
       this.sub_header_infos = [];
 
       this.top_right_infos.push({
-        number: data.pay_amount,
+        number: data.pay_amount ? data.pay_amount : 0,
         text: "Tiền đã thu"
       });
 
       this.top_right_infos.push({
-        number: data.remain_amount,
+        number: data.remain_amount ? data.remain_amount : 0,
         text: "Tiền còn thiếu"
       });
 
       this.top_right_infos.push({
-        number: data.number_of_customer,
+        number: data.number_of_customer ? data.number_of_customer : 0,
         text: "Số khách hàng"
       });
 
       this.top_right_infos.push({
-        number: data.number_of_customer_using_promotion,
+        number: data.number_of_customer_using_promotion ? data.number_of_customer_using_promotion : 0,
         text: "Số khuyến mãi được dùng"
       });
 
       this.top_right_infos.push({
-        number: data.number_of_bill,
+        number: data.number_of_bill ? data.number_of_bill : 0,
         text: "Số đơn hàng"
       });
 
       this.sub_header_infos.push({
-        number: data.number_of_sent_successfully_status,
+        number: data.number_of_sent_successfully_status ? data.number_of_sent_successfully_status : 0,
         text: 'THÀNH CÔNG',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_distributed_status,
+        number: data.number_of_distributed_status ? data.number_of_distributed_status : 0,
         text: 'ĐÃ ĐIỀU PHỐI',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_waiting_for_confirmation_status,
+        number: data.number_of_waiting_for_confirmation_status ? data.number_of_waiting_for_confirmation_status : 0,
         text: 'ĐANG CHỜ XÁC NHẬN',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_bill_confirmed_status,
+        number: data.number_of_bill_confirmed_status ? data.number_of_bill_confirmed_status : 0,
         text: 'ĐÃ XÁC NHẬN',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_picking_up_status,
+        number: data.number_of_picking_up_status ? data.number_of_picking_up_status : 0,
         text: 'ĐANG LẤY HÀNG',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_received_status,
+        number: data.number_of_received_status ? data.number_of_received_status : 0,
         text: 'ĐÃ NHẬN HÀNG',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_processing_status,
+        number: data.number_of_processing_status ? data.number_of_processing_status : 0,
         text: 'ĐANG XỬ LÝ',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_prepared_status,
+        number: data.number_of_prepared_status ? data.number_of_prepared_status : 0,
         text: 'ĐÃ CHUẨN BỊ',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_sent_shipper_status,
+        number: data.number_of_sent_shipper_status ? data.number_of_sent_shipper_status : 0,
         text: 'ĐÃ GỬI GIAO HÀNG',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_delivering_status,
+        number: data.number_of_delivering_status ? data.number_of_delivering_status : 0,
         text: 'ĐANG GIAO',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_paid_status,
+        number: data.number_of_paid_status ? data.number_of_paid_status : 0,
         text: 'ĐÃ THANH TOÁN',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_collected_money_status,
+        number: data.number_of_collected_money_status ? data.number_of_collected_money_status : 0,
         text: 'ĐÃ NHẬN TIỀN',
       })
 
       this.sub_header_infos.push({
-        number: data.number_of_cancelled_status,
+        number: data.number_of_cancelled_status ? data.number_of_cancelled_status : 0,
         text: 'ĐÃ HỦY',
       })
 

@@ -11,12 +11,13 @@
   font-size: 1.5rem;
 }
 
-.header-text {
+.header-text { text-align:right;
   color: $bluegrey-darker;
   font-size: 0.85rem;
   font-weight: bold;
   padding: 0;
   margin: 0;
+  text-align: right;
   display: flex;
   justify-content: flex-end;
   align-items: center;

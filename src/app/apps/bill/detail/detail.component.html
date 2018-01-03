@@ -133,7 +133,7 @@
                     <tbody>
                       <tr>
                         <td class="price-title">Tổng đơn hàng</td>
-                        <td class="text-right">{{bill.total_price | accounting}}</td>
+                        <td class="text-right">{{bill.bill_items_total_price | accounting}}</td>
                       </tr>
                       <tr>
                         <td class="price-title">Khuyến mãi</td>
@@ -212,16 +212,22 @@
               <table class="table table-bordered">
                 <thead>
                   <tr>
+                    <th class="text-center">Tổng tiền</th>
                     <th class="text-center">Tiền còn thiếu</th>
                     <th class="text-center">Tiền đã trả</th>
+                    <th class="text-center">Tổng tiền đã trả</th>
+                    <th class="text-center">Nội dung</th>
                     <th class="text-center">Nhân viên xử lý</th>
                     <th class="text-center">Thời gian</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let v of bill.paid_historys | orderBy: 'created_at';let i=index">
+                    <td class="text-center">{{v.total_amount | accounting}}</td>
                     <td class="text-center">{{v.remain_amount | accounting}}</td>
                     <td class="text-center">{{v.pay_amount | accounting}}</td>
+                    <td class="text-center">{{v.total_remain | accounting}}</td>
+                    <td class="text-center">{{v.description?v.description:"không có"}}</td>
                     <td class="text-center">{{v.employee?v.employee.fullname:'không có'}}</td>
                     <td class="text-center">{{v.created_at | date:'dd/MM/yyyy HH:mm'}}</td>
                   </tr>

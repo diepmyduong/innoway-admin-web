@@ -5,12 +5,12 @@ import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayApiService } from "app/services/innoway";
 import { Globals } from './../../globals';
-import {MatTooltipModule} from '@angular/material';
+import { MatTooltipModule } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription'
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-bill',
@@ -56,33 +56,33 @@ export class BillComponent implements OnInit, ListPageInterface {
 
     moment.locale('vi');
   }
-  
-    async loadBrandByEmployeeData(brandId: string) {
-      try {
-        this.brand = await this.innowayApi.brand.getItem(brandId, {
-          local: true, reload: true, query: {
-            fields: ["$all"]
-          }
-        })
-        this.ref.detectChanges();
-      } catch (err) {
-  
-      }
+
+  async loadBrandByEmployeeData(brandId: string) {
+    try {
+      this.brand = await this.innowayApi.brand.getItem(brandId, {
+        local: true, reload: true, query: {
+          fields: ["$all"]
+        }
+      })
+      this.ref.detectChanges();
+    } catch (err) {
+
     }
-  
-    async loadBranchByEmployeeData(branchId: string) {
-      try {
-        this.branch = await this.innowayApi.branch.getItem(branchId, {
-          local: true, reload: true, query: {
-            fields: ["$all"]
-          }
-        })
-        this.ref.detectChanges();
-      } catch (err) {
-  
-      }
+  }
+
+  async loadBranchByEmployeeData(branchId: string) {
+    try {
+      this.branch = await this.innowayApi.branch.getItem(branchId, {
+        local: true, reload: true, query: {
+          fields: ["$all"]
+        }
+      })
+      this.ref.detectChanges();
+    } catch (err) {
+
     }
-  
+  }
+
 
   async reloadItems(params) {
     let { limit, offset, sortBy, sortAsc } = params;
@@ -255,25 +255,25 @@ export class BillComponent implements OnInit, ListPageInterface {
   }
 
   async printBill(data: any, popupWin: any) {
-    
+
     let tableContent = "";
     let index = 0;
     data.items.forEach(item => {
       tableContent += "<tr class='small-text text-right'>";
-      tableContent += '<td>' + (index++) + '</td>'; 
-      tableContent += '<td>' + item.product.name + '</td>'; 
-      tableContent += '<td>' + item.amount + '</td>'; 
-      tableContent += '<td>' + this.addSpace(item.product_price) + '</td>'; 
-      tableContent += '<td>' + this.addSpace(item.total_price) + '</td>'; 
+      tableContent += '<td>' + (index++) + '</td>';
+      tableContent += '<td>' + item.product.name + '</td>';
+      tableContent += '<td>' + item.amount + '</td>';
+      tableContent += '<td>' + this.addSpace(item.product_price) + '</td>';
+      tableContent += '<td>' + this.addSpace(item.total_price) + '</td>';
       tableContent += '</tr>';
     });
-    
+
     popupWin.document.write(`
             <html>
                 <head>
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css">
                     <style>
-                      @media print { body.receipt { width: 80mm, min-height: 500mm } } 
+                      @media print { body.receipt { width: 80mm, min-height: 500mm } }
                         .receipt { width: 80mm; min-height: 500mm; font-family: sans-serif; color: #555; text-align: center;  }
                         .sheet { padding: 2.5mm; }
                         .text-center { }
@@ -295,27 +295,27 @@ export class BillComponent implements OnInit, ListPageInterface {
                 </head>
                 <body onload="window.print();window.close()" class="receipt">
                   <section class="sheet">
-                    <img class='logo padding-3' src='` + this.brand.logo +`'>
+                    <img class='logo padding-3' src='` + this.brand.logo + `'>
                     <div class='text-center normal-text padding-3'>` + this.branch.address + `</div>
                     <div class='text-center normal-text'>Hotline: ` + this.branch.phone + `</div>
 
                     <hr style="border: none; border-top: solid 1px;" />
-                    
+
                     <div style="display: inline-block; width: 100%;">
                       <div class='small-text left'>Ngày đặt: ` + moment(data.created_at).format('L') + `</div>
                       <div class='small-text text-right right'>Ngày nhận: ` + moment().format('L') + `</div>
                     </div>
 
-                    <div class='title padding-4'>Phiếu thanh toán</div> 
+                    <div class='title padding-4'>Phiếu thanh toán</div>
 
-                    <div class='normal-text text-left'>Mã đơn hàng: ` + data.id +`</div>
+                    <div class='normal-text text-left'>Mã đơn hàng: ` + data.id + `</div>
                     <div class='normal-text text-left'>Nhân viên giao hàng: Uy Minh</div>
 
                     <hr style="border: none; border-top: dashed 1px;" />
                     <table style="width:100%">
                       <tr class='small-text text-right'>
                         <th>TT</th>
-                        <th>Tên sản phẩm</th> 
+                        <th>Tên sản phẩm</th>
                         <th>SL</th>
                         <th>Đơn giá</th>
                         <th>T. Tiền</th>
@@ -344,17 +344,16 @@ export class BillComponent implements OnInit, ListPageInterface {
     );
     popupWin.document.close();
   }
-  
-    addSpace(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+  addSpace(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
 
   changeDateFormat(time, format) {
     if (!time)
-      return; 
+      return;
 
-    if (format)
-    {
+    if (format) {
       return moment(time).format(format);
     }
     return moment(time).format('L');

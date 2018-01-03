@@ -82,7 +82,7 @@ export class CustomerLayoutComponent implements OnInit {
     {
       type: 'parent',
       name: 'Người dùng',
-      icon: 'icon-star',
+      icon: 'fa fa-user-o',
       children: [
         {
           name: 'Thêm',
@@ -99,7 +99,7 @@ export class CustomerLayoutComponent implements OnInit {
     {
       type: 'parent',
       name: 'Loại người dùng',
-      icon: 'icon-star',
+      icon: 'fa fa-user-o',
       children: [
         {
           name: 'Thêm',

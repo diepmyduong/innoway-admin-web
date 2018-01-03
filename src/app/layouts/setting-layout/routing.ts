@@ -8,12 +8,24 @@ export const SettingLayoutRouting = {
   children: [
     {
       path: '',
-      redirectTo: 'setting',
+      redirectTo: 'settings',
       pathMatch: 'full',
     },
     {
       path: 'settings',
       loadChildren: 'app/apps/settings/settings.module#SettingsModule'
+    },
+    {
+      path: 'ship',
+      loadChildren: 'app/apps/ship/ship.module#ShipModule'
+    },
+    {
+      path: 'area',
+      loadChildren: 'app/apps/area/area.module#AreaModule'
+    },
+    {
+      path: 'integration',
+      loadChildren: 'app/apps/integration/integration.module#IntegrationModule'
     }
   ],
 

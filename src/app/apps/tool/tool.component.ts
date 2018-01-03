@@ -12,7 +12,7 @@ export class ToolComponent implements OnInit {
       {
         title: "Thiết lập",
         icon: "https://farm5.staticflickr.com/4521/38018892844_81b009a668_o.png",
-        link: "/super-admin/dashboard",
+        link: "/setting-layout",
       },
       {
         title: "Trang điều phối",

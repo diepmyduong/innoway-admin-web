@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayApiService } from "app/services/innoway";
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
-declare let swal:any
+declare let swal: any
 declare var innoway2: any;
 
 @Component({
@@ -18,6 +19,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   itemFields: any = ['$all', {
     brand_ship: ["$all"]
   }];
+
+  numberMask = createNumberMask({
+    prefix: '',
+    suffix: ' đ'
+  })
 
   constructor(
     private route: ActivatedRoute,

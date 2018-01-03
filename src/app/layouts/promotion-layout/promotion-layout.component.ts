@@ -124,7 +124,7 @@ export class PromotionLayoutComponent implements OnInit {
     {
       type: 'parent',
       name: 'Khuyến mãi',
-      icon: 'icon-star',
+      icon: 'fa fa-gift',
       children: [
         {
           name: 'Thêm',
@@ -141,7 +141,7 @@ export class PromotionLayoutComponent implements OnInit {
     {
       type: 'parent',
       name: 'Loại khuyến mãi',
-      icon: 'icon-star',
+      icon: 'fa fa-gift',
       children: [
         {
           name: 'Thêm',

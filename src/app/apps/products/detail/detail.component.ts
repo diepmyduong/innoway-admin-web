@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
+import { InnowayApiService } from 'app/services/innoway'
 import { DetailPageInterface } from "app/apps/interface/detailPageInterface";
 import { NgModel } from "@angular/forms";
 import { SelectComponent } from "ng2-select";
@@ -7,7 +8,7 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Subscription } from 'rxjs/Subscription'
 import * as Ajv from 'ajv';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
-import { InnowayApiService } from 'app/services/innoway'
+
 import * as Console from 'console-prefix'
 
 declare var swal, _: any;

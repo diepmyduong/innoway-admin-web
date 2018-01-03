@@ -4,69 +4,66 @@
     <h3 class="col-6">Danh sách đơn hàng</h3>
     <div class="col-6">
       <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm đơn hàng</button>
-      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()"
-      [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa đơn hàng</button>
+      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa đơn hàng</button>
     </div>
   </div>
 
   <div class="table-wrapper">
-      <div class="search-bar">
-        <p>Tìm kiếm</p>
-        <input type="text" class="input-control form-control" (keyup)="onSearch($event)">
-      </div>
-      <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async"
-      [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true"
-      [multiSelect]="true" [substituteRows]="false" [selectOnRowClick]="true"
-      [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
-        <data-table-column property="address" header="Địa điểm" [sortable]="true" [visible]="false">
-        </data-table-column>
-        <data-table-column property="customer.phone" header="Khách hàng" [resizable]="true" [sortable]="true">
-          <template #dataTableCell let-item="item">
-              {{item.customer?.phone}}
+    <div class="search-bar">
+      <p>Tìm kiếm</p>
+      <input type="text" class="input-control form-control" (keyup)="onSearch($event)">
+    </div>
+    <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true" [substituteRows]="false"
+      [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
+      <data-table-column property="address" header="Địa điểm" [sortable]="true" [visible]="false">
+      </data-table-column>
+      <data-table-column property="customer.phone" header="Khách hàng" [resizable]="true" [sortable]="true">
+        <template #dataTableCell let-item="item">
+              {{item.customer?.phone?(item.customer.phone=="000000"?null:item.customer.phone):null}}
               <div *ngIf="item.customer?.fullname">{{item.customer?.fullname}}</div>
               <i class='muted' *ngIf="!item.customer?.phone && !item.customer?.fullname">Không có</i>
             </template>
-        </data-table-column>
-        <data-table-column property="activity.action" header="Tình trạng" [resizable]="true" [sortable]="true">
-          <template #dataTableCell let-item="item">
+      </data-table-column>
+      <data-table-column property="activity.action" header="Tình trạng" [resizable]="true" [sortable]="true">
+        <template #dataTableCell let-item="item">
                 {{item.activity?(detectActionName(item.activity.action)):""}}
                 <i class='muted' *ngIf="!item.activity">Không có</i>
             </template>
-        </data-table-column>
-        <!-- <data-table-column property="created_at" header="Ngày tạo" [resizable]="true" [sortable]="true">
+      </data-table-column>
+      <!-- <data-table-column property="created_at" header="Ngày tạo" [resizable]="true" [sortable]="true">
           <template #dataTableCell let-item="item">
               {{ changeDateFormat(item.created_at) }}
             </template>
         </data-table-column> -->
-        <data-table-column property="bill_ship_detail.received_time" header="Ngày giao" [resizable]="true" [sortable]="true">
-          <template #dataTableCell let-item="item">
+      <data-table-column property="bill_ship_detail.received_time" header="Ngày giao" [resizable]="true" [sortable]="true">
+        <template #dataTableCell let-item="item">
               {{ changeDateFormat(item.bill_ship_detail?.received_time, 'D-M-YYYY HH:mm') }}
               <i class='muted' *ngIf="!item.bill_ship_detail">Không có</i>
             </template>
-        </data-table-column>
-        <data-table-column property="updated_at" header="Cập nhật" [resizable]="true" [sortable]="true">
-          <template #dataTableCell let-item="item">
+      </data-table-column>
+      <data-table-column property="updated_at" header="Cập nhật" [resizable]="true" [sortable]="true">
+        <template #dataTableCell let-item="item">
               <div>{{timeFromNow(item.updated_at)}}</div>
             </template>
-        </data-table-column>
-        <!-- <data-table-column property="bill_ship_detail.fee" header="Phí ship" [resizable]="true" [sortable]="true">
+      </data-table-column>
+      <!-- <data-table-column property="bill_ship_detail.fee" header="Phí ship" [resizable]="true" [sortable]="true">
           <template #dataTableCell let-item="item">
               {{item.bill_ship_detail?.fee?(item.bill_ship_detail.fee | accounting):""}}
               <i class='muted' *ngIf="!item.bill_ship_detail?.fee">Không có</i>
             </template>
         </data-table-column> -->
-        <!-- <data-table-column property="status" header="Trạng thái" [sortable]="true">
+      <!-- <data-table-column property="status" header="Trạng thái" [sortable]="true">
           <template #dataTableCell let-item="item">
                 <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>
               </template>
         </data-table-column> -->
-        <data-table-column property="total_price" header="Tổng tiền" [sortable]="true">
-          <template #dataTableCell let-item="item">
+      <data-table-column property="total_price" header="Tổng tiền" [sortable]="true">
+        <template #dataTableCell let-item="item">
               <div>{{item.total_price | accounting}}</div>
             </template>
-        </data-table-column>
-        <data-table-column header="Ph. thức" [width]="100" [resizable]="false">
-          <template #dataTableCell let-item="item">
+      </data-table-column>
+      <data-table-column header="Ph. thức" [width]="100" [resizable]="false">
+        <template #dataTableCell let-item="item">
             <div class="text-left">
             <i matTooltip="Tại cửa hàng" class="material-icons color-bluegrey-light"
             *ngIf="item.channel=='at_store'">store</i>
@@ -88,14 +85,14 @@
           </div>
         </template>
       </data-table-column>
-        <data-table-column header="Thao tác" [width]="100" [resizable]="false">
-          <template #dataTableCell let-item="item">
+      <data-table-column header="Thao tác" [width]="100" [resizable]="false">
+        <template #dataTableCell let-item="item">
             <div>
               <button (click)="print(item)" class="btn btn-sm btn-table btn-green"><i class="fa fa-print"></i></button>
               <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-eye"></i></button>
             </div>
           </template>
-        </data-table-column>
-      </data-table>
-    </div>
+      </data-table-column>
+    </data-table>
+  </div>
 </div>

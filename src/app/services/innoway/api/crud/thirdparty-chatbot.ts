@@ -51,18 +51,18 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
   }
 
   async requireCreateSmartCodeOnChatbot(params: {
-    smartCodeId: string
+    smart_code_id: string
   }) {
-    let { smartCodeId } = params;
+    let { smart_code_id } = params;
     let setting = {
-      method: 'PUT',
+      method: 'POST',
       uri: this.apiUrl(`require_create_smart_code_on_chatbot`),
       headers: { //headers
         'User-Agent': 'Request-Promise',
         'access_token': this.api.innowayAuth.adminToken
       },
       json: true,
-      body: { smartCodeId }
+      body: { smart_code_id }
     }
     var res: any = await this.exec(setting);
     var row = res.results.object;
@@ -71,25 +71,45 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
 
   async integrateSmartCodeToChatbot(params: {
     code: string,
-    messenger_code: string,
-    qr_code: string,
+    messenger_code_image: string,
+    qr_code_image: string,
     link: string
   }) {
-    let { code, messenger_code, qr_code, link } = params;
+    let { code, messenger_code_image, qr_code_image, link } = params;
     let setting = {
-      method: 'PUT',
-      uri: this.apiUrl(`/integrate_smart_code_to_chatbot`),
+      method: 'POST',
+      uri: this.apiUrl(`integrate_smart_code_to_chatbot`),
       headers: { //headers
         'User-Agent': 'Request-Promise',
         'access_token': this.api.innowayAuth.adminToken
       },
       json: true,
-      body: { code, messenger_code, qr_code, link }
+      body: { code, messenger_code_image, qr_code_image, link }
     }
     var res: any = await this.exec(setting);
     var row = res.results.object;
     return row;
   }
+
+  // async handleSmartcodeFromChatbot(params: {
+  //   code: string,
+  //   subscriber_id: string,
+  // }) {
+  //   let { code, subscriber_id } = params;
+  //   let setting = {
+  //     method: 'PUT',
+  //     uri: this.apiUrl(`/handle_smart_code_from_chatbot`),
+  //     headers: { //headers
+  //       'User-Agent': 'Request-Promise',
+  //       'access_token': this.api.innowayAuth.adminToken
+  //     },
+  //     json: true,
+  //     body: { code, subscriber_id }
+  //   }
+  //   var res: any = await this.exec(setting);
+  //   var row = res.results.object;
+  //   return row;
+  // }
 
   async sendStory(params: {
     story_id: string

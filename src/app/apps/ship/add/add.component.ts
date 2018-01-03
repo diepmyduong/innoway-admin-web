@@ -3,13 +3,16 @@ import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InnowayApiService } from "app/services/innoway";
 import { NgForm } from "@angular/forms";
+import { Globals } from "./../../../Globals"
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 declare var innoway2: any;
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
+  providers: [Globals],
   styleUrls: ['./add.component.scss']
 })
 export class AddComponent implements OnInit, AddPageInterface {
@@ -21,11 +24,18 @@ export class AddComponent implements OnInit, AddPageInterface {
   allow_pick_at_store: boolean;
   allow_ship: boolean;
   ship_method: 'distance' | 'area';
-  ship_fee_per_km: number;
+  ship_methods: any[]
+  ship_fee_per_km: string;
+
+  numberMask = createNumberMask({
+    prefix: '',
+    suffix: ' đ'
+  })
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
+    private globals: Globals,
     public innowayApi: InnowayApiService) {
   }
 
@@ -50,7 +60,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async setData() {
     try {
       let data = await this.innowayApi.brand.getItem(this.id, {
-        query: { 
+        query: {
           fields: ["$all", {
             brand_ship: ["$all"]
           }]
@@ -70,6 +80,9 @@ export class AddComponent implements OnInit, AddPageInterface {
         data.brand_ship.ship_fee_per_km = 0;
       }
       this.ship_fee_per_km = data.brand_ship.ship_fee_per_km
+
+      this.ship_methods = this.globals.SHIP_METHODS;
+      this.ship_method = this.ship_methods[0].code
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -78,7 +91,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   backToList() {
-    this.router.navigate(['../../'], { relativeTo: this.route });
+    this.router.navigate(['./../detail'], { relativeTo: this.route });
   }
 
   alertItemNotFound() {
@@ -132,7 +145,10 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       let { allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km } = this;
-      await this.innowayApi.brand.add({ name, allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km })
+      await this.innowayApi.brandShip.add({
+        name, allow_pick_at_store, allow_ship,
+        ship_method, ship_fee_per_km: this.globals.convertStringToPrice(ship_fee_per_km)
+      })
       this.alertAddSuccess();
       form.reset();
       form.controls["status"].setValue(1);
@@ -144,7 +160,10 @@ export class AddComponent implements OnInit, AddPageInterface {
   async updateItem(form: NgForm) {
     if (form.valid) {
       let { allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km } = this;
-      await this.innowayApi.brandShip.update(this.brand_ship_id, { allow_pick_at_store, allow_ship, ship_method, ship_fee_per_km })
+      await this.innowayApi.brandShip.update(this.brand_ship_id, {
+        allow_pick_at_store, allow_ship,
+        ship_method, ship_fee_per_km: this.globals.convertStringToPrice(ship_fee_per_km)
+      })
       this.alertUpdateSuccess();
       // form.reset();
     } else {

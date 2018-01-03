@@ -8,7 +8,7 @@ import { FormControl } from '@angular/forms';
 import { } from 'googlemaps';
 import { MapsAPILoader } from '@agm/core';
 import * as _ from 'lodash'
-declare let swal:any
+declare let swal: any
 
 @Component({
   selector: 'app-add',
@@ -116,7 +116,19 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   setDefaultData() {
     this.status = 1;
-    this.type = 1;
+    this.longitude = null;
+    this.latitude = null;
+    this.address = null;
+    this.phone = null;
+    this.name = null;
+    return {
+      status: this.status,
+      longitude: this.longitude,
+      latitude: this.latitude,
+      address: this.address,
+      phone: this.phone,
+      name: this.name
+    }
   }
 
   async setData() {
@@ -128,7 +140,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.address = data.address;
       this.longitude = _.toString(data.longitude);
       this.latitude = _.toString(data.latitude);
-      this.employee_id = data.employee_id;
+      this.employee_id = data.employee_id ? data.employee_id : undefined;
       this.phone = data.phone;
       this.type = data.type;
       this.status = data.status
@@ -196,15 +208,20 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, address, longitude, latitude, employee_id, phone, type, status } = this;
-      await this.innowayApi.branch.add({
-        name, address, employee_id, phone, type, status,
-        longitude: _.toNumber(longitude),
-        latitude: _.toNumber(latitude)
-      })
-      this.alertAddSuccess();
-      form.reset();
-      this.setDefaultData();
+      try {
+        let { name, address, longitude, latitude, phone, status } = this;
+        let data = await this.innowayApi.branch.add({
+          name, address, phone, status,
+          longitude: _.toNumber(longitude),
+          latitude: _.toNumber(latitude)
+        })
+        console.log(JSON.stringify(data))
+        this.alertAddSuccess();
+        form.reset();
+        form.resetForm(this.setDefaultData());
+      } catch (err) {
+        console.log(err)
+      }
     } else {
       this.alertFormNotValid();
     }
@@ -212,9 +229,9 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, address, longitude, latitude, employee_id, phone, type, status } = this;
+      let { name, address, longitude, latitude, phone, status } = this;
       await this.innowayApi.branch.update(this.id, {
-        name, address, employee_id, phone, type, status,
+        name, address, phone, status,
         longitude: _.toNumber(longitude),
         latitude: _.toNumber(latitude)
       })

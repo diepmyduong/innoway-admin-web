@@ -102,6 +102,17 @@ export class Globals {
     }
   ]
 
+  SHIP_METHODS = [
+    {
+      code: "distance",
+      name: "Khoảng cách"
+    },
+    {
+      code: "area",
+      name: "khu vực"
+    }
+  ]
+
   public detectPromotionTypeByCode(code: string): any {
     let result = null;
     this.PROMOTION_TYPES.forEach(type => {

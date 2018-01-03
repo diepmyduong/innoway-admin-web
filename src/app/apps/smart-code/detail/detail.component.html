@@ -1,0 +1,107 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Thông tin mã code</strong>
+        </div>
+        <div class="card-block">
+          <form #itemFrm="ngForm">
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Mã Code</label>
+              <div class="col-md-10">
+                <input type="text" #codeControl="ngModel" [(ngModel)]="code" name="code" class="form-control input-control" [placeholder]="'Mã code'" readonly>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="select">Loại mã code</label>
+              <div class="col-md-10">
+                <select #codeTypeControl="ngModel" [(ngModel)]="codeType" name="codeType" class="form-control input-control" [attr.disabled]="true">
+                    <option *ngFor="let v of codeTypes" [value]="v.code">
+                      {{v.name}}
+                    </option>
+                  </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Thời gian bắt đầu</label>
+              <div class="col-md-10">
+                <input type="text" #startTimeControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="startTime" name="startTime" class="form-control input-control" [placeholder]="'Nhập ngày bắt đầu'" readonly>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Thời gian kết thúc</label>
+              <div class="col-md-10">
+                <input type="text" #endTimeControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="endTime" name="endTime" class="form-control input-control" [placeholder]="'Nhập ngày kết thúc'" readonly>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Nội dung</label>
+              <div class="col-md-10">
+                <input type="text" #contentModel="ngModel" [(ngModel)]="content" name="content" class="form-control input-control" [placeholder]="'Nội dung'" readonly>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Giới hạn</label>
+              <div class="col-md-10">
+                <input type="number" #limitModel="ngModel" [(ngModel)]="limit" name="limit" class="form-control input-control" [placeholder]="'Số lần sử dụng giới hạn'" readonly>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Số lượng</label>
+              <div class="col-md-10">
+                <input type="number" #amountControl="ngModel" [(ngModel)]="amount" name="amount" class="form-control input-control" [placeholder]="'Số lượng giới hạn'" readonly>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
+              <div class="col-md-10">
+                <select #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control" [attr.disabled]="true">
+                  <option *ngFor="let v of [0,1]" [value]="v">
+                    {{ v===1?"Hoạt động":"Không hoạt động"}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="isConnectChatbot">
+              <label class="col-md-2 header-text" for="text-input">Messenger Link</label>
+              <div class="col-md-10">
+                <input type="text" #linkControl="ngModel" [(ngModel)]="link" name="link" class="form-control input-control" [placeholder]="'Messenger Link'" readonly>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="isConnectChatbot">
+              <label class="col-md-2 header-text" for="textarea-input">Messenger Code</label>
+              <div class="col-md-10">
+                <input type="text" #messengerCodeImageControl="ngModel" [(ngModel)]="messengerCodeImage" name="messengerCodeImage" class="form-control input-control" [placeholder]="image?'':'Nhập url'" url readonly/>
+                <small *ngIf="messengerCodeImageControl.errors?.url" class="text-muted danger">
+                    (Link không hợp lệ)
+                  </small>
+                <img *ngIf="messengerCodeImageControl.value && messengerCodeImageControl.valid" style="width:auto;height:80px;margin-top:0.1rem;" [src]="messengerCodeImageControl.value" />
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="isConnectChatbot">
+              <label class="col-md-2 header-text" for="textarea-input">QR Code</label>
+              <div class="col-md-10">
+                <input type="text" #qrCodeImageControl="ngModel" [(ngModel)]="qrCodeImage" name="qrCodeImage" class="form-control input-control" [placeholder]="image?'':'Nhập url'" url readonly/>
+                <small *ngIf="qrCodeImageControl.errors?.url" class="text-muted danger">
+                    (Link không hợp lệ)
+                  </small>
+                <img *ngIf="qrCodeImageControl.value && qrCodeImageControl.valid" style="width:auto;height:80px;margin-top:0.1rem;" [src]="qrCodeImageControl.value" />
+              </div>
+            </div>
+
+          </form>
+        </div>
+        <div class="card-footer">
+          <button (click)="backToList()" class="btn btn-ladda btn-default ml-auto" data-style="expand-right" [ladda]='submitting'>Quay lại</button>
+          <button (click)="editItem()" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Chỉnh sửa</button>
+          <button (click)="requireCreateSmartCodeOnChatbot()" *ngIf="!isConnectChatbot" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Tích hợp chatbot</button>
+          <!-- <button (click)="send()" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda">
+            Send
+          </button> -->
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+</div>

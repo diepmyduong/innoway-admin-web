@@ -10,10 +10,8 @@ import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 import { TextMaskModule } from 'angular2-text-mask';
-import { PipesModule } from 'app/pipes/pipes.module'
-
-import { FroalaComponent } from "app/editor/froala.component";
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { PipesModule } from 'app/pipes/pipes.module';
+import { DetailComponent } from './detail/detail.component'
 
 @NgModule({
   imports: [
@@ -24,11 +22,9 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     LaddaModule,
     DataTableModule,
     TextMaskModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot(),
 
     PipesModule
   ],
-  declarations: [SmartCodeComponent, AddComponent, FroalaComponent]
+  declarations: [SmartCodeComponent, AddComponent, DetailComponent]
 })
 export class SmartCodeModule { }

@@ -91,8 +91,8 @@ export class AddComponent implements OnInit {
         }
       })
       this.codeType = data.code_type;
-      this.startTime = data.start_time;
-      this.endTime = data.end_time;
+      this.startTime = moment(data.start_time).format("MM/DD/YYYY hh:mm")
+      this.endTime = moment(data.end_time).format("MM/DD/YYYY hh:mm")
       this.code = data.code;
       this.content = data.content;
       this.limit = data.limit;
@@ -232,6 +232,29 @@ export class AddComponent implements OnInit {
     }
   }
 
+  async requireCreateSmartCodeOnChatbot() {
+    try {
+      let request = {
+        smart_code_id: this.id
+      }
+      let response = await this.innowayApi.thirdpartyChatbot.requireCreateSmartCodeOnChatbot(request);
+      this.integrateSmartCodeToChatbot({
+        code: this.code,
+        messenger_code_image: response.result.messengerCode,
+        qr_code_image: response.qrUrl,
+        link: response.link
+      });
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
+  async integrateSmartCodeToChatbot(request: any) {
+    try {
+      let response = await this.innowayApi.thirdpartyChatbot.integrateSmartCodeToChatbot(request);
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
 }

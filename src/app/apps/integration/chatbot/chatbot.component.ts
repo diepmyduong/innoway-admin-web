@@ -11,8 +11,8 @@ import { MatDialog } from "@angular/material";
 })
 export class ChatbotComponent implements OnInit {
 
-  appId: string = "5a3b590b4da5ed00923ebc85";
-  appSecret: string = "90bb0dba-54f1-fbe4-9b50-e49a69eaadf3";
+  appId: string;
+  appSecret: string;
   appToken: string;
   story: string;
   stories: any[];
@@ -38,7 +38,7 @@ export class ChatbotComponent implements OnInit {
       let data = await this.innowayApi.brand.getItem(brandId, {
         query: {
           fields: ['$all', {
-            'thirdparty_chatbot': ['$all']
+            thirdparty_chatbot: ["$all"]
           }]
         }
       })
@@ -75,7 +75,7 @@ export class ChatbotComponent implements OnInit {
     try {
       let response = await this.innowayApi.thirdpartyChatbot.getStories();
       this.stories = response.rows;
-      this.story=this.stories[0]._id;
+      this.story = this.stories[0]._id;
       console.log("getStories", response);
     } catch (err) {
 

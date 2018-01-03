@@ -116,6 +116,9 @@ export class BrandComponent implements OnInit, ListPageInterface {
   }
 
   async deleteAll() {
+    if (this.itemsTable.selectedRows.length == 0)
+      return;
+
     let rows = this.itemsTable.selectedRows;
     let ids = [];
     rows.forEach(row => {
@@ -135,8 +138,6 @@ export class BrandComponent implements OnInit, ListPageInterface {
         row.item.deleting = false;
       });
     }
-
-
   }
 
   onSearch(e) {
@@ -146,7 +147,6 @@ export class BrandComponent implements OnInit, ListPageInterface {
       this.query.filter = {
         $or: {
           name: { $iLike: `%${key}%` },
-          description: { $iLike: `%${key}%` },
         }
       }
       this.getItems();

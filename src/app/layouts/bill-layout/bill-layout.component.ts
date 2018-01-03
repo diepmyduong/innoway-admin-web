@@ -91,30 +91,30 @@ export class BillLayoutComponent implements OnInit {
           link: "./bill/list",
           icon: 'fa fa-list-ul'
         },
-        {
-          name: 'Lịch sử hoạt động',
-          // link: "./bill/list",
-          icon: 'fa fa-send'
-        }
+        // {
+        //   name: 'Lịch sử hoạt động',
+        //   // link: "./bill/list",
+        //   icon: 'fa fa-send'
+        // }
       ]
     },
-    {
-      type: 'parent',
-      name: 'Thanh toán',
-      icon: 'fa fa-file-text-o',
-      children: [
-        {
-          name: 'Thêm',
-          // link: "./bill/list",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          // link: "./bill/list",
-          icon: 'fa fa-list-ul'
-        }
-      ]
-    }
+    // {
+    //   type: 'parent',
+    //   name: 'Thanh toán',
+    //   icon: 'fa fa-file-text-o',
+    //   children: [
+    //     {
+    //       name: 'Thêm',
+    //       // link: "./bill/list",
+    //       icon: 'fa fa-plus'
+    //     },
+    //     {
+    //       name: 'Danh sách',
+    //       // link: "./bill/list",
+    //       icon: 'fa fa-list-ul'
+    //     }
+    //   ]
+    // }
   ];
 
 }

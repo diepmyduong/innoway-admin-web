@@ -30,5 +30,5 @@ export {
     PromotionLayoutRouting,
     SettingLayoutRouting,
     BranchLayoutRouting,
-    DashboardLayoutRouting
+    DashboardLayoutRouting,
 }

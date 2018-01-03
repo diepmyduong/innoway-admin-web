@@ -7,33 +7,33 @@
         </div>
         <div class="card-block">
           <div class="form-group row">
-            <label class="col-md-4 form-control-label" for="text-input">Lấy hàng tại store</label>
-            <div class="col-md-8">
-              <input type="text" [value]="item?.brand_ship.allow_pick_at_store==true?'Kích hoạt':'Không kích hoạt'" name="allow_pick_at_store" class="form-control" readonly/>
+            <label class="col-md-2 header-text" for="text-input">Lấy hàng tại cửa hàng</label>
+            <div class="col-md-10">
+              <input type="text" [value]="item?.brand_ship.allow_pick_at_store==true?'Kích hoạt':'Không kích hoạt'" name="allow_pick_at_store" class="form-control input-control" readonly/>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 form-control-label" for="text-input">Giao hàng</label>
-            <div class="col-md-8">
-              <input type="text" [value]="item?.brand_ship.allow_ship==true?'Kích hoạt':'Không kích hoạt'" name="allow_ship" class="form-control" readonly/>
+            <label class="col-md-2 header-text" for="text-input">Giao hàng</label>
+            <div class="col-md-10">
+              <input type="text" [value]="item?.brand_ship.allow_ship==true?'Kích hoạt':'Không kích hoạt'" name="allow_ship" class="form-control input-control" readonly/>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 form-control-label" for="text-input">Hình thức ship</label>
-            <div class="col-md-8">
-              <input type="text" [value]="item?.brand_ship.ship_method==1?'Theo khoảng cách':'Theo khu vực'" name="ship_method" class="form-control" readonly/>
+            <label class="col-md-2 header-text" for="text-input">Hình thức giao hàng</label>
+            <div class="col-md-10">
+              <input type="text" [value]="item?.brand_ship.ship_method==1?'Theo khoảng cách':'Theo khu vực'" name="ship_method" class="form-control input-control" readonly/>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-4 form-control-label" for="text-input">Tiền ship theo khoảng cách</label>
-            <div class="col-md-8">
-              <input type="text" [value]="item?.brand_ship.ship_fee_per_km" name="ship_fee_per_km" class="form-control" readonly/>
+            <label class="col-md-2 header-text" for="text-input">Phí giao hàng trên km</label>
+            <div class="col-md-10">
+              <input type="text" [value]="item?.brand_ship.ship_fee_per_km" name="ship_fee_per_km" [textMask]="{mask: numberMask}" class="form-control input-control" readonly/>
             </div>
           </div>
 
         </div>
         <div class="card-footer">
-          <button (click)="editItem()" class="btn btn-sm btn-primary" data-style="expand-right">
+          <button (click)="editItem()" class="btn btn-ladda btn-success ml-auto" data-style="expand-right">
             Cập nhật
           </button>
         </div>

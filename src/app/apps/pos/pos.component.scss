@@ -193,7 +193,7 @@ span {
   padding: 0.25rem;
 }
 
-.header-text {
+.header-text { text-align:right;
   color: $bluegrey-darker;
   font-size: 0.95rem;
   padding: 0.25rem;
@@ -251,7 +251,7 @@ span {
   font-size: 1.5rem;
 }
 
-.header-text {
+.header-text { text-align:right;
   color: $bluegrey-darker;
   font-size: 0.85rem;
   font-weight: bold;
@@ -412,7 +412,7 @@ label {
   font-size: 1.5rem;
 }
 
-.header-text {
+.header-text { text-align:right;
   color: $bluegrey-darker;
   font-size: 0.85rem;
   font-weight: bold;

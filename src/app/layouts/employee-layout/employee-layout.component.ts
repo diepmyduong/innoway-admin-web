@@ -124,7 +124,7 @@ export class EmployeeLayoutComponent implements OnInit {
     {
       type: 'parent',
       name: 'Nhân viên',
-      icon: 'icon-star',
+      icon: 'fa fa-users',
       children: [
         {
           name: 'Thêm',

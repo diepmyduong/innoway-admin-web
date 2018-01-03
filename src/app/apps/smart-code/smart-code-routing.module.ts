@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { SmartCodeComponent } from './smart-code.component';
 import { AddComponent } from './add/add.component';
-// import { DetailComponent } from './detail/detail.component';
+import { DetailComponent } from './detail/detail.component';
 
 const routes: Routes = [
   {
@@ -37,13 +37,13 @@ const routes: Routes = [
           title: "Danh sách"
         }
       },
-      // {
-      //   path: 'detail/:id',
-      //   component: DetailComponent,
-      //   data: {
-      //     title: "Chi tiết"
-      //   }
-      // },
+      {
+        path: 'detail/:id',
+        component: DetailComponent,
+        data: {
+          title: "Chi tiết"
+        }
+      },
     ]
   }
 ];

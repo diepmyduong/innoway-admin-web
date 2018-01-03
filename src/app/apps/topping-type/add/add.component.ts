@@ -24,6 +24,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   submitting: boolean = false;
   name: string;
   description: string;
+  isSelectMultiple: boolean = true;
   status: number = 1;
 
   constructor(private route: ActivatedRoute,
@@ -55,12 +56,13 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async setData() {
     try {
-      let category = await this.innowayApi.topping.getItem(this.id, {
-        query: { fields: ["name", "description", "status"] }
+      let data = await this.innowayApi.topping.getItem(this.id, {
+        query: { fields: ["$all"] }
       })
-      this.name = category.name
-      this.description = category.description
-      this.status = category.status
+      this.name = data.name
+      this.description = data.description
+      this.isSelectMultiple = data.is_select_multiple
+      this.status = data.status
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       this.backToList()
@@ -125,8 +127,9 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, status } = this;
-      await this.innowayApi.topping.add({ name, description, status })
+      let { name, description, isSelectMultiple, status } = this;
+      let is_select_multiple = isSelectMultiple
+      await this.innowayApi.topping.add({ name, description, is_select_multiple, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -137,8 +140,9 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, status } = this;
-      await this.innowayApi.topping.update(this.id, { name, description, status })
+      let { name, description, isSelectMultiple, status } = this;
+      let is_select_multiple = isSelectMultiple
+      await this.innowayApi.topping.update(this.id, { name, description, is_select_multiple, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {
@@ -182,204 +186,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
-
-
-
-
-
-  // public isUpdate;
-  // public statuses;
-  // public notificationOption;
-  // public data;
-  // public dataId;
-  //
-  // private form: FormGroup;
-  // private toppingService: any;
-  //
-  // constructor(
-  //   public innowayApi: InnowayApiService,
-  //   private modal: Modal,
-  //   private pageService: PageService,
-  //   private zone: NgZone,
-  //   private route: ActivatedRoute,
-  //   private router: Router,
-  //   private notificationService: NotificationsService,
-  //   private ref: ChangeDetectorRef,
-  //   private vcRef: ViewContainerRef) {
-  //
-  //   //default value
-  //   this.isUpdate = false;
-  //   this.statuses = [0, 1];
-  //
-  //   //init form
-  //   this.form = new FormGroup({
-  //     nameInput: new FormControl('', [Validators.required, Validators.minLength(6)]),
-  //     descriptionInput: new FormControl('', null),
-  //     statusInput: new FormControl(1, Validators.required)
-  //   });
-  //
-  //   //config notification
-  //   this.notificationOption = {
-  //     position: ["top", "right"],
-  //     timeOut: 1000,
-  //     lastOnBottom: true,
-  //   };
-  //
-  //   //config modal
-  //   modal.overlay.defaultViewContainer = vcRef;
-  //
-  //   //add topping service
-  //   this.toppingService = innoway.getService('topping');
-  // }
-  //
-  // ngOnInit() {
-  //
-  //   //check Add or Update
-  //   this.dataId = this.route.snapshot.paramMap.get('id');
-  //   if (this.dataId == null) {
-  //     this.isUpdate = false;
-  //   } else {
-  //     this.isUpdate = true;
-  //   }
-  //
-  //   if (this.isUpdate) {
-  //     this.updateUIFollowDataId(this.dataId);
-  //   }
-  // }
-  //
-  // async updateUIFollowDataId(id: string) {
-  //   try {
-  //     //call api
-  //     let topping = await this.toppingService.get(id, {
-  //       fields: ["name", "status"]
-  //     });
-  //
-  //     //update data for form
-  //     this.form.controls['nameInput'].setValue(topping.name);
-  //     this.form.controls['descriptionInput'].setValue(topping.description);
-  //     this.form.controls['statusInput'].setValue(topping.status);
-  //
-  //     //update UI
-  //     this.ref.detectChanges();
-  //   } catch (err) {
-  //     this.pushNotification("Error!", "Cập nhật dữ liệu bị lỗi", -1);
-  //     this.router.navigate(['../../list'], { relativeTo: this.route});;
-  //   }
-  // }
-  //
-  // submitAndNew() {
-  //   if (this.form.valid) {
-  //     this.submit(false);
-  //   } else {
-  //     this.pushNotification("Error!", "Kiểm tra lại thông tin!", -1);
-  //   }
-  // }
-  //
-  // submitAndClose() {
-  //   if (this.form.valid) {
-  //     this.submit(true);
-  //   } else {
-  //     this.pushNotification("Error!", "Kiểm tra lại thông tin!", -1);
-  //   }
-  // }
-  //
-  // async submit(isNagativeToDashboard: boolean) {
-  //   this.data = {
-  //     "name": this.form.controls["nameInput"].value,
-  //     "description": this.form.controls["descriptionInput"].value,
-  //     "status": this.form.controls["statusInput"].value
-  //   };
-  //
-  //   try {
-  //     //call api
-  //     let topping = await this.toppingService.add(this.data);
-  //
-  //     this.form.reset();
-  //     this.form.controls['statusInput'].setValue(1);
-  //
-  //     //push notification
-  //     this.zone.run(() => {
-  //       this.pushNotification(topping.name, "Thêm " + topping.name + " thành công!", 0);
-  //     });
-  //
-  //     if (isNagativeToDashboard) {
-  //       this.router.navigate(['../../list'], { relativeTo: this.route});;
-  //     }
-  //   } catch (err) {
-  //     this.pushNotification("Error!", "Thêm dữ liệu bị lỗi", -1);
-  //   }
-  // }
-  //
-  // async updateAndClose() {
-  //   this.data = {
-  //     "name": this.form.controls["nameInput"].value,
-  //     "description": this.form.controls["descriptionInput"].value,
-  //     "status": this.form.controls["statusInput"].value.toString()
-  //   };
-  //
-  //   try {
-  //     //call api
-  //     let topping = await this.toppingService.update(this.dataId, this.data);
-  //     // this.form.reset();
-  //     console.log('success',topping);
-  //     //push notification
-  //     this.pushNotification(topping.name, "Cập nhật " + topping.name + " thành công!", 0);
-  //     this.ref.detectChanges();
-  //     this.router.navigate(['../../list'], { relativeTo: this.route});;
-  //   } catch (err) {
-  //     this.pushNotification("Error!", "Cập nhật dữ liệu bị lỗi", -1);
-  //   }
-  // }
-  //
-  // async deleteAndClose() {
-  //   try {
-  //     //call api
-  //     await this.toppingService.delete(this.dataId);
-  //
-  //     //push notification
-  //     this.pushNotification("Success", "Xóa thành công!", 0);
-  //     this.ref.detectChanges();
-  //     this.router.navigate(['../../list'], { relativeTo: this.route});;
-  //   } catch (err) {
-  //     this.pushNotification("Error!", "Xóa dữ liệu bị lỗi", -1);
-  //   }
-  // }
-  //
-  // pushNotification(title, content, type: number) {
-  //   switch (type) {
-  //     case -1: {
-  //       this.notificationService.alert(
-  //         title.toString(),
-  //         content.toString(),
-  //         {
-  //           showProgressBar: true,
-  //           pauseOnHover: false,
-  //           clickToClose: false,
-  //         }
-  //       )
-  //       break;
-  //     } case 0: {
-  //       this.notificationService.success(
-  //         title.toString(),
-  //         content.toString(),
-  //         {
-  //           showProgressBar: true,
-  //           pauseOnHover: false,
-  //           clickToClose: false,
-  //         }
-  //       )
-  //       break;
-  //     } default: {
-  //       this.notificationService.success(
-  //         title.toString(),
-  //         content.toString(),
-  //         {
-  //           showProgressBar: true,
-  //           pauseOnHover: false,
-  //           clickToClose: false,
-  //         }
-  //       )
-  //     }
-  //   }
-  // }
+  checkSelectMultiple(event) {
+    this.isSelectMultiple = event;
+  }
 }
