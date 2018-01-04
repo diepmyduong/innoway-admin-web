@@ -93,7 +93,7 @@ export class CrudAPI<T> extends BaseAPI {
         if (options.local && this.hashCache[hashedQuery] && this.localBrandName == this.api.innowayConfig.brandName) {
             let items = this.hashCache[hashedQuery].items
             this.pagination = this.hashCache[hashedQuery].pagination
-            if (items.length > 1) { // If local empty, request to server
+            if (items.length > 0) { // If local empty, request to server
                 return items
             }
         }

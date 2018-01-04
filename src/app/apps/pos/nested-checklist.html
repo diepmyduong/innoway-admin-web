@@ -2,9 +2,9 @@
 <ul>
   <li *ngFor="let task of toppingsData">
     <mat-checkbox [(ngModel)]="task.completed"
-                 [checked]="allComplete(task)"
-                 [indeterminate]="someComplete(task.subtasks)"
-                 (change)="setAllCompleted(task.subtasks, $event.checked)">
+      [checked]="allComplete(task)"
+      [indeterminate]="someComplete(task.subtasks)"
+      (change)="setAllCompleted(task.subtasks, $event.checked)">
       <p class="header-text">{{task.name}}</p>
     </mat-checkbox>
     <ul>

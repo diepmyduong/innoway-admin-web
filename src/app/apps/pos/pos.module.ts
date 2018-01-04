@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SidebarModule } from 'ng-sidebar';
-import { SwiperModule } from 'angular2-useful-swiper';
 import { SelectModule } from 'ng2-select';
 import { SharedModule } from 'app/shared'
+import { PaginationModule, ButtonsModule } from 'ngx-bootstrap';
 import {
   MatToolbarModule,
   MatSidenavModule,
@@ -18,11 +18,13 @@ import {
   MatFormFieldModule,
   MatDialogModule,
   MatCheckboxModule,
+  MatRadioModule,
   MatPseudoCheckboxModule,
 } from '@angular/material'
 
 import { PosRoutingModule } from './pos-routing.module';
-import { PosComponent, ToppingDialog, CheckboxToppingChecklistComponent } from './pos.component';
+import { ToppingDialog } from './topping-dialog.component';
+import { PosComponent, CheckboxToppingChecklistComponent } from './pos.component';
 
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TextMaskModule } from 'angular2-text-mask';
@@ -40,7 +42,6 @@ import { DataTableModule } from "angular-2-data-table-bootstrap4";
     CommonModule,
     SharedModule,
     PosRoutingModule,
-    SwiperModule,
     SidebarModule,
     NgbModule,
     DataTableModule,
@@ -56,6 +57,7 @@ import { DataTableModule } from "angular-2-data-table-bootstrap4";
     MatFormFieldModule,
     MatDialogModule,
     MatCheckboxModule,
+    MatRadioModule,
     MatPseudoCheckboxModule,
     TabsModule,
     TextMaskModule,
@@ -65,9 +67,12 @@ import { DataTableModule } from "angular-2-data-table-bootstrap4";
     ReactiveFormsModule,
     LaddaModule,
     SelectModule,
+    PaginationModule.forRoot(),
+    ButtonsModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
-      libraries: ["places,drawing"]
+      libraries: ["places,drawing"],
+      language: 'vi-VN'
     }),
   ],
   entryComponents: [PosComponent, ToppingDialog, CheckboxToppingChecklistComponent],

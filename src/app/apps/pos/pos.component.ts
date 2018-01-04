@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation, ChangeDetectorRef, NgZone, Inject, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation, ChangeDetectorRef, 
+  NgZone, Inject, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
@@ -22,6 +23,7 @@ import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angu
 import { MapsAPILoader } from "@agm/core";
 import { SelectComponent } from "ng2-select";
 
+import { ToppingDialog } from "./topping-dialog.component"
 import { EditInfoDialog } from "../../modal/edit-info/edit-info.component";
 import { DataTable } from "angular-2-data-table-bootstrap4";
 
@@ -58,6 +60,7 @@ export class PosComponent implements OnInit {
 
   customerPhoneOnline: string = "";
   customerNameOnline: string = "";
+  customerNamePlaceholder: string = "Khách vãng lai";
   customerPhoneAtStore: string = "";
   customerNameAtStore: string = "";
 
@@ -74,12 +77,9 @@ export class PosComponent implements OnInit {
     suffix: ' đ'
   })
 
-  @ViewChild("addressInput")
-  searchElementRef: ElementRef;
+  @ViewChild("addressInput") addressElementRef: ElementRef;
 
   dialogRef: MatDialogRef<ToppingDialog> | null;
-  lastAfterClosedResult: string;
-  lastBeforeCloseResult: string;
   actionsAlignment: string;
 
   dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', '2', '0', '1', '7', ' ', /\d/, /\d/, ':', /\d/, /\d/];
@@ -101,9 +101,10 @@ export class PosComponent implements OnInit {
       left: '',
       right: ''
     },
-    data: [
-
-    ]
+    data: {
+      selectedToppings: [],
+      productToppings: [],
+    }
   };
   numTemplateOpens = 0;
 
@@ -167,7 +168,7 @@ export class PosComponent implements OnInit {
 
   shipFee: string = "0";
   deliveryTime: any;
-  paidType: string = "partical";
+  paidType: string = "partial";
 
   channel: string;
   channels: any[];
@@ -175,8 +176,20 @@ export class PosComponent implements OnInit {
   deliveryMethod: string;
   deliveryMethods: any[] = [];
 
+  maxSize: number = 5;
+  currentPage: number = 1;
+  totalItems: number;
+
+  category_filter = "all";
+  name_filter: any;
+
+  isQueryingProduct: boolean = false;
+  isDetectingNameFromPhone: boolean = false;
+  isCreatingOrder: boolean = false;
+
+  methodModel = 'store';
+
   isVAT: boolean = false;
-  isSelectBillAtStoreTab: boolean = true;
   isPickAtStore: boolean;
   vatValue: number;
 
@@ -236,36 +249,34 @@ export class PosComponent implements OnInit {
 
   updateDeliveryTime(event) {
     // this.deliveryTime = new Date(event);
-    console.log((new Date(event)).toString());
-  }
-
-  openToppingDialog(productId, data) {
-    this.config.data = data;
-    this.dialogRef = this.dialog.open(ToppingDialog, this.config);
-
-    this.dialogRef.beforeClose().subscribe((result: string) => {
-      this.lastBeforeCloseResult = result;
-    });
-    this.dialogRef.afterClosed().subscribe((result) => {
-      this.addToppingsToProduct(result, productId);
-      this.lastAfterClosedResult = result;
-      this.dialogRef = null;
-    });
+    //console.log((new Date(event)).toString());
   }
 
   async ngOnInit() {
-    this.allProductData = await this.getProductData();
+    this.allProductData = await this.filterProduct();
+    await this.getCategoriesData();
     // this.employee = this.employee.fullname;
     this.employeeId = this.employee.id;
     this.employeeName = this.employee.fullname;
 
-    console.log("bambi auth: " + JSON.stringify(this.employee));
+    //console.log("bambi auth: " + JSON.stringify(this.employee));
 
     this.getBrandData(this.employee.brand_id);
     // this.getPromotionData();
     this.getAllBranchData();
     this.getBranchData(this.employee.branch_id);
     this.setAutocompleteMap();
+  }
+
+  async getCategoriesData() {
+    try {
+      let data = await this.innowayApi.productCategory.getList({
+        query: { fields: ["$all"] }
+      })
+      this.categoryData.next(data);
+    } catch (err) {
+      this.alertItemNotFound()
+    }
   }
 
   async getBrandData(id: string) {
@@ -305,7 +316,6 @@ export class PosComponent implements OnInit {
   }
 
   async getBranchData(id: string) {
-    console.log("branch_id: " + id);
     try {
       let data = await this.innowayApi.branch.getItem(id, {
         query: { fields: ["$all", "$paranoid"] }
@@ -313,7 +323,6 @@ export class PosComponent implements OnInit {
       this.branch = data;
       this.branchId = this.branch.id;
       this.branchName = this.branch.name;
-      console.log("address branch", JSON.stringify(data));
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -334,103 +343,141 @@ export class PosComponent implements OnInit {
     }
   }
 
-  async getProductData() {
+  async onFilterChange() {
+    this.allProductData = await this.filterProduct();
+  }
+
+  async filterProduct() {
+    let query = {
+      fields: ["$all", {
+        toppings: ["id", {
+          topping: ["$all", {
+            values: ["id", "name", "price"]
+          }]
+        }]
+      }],
+      limit: 10,
+      filter: {},
+      page: this.currentPage,
+    }
+
+    if (this.category_filter != "all") {
+      query.filter = {...query.filter, category_id: this.category_filter }
+    }
+
+    if (this.name_filter) {
+      query.filter = {...query.filter, name: { $iLike: `%${this.name_filter}%` } }
+    }
+
     try {
-      this.productData.next(await this.innowayApi.product.getList({
-        query: {
-          fields: ["$all"],
-          limit: 0,
-        }
-      }))
+      this.isQueryingProduct = true;
+      let list = await this.innowayApi.product.getList({
+        query: query
+      });
+      this.totalItems = this.innowayApi.product.pagination.totalItems;
+      this.productData.next(list);
+      this.isQueryingProduct = false;
       return this.productData.getValue()
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
+      this.isQueryingProduct = false;
     }
   }
 
-  async getToppings(productId) {
-    try {
-      let data = await this.innowayApi.product.getItem(productId, {
-        query: {
-          fields: ["id", {
-            toppings: ["id", {
-              topping: ["id", "name", {
-                values: ["id", "name", "price"]
-              }]
-            }]
-          }]
+  async addOrder() {
+    if (!this.selectedProduct || this.selectedProduct.length == 0) {
+      swal ("Lỗi nhập liệu", "Không được để trống đơn hàng.", "warning");
+      return;
+    }
+
+    if (this.customerNameAtStore && !this.customerPhoneAtStore) {
+      swal ("Lỗi nhập liệu", "Không được để trống SĐT khi đã nhập tên khách hàng.", "warning");
+      return;
+    }
+
+    this.isCreatingOrder = true;
+
+    // Create new account
+    if (this.customerId == null) {
+      if (this.customerPhoneAtStore) {
+        try {
+          this.customer = await this.innowayApi.customer.add({ fullname: this.customerNameAtStore, phone: '+84' + this.customerPhoneAtStore,});
+          this.customerId = this.customer.id;
+        } catch (err) {
+          swal('Lỗi tạo khách hàng', 'Không tạo được khách hàng', 'error');
+          console.log(err.message);
+          this.isCreatingOrder = false;
+          return;
         }
-      })
-      this.selectedTopping = data.toppings != null ? data.toppings : null;
-      if (this.selectedTopping != null) {
-        this.openToppingDialog(productId, data.toppings);
-      } else {
-        this.alertItemNotFound();
       }
+    } else {
+      if (!this.customer.fullname && this.customerNameAtStore) {
+        try {
+          await this.innowayApi.customer.update(this.customerId, { fullname: this.customerNameAtStore });
+        } catch (err) {
+          swal('Lỗi cập nhật', 'Không cập nhật được tên khách hàng', 'error');
+          this.isCreatingOrder = false;
+          return;
+        }
+      }
+    }
+
+    if (this.methodModel == 'store') {
+      this.orderAtStore();
+    } else {
+      this.orderOnline();
+    }
+  }
+
+  async getToppings(product) {
+    let productId = product.id;
+    let productToppings = product.toppings?[...product.toppings]:[];
+    let selectedToppings;
+    if (product.selected_toppings) {
+      selectedToppings = product.selected_toppings;
+    } else {
+      selectedToppings = [];
+    }
+    try {
+      // let data = await this.innowayApi.product.getItem(productId, {
+      //   query: {
+      //     fields: ["id", {
+      //       toppings: ["id", {
+      //         topping: ["id", "name", {
+      //           values: ["id", "name", "price"]
+      //         }]
+      //       }]
+      //     }]
+      //   }
+      // })
+      this.openToppingDialog(productId, productToppings, selectedToppings);
+      // this.selectedTopping = productToppings != null ? productToppings : null;
+      // if (this.selectedTopping != null) {
+      //   this.openToppingDialog(productId, productToppings, product.toppings);
+      // } else {
+      //   this.alertItemNotFound();
+      // }
     } catch (err) {
-      try { await this.alertItemNotFound() } catch (err) { }
+      await this.alertItemNotFound()
       console.log("ERRRR", err);
     }
   }
 
-  addProduct(product) {
-    let isAvaible = false;
-    let amount = 0;
-    let price = Number.parseInt(product.price);
-    let pos = -1;
+  openToppingDialog(productId, productToppings, selectedToppings) {
+    this.config.data.productToppings = productToppings;
+    this.config.data.selectedToppings = selectedToppings;
+    this.dialogRef = this.dialog.open(ToppingDialog, this.config);
 
-    this.selectedProduct.forEach((item, index) => {
-      // let isSameTopping = false;
-      // let toppingItem: Set<any> = new Set<any>();
-      //
-      // if()
-      // item.toppings.forEach((topping, index) => {
-      //   toppingItem.add(topping);
-      // })
-      //
-      // let currentSize = toppingItem.size;
-      //
-      // product.toppings.forEach((topping, index) => {
-      //   toppingItem.add(topping);
-      // })
-      //
-      // if (toppingItem.size == currentSize) {
-      //   isSameTopping = true;
-      // }
-
-      if (item.id == product.id
-        && item.toppings.length == 0) {
-        amount = item.amount;
-        isAvaible = true;
-        pos = index;
+    this.dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.data) {
+        this.addToppingsToProduct(result.data, productId);
       }
-    })
-
-    amount++;
-    let total = price * amount;
-
-    let item = {
-      id: product.id,
-      name: product.name,
-      amount: amount,
-      thumb: product.thumb,
-      price: product.price,
-      total: total.toString(),
-      toppings: [],
-    }
-
-    if (isAvaible) {
-      this.selectedProduct[pos] = item;
-    } else {
-      this.selectedProduct.push(item);
-    }
-
-    this.updateTotalAmount();
-    this.ref.detectChanges();
+      this.dialogRef = null;
+    });
   }
 
-  addToppingsToProduct(toppings: any, id: string) {
+  addToppingsToProduct(selectedToppings: any, id: string) {
     let pos = -1;
     this.selectedProduct.forEach((item, index) => {
       if (item.id == id) {
@@ -440,27 +487,80 @@ export class PosComponent implements OnInit {
     })
 
     let product = this.selectedProduct[pos];
-    product.toppings = toppings;
+    product.selected_toppings = selectedToppings;
+
+    // let topping_value_ids = [];
+    // selectedToppings.forEach(value => {
+    //   topping_value_ids.push(value.option.id);
+    // });
+    // product.topping_value_ids = topping_value_ids;
+    // console.log(topping_value_ids);
 
     let total = 0;
-    product.toppings.forEach((item, index) => {
-      total += Number.parseInt(item.price);
+    product.selected_toppings.forEach((item, index) => {
+      total += Number.parseInt(item.option.price);
     });
 
-    product.price = (Number.parseInt(product.price) + total).toString();
-    product.total = (Number.parseInt(product.price) * Number.parseInt(product.amount)).toString();
+    let priceWithTopping = Number.parseInt(product.price) + total;
+    product.priceWithTopping = priceWithTopping.toString();
+    product.total = (priceWithTopping * Number.parseInt(product.amount)).toString();
     this.selectedProduct[pos] = product;
 
     this.updateTotalAmount();
     this.ref.detectChanges();
   }
 
-  rowClick(event) {
-    console.log('Row clicked', event);
-  }
+  addProduct(product) {
+    let amount = 0;
+    let price = Number.parseFloat(product.price);
+    let pos = -1;
 
-  rowDoubleClick(event) {
-    console.log('Row double click', event);
+    for (let i = 0; i < this.selectedProduct.length; i++) {
+      let item = this.selectedProduct[i];
+      if (item.id == product.id && item.priceWithTopping == item.price) {
+        pos = i;
+        break;
+      }
+    }
+
+    if (pos > -1) {
+      this.updateAmount(this.selectedProduct[pos], this.selectedProduct[pos].amount + 1);
+      return;
+    }
+
+    product.selected_toppings = [];
+    product.toppings.forEach(item => {
+      let topping = item.topping;
+      if (topping.is_select_multiple == false) {
+        for (let i = 0; i < topping.values.length; i++) {
+          let option = topping.values[i];
+          if (option.price == 0) {
+            product.selected_toppings.push({option: option, topping_id: topping.id, type: 'single'});
+            return;
+          }
+        }
+      }
+    })
+
+    amount = 1;
+    let total = price * amount;
+
+    let item = {
+      id: product.id,
+      name: product.name,
+      amount: amount,
+      thumb: product.thumb,
+      price: price, 
+      priceWithTopping: price,
+      total: total.toString(),
+      toppings: product.toppings,
+      selected_toppings: product.selected_toppings,
+    }
+
+    this.selectedProduct.push(item);
+
+    this.updateTotalAmount();
+    this.ref.detectChanges();
   }
 
   removeProduct(product,index) {
@@ -507,7 +607,8 @@ export class PosComponent implements OnInit {
     swal({
       title: 'Không còn tồn tại',
       type: 'warning',
-      timer: 2000
+      timer: 2000,
+      allowOutsideClick: false,
     })
   }
 
@@ -516,6 +617,7 @@ export class PosComponent implements OnInit {
       title: 'Cập nhật thành công',
       type: 'success',
       timer: 2000,
+      allowOutsideClick: false,
     })
   }
 
@@ -524,6 +626,7 @@ export class PosComponent implements OnInit {
       title: 'Đã cập nhật',
       type: 'success',
       timer: 2000,
+      allowOutsideClick: false,
     })
   }
 
@@ -532,6 +635,7 @@ export class PosComponent implements OnInit {
       title: 'Nội dung nhập không hợp lệ',
       type: 'warning',
       timer: 2000,
+      allowOutsideClick: false,
     })
   }
 
@@ -540,6 +644,7 @@ export class PosComponent implements OnInit {
       title: 'Thêm không thành công',
       type: 'warning',
       timer: 2000,
+      allowOutsideClick: false,
     })
   }
 
@@ -548,6 +653,7 @@ export class PosComponent implements OnInit {
       title: 'Cập nhật không thành công',
       type: 'warning',
       timer: 2000,
+      allowOutsideClick: false,
     })
   }
 
@@ -575,6 +681,7 @@ export class PosComponent implements OnInit {
   }
 
   updateAmount(product, amount) {
+    console.log(product, amount);
     let isAvaible = false;
     let pos;
 
@@ -585,26 +692,10 @@ export class PosComponent implements OnInit {
       }
     })
 
-    // if (amount == 0) {
-    //   this.removeProduct(product);
-    //   return;
-    // }
+    let total = Number.parseInt(amount) * Number.parseInt(product.priceWithTopping);
 
-    let total = Number.parseInt(amount) * Number.parseInt(product.price);
-
-    let item = {
-      id: product.id,
-      name: product.name,
-      amount: amount,
-      thumb: product.thumb,
-      price: product.price,
-      total: total.toString(),
-      toppings: product.toppings,
-    }
-
-    if (isAvaible) {
-      this.selectedProduct[pos] = item;
-    }
+    this.selectedProduct[pos].amount = amount;
+    this.selectedProduct[pos].total = total;
 
     this.updateTotalAmount();
     this.ref.detectChanges();
@@ -622,7 +713,6 @@ export class PosComponent implements OnInit {
     } else {
       this.outputVAT = 0;
     }
-    console.log("VAT: " + this.isVAT + " --- " + this.outputVAT);
     this.calculateAmountOfPurchase();
     this.ref.detectChanges();
   }
@@ -653,7 +743,6 @@ export class PosComponent implements OnInit {
   }
 
   private calculateAmountOfPurchase() {
-
     this.outputPromotion = 0;
     if (this.promotion != null) {
       this.promotionData.forEach(data => {
@@ -692,8 +781,9 @@ export class PosComponent implements OnInit {
 
   setAutocompleteMap() {
     this.mapsAPILoader.load().then(() => {
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-        types: ["address"]
+      let autocomplete = new google.maps.places.Autocomplete(this.addressElementRef.nativeElement, {
+        types: ["address"],
+        componentRestrictions: {country: 'vn'}
       });
       autocomplete.addListener("place_changed", () => {
         this.zone.run(() => {
@@ -708,7 +798,6 @@ export class PosComponent implements OnInit {
           this.longitude = place.geometry.location.lng().toString();
           this.latitude = place.geometry.location.lat().toString();
 
-          console.log(place.geometry.location.lng() + " --- " + place.geometry.location.lat());
           this.calculateShipFee(place.geometry.location.lng(), place.geometry.location.lat());
 
           this.ref.detectChanges();
@@ -752,7 +841,7 @@ export class PosComponent implements OnInit {
       }
       let fee = await this.innowayApi.bill.calculateShipFee(data);
       this.shipFee = fee.fee;
-      if (!this.isSelectBillAtStoreTab) {
+      if (this.methodModel == 'online') {
         this.outputShipFee = Number.parseInt(this.shipFee);
       } else {
         this.outputShipFee = 0;
@@ -765,8 +854,22 @@ export class PosComponent implements OnInit {
   }
 
   async detectCustomerByPhone(phone: string) {
-    console.log("detect: " + phone);
+    if (!this.customerPhoneAtStore) {
+      this.customer = null;
+      this.customerId = null;
+      this.customerNameAtStore = "";
+      this.customerNamePlaceholder = "Khách vãng lai";
+      return;
+    }
+    
+    if (phone.startsWith('0'))
+    {
+      phone = phone.substr(1);
+    }
+    phone = '+84' + phone;
+
     try {
+      this.isDetectingNameFromPhone = true;
       let data = {
         phone: phone.toString()
       }
@@ -774,28 +877,44 @@ export class PosComponent implements OnInit {
 
       this.promotion = null;
       if (this.customer != null && this.customer.code != 500) {
-        this.customerNameAtStore = this.customer.fullname ? this.customer.fullname : "Chưa cập nhật";
+        if (this.customer.fullname)
+        {
+          this.customerNameAtStore = this.customer.fullname
+        }
+        else {
+          this.customerNameAtStore = "";
+          this.customerNamePlaceholder = "Khách hàng chưa có tên";
+        }
         this.getPromotionsByCustomerId(this.customer.id);
         this.customerId = this.customer.id;
       } else {
         this.customerId = null;
       }
+      
+      if (!this.customerPhoneAtStore) {
+        this.customerNameAtStore = "";
+        this.customer = null;
+        this.customerId = null;
+        this.customerNamePlaceholder = "Khách vãng lai";
+        return;
+      }
 
-      this.ref.detectChanges();
+      this.isDetectingNameFromPhone = false;
     } catch (err) {
       this.customerNameAtStore = null;
       this.customer = null;
       this.customerId = null;
-      console.log("detect phone: " + err);
-    }
-  }
+      this.isDetectingNameFromPhone = false;
 
-  async createNewCustomerAccount(data: any) {
-    try {
-      let response = this.innowayApi.customer.add(data);
-      console.log("create new customer", JSON.stringify(response));
-    } catch (err) {
-
+      this.customerNamePlaceholder = "Chưa có tài khoản";
+      
+      if (!this.customerPhoneAtStore) {
+        this.customerNameAtStore = "";
+        this.customer = null;
+        this.customerId = null;
+        this.customerNamePlaceholder = "Khách vãng lai";
+        return;
+      }
     }
   }
 
@@ -808,7 +927,22 @@ export class PosComponent implements OnInit {
       this.ref.detectChanges();
       // alert(JSON.stringify(data))
     } catch (err) {
-      alert(err.toString())
+      console.log(err.message)
+    }
+  }
+
+  checkMethod() {
+    if (this.isCreatingOrder) {
+      return;
+    } else {
+      (this.methodModel == 'store')?this.methodModel='online':this.methodModel='store'; 
+    }
+
+    if (this.methodModel == 'store') {
+      this.selectBillAtStoreTab();
+    }
+    else {
+      this.selectBillOnlineTab();
     }
   }
 
@@ -819,13 +953,11 @@ export class PosComponent implements OnInit {
 
   selectBillAtStoreTab() {
     this.outputShipFee = 0;
-    this.isSelectBillAtStoreTab = true;
     this.updateTotalAmount();
   }
 
   selectBillOnlineTab() {
     this.outputShipFee = this.shipFee ? Number.parseInt(this.shipFee) : 0;
-    this.isSelectBillAtStoreTab = false;
     this.updateTotalAmount();
   }
 
@@ -875,11 +1007,14 @@ export class PosComponent implements OnInit {
 
       let responseOrderAtStore = await this.innowayApi.bill.orderAtStore(request);
       // alert(JSON.stringify(responseOrderAtStore));
+      this.resetDefaultValue();
 
       this.alertAddSuccess();
+      this.isCreatingOrder = false;
     } catch (err) {
       console.log("bambi: " + err.toString());
       this.alertAddFailed();
+      this.isCreatingOrder = false;
       // alert(JSON.stringify(err));
     }
   }
@@ -946,16 +1081,19 @@ export class PosComponent implements OnInit {
 
       let responseOrderAtStore = await this.innowayApi.bill.orderOnlineByEmployee(request);
       // alert(JSON.stringify(responseOrderAtStore));
+      this.resetDefaultValue();
       this.alertAddSuccess()
+      this.isCreatingOrder = false;
     } catch (err) {
       console.log("bambi: " + err.toString());
       this.alertAddFailed();
+      this.isCreatingOrder = false;
       // alert(JSON.stringify(err));
     }
   }
 
   resetDefaultValue() {
-    this.selectedProduct = null;
+    this.selectedProduct = [];
     this.promotion = null;
     this.address = null;
     this.longitude = null;
@@ -976,6 +1114,16 @@ export class PosComponent implements OnInit {
     this.paidType = this.globals.PAID_HISTORY_TYPES[0].code;
 
     this.receivedTime = "0";
+    
+    this.customerPhoneAtStore = "";
+    this.customerNamePlaceholder = "Khách vãng lai";
+    this.customerNameAtStore = "";
+    this.customer = null;
+    this.customerId = null;
+    this.promotion = null;
+
+    this.isVAT = false;
+    this.calculateAmountOfPurchase();
 
     this.ref.detectChanges();
   }
@@ -1076,57 +1224,57 @@ export class PosComponent implements OnInit {
 }
 
 
-@Component({
-  selector: 'topping-dialog',
-  template: `
-  <checkbox-topping-checklist [toppings]="selectedTopping"
-  (updateSelectedTopping)="handleupdateSelectedTopping($event)"></checkbox-topping-checklist>
-  <p class="header-text">Chi phí: {{totalPrice | accounting}}</p>
-  <div style="text-align:center;margin:auto;width:100%;">
-  <button type="button" class="btn btn-ladda btn-primary ml-auto" (click)="dialogRef.close(selectedToppings)">Chấp nhận</button>
-  </div>`,
-  styleUrls: ['./pos.component.scss'],
-})
-export class ToppingDialog {
-  private _dimesionToggle = false;
-  private selectedTopping: any;
-  initialCount: number = 10;
-  totalPrice: number = 0;
-  selectedToppings: any[] = [];
+// @Component({
+//   selector: 'topping-dialog',
+//   template: `
+//   <checkbox-topping-checklist [toppings]="selectedTopping"
+//   (updateSelectedTopping)="handleupdateSelectedTopping($event)"></checkbox-topping-checklist>
+//   <p class="header-text">Chi phí: {{totalPrice | accounting}}</p>
+//   <div style="text-align:center;margin:auto;width:100%;">
+//   <button type="button" class="btn btn-ladda btn-primary ml-auto" (click)="dialogRef.close(selectedToppings)">Chấp nhận</button>
+//   </div>`,
+//   styleUrls: ['./pos.component.scss'],
+// })
+// export class ToppingDialog {
+//   private _dimesionToggle = false;
+//   private selectedTopping: any;
+//   initialCount: number = 10;
+//   totalPrice: number = 0;
+//   selectedToppings: any[] = [];
+//   toppings: any[] = [];
 
-  constructor(
-    public dialogRef: MatDialogRef<ToppingDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.selectedTopping = data;
-  }
+//   constructor(
+//     public dialogRef: MatDialogRef<ToppingDialog>,
+//     @Inject(MAT_DIALOG_DATA) public data: any) {
+//     this.toppings = data;
+//   }
 
-  public setSelectedTopping(selectedTopping) {
-    this.selectedTopping = selectedTopping;
-  }
+//   public setSelectedTopping(selectedTopping) {
+//     this.selectedTopping = selectedTopping;
+//   }
 
-  handleupdateSelectedTopping(selectedToppings) {
-    this.totalPrice = 0;
-    this.selectedToppings = selectedToppings;
-    this.selectedToppings.forEach(topping => {
-      this.totalPrice += Number.parseInt(topping.price);
-    });
-    // this.addToppingsToProduct(result, )
-  }
+//   handleupdateSelectedTopping(selectedToppings) {
+//     this.totalPrice = 0;
+//     this.selectedToppings = selectedToppings;
+//     this.selectedToppings.forEach(topping => {
+//       this.totalPrice += Number.parseInt(topping.price);
+//     });
+//   }
 
-  togglePosition(): void {
-    this._dimesionToggle = !this._dimesionToggle;
+//   togglePosition(): void {
+//     this._dimesionToggle = !this._dimesionToggle;
 
-    if (this._dimesionToggle) {
-      this.dialogRef
-        .updateSize('500px', '500px')
-        .updatePosition({ top: '25px', left: '25px' });
-    } else {
-      this.dialogRef
-        .updateSize()
-        .updatePosition();
-    }
-  }
-}
+//     if (this._dimesionToggle) {
+//       this.dialogRef
+//         .updateSize('500px', '500px')
+//         .updatePosition({ top: '25px', left: '25px' });
+//     } else {
+//       this.dialogRef
+//         .updateSize()
+//         .updatePosition();
+//     }
+//   }
+// }
 
 @Component({
   selector: 'checkbox-topping-checklist',
@@ -1150,24 +1298,24 @@ export class CheckboxToppingChecklistComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.toppings.forEach(data => {
-      let task = {
-        name: data.topping.name,
-        completed: false,
-        subtasks: [
-        ]
-      };
-      data.topping.values.forEach(data => {
-        let subtask = {
-          id: data.id,
-          name: data.name,
-          price: data.price != null ? data.price : 0,
-          completed: false,
-        }
-        task.subtasks.push(subtask);
-      });
-      this.toppingsData.push(task);
-    });
+    // this.toppings.forEach(data => {
+    //   let task = {
+    //     name: data.topping.name,
+    //     completed: false,
+    //     subtasks: [
+    //     ]
+    //   };
+    //   data.topping.values.forEach(data => {
+    //     let subtask = {
+    //       id: data.id,
+    //       name: data.name,
+    //       price: data.price != null ? data.price : 0,
+    //       completed: false,
+    //     }
+    //     task.subtasks.push(subtask);
+    //   });
+    //   this.toppingsData.push(task);
+    // });
 
   }
 
