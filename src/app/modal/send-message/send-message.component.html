@@ -2,13 +2,24 @@
 <div class="row">
   <p class="col-4 header-text">Tin nhắn</p>
   <div class="col-8">
-    <textarea type="text" [(ngModel)]="contentInput" class="input-control form-control"></textarea>
+    <textarea type="text" [(ngModel)]="contentInput" class="input-control form-control" placeholder="Tin nhắn"></textarea>
   </div>
 </div>
 <div class="row">
   <p class="col-4 header-text">Link hình media</p>
   <div class="col-8">
-    <input type="text" [(ngModel)]="mediaLinkInput" class="input-control form-control">
+    <input type="text" [(ngModel)]="mediaLinkInput" class="input-control form-control" placeholder="Link hình media">
+  </div>
+</div>
+<div class="row">
+  <p class="col-4 header-text">Loại media</p>
+  <div class="col-8">
+    <select [(ngModel)]="mediaType" name="mediaType" class="select-control form-control">
+      <option value=null [selected]="true">Chọn loại media</option>
+    <option *ngFor="let v of mediaTypes" [value]="v.code">
+      {{ v.name }}
+    </option>
+  </select>
   </div>
 </div>
 <div style="padding-bottom:20px;text-align:center;" *ngIf="error!=null">
@@ -17,6 +28,6 @@
   </small>
 </div>
 <div class="bottom-btn-group">
-  <button class="btn-confirm btn btn-md" [disabled]="!isValid" [mat-dialog-close]="info" (click)="onYesClick()">{{data.button_yes}}</button>
-  <button class="btn-cancel btn btn-md" (click)="onNoClick()">{{data.button_no}}</button>
+  <button class="btn-confirm btn btn-md" [disabled]="!isValid" [mat-dialog-close]="info" (click)="onYesClick()">Gửi</button>
+  <button class="btn-cancel btn btn-md" (click)="onNoClick()">Bỏ qua</button>
 </div>

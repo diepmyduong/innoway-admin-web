@@ -5,8 +5,11 @@ import { DataTable } from "angular-2-data-table-bootstrap4/dist";
 import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayApiService } from "app/services/innoway";
 import { Globals } from "./../../Globals"
+import { MatDialog } from "@angular/material";
+import { SendMessageDialog } from "app/modal/send-message/send-message.component";
+import { SendStoryDialog } from "app/modal/send-story/send-story.component";
 declare let swal: any
-declare var accounting:any;
+declare var accounting: any;
 
 @Component({
   selector: 'app-customer',
@@ -23,18 +26,26 @@ export class CustomerComponent implements OnInit, ListPageInterface {
   searchTimeOut: number = 250;
   searchRef: any;
 
+  story: string;
+  stories: any[];
+
+  isConnectChatbot: boolean = false;
+
   @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
     private router: Router,
     private globals: Globals,
+    public dialog: MatDialog,
     public innowayApi: InnowayApiService,
     private route: ActivatedRoute,
     private ref: ChangeDetectorRef
   ) {
+
   }
 
   ngOnInit() {
+
   }
 
   async reloadItems(params) {
@@ -43,6 +54,24 @@ export class CustomerComponent implements OnInit, ListPageInterface {
     this.query.offset = offset;
     this.query.order = sortBy ? [[sortBy, sortAsc ? 'ASC' : 'DESC']] : null;
     await this.getItems();
+  }
+
+  async loadBrand() {
+    try {
+      let brandId = this.innowayApi.innowayAuth.innowayUser.brand_id
+      let data = await this.innowayApi.brand.getItem(brandId, {
+        query: {
+          fields: ["$all", {
+            thirdparty_chatbot: ["$all"]
+          }]
+        }
+      })
+      if (data.thirdparty_chatbot) {
+        this.isConnectChatbot = true
+      }
+    } catch (err) {
+
+    }
   }
 
   async getItems() {
@@ -98,9 +127,25 @@ export class CustomerComponent implements OnInit, ListPageInterface {
     });
   }
 
+  async alertUpdateFail() {
+    return await swal({
+      title: 'Xử lý thất bại',
+      type: 'warning',
+      timer: 1000,
+    });
+  }
+
   async alertDeleteSuccess() {
     return await swal({
       title: 'Xoá thành công',
+      type: 'success',
+      timer: 1000,
+    });
+  }
+
+  async alertUpdateSuccess() {
+    return await swal({
+      title: 'Xử lý thành công',
       type: 'success',
       timer: 1000,
     });
@@ -157,5 +202,91 @@ export class CustomerComponent implements OnInit, ListPageInterface {
       }
       this.getItems();
     }, this.searchTimeOut);
+  }
+
+  sendMessageChatbot(item) {
+    let data = {
+
+    };
+
+    let dialogRef = this.dialog.open(SendMessageDialog, {
+      width: '560px',
+      data: data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        this.sendMessage({
+          content: result.contentInput,
+          media: {
+            type: result.mediaType,
+            link: result.mediaLinkInput
+          }
+        })
+      }
+    })
+  }
+
+  async sendMessage(input: any) {
+    try {
+      let request = {
+        content: input.content,
+        media: {
+          type: input.media.type,
+          link: input.media.link
+        }
+      }
+      let data = await this.innowayApi.thirdpartyChatbot.sendMessageToCustomer(request);
+      this.alertUpdateSuccess()
+      console.log("response", JSON.stringify(data))
+    } catch (err) {
+      this.alertUpdateFail()
+      console.log("response", err)
+    }
+  }
+
+  sendStoryChatbot(item) {
+
+    let data = {
+      stories: this.stories ? this.stories : [],
+      subscriberId: item.id
+    };
+
+    let dialogRef = this.dialog.open(SendStoryDialog, {
+      width: '560px',
+      data: data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        if (result.result) {
+          this.sendStory(result.storyId)
+        }
+      }
+    })
+  }
+
+  async getStories() {
+    try {
+      let response = await this.innowayApi.thirdpartyChatbot.getStories();
+      this.stories = response.rows;
+      this.story = this.stories[0]._id;
+      console.log("getStories", response);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async sendStory(storyId: string) {
+    try {
+      let response = await this.innowayApi.thirdpartyChatbot.sendStory({
+        story_id: storyId
+      });
+      console.log("send message", JSON.stringify(response))
+      alert(true)
+    } catch (err) {
+      console.log("send message", err)
+      alert(false)
+    }
   }
 }

@@ -16,6 +16,7 @@ export class SendStoryDialog implements OnInit {
 
   story: string;
   stories: any[];
+  subscriberId: string;
 
   error: string;
   isValid: boolean = false;
@@ -30,7 +31,10 @@ export class SendStoryDialog implements OnInit {
   ngOnInit() {
     console.log(this.data);
 
-    this.getStories();
+    this.stories = this.data.stories ? this.data.stories : [];
+    this.story = this.stories[0].id ? this.stories[0].id : null;
+    this.subscriberId = this.data.susubscriberId ? this.data.susubscriberId : null;
+
     this.validateInputData();
   }
 
@@ -38,6 +42,7 @@ export class SendStoryDialog implements OnInit {
 
 
     this.error = null;
+    this.isValid = true;
 
 
     this.ref.detectChanges();
@@ -45,38 +50,11 @@ export class SendStoryDialog implements OnInit {
 
 
   onYesClick() {
-    this.sendMessage();
+    this.info["storyId"] = this.story
   }
 
   onNoClick(): void {
     this.dialogRef.close();
-  }
-
-  async getStories() {
-    try {
-      let response = await this.innowayApi.thirdpartyChatbot.getStories();
-      this.stories = response.rows;
-      this.story = this.stories[0]._id;
-      console.log("getStories", response);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async sendMessage() {
-    try {
-      console.log("send story", JSON.stringify(this.story))
-      let response = await this.innowayApi.thirdpartyChatbot.sendStory({
-        story_id: this.story
-      });
-      console.log("send message", JSON.stringify(response))
-      // let response = await this.innowayApi.thirdpartyChatbot.sendSampleStory();
-      // console.log("getStories", response);
-      alert(true)
-    } catch (err) {
-      console.log("send message", err)
-      alert(false)
-    }
   }
 
 }

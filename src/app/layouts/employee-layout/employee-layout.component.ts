@@ -129,7 +129,7 @@ export class EmployeeLayoutComponent implements OnInit {
         {
           name: 'Thêm',
           link: "./employee/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
