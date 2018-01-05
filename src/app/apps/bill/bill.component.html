@@ -90,6 +90,7 @@
             <div>
               <button (click)="print(item)" class="btn btn-sm btn-table btn-green"><i class="fa fa-print"></i></button>
               <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-eye"></i></button>
+              <button *ngIf="!detectBillCancel(item)" (click)="showCancelBillDialog(item)" class="btn btn-sm btn-table btn-red"><i class="fa fa-remove"></i></button>
             </div>
           </template>
       </data-table-column>

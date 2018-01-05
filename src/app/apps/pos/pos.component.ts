@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation, ChangeDetectorRef, 
-  NgZone, Inject, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component, OnInit, ViewChild, ElementRef, ViewEncapsulation, ChangeDetectorRef,
+  NgZone, Inject, TemplateRef, Input, Output, EventEmitter
+} from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
@@ -82,7 +84,7 @@ export class PosComponent implements OnInit {
   dialogRef: MatDialogRef<ToppingDialog> | null;
   actionsAlignment: string;
 
-  dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', '2', '0', '1', '7', ' ', /\d/, /\d/, ':', /\d/, /\d/];
+  dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', '2', '0', '1', '8', ' ', /\d/, /\d/, ':', /\d/, /\d/];
 
   config = {
     disableClose: false,
@@ -239,7 +241,7 @@ export class PosComponent implements OnInit {
       doc.body.classList.remove('no-scroll');
     });
 
-    this.deliveryTime = moment(Date.now()).format('MM/DD/yyyy HH:mm');
+    this.deliveryTime = moment(Date.now()).format('MM/DD/YYYY HH:mm');
   }
 
   checkVAT(event) {
@@ -362,11 +364,11 @@ export class PosComponent implements OnInit {
     }
 
     if (this.category_filter != "all") {
-      query.filter = {...query.filter, category_id: this.category_filter }
+      query.filter = { ...query.filter, category_id: this.category_filter }
     }
 
     if (this.name_filter) {
-      query.filter = {...query.filter, name: { $iLike: `%${this.name_filter}%` } }
+      query.filter = { ...query.filter, name: { $iLike: `%${this.name_filter}%` } }
     }
 
     try {
@@ -387,12 +389,12 @@ export class PosComponent implements OnInit {
 
   async addOrder() {
     if (!this.selectedProduct || this.selectedProduct.length == 0) {
-      swal ("Lỗi nhập liệu", "Không được để trống đơn hàng.", "warning");
+      swal("Lỗi nhập liệu", "Không được để trống đơn hàng.", "warning");
       return;
     }
 
     if (this.customerNameAtStore && !this.customerPhoneAtStore) {
-      swal ("Lỗi nhập liệu", "Không được để trống SĐT khi đã nhập tên khách hàng.", "warning");
+      swal("Lỗi nhập liệu", "Không được để trống SĐT khi đã nhập tên khách hàng.", "warning");
       return;
     }
 
@@ -402,7 +404,7 @@ export class PosComponent implements OnInit {
     if (this.customerId == null) {
       if (this.customerPhoneAtStore) {
         try {
-          this.customer = await this.innowayApi.customer.add({ fullname: this.customerNameAtStore, phone: '+84' + this.customerPhoneAtStore,});
+          this.customer = await this.innowayApi.customer.add({ fullname: this.customerNameAtStore, phone: '+84' + this.customerPhoneAtStore, });
           this.customerId = this.customer.id;
         } catch (err) {
           swal('Lỗi tạo khách hàng', 'Không tạo được khách hàng', 'error');
@@ -432,7 +434,7 @@ export class PosComponent implements OnInit {
 
   async getToppings(product) {
     let productId = product.id;
-    let productToppings = product.toppings?[...product.toppings]:[];
+    let productToppings = product.toppings ? [...product.toppings] : [];
     let selectedToppings;
     if (product.selected_toppings) {
       selectedToppings = product.selected_toppings;
@@ -535,7 +537,7 @@ export class PosComponent implements OnInit {
         for (let i = 0; i < topping.values.length; i++) {
           let option = topping.values[i];
           if (option.price == 0) {
-            product.selected_toppings.push({option: option, topping_id: topping.id, type: 'single'});
+            product.selected_toppings.push({ option: option, topping_id: topping.id, type: 'single' });
             return;
           }
         }
@@ -550,7 +552,7 @@ export class PosComponent implements OnInit {
       name: product.name,
       amount: amount,
       thumb: product.thumb,
-      price: price, 
+      price: price,
       priceWithTopping: price,
       total: total.toString(),
       toppings: product.toppings,
@@ -563,7 +565,7 @@ export class PosComponent implements OnInit {
     this.ref.detectChanges();
   }
 
-  removeProduct(product,index) {
+  removeProduct(product, index) {
     // console.log(index.index)
     // for (var i = this.selectedProduct.length; i--;) {
     //   let item = this.selectedProduct[i];
@@ -783,7 +785,7 @@ export class PosComponent implements OnInit {
     this.mapsAPILoader.load().then(() => {
       let autocomplete = new google.maps.places.Autocomplete(this.addressElementRef.nativeElement, {
         types: ["address"],
-        componentRestrictions: {country: 'vn'}
+        componentRestrictions: { country: 'vn' }
       });
       autocomplete.addListener("place_changed", () => {
         this.zone.run(() => {
@@ -861,9 +863,8 @@ export class PosComponent implements OnInit {
       this.customerNamePlaceholder = "Khách vãng lai";
       return;
     }
-    
-    if (phone.startsWith('0'))
-    {
+
+    if (phone.startsWith('0')) {
       phone = phone.substr(1);
     }
     phone = '+84' + phone;
@@ -877,8 +878,7 @@ export class PosComponent implements OnInit {
 
       this.promotion = null;
       if (this.customer != null && this.customer.code != 500) {
-        if (this.customer.fullname)
-        {
+        if (this.customer.fullname) {
           this.customerNameAtStore = this.customer.fullname
         }
         else {
@@ -890,7 +890,7 @@ export class PosComponent implements OnInit {
       } else {
         this.customerId = null;
       }
-      
+
       if (!this.customerPhoneAtStore) {
         this.customerNameAtStore = "";
         this.customer = null;
@@ -907,7 +907,7 @@ export class PosComponent implements OnInit {
       this.isDetectingNameFromPhone = false;
 
       this.customerNamePlaceholder = "Chưa có tài khoản";
-      
+
       if (!this.customerPhoneAtStore) {
         this.customerNameAtStore = "";
         this.customer = null;
@@ -935,7 +935,7 @@ export class PosComponent implements OnInit {
     if (this.isCreatingOrder) {
       return;
     } else {
-      (this.methodModel == 'store')?this.methodModel='online':this.methodModel='store'; 
+      (this.methodModel == 'store') ? this.methodModel = 'online' : this.methodModel = 'store';
     }
 
     if (this.methodModel == 'store') {
@@ -1029,8 +1029,8 @@ export class PosComponent implements OnInit {
         this.shipMethod = this.brand.brand_ship.ship_method;
       }
 
-      this.receivedTime = this.deliveryTime ? moment(this.deliveryTime, "MM/DD/YYYY HH:mm").format() : null
-
+      this.receivedTime = this.deliveryTime ? moment(this.deliveryTime, "MM/DD/YYYY HH:mm").format() : undefined
+      console.log("bi bi time", this.receivedTime)
 
       let request = {
         "address": this.address,
@@ -1114,7 +1114,7 @@ export class PosComponent implements OnInit {
     this.paidType = this.globals.PAID_HISTORY_TYPES[0].code;
 
     this.receivedTime = "0";
-    
+
     this.customerPhoneAtStore = "";
     this.customerNamePlaceholder = "Khách vãng lai";
     this.customerNameAtStore = "";

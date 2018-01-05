@@ -362,4 +362,48 @@ export class BillComponent implements OnInit, ListPageInterface {
   timeFromNow(time) {
     return moment(time).fromNow();
   }
+
+  showCancelBillDialog(bill: any) {
+    swal({
+      title: 'Bạn muốn hủy đơn hàng?',
+      text: 'Đơn hàng sẽ chuyển sang trạng thái hủy.',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Hủy đơn hàng',
+      cancelButtonText: 'Bỏ qua'
+    }).then((result) => {
+      console.log(result)
+      if (result) {
+        this.cancelBill(bill)
+        // result.dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
+      } else if (result.dismiss === 'cancel') {
+
+      }
+    })
+  }
+
+  async cancelBill(bill: any) {
+    try {
+      let request = {
+        billId: bill.id
+      }
+      let response = await this.innowayApi.bill.cancel(request);
+      this.alertDeleteSuccess()
+      this.getItems()
+      console.log(JSON.stringify(response));
+    } catch (err) {
+      this.alertCannotDelete()
+      console.log(err)
+    }
+  }
+
+  detectBillCancel(bill): boolean {
+    if (bill.activity) {
+      if (bill.activity.action.indexOf("CANCEL") >= 0
+    || bill.activity.action.indexOf("DISTRIBUTED") >= 0) {
+        return true
+      }
+    }
+    return false
+  }
 }

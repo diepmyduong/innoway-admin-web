@@ -25,6 +25,7 @@ export class BillDetailComponent implements OnInit {
   brand: any;
   branch: any;
   bill: any;
+  isCancel: boolean = false;
 
   itemFields: any = ['$all', {
     activities: ['$all', {
@@ -79,6 +80,16 @@ export class BillDetailComponent implements OnInit {
         local: false,
         query: { fields: this.itemFields }
       })
+
+      if (this.item.activity) {
+        if (this.item.activity.action.indexOf("CANCEL") >= 0) {
+          this.isCancel = true
+        } else {
+          this.isCancel = false
+        }
+      } else {
+        this.isCancel = false
+      }
       console.log("billdata:" + JSON.stringify(this.item));
     } catch (err) {
       this.alertItemNotFound()
@@ -266,7 +277,8 @@ export class BillDetailComponent implements OnInit {
     }
     if (bill.activity != null) {
       if (bill.activity.action == "BILL_COLLECTED_MONEY"
-        || bill.activity.action == "BILL_MODIFIED_AT_COLLECTED_MONEY") {
+        || bill.activity.action == "BILL_MODIFIED_AT_COLLECTED_MONEY"
+        || bill.activity.action.indexOf("CANCEL") >= 0) {
         return false;
       }
       return true;
@@ -477,5 +489,55 @@ export class BillDetailComponent implements OnInit {
     } catch (err) {
 
     }
+  }
+
+  showCancelBillDialog(bill: any) {
+    swal({
+      title: 'Bạn muốn hủy đơn hàng?',
+      text: 'Đơn hàng sẽ chuyển sang trạng thái hủy.',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Hủy đơn hàng',
+      cancelButtonText: 'Bỏ qua'
+    }).then((result) => {
+      console.log(result)
+      if (result) {
+        this.cancelBill(bill)
+        // result.dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
+      } else if (result.dismiss === 'cancel') {
+
+      }
+    })
+  }
+
+  async cancelBill(bill: any) {
+    try {
+      let request = {
+        billId: bill.id
+      }
+      let response = await this.innowayApi.bill.cancel(request);
+      this.alertDeleteSuccess()
+      this.setData()
+      console.log(JSON.stringify(response));
+    } catch (err) {
+      this.alertDeleteFail()
+      console.log(err)
+    }
+  }
+
+  alertDeleteSuccess() {
+    return swal({
+      title: 'Hủy đơn hàng thành công',
+      type: 'success',
+      timer: 2000
+    })
+  }
+
+  alertDeleteFail() {
+    return swal({
+      title: 'Hủy đơn hàng thất bại',
+      type: 'warning',
+      timer: 2000
+    })
   }
 }

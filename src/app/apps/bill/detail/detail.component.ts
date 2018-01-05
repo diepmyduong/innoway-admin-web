@@ -53,6 +53,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   payerAddress: string;
   payerNote: string;
 
+  isCancel: boolean = false;
+
   constructor(
     private globals: Globals,
     private route: ActivatedRoute,
@@ -284,16 +286,14 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         this.payAmount = payAmount;
       }
 
-
-      // receiverName: string;
-      // receiverPhone: string;
-      // receiverAddress: string;
-      // receiverNote: string;
-      //
-      // payerName: string;
-      // payerPhone: string;
-      // payerAddress: string;
-      // payerNote: string;
+      if (this.bill.activity.action) {
+        if (this.bill.activity.action.indexOf("CANCEL") >= 0
+          || this.bill.activity.action.indexOf("DISTRIBUTED") >= 0) {
+          this.isCancel = true
+        } else {
+          this.isCancel = false
+        }
+      }
 
       if (this.bill.related_people == null) {
         this.bill.related_people = {};
@@ -371,6 +371,22 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     return swal({
       title: 'Cập nhật thành công',
       type: 'success',
+      timer: 2000
+    })
+  }
+
+  alertDeleteSuccess() {
+    return swal({
+      title: 'Hủy đơn hàng thành công',
+      type: 'success',
+      timer: 2000
+    })
+  }
+
+  alertDeleteFail() {
+    return swal({
+      title: 'Hủy đơn hàng thất bại',
+      type: 'warning',
       timer: 2000
     })
   }
@@ -821,6 +837,40 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       let response = await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(params)
       console.log(JSON.stringify(response))
     } catch (err) {
+      console.log(err)
+    }
+  }
+
+  showCancelBillDialog(bill: any) {
+    swal({
+      title: 'Bạn muốn hủy đơn hàng?',
+      text: 'Đơn hàng sẽ chuyển sang trạng thái hủy.',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Hủy đơn hàng',
+      cancelButtonText: 'Bỏ qua'
+    }).then((result) => {
+      console.log(result)
+      if (result) {
+        this.cancelBill(bill)
+        // result.dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
+      } else if (result.dismiss === 'cancel') {
+
+      }
+    })
+  }
+
+  async cancelBill(bill: any) {
+    try {
+      let request = {
+        billId: bill.id
+      }
+      let response = await this.innowayApi.bill.cancel(request);
+      this.alertDeleteSuccess()
+      this.setData()
+      console.log(JSON.stringify(response));
+    } catch (err) {
+      this.alertDeleteFail()
       console.log(err)
     }
   }
