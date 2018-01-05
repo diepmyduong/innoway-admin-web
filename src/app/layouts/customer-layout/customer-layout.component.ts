@@ -87,7 +87,7 @@ export class CustomerLayoutComponent implements OnInit {
         {
           name: 'Thêm',
           link: "./customer/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
@@ -104,7 +104,7 @@ export class CustomerLayoutComponent implements OnInit {
         {
           name: 'Thêm',
           link: "./customer-type/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',

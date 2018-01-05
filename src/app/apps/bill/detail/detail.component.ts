@@ -203,7 +203,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     try {
       if (this.employee.brand_id) {
         this.brand = await this.innowayApi.brand.getItem(this.employee.brand_id, {
-          query: { fields: ["$all"] }
+          query: {
+            fields: ["$all", {
+              thirdparty_chatbot: ["$all"]
+            }],
+          }
         })
         this.ref.detectChanges();
       }
@@ -245,6 +249,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
           fields: this.itemFields
         }
       }))
+
       this.bill = this.item.getValue();
 
       if (this.bill.customer) {
@@ -319,6 +324,15 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       this.payerNote =
         this.bill.related_people.payer_note ?
           this.bill.related_people.payer_note : "không có";
+
+      if (this.brand.thirdparty_chatbot) {
+        if (this.bill.channel == "chatbot") {
+          alert("chatbot");
+        }
+        if (this.bill.customer.chatbot_subscriber_id) {
+          alert("chatbot");
+        }
+      }
 
       console.log("setData", JSON.stringify(this.bill));
       this.ref.detectChanges();
@@ -789,31 +803,25 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     })
   }
 
-  async sendInvoiceToCustomer() {
+  async sendInvoiceToCustomer(bill: any) {
     try {
       let params = {
-        contentGreeting: {
-          text: "",
-        },
-        contentReceipt: {
-          total_price: 0,
-          vat_fee: 0,
-          amount_of_sub_fee: 0,
-          amount_of_promotion: 0,
-          ship_fee: 0,
-          ship_method: "",
-          created_at: "",
-          code: "",
-          brand: {},
-          branch: {},
-          address: "",
-          customer_fullname: "",
-          product: []
-        }
+        total_price: bill.total_price,
+        vat_fee: bill.vat_fee,
+        amount_of_sub_fee: bill.amount_of_sub_fee,
+        amount_of_promotion: bill.amount_of_promotion,
+        ship_fee: bill.ship_detail.ship_fee ? bill.ship_detail.ship_fee : 0,
+        ship_method: bill.ship_detail.ship_method,
+        created_at: bill.created_at,
+        code: bill.code,
+        address: bill.address,
+        customer_fullname: bill.customer.fullname,
+        greeting: "Chào {{first_name}} {{last_name}}, đơn hàng " + bill.code + " của quý khách đã được xác nhận thành công",
       }
-      await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(params)
+      let response = await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(params)
+      console.log(JSON.stringify(response))
     } catch (err) {
-
+      console.log(err)
     }
   }
 }

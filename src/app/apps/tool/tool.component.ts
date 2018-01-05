@@ -47,15 +47,16 @@ export class ToolComponent implements OnInit {
         title: "POS",
         icon: "https://farm5.staticflickr.com/4528/24866458148_a12c9693af_o.png",
         link: "/pos",
-      }, {
-        title: "Phản hồi",
-        icon: "https://farm5.staticflickr.com/4558/38018892994_1ef6928909_o.png",
-        link: "/feedback-layout",
-      }, {
-        title: "Ticket",
-        icon: "https://farm5.staticflickr.com/4586/37848509095_91f1c6899d_o.png",
-        link: "/ticket-layout",
       }
+      // , {
+      //   title: "Phản hồi",
+      //   icon: "https://farm5.staticflickr.com/4558/38018892994_1ef6928909_o.png",
+      //   link: "/feedback-layout",
+      // }, {
+      //   title: "Ticket",
+      //   icon: "https://farm5.staticflickr.com/4586/37848509095_91f1c6899d_o.png",
+      //   link: "/ticket-layout",
+      // }
     ],
     addon: [
       {

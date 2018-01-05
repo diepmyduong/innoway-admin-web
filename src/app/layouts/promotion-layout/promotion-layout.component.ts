@@ -129,7 +129,7 @@ export class PromotionLayoutComponent implements OnInit {
         {
           name: 'Thêm',
           link: "./promotion/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
@@ -146,7 +146,7 @@ export class PromotionLayoutComponent implements OnInit {
         {
           name: 'Thêm',
           link: "./promotion-type/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',

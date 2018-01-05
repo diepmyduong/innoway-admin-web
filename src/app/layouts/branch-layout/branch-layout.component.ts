@@ -128,7 +128,7 @@ export class BranchLayoutComponent implements OnInit {
         {
           name: 'Thêm',
           link: "./branch/add",
-          icon: 'icon-add'
+          icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',

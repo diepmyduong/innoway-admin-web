@@ -23,8 +23,20 @@ export class SendMessageDialog implements OnInit {
   longitude: number;
   latitude: number;
 
-  option: string;
-  options: any[];
+  mediaType: string = null;
+  mediaTypes: any[] = [
+    {
+      name: "video",
+      code: "video",
+    },
+    {
+      name: "image",
+      code: "image",
+    }, {
+      name: "audio",
+      code: "audio",
+    }
+  ];
 
   error: string;
   isValid: boolean = false;
@@ -49,37 +61,37 @@ export class SendMessageDialog implements OnInit {
   }
 
   validateInputData() {
-
-
     this.error = null;
-
+    this.isValid = true;
 
     this.ref.detectChanges();
   }
 
 
   onYesClick() {
-
+    this.info["contentInput"] = this.contentInput
+    this.info["mediaType"] = this.mediaType
+    this.info["mediaLinkInput"] = this.mediaLinkInput
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  async sendMessage(input: any) {
-    try {
-      let request = {
-        content: input.content,
-        media: {
-          type: input.media.type,
-          link: input.media.link
-        }
-      }
-      let data = await this.innowayApi.thirdpartyChatbot.sendMessageToCustomer(request);
-      console.log("response", JSON.stringify(data))
-    } catch (err) {
-      console.log("response", err)
-    }
-  }
+  // async sendMessage(input: any) {
+  //   try {
+  //     let request = {
+  //       content: input.content,
+  //       media: {
+  //         type: input.media.type,
+  //         link: input.media.link
+  //       }
+  //     }
+  //     let data = await this.innowayApi.thirdpartyChatbot.sendMessageToCustomer(request);
+  //     console.log("response", JSON.stringify(data))
+  //   } catch (err) {
+  //     console.log("response", err)
+  //   }
+  // }
 
 }

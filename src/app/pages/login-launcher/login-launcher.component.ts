@@ -49,6 +49,10 @@ export class LoginLauncherComponent implements OnInit {
     this.router.navigate(["launcher"])
   }
 
+  register(){
+    this.router.navigate(["brand-register"])
+  }
+
   async signIn(form: NgForm) {
 
     if (this.submitting) {
@@ -94,7 +98,7 @@ export class LoginLauncherComponent implements OnInit {
             } else {
               this.alertAuthError("Đăng nhập không thành công");
             }
-            
+
         }
         this.submitting = false;
       }
