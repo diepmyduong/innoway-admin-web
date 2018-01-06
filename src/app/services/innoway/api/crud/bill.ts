@@ -277,7 +277,6 @@ export class Bill extends CrudAPI<iBill> {
         'access_token': this.api.innowayAuth.adminToken
       },
       json: true,
-      body: { billId }
     }
     var res: any = await this.exec(setting);
     var row = res.results.object;

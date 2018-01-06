@@ -4,15 +4,19 @@
       <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin đơn hàng</ng-template>
       <div class="row">
         <div class="col-md-12">
+          <span *ngIf="!isCancel" class="float-right cancel-bill" (click)="showCancelBillDialog(bill)"><i class="fa fa-remove mr-h"></i>Hủy đơn hàng</span>
+          <span *ngIf="isCancel" class="float-right cancel-bill">Đơn hàng đã hủy</span>
+        </div>
+        <div class="col-md-12">
           <div class="card" style="border: 1px solid #e1e6ef">
             <div class="card-header">
               <div class="float-left">
                 <div>Đơn hàng: <strong>{{formatBillCode(bill.code?bill.code:"")}}</strong></div>
               </div>
-              <a class="btn btn-sm btn-gray-info float-right" (click)="showSendStoryDialog(bill)"><i class="fa fa-print"></i> Gửi tin nhắn</a>
-              <a class="btn btn-sm btn-gray-info float-right" (click)="print(bill)"><i class="fa fa-print"></i> In hóa đơn</a>
-              <a class="btn btn-sm btn-gray-info float-right mr-h" (click)="showEditInfoDialog(bill, employee, employees)"><i class="fa fa-flag"></i> Cập nhật trạng thái</a>
-              <a class="btn btn-sm btn-gray-info float-right mr-h" (click)="showUpdatePaidHistoryDialog(bill)"><i class="fa fa-edit"></i> Cập nhật chi phí</a>
+              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right" (click)="showSendStoryDialog(bill)"><i class="fa fa-print"></i> Gửi tin nhắn</a>
+              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right" (click)="print(bill)"><i class="fa fa-print"></i> In hóa đơn</a>
+              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right mr-h" (click)="showEditInfoDialog(bill, employee, employees)"><i class="fa fa-flag"></i> Cập nhật trạng thái</a>
+              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right mr-h" (click)="showUpdatePaidHistoryDialog(bill)"><i class="fa fa-edit"></i> Cập nhật chi phí</a>
             </div>
             <div class="card-block" style="padding: 1.5rem 1rem 1rem;">
               <div class="row mb-2">
@@ -56,7 +60,7 @@
 
                 <div class="col-sm-4 info-column">
                   <h6><i class="fa fa-user"></i> Thông tin người nhận
-                  <i class="fa fa-pencil editor" *ngIf="load_done.getValue()" (click)="openUpdateReceiverInfoDialog()"></i></h6>
+                  <i class="fa fa-pencil editor" *ngIf="load_done.getValue() && !isCancel" (click)="openUpdateReceiverInfoDialog()"></i></h6>
                   <div>Họ tên: {{bill.related_people.receiver_name?bill.related_people.receiver_name:"không có"}}</div>
                   <div>Số điện thoại: {{bill.related_people.receiver_phone?bill.related_people.receiver_phone:"không có"}}</div>
                   <div>Địa chỉ: {{bill.related_people.receiver_address?bill.related_people.receiver_address:"không có"}}</div>
@@ -70,7 +74,7 @@
 
                 <div class="col-sm-4 info-column">
                   <h6><i class="fa fa-user"></i> Thông tin người trả
-                  <i class="fa fa-pencil editor" *ngIf="load_done.getValue()" (click)="openUpdatePayerInfoDialog()"></i></h6>
+                  <i class="fa fa-pencil editor" *ngIf="load_done.getValue() && !isCancel" (click)="openUpdatePayerInfoDialog()"></i></h6>
                   <div>Họ tên: {{bill.related_people.payer_name?bill.related_people.receiver_name:"không có"}}</div>
                   <div>Số điện thoại: {{bill.related_people.payer_phone?bill.related_people.payer_phone:"không có"}}</div>
                   <div>Địa chỉ: {{bill.related_people.payer_address?bill.related_people.payer_address:"không có"}}</div>
@@ -133,7 +137,7 @@
                     <tbody>
                       <tr>
                         <td class="price-title">Tổng đơn hàng</td>
-                        <td class="text-right">{{bill.bill_items_total_price | accounting}}</td>
+                        <td class="text-right">+ {{bill.bill_items_total_price | accounting}}</td>
                       </tr>
                       <tr>
                         <td class="price-title">Khuyến mãi</td>

@@ -97,6 +97,8 @@ export class BillsComponent implements OnInit {
     this.loadBrandByEmployeeData(this.employeeData.brand_id);
     this.loadEmployeeData();
     this.subscribeTopicByFCM();
+
+    moment.locale('vi');
   }
 
   async loadBrandByEmployeeData(brandId: string) {
@@ -719,7 +721,7 @@ export class BillsComponent implements OnInit {
       this.onLoadDailySummary(true);
       this.loadBillData();
     } catch (err) {
-      console.log("updateBillActivity",err);
+      console.log("updateBillActivity", err);
       this.alertUpdateFailed();
     }
   }
@@ -750,7 +752,8 @@ export class BillsComponent implements OnInit {
   }
   detectBillActivityStatus(bill): boolean {
     if (bill.activity.action == "BILL_COLLECTED_MONEY"
-      || bill.activity.action == "BILL_MODIFIED_AT_COLLECTED_MONEY") {
+      || bill.activity.action == "BILL_MODIFIED_AT_COLLECTED_MONEY"
+      || bill.activity.action.indexOf("CANCEL") >= 0) {
       return false;
     }
     return true;
@@ -758,5 +761,65 @@ export class BillsComponent implements OnInit {
 
   timeFromNow(time) {
     return moment(time).fromNow();
+  }
+
+  showCancelBillDialog(bill: any) {
+    swal({
+      title: 'Bạn muốn hủy đơn hàng?',
+      text: 'Đơn hàng sẽ chuyển sang trạng thái hủy.',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Hủy đơn hàng',
+      cancelButtonText: 'Bỏ qua'
+    }).then((result) => {
+      console.log(result)
+      if (result) {
+        this.cancelBill(bill)
+        // result.dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
+      } else if (result.dismiss === 'cancel') {
+
+      }
+    })
+  }
+
+  async cancelBill(bill: any) {
+    try {
+      let request = {
+        billId: bill.id
+      }
+      let response = await this.innowayApi.bill.cancel(request);
+      this.alertDeleteSuccess()
+      this.loadBillData()
+      console.log(JSON.stringify(response));
+    } catch (err) {
+      this.alertDeleteFail()
+      console.log(err)
+    }
+  }
+
+  detectShowCancelButton(bill): boolean {
+    if (bill.activity.action) {
+      if (bill.activity.action.indexOf("CANCEL") >= 0
+        || bill.activity.action.indexOf("DISTRIBUTED") >= 0) {
+        return true
+      }
+    }
+    return false
+  }
+
+  alertDeleteSuccess() {
+    return swal({
+      title: 'Hủy đơn hàng thành công',
+      type: 'success',
+      timer: 2000
+    })
+  }
+
+  alertDeleteFail() {
+    return swal({
+      title: 'Hủy đơn hàng thất bại',
+      type: 'warning',
+      timer: 2000
+    })
   }
 }

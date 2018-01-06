@@ -27,6 +27,11 @@
               <span>{{item.fullname?item.fullname:"không có"}}</span>
             </template>
       </data-table-column>
+      <data-table-column property="chatbot" header="Chatbot" [sortable]="true">
+        <template #dataTableCell let-item="item">
+              <span>{{item.chatbot_subscriber_id?"có kết nối":"không kết nối"}}</span>
+            </template>
+      </data-table-column>
       <!-- <data-table-column property="birthday" header="Ngày sinh" [sortable]="true">
         <template #dataTableCell let-item="item">
               <span>{{item.birthday?(item.birthday | date:'dd/MM/yyyy'):"không có thông tin"}}</span>
@@ -40,6 +45,8 @@
       <data-table-column header="Actions">
         <template #dataTableCell let-item="item">
               <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
+              <button (click)="sendMessageChatbot(item)" *ngIf="item.chatbot_subscriber_id" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-send"></i></button>
+              <button (click)="sendStoryChatbot(item)" *ngIf="item.chatbot_subscriber_id" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-send-o"></i></button>
             </template>
       </data-table-column>
     </data-table>

@@ -39,6 +39,7 @@
             <div>{{bill.updated_at | date:'HH:mm'}}</div>
             <!-- <div>{{bill.bill_ship_detail?.received_time | date:'dd/MM/yyyy HH:mm'}}</div> -->
             <div>{{timeFromNow(bill.bill_ship_detail?.received_time)}}</div>
+            <span *ngIf="!detectShowCancelButton(bill)" class="cancel-bill" (click)="showCancelBillDialog(bill)"><i class="fa fa-remove mr-h"></i>Hủy đơn hàng</span>
           </div>
         </div>
         <div class="bill-button">

@@ -53,6 +53,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   payerAddress: string;
   payerNote: string;
 
+  isCancel: boolean = false;
+
   constructor(
     private globals: Globals,
     private route: ActivatedRoute,
@@ -203,7 +205,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     try {
       if (this.employee.brand_id) {
         this.brand = await this.innowayApi.brand.getItem(this.employee.brand_id, {
-          query: { fields: ["$all"] }
+          query: {
+            fields: ["$all", {
+              thirdparty_chatbot: ["$all"]
+            }],
+          }
         })
         this.ref.detectChanges();
       }
@@ -245,6 +251,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
           fields: this.itemFields
         }
       }))
+
       this.bill = this.item.getValue();
 
       if (this.bill.customer) {
@@ -279,16 +286,14 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         this.payAmount = payAmount;
       }
 
-
-      // receiverName: string;
-      // receiverPhone: string;
-      // receiverAddress: string;
-      // receiverNote: string;
-      //
-      // payerName: string;
-      // payerPhone: string;
-      // payerAddress: string;
-      // payerNote: string;
+      if (this.bill.activity.action) {
+        if (this.bill.activity.action.indexOf("CANCEL") >= 0
+          || this.bill.activity.action.indexOf("DISTRIBUTED") >= 0) {
+          this.isCancel = true
+        } else {
+          this.isCancel = false
+        }
+      }
 
       if (this.bill.related_people == null) {
         this.bill.related_people = {};
@@ -319,6 +324,15 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       this.payerNote =
         this.bill.related_people.payer_note ?
           this.bill.related_people.payer_note : "không có";
+
+      if (this.brand.thirdparty_chatbot) {
+        if (this.bill.channel == "chatbot") {
+          alert("chatbot");
+        }
+        if (this.bill.customer.chatbot_subscriber_id) {
+          alert("chatbot");
+        }
+      }
 
       console.log("setData", JSON.stringify(this.bill));
       this.ref.detectChanges();
@@ -357,6 +371,22 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     return swal({
       title: 'Cập nhật thành công',
       type: 'success',
+      timer: 2000
+    })
+  }
+
+  alertDeleteSuccess() {
+    return swal({
+      title: 'Hủy đơn hàng thành công',
+      type: 'success',
+      timer: 2000
+    })
+  }
+
+  alertDeleteFail() {
+    return swal({
+      title: 'Hủy đơn hàng thất bại',
+      type: 'warning',
       timer: 2000
     })
   }
@@ -789,31 +819,59 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     })
   }
 
-  async sendInvoiceToCustomer() {
+  async sendInvoiceToCustomer(bill: any) {
     try {
       let params = {
-        contentGreeting: {
-          text: "",
-        },
-        contentReceipt: {
-          total_price: 0,
-          vat_fee: 0,
-          amount_of_sub_fee: 0,
-          amount_of_promotion: 0,
-          ship_fee: 0,
-          ship_method: "",
-          created_at: "",
-          code: "",
-          brand: {},
-          branch: {},
-          address: "",
-          customer_fullname: "",
-          product: []
-        }
+        total_price: bill.total_price,
+        vat_fee: bill.vat_fee,
+        amount_of_sub_fee: bill.amount_of_sub_fee,
+        amount_of_promotion: bill.amount_of_promotion,
+        ship_fee: bill.ship_detail.ship_fee ? bill.ship_detail.ship_fee : 0,
+        ship_method: bill.ship_detail.ship_method,
+        created_at: bill.created_at,
+        code: bill.code,
+        address: bill.address,
+        customer_fullname: bill.customer.fullname,
+        greeting: "Chào {{first_name}} {{last_name}}, đơn hàng " + bill.code + " của quý khách đã được xác nhận thành công",
       }
-      await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(params)
+      let response = await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(params)
+      console.log(JSON.stringify(response))
     } catch (err) {
+      console.log(err)
+    }
+  }
 
+  showCancelBillDialog(bill: any) {
+    swal({
+      title: 'Bạn muốn hủy đơn hàng?',
+      text: 'Đơn hàng sẽ chuyển sang trạng thái hủy.',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Hủy đơn hàng',
+      cancelButtonText: 'Bỏ qua'
+    }).then((result) => {
+      console.log(result)
+      if (result) {
+        this.cancelBill(bill)
+        // result.dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
+      } else if (result.dismiss === 'cancel') {
+
+      }
+    })
+  }
+
+  async cancelBill(bill: any) {
+    try {
+      let request = {
+        billId: bill.id
+      }
+      let response = await this.innowayApi.bill.cancel(request);
+      this.alertDeleteSuccess()
+      this.setData()
+      console.log(JSON.stringify(response));
+    } catch (err) {
+      this.alertDeleteFail()
+      console.log(err)
     }
   }
 }

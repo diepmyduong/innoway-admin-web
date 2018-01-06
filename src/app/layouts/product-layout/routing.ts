@@ -8,13 +8,9 @@ export const ProductLayoutRouting = {
   children: [
     {
       path: '',
-      redirectTo: 'dashboard',
+      redirectTo: 'products',
       pathMatch: 'full',
-    },
-    {
-      path: 'dashboard',
-      loadChildren: 'app/apps/dashboard/dashboard.module#DashboardModule'
-    },
+    },  
     {
       path: 'products',
       loadChildren: 'app/apps/products/products.module#ProductsModule'

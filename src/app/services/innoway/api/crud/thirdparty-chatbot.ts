@@ -131,26 +131,20 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
   }
 
   async sendInvoiceToCustomer(params: {
-    contentGreeting: {
-      text: string,
-    },
-    contentReceipt: {
-      total_price: number,
-      vat_fee: number,
-      amount_of_sub_fee: number,
-      amount_of_promotion: number,
-      ship_fee: number,
-      ship_method: string,
-      created_at: string,
-      code: string,
-      brand: any,
-      branch: any,
-      address: string,
-      customer_fullname: string,
-      product: any[]
-    }
+    total_price: number,
+    vat_fee: number,
+    amount_of_sub_fee: number,
+    amount_of_promotion: number,
+    ship_fee: number,
+    ship_method: string,
+    created_at: string,
+    code: string,
+    address: string,
+    customer_fullname: string,
+    greeting: string
   }) {
-    let { contentGreeting, contentReceipt } = params;
+    let { total_price, vat_fee, amount_of_sub_fee, amount_of_promotion,
+      ship_fee, ship_method, created_at, code, address, customer_fullname, greeting } = params;
     let setting = {
       method: 'POST',
       uri: this.apiUrl(`send_invoice_to_customer`),
@@ -159,7 +153,10 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
         'access_token': this.api.innowayAuth.adminToken
       },
       json: true,
-      body: { contentGreeting, contentReceipt }
+      body: {
+        total_price, vat_fee, amount_of_sub_fee, amount_of_promotion,
+        ship_fee, ship_method, created_at, code, address, customer_fullname, greeting
+      }
     }
     var res: any = await this.exec(setting);
     var row = res.results.object;

@@ -84,11 +84,18 @@
         </small>
       </tab>
     </tabset>
-    <button type="button" class="btn btn-login" (click)="registerNewBrand(ngForm)">
+    <div class="input-row" style="text-align: center;border: none;">
+      <button type="button" class="btn btn-login" (click)="registerNewBrand(ngForm)">
       <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner"
         style="font-size:24px"></i>
       <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng ký</span>
     </button>
+      <button type="button" class="btn btn-login" (click)="login()">
+      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner"
+        style="font-size:24px"></i>
+      <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng nhập</span>
+    </button>
+    </div>
     <!-- <button type="submit" class="btn btn-sm btn-primary" (click)="registerNewBrand()"><i class="fa fa-dot-circle-o"></i> Đăng ký</button> -->
   </form>
 </div>

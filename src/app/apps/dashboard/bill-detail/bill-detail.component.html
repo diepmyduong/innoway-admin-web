@@ -15,6 +15,7 @@
 </div>
 <div class="content animated fadeIn">
   <h4>Thông tin đơn hàng</h4>
+  <span *ngIf="!isCancel" class="cancel-bill" (click)="showCancelBillDialog(item)"><i class="fa fa-remove mr-h"></i>Hủy đơn hàng</span>
   <table class="table">
     <tbody>
       <tr>

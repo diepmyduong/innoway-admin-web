@@ -22,97 +22,136 @@
         </div>
         <div class="card-block">
           <form #itemFrm="ngForm">
-            <!-- <div class="form-group row">
+            <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Logo</label>
               <div class="col-md-10">
                 <input type="text" #logoControl="ngModel" [(ngModel)]="logo" name="logo" url class="form-control input-control" [placeholder]="image?'':'Nhập logo'" />
                 <small *ngIf="logoControl.errors?.url" class="text-muted danger">
                     (Link không hợp lệ)
                   </small>
-                <img *ngIf="logoControl.value && logoControl.valid" style="width:auto;height:80px;" [src]="logoControl.value" />
+                <img *ngIf="logoControl.value && logoControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="logoControl.value" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
+              <label class="col-md-2 header-text" for="text-input">Primary</label>
               <div class="col-md-10">
                 <input type="text" #primaryControl="ngModel" [(ngModel)]="primary" name="primary" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <input [(colorPicker)]="primarypickerColor" [style.background]="primarypickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'primary');primarypickerColor=$event" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
+              <label class="col-md-2 header-text" for="text-input">Light</label>
               <div class="col-md-10">
                 <input type="text" #lightControl="ngModel" [(ngModel)]="light" name="light" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <input [(colorPicker)]="lightpickerColor" [style.background]="lightpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'light');lightpickerColor=$event" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
+              <label class="col-md-2 header-text" for="text-input">Dark</label>
               <div class="col-md-10">
                 <input type="text" #darkControl="ngModel" [(ngModel)]="dark" name="dark" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <input [(colorPicker)]="darkpickerColor" [style.background]="darkpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'dark');darkpickerColor=$event" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
+              <label class="col-md-2 header-text" for="text-input">Logo</label>
               <div class="col-md-10">
-                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <input type="text" #logoControl="ngModel" [(ngModel)]="logo" name="logo" class="form-control input-control" [placeholder]="'Nhập mã màu'">
+                <small *ngIf="logoControl.errors?.url" class="text-muted danger">
+                    (Link không hợp lệ)
+                  </small>
+                <img *ngIf="logoControl.value && logoControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="logoControl.value" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
+              <label class="col-md-2 header-text" for="text-input">Banner Logo</label>
               <div class="col-md-10">
-                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <input type="text" #bannerLogoControl="ngModel" [(ngModel)]="bannerLogo" name="bannerLogo" class="form-control input-control" [placeholder]="'Nhập mã màu'">
+                <small *ngIf="bannerLogoControl.errors?.url" class="text-muted danger">
+                    (Link không hợp lệ)
+                  </small>
+                <img *ngIf="bannerLogoControl.value && bannerLogoControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="bannerLogoControl.value" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
+              <label class="col-md-2 header-text" for="text-input">Banner Background Image</label>
               <div class="col-md-10">
-                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <input type="text" #bannerBackgroundImageControl="ngModel" [(ngModel)]="bannerBackgroundImage" name="bannerBackgroundImage" class="form-control input-control" [placeholder]="'Nhập mã màu'">
+                <small *ngIf="bannerBackgroundImageControl.errors?.url" class="text-muted danger">
+                    (Link không hợp lệ)
+                  </small>
+                <img *ngIf="bannerBackgroundImageControl.value && bannerBackgroundImageControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="bannerBackgroundImageControl.value" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
+              <label class="col-md-2 header-text" for="text-input">Banner Background Color</label>
               <div class="col-md-10">
-                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <input type="text" #bannerBackgroundColorControl="ngModel" [(ngModel)]="bannerBackgroundColor" name="bannerBackgroundColor" class="form-control input-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="bannerBackgroundColorpickerColor" [style.background]="bannerBackgroundColorpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'bannerBackgroundColor');bannerBackgroundColorpickerColor=$event" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
+              <label class="col-md-2 header-text" for="text-input">Default Product Image</label>
               <div class="col-md-10">
-                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <input type="text" #defaultProductImageControl="ngModel" [(ngModel)]="defaultProductImage" name="defaultProductImage" class="form-control input-control" [placeholder]="'Nhập mã màu'">
+                <small *ngIf="defaultProductImageControl.errors?.url" class="text-muted danger">
+                    (Link không hợp lệ)
+                  </small>
+                <img *ngIf="defaultProductImageControl.value && defaultProductImageControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="defaultProductImageControl.value" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
+              <label class="col-md-2 header-text" for="text-input">Default Product Color</label>
               <div class="col-md-10">
-                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <input type="text" #defaultProductColorControl="ngModel" [(ngModel)]="defaultProductColor" name="defaultProductColor" class="form-control input-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="defaultProductColorpickerColor" [style.background]="defaultProductColorpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'defaultProductColor');defaultProductColorpickerColor=$event" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
+              <label class="col-md-2 header-text" for="text-input">Default Promotion Cover</label>
               <div class="col-md-10">
-                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <input type="text" #defaultPromotionCoverControl="ngModel" [(ngModel)]="defaultPromotionCover" name="defaultPromotionCover" class="form-control input-control" [placeholder]="'Nhập mã màu'">
+                <small *ngIf="defaultPromotionCoverControl.errors?.url" class="text-muted danger">
+                    (Link không hợp lệ)
+                  </small>
+                <img *ngIf="defaultPromotionCoverControl.value && defaultPromotionCoverControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="defaultPromotionCoverControl.value" />
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
+              <label class="col-md-2 header-text" for="text-input">Navbar Color</label>
               <div class="col-md-10">
-                <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
+                <input type="text" #navbarColorControl="ngModel" [(ngModel)]="navbarColor" name="navbarColor" class="form-control input-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="navbarColorpickerColor" [style.background]="navbarColorpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'navbarColor');navbarColorpickerColor=$event" />
               </div>
-            </div> -->
+            </div>
             <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Footer Color</label>
+              <div class="col-md-10">
+                <input type="text" #footerColorControl="ngModel" [(ngModel)]="footerColor" name="footerColor" class="form-control input-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="footerColorpickerColor" [style.background]="footerColorpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'footerColor');footerColorpickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Price Color</label>
+              <div class="col-md-10">
+                <input type="text" #priceColorControl="ngModel" [(ngModel)]="priceColor" name="priceColor" class="form-control input-control" [placeholder]="'Nhập mã màu'">
+                <input [(colorPicker)]="priceColorpickerColor" [style.background]="priceColorpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'priceColor');priceColorpickerColor=$event" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Logo Circle</label>
+              <div class="col-md-10">
+                <input type="text" #logoCircleControl="ngModel" [(ngModel)]="logoCircle" name="logoCircle" class="form-control input-control" [placeholder]="'Nhập mã màu'">
+                <small *ngIf="logoCircleControl.errors?.url" class="text-muted danger">
+                    (Link không hợp lệ)
+                  </small>
+                <img *ngIf="logoCircleControl.value && logoCircleControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="logoCircleControl.value" />
+              </div>
+            </div>
+            <div class="form-group row" [hidden]="true">
               <label class="col-md-2 header-text" for="text-input">Nội dung JSON</label>
               <div class="col-md-10">
-                <textarea type="text" #contentControl="ngModel" [(ngModel)]="contentJSON" name="contentJSON" class="form-control input-control input-control" [placeholder]="JSON" ></textarea>                
+                <textarea type="text" #contentControl="ngModel" [(ngModel)]="contentJSON" name="contentJSON" class="form-control input-control input-control" [placeholder]="JSON"></textarea>
               </div>
             </div>
             <div class="form-group row">
@@ -128,7 +167,7 @@
           </form>
         </div>
         <div class="card-footer">
-          <button (click)="updateTheme()"class="btn btn-ladda btn-success ml-auto" data-style="expand-right"><i class="fa fa-plus"></i> Thêm và tạo mới</button>
+          <button (click)="updateTheme()" class="btn btn-ladda btn-success ml-auto" data-style="expand-right"><i class="fa fa-plus"></i> Thêm và tạo mới</button>
           <!-- <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
           <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button> -->
         </div>

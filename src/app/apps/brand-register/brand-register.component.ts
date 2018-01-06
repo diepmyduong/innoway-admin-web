@@ -4,6 +4,8 @@ import { InnowayApiService } from "app/services/innoway";
 import { NgForm } from "@angular/forms";
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import * as Console from 'console-prefix';
+import { Router } from "@angular/router";
+
 declare var swal: any;
 
 @Component({
@@ -38,7 +40,8 @@ export class BrandRegisterComponent implements OnInit {
   isValid: boolean = false;
   submitting = false;
 
-  constructor(public innowayApi: InnowayApiService) {
+  constructor(public innowayApi: InnowayApiService,
+    public router: Router) {
 
   }
 
@@ -48,24 +51,26 @@ export class BrandRegisterComponent implements OnInit {
 
   async registerNewBrand(form: NgForm) {
     try {
-      // if (form.valid) {
-      let request: any = {
-        brand_name: this.brandName,
-        brand_address: this.brandAddress,
-        brand_phone: this.brandPhone,
-        brand_code: this.brandCode,
+      if (form.valid) {
+        let request: any = {
+          brand_name: this.brandName,
+          brand_address: this.brandAddress,
+          brand_phone: this.brandPhone,
+          brand_code: this.brandCode,
 
-        longitude: 106.694035,
-        latitude: 10.787068,
+          longitude: 106.694035,
+          latitude: 10.787068,
 
-        admin_fullname: this.adminFullname,
-        admin_phone: this.adminPhone,
-        admin_email: this.adminEmail,
-        admin_password: this.adminPassword
+          admin_fullname: this.adminFullname,
+          admin_phone: this.adminPhone,
+          admin_email: this.adminEmail,
+          admin_password: this.adminPassword
+        }
+        let data = await this.innowayApi.brand.registerNewBrand(request)
+        console.log("register", JSON.stringify(data))
+      } else {
+        this.alertFormNotValid("Vui lòng kiểm tra lại nội dung đã nhập")
       }
-      let data = await this.innowayApi.brand.registerNewBrand(request)
-      // }
-      console.log("register", JSON.stringify(data))
     } catch (err) {
       console.log(err)
     }
@@ -88,6 +93,10 @@ export class BrandRegisterComponent implements OnInit {
       showConfirmButton: false,
       timer: 1000,
     })
+  }
+
+  login() {
+    this.router.navigate(["login"])
   }
 
 }
