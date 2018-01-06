@@ -471,7 +471,7 @@ export class PosComponent implements OnInit {
         for (let i = 0; i < topping.values.length; i++) {
           let option = topping.values[i];
           if (option.price == 0) {
-            product.selected_toppings.push({ option: option, topping_id: topping.id, type: 'single' });
+            product.selectedToppings.push({ option: option, topping_id: topping.id, type: 'single' });
             return;
           }
         }
