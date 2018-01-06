@@ -64,7 +64,7 @@ export class PosComponent implements OnInit {
   customerPhoneAtStore: string = "";
   customerNameAtStore: string = "";
 
-  selectedProduct: Array<any> = new Array<any>();
+  selectedProducts: Array<any> = new Array<any>();
   selectedTopping: Array<any> = new Array<any>();
   allProductData: Array<any> = new Array<any>();
   autocompleteCustomerData: Array<any> = new Array<any>();
@@ -167,6 +167,7 @@ export class PosComponent implements OnInit {
   subFeeNote: string;
 
   shipFee: string = "0";
+  addressValidated: boolean = true;
   deliveryTime: any;
   paidType: string = "partial";
 
@@ -185,6 +186,7 @@ export class PosComponent implements OnInit {
 
   isQueryingProduct: boolean = false;
   isDetectingNameFromPhone: boolean = false;
+  isCalculatingShipFee: boolean = false;
   isCreatingOrder: boolean = false;
 
   methodModel = 'store';
@@ -239,7 +241,7 @@ export class PosComponent implements OnInit {
       doc.body.classList.remove('no-scroll');
     });
 
-    this.deliveryTime = moment(Date.now()).format('MM/DD/yyyy HH:mm');
+    this.deliveryTime = moment().format('MM/DD/yyyy HH:mm');
   }
 
   checkVAT(event) {
@@ -385,109 +387,41 @@ export class PosComponent implements OnInit {
     }
   }
 
-  async addOrder() {
-    if (!this.selectedProduct || this.selectedProduct.length == 0) {
-      swal ("Lỗi nhập liệu", "Không được để trống đơn hàng.", "warning");
-      return;
-    }
-
-    if (this.customerNameAtStore && !this.customerPhoneAtStore) {
-      swal ("Lỗi nhập liệu", "Không được để trống SĐT khi đã nhập tên khách hàng.", "warning");
-      return;
-    }
-
-    this.isCreatingOrder = true;
-
-    // Create new account
-    if (this.customerId == null) {
-      if (this.customerPhoneAtStore) {
-        try {
-          this.customer = await this.innowayApi.customer.add({ fullname: this.customerNameAtStore, phone: '+84' + this.customerPhoneAtStore,});
-          this.customerId = this.customer.id;
-        } catch (err) {
-          swal('Lỗi tạo khách hàng', 'Không tạo được khách hàng', 'error');
-          console.log(err.message);
-          this.isCreatingOrder = false;
-          return;
-        }
-      }
-    } else {
-      if (!this.customer.fullname && this.customerNameAtStore) {
-        try {
-          await this.innowayApi.customer.update(this.customerId, { fullname: this.customerNameAtStore });
-        } catch (err) {
-          swal('Lỗi cập nhật', 'Không cập nhật được tên khách hàng', 'error');
-          this.isCreatingOrder = false;
-          return;
-        }
-      }
-    }
-
-    if (this.methodModel == 'store') {
-      this.orderAtStore();
-    } else {
-      this.orderOnline();
-    }
-  }
-
-  async getToppings(product) {
+  async getToppings(product, rowIndex) {
     let productId = product.id;
     let productToppings = product.toppings?[...product.toppings]:[];
     let selectedToppings;
-    if (product.selected_toppings) {
-      selectedToppings = product.selected_toppings;
+    if (product.selectedToppings) {
+      selectedToppings = _.cloneDeep(product.selectedToppings);
     } else {
       selectedToppings = [];
     }
+    console.log(selectedToppings)
     try {
-      // let data = await this.innowayApi.product.getItem(productId, {
-      //   query: {
-      //     fields: ["id", {
-      //       toppings: ["id", {
-      //         topping: ["id", "name", {
-      //           values: ["id", "name", "price"]
-      //         }]
-      //       }]
-      //     }]
-      //   }
-      // })
-      this.openToppingDialog(productId, productToppings, selectedToppings);
-      // this.selectedTopping = productToppings != null ? productToppings : null;
-      // if (this.selectedTopping != null) {
-      //   this.openToppingDialog(productId, productToppings, product.toppings);
-      // } else {
-      //   this.alertItemNotFound();
-      // }
+      this.openToppingDialog(productId, rowIndex, productToppings, selectedToppings);
     } catch (err) {
       await this.alertItemNotFound()
       console.log("ERRRR", err);
     }
   }
 
-  openToppingDialog(productId, productToppings, selectedToppings) {
+  openToppingDialog(productId, rowIndex, productToppings, selectedToppings) {
     this.config.data.productToppings = productToppings;
     this.config.data.selectedToppings = selectedToppings;
     this.dialogRef = this.dialog.open(ToppingDialog, this.config);
 
     this.dialogRef.afterClosed().subscribe((result) => {
       if (result && result.data) {
-        this.addToppingsToProduct(result.data, productId);
+        this.addToppingsToProduct(result.data, productId, rowIndex);
       }
       this.dialogRef = null;
     });
   }
 
-  addToppingsToProduct(selectedToppings: any, id: string) {
-    let pos = -1;
-    this.selectedProduct.forEach((item, index) => {
-      if (item.id == id) {
-        pos = index;
-        return;
-      }
-    })
-
-    let product = this.selectedProduct[pos];
-    product.selected_toppings = selectedToppings;
+  addToppingsToProduct(selectedToppings: any, id: string, rowIndex) {
+    let product = this.selectedProducts[rowIndex];
+    product.selectedToppings = selectedToppings;
+    product.pure = false;
 
     // let topping_value_ids = [];
     // selectedToppings.forEach(value => {
@@ -497,14 +431,14 @@ export class PosComponent implements OnInit {
     // console.log(topping_value_ids);
 
     let total = 0;
-    product.selected_toppings.forEach((item, index) => {
+    product.selectedToppings.forEach((item, index) => {
       total += Number.parseInt(item.option.price);
     });
 
     let priceWithTopping = Number.parseInt(product.price) + total;
     product.priceWithTopping = priceWithTopping.toString();
     product.total = (priceWithTopping * Number.parseInt(product.amount)).toString();
-    this.selectedProduct[pos] = product;
+    this.selectedProducts[rowIndex] = product;
 
     this.updateTotalAmount();
     this.ref.detectChanges();
@@ -515,27 +449,27 @@ export class PosComponent implements OnInit {
     let price = Number.parseFloat(product.price);
     let pos = -1;
 
-    for (let i = 0; i < this.selectedProduct.length; i++) {
-      let item = this.selectedProduct[i];
-      if (item.id == product.id && item.priceWithTopping == item.price) {
+    for (let i = 0; i < this.selectedProducts.length; i++) {
+      let item = this.selectedProducts[i];
+      if (item.id == product.id && item.pure) {
         pos = i;
         break;
       }
     }
 
     if (pos > -1) {
-      this.updateAmount(this.selectedProduct[pos], this.selectedProduct[pos].amount + 1);
+      this.updateAmount(this.selectedProducts[pos], this.selectedProducts[pos].amount + 1, pos);
       return;
     }
 
-    product.selected_toppings = [];
+    product.selectedToppings = [];
     product.toppings.forEach(item => {
       let topping = item.topping;
       if (topping.is_select_multiple == false) {
         for (let i = 0; i < topping.values.length; i++) {
           let option = topping.values[i];
           if (option.price == 0) {
-            product.selected_toppings.push({option: option, topping_id: topping.id, type: 'single'});
+            product.selectedToppings.push({option: option, topping_id: topping.id, type: 'single'});
             return;
           }
         }
@@ -554,51 +488,24 @@ export class PosComponent implements OnInit {
       priceWithTopping: price,
       total: total.toString(),
       toppings: product.toppings,
-      selected_toppings: product.selected_toppings,
+      selectedToppings: product.selectedToppings,
+      pure: true,
     }
 
-    this.selectedProduct.push(item);
+    this.selectedProducts.push(item);
 
     this.updateTotalAmount();
     this.ref.detectChanges();
   }
 
   removeProduct(product,index) {
-    // console.log(index.index)
-    // for (var i = this.selectedProduct.length; i--;) {
-    //   let item = this.selectedProduct[i];
-    //
-    //   let isSameTopping = false;
-    //   let toppingItem: Set<any> = new Set<any>();
-    //
-    //   if (item.toppings.length > 0) {
-    //     item.toppings.forEach((topping, index) => {
-    //       toppingItem.add(topping);
-    //     })
-    //
-    //     let currentSize = toppingItem.size;
-    //
-    //     product.toppings.forEach((topping, index) => {
-    //       toppingItem.add(topping);
-    //     })
-    //
-    //     if (toppingItem.size == currentSize) {
-    //       isSameTopping = true;
-    //     }
-    //   }
-    //
-    //   if (this.selectedProduct[i].id == product.id
-    //     && (isSameTopping || this.selectedProduct[i].toppings.length == 0)) {
-    //     this.selectedProduct.splice(i, 1);
-    //   }
-    // }
-    this.selectedProduct.splice(index, 1);
+    this.selectedProducts.splice(index, 1);
     this.updateTotalAmount();
     this.ref.detectChanges();
   }
 
   removeAllProduct() {
-    this.selectedProduct = new Array<any>();
+    this.selectedProducts = new Array<any>();
     this.updateTotalAmount();
     this.ref.detectChanges();
   }
@@ -607,7 +514,6 @@ export class PosComponent implements OnInit {
     swal({
       title: 'Không còn tồn tại',
       type: 'warning',
-      timer: 2000,
       allowOutsideClick: false,
     })
   }
@@ -616,7 +522,6 @@ export class PosComponent implements OnInit {
     return swal({
       title: 'Cập nhật thành công',
       type: 'success',
-      timer: 2000,
       allowOutsideClick: false,
     })
   }
@@ -625,7 +530,6 @@ export class PosComponent implements OnInit {
     return swal({
       title: 'Đã cập nhật',
       type: 'success',
-      timer: 2000,
       allowOutsideClick: false,
     })
   }
@@ -680,22 +584,13 @@ export class PosComponent implements OnInit {
     }
   }
 
-  updateAmount(product, amount) {
-    console.log(product, amount);
-    let isAvaible = false;
-    let pos;
-
-    this.selectedProduct.forEach((item, index) => {
-      if (item.id == product.id) {
-        isAvaible = true;
-        pos = index;
-      }
-    })
+  updateAmount(product, amount, rowIndex) {
+    let pos = rowIndex;
 
     let total = Number.parseInt(amount) * Number.parseInt(product.priceWithTopping);
 
-    this.selectedProduct[pos].amount = amount;
-    this.selectedProduct[pos].total = total;
+    this.selectedProducts[pos].amount = amount;
+    this.selectedProducts[pos].total = total;
 
     this.updateTotalAmount();
     this.ref.detectChanges();
@@ -703,7 +598,7 @@ export class PosComponent implements OnInit {
 
   updateTotalAmount() {
     let total = 0;
-    this.selectedProduct.forEach(item => {
+    this.selectedProducts.forEach(item => {
       total += Number.parseInt(item.total);
     })
     // this.totalAmount = total.toString();
@@ -835,6 +730,7 @@ export class PosComponent implements OnInit {
 
   async calculateShipFee(longitude, latitude) {
     try {
+      this.isCalculatingShipFee = true;
       let data = {
         "longitude": longitude,
         "latitude": latitude
@@ -846,10 +742,14 @@ export class PosComponent implements OnInit {
       } else {
         this.outputShipFee = 0;
       }
+      this.isCalculatingShipFee = false;
+      this.addressValidated = true;
       this.ref.detectChanges();
       this.updateTotalAmount();
     } catch (err) {
-
+      this.isCalculatingShipFee = false;
+      this.addressValidated = false;
+      this.ref.detectChanges();
     }
   }
 
@@ -961,6 +861,63 @@ export class PosComponent implements OnInit {
     this.updateTotalAmount();
   }
 
+  async addOrder() {
+    if (!this.selectedProducts || this.selectedProducts.length == 0) {
+      swal ("Lỗi nhập liệu", "Không được để trống đơn hàng.", "warning");
+      return;
+    }
+
+    if (this.customerNameAtStore && !this.customerPhoneAtStore) {
+      swal ("Lỗi nhập liệu", "Không được để trống SĐT khi đã nhập tên khách hàng.", "warning");
+      return;
+    }
+
+    if (this.methodModel == 'online' && (!this.address || this.isCalculatingShipFee || !this.addressValidated)) {
+      swal ("Lỗi địa chỉ", "Địa chỉ giao hàng chưa có hoặc không hỗ trợ.", "warning");
+      return;
+    }
+
+    this.isCreatingOrder = true;
+
+    // Create new account
+    if (this.customerId == null) {
+      if (this.customerPhoneAtStore) {
+        try {
+          let phone;
+          if (this.customerPhoneAtStore.startsWith('0')) {
+            phone = this.customerPhoneAtStore.substr(1);
+          }
+          else {
+            phone = this.customerPhoneAtStore
+          }
+          this.customer = await this.innowayApi.customer.add({ fullname: this.customerNameAtStore, phone: '+84' + this.customerPhoneAtStore,});
+          this.customerId = this.customer.id;
+        } catch (err) {
+          swal('Lỗi tạo khách hàng', 'Không tạo được khách hàng', 'error');
+          console.log(err.message);
+          this.isCreatingOrder = false;
+          return;
+        }
+      }
+    } else {
+      if (!this.customer.fullname && this.customerNameAtStore) {
+        try {
+          await this.innowayApi.customer.update(this.customerId, { fullname: this.customerNameAtStore });
+        } catch (err) {
+          swal('Lỗi cập nhật', 'Không cập nhật được tên khách hàng', 'error');
+          this.isCreatingOrder = false;
+          return;
+        }
+      }
+    }
+
+    if (this.methodModel == 'store') {
+      this.orderAtStore();
+    } else {
+      this.orderOnline();
+    }
+  }
+
   async orderAtStore() {
     try {
 
@@ -987,18 +944,16 @@ export class PosComponent implements OnInit {
       }
 
       let products = [];
-      this.selectedProduct.forEach(product => {
+      this.selectedProducts.forEach(product => {
         let item = {
           product_id: product.id,
-          amount: product.amount,
+          amount: parseInt(product.amount),
           topping_value_ids: []
         }
-        let toppings = [];
-        product.toppings.forEach(topping => {
-          toppings.push(topping.id)
+        product.selectedToppings.forEach(topping => {
+          item.topping_value_ids.push(topping.option.id)
         });
 
-        item.topping_value_ids = toppings;
         products.push(item);
       });
 
@@ -1029,8 +984,14 @@ export class PosComponent implements OnInit {
         this.shipMethod = this.brand.brand_ship.ship_method;
       }
 
-      this.receivedTime = this.deliveryTime ? moment(this.deliveryTime, "MM/DD/YYYY HH:mm").format() : null
-
+      let receivedMoment = moment(this.deliveryTime, "MM/DD/yyyy HH:mm");
+      if (!this.deliveryTime || !receivedMoment.isAfter(moment())) {
+        this.receivedTime == null;
+      }
+      else {
+        this.receivedTime = receivedMoment.format();
+      }
+      console.log("Delivery", this.deliveryTime + " // " + this.receivedTime + " // " + receivedMoment);
 
       let request = {
         "address": this.address,
@@ -1061,18 +1022,16 @@ export class PosComponent implements OnInit {
       }
 
       let products = [];
-      this.selectedProduct.forEach(product => {
+      this.selectedProducts.forEach(product => {
         let item = {
           product_id: product.id,
           amount: product.amount,
           topping_value_ids: []
         }
-        let toppings = [];
-        product.toppings.forEach(topping => {
-          toppings.push(topping.id)
+        product.selectedToppings.forEach(topping => {
+          item.topping_value_ids.push(topping.option.id)
         });
 
-        item.topping_value_ids = toppings;
         products.push(item);
       });
 
@@ -1093,7 +1052,7 @@ export class PosComponent implements OnInit {
   }
 
   resetDefaultValue() {
-    this.selectedProduct = [];
+    this.selectedProducts = [];
     this.promotion = null;
     this.address = null;
     this.longitude = null;
@@ -1107,6 +1066,7 @@ export class PosComponent implements OnInit {
     this.outputAmountOfPurchase = 0;
     this.outputAmountOfPriceItems = 0;
 
+    this.shipFee = "0";
     this.receiveAmount = "0";
     this.payAmount = "0";
     this.returnAmount = "0";
@@ -1114,6 +1074,15 @@ export class PosComponent implements OnInit {
     this.paidType = this.globals.PAID_HISTORY_TYPES[0].code;
 
     this.receivedTime = "0";
+    
+    this.receiverName = "",
+    this.receiverPhone = "",
+    this.receiverAddress = "",
+    this.receiverNote = "",
+    this.payerName = "",
+    this.payerPhone = "",
+    this.payerAddress = "",
+    this.payerNote = "",
     
     this.customerPhoneAtStore = "";
     this.customerNamePlaceholder = "Khách vãng lai";
@@ -1220,150 +1189,5 @@ export class PosComponent implements OnInit {
         this.payerNote = result.payerNote ? result.payerNote : "";
       }
     })
-  }
-}
-
-
-// @Component({
-//   selector: 'topping-dialog',
-//   template: `
-//   <checkbox-topping-checklist [toppings]="selectedTopping"
-//   (updateSelectedTopping)="handleupdateSelectedTopping($event)"></checkbox-topping-checklist>
-//   <p class="header-text">Chi phí: {{totalPrice | accounting}}</p>
-//   <div style="text-align:center;margin:auto;width:100%;">
-//   <button type="button" class="btn btn-ladda btn-primary ml-auto" (click)="dialogRef.close(selectedToppings)">Chấp nhận</button>
-//   </div>`,
-//   styleUrls: ['./pos.component.scss'],
-// })
-// export class ToppingDialog {
-//   private _dimesionToggle = false;
-//   private selectedTopping: any;
-//   initialCount: number = 10;
-//   totalPrice: number = 0;
-//   selectedToppings: any[] = [];
-//   toppings: any[] = [];
-
-//   constructor(
-//     public dialogRef: MatDialogRef<ToppingDialog>,
-//     @Inject(MAT_DIALOG_DATA) public data: any) {
-//     this.toppings = data;
-//   }
-
-//   public setSelectedTopping(selectedTopping) {
-//     this.selectedTopping = selectedTopping;
-//   }
-
-//   handleupdateSelectedTopping(selectedToppings) {
-//     this.totalPrice = 0;
-//     this.selectedToppings = selectedToppings;
-//     this.selectedToppings.forEach(topping => {
-//       this.totalPrice += Number.parseInt(topping.price);
-//     });
-//   }
-
-//   togglePosition(): void {
-//     this._dimesionToggle = !this._dimesionToggle;
-
-//     if (this._dimesionToggle) {
-//       this.dialogRef
-//         .updateSize('500px', '500px')
-//         .updatePosition({ top: '25px', left: '25px' });
-//     } else {
-//       this.dialogRef
-//         .updateSize()
-//         .updatePosition();
-//     }
-//   }
-// }
-
-@Component({
-  selector: 'checkbox-topping-checklist',
-  templateUrl: 'nested-checklist.html',
-  styleUrls: ['./pos.component.scss'],
-})
-export class CheckboxToppingChecklistComponent implements OnInit {
-
-  @Input()
-  toppings: any[];
-
-  totalPrice: number = 0;
-  toppingsData: any[] = [];
-  selectedToppings: any[] = [];
-
-  @Output() updateSelectedTopping = new EventEmitter();
-
-  constructor() {
-
-  }
-
-  ngOnInit(): void {
-
-    // this.toppings.forEach(data => {
-    //   let task = {
-    //     name: data.topping.name,
-    //     completed: false,
-    //     subtasks: [
-    //     ]
-    //   };
-    //   data.topping.values.forEach(data => {
-    //     let subtask = {
-    //       id: data.id,
-    //       name: data.name,
-    //       price: data.price != null ? data.price : 0,
-    //       completed: false,
-    //     }
-    //     task.subtasks.push(subtask);
-    //   });
-    //   this.toppingsData.push(task);
-    // });
-
-  }
-
-  allComplete(task: any): boolean {
-    let subtasks = task.subtasks;
-
-    if (!subtasks) {
-      return false;
-    }
-
-    return subtasks.every(t => t.completed) ? true
-      : subtasks.every(t => !t.completed) ? false
-        : task.completed;
-  }
-
-  someComplete(tasks: any[]): boolean {
-    const numComplete = tasks.filter(t => t.completed).length;
-    return numComplete > 0 && numComplete < tasks.length;
-  }
-
-  setAllCompleted(tasks: any[], completed: boolean) {
-    tasks.forEach(t => {
-      this.updateStatus(t, completed);
-    });
-  }
-
-  updateStatus(subtask, event) {
-    subtask.completed = event;
-    let pos = -1;
-    for (var i = this.selectedToppings.length; i--;) {
-      if (this.selectedToppings[i].name == subtask.name) {
-        pos = i;
-        break;
-      }
-    }
-
-    if (pos != -1) {
-      if (subtask.completed) {
-        this.selectedToppings.push(subtask);
-      } else {
-        this.selectedToppings.splice(pos, 1);
-      }
-    } else {
-      if (subtask.completed) {
-        this.selectedToppings.push(subtask);
-      }
-    }
-
-    this.updateSelectedTopping.emit(this.selectedToppings);
   }
 }

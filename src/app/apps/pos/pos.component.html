@@ -261,6 +261,8 @@
             <div class="form-group row">
               <label class="col-md-4 header-text form-control input-control-label" for="text-input">Phí giao hàng</label>
               <div class="col-md-8">
+                <div class="phone-spinner" *ngIf="isCalculatingShipFee"><i class="fa fa-refresh fa-spin"></i></div>
+                <div class="phone-spinner ship-danger" *ngIf="!isCalculatingShipFee && !addressValidated"><i>Không hỗ trợ</i></div>
                 <input type="text" #shipFeeControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="shipFee" name="shipFee" class="form-control input-control" readonly/>
               </div>
             </div>
@@ -426,7 +428,7 @@
 
   <div class="pos-left-side">
     <div class="pos-top-left">
-      <data-table #itemsTable class="order-item-table" [header]="false" indexColumnHeader="STT" [items]="selectedProduct"
+      <data-table #itemsTable class="order-item-table" [header]="false" indexColumnHeader="STT" [items]="selectedProducts"
       [pagination]="false" [indexColumn]="true" [selectColumn]="false"
       [multiSelect]="false" [substituteRows]="false" [expandableRows]="true" [showReloading]="false"
       [expandableRows]="true">
@@ -435,19 +437,19 @@
             <p class="item-name">{{item?.name}}</p>
           </template>
           <template #dataTableExpand let-item="item" class="order-item-expand">
-            <span *ngIf="!item.selected_toppings?.length" class="item-topping-muted">Không có topping </span>
-            <div class="item-name" *ngIf="item.selected_toppings?.length">
-              <span class="item-topping" *ngFor="let topping of item.selected_toppings">{{topping.option.name}}
+            <span *ngIf="!item.selectedToppings?.length" class="item-topping-muted">Không có topping </span>
+            <div class="item-name" *ngIf="item.selectedToppings?.length">
+              <span class="item-topping" *ngFor="let topping of item.selectedToppings">{{topping.option.name}}
                 <span *ngIf="topping.option.price != 0">- {{topping.option.price | accounting}}</span>
               </span>              
           </div>
           </template>
         </data-table-column>
         <data-table-column header="Số lượng" width="100px">
-          <template #dataTableCell let-item="item">
+          <template #dataTableCell let-item="item" let-row="row">
             <div class="cell-input">
               <input type="number" class="form-control input-control" [value]="item?.amount" #amount 
-              (keyup.enter)="updateAmount(item, amount.value)" (change)="updateAmount(item, amount.value)"/>
+              (keyup.enter)="updateAmount(item, amount.value, row.index)" (change)="updateAmount(item, amount.value, row.index)"/>
             </div>
           </template>
         </data-table-column>
@@ -463,15 +465,13 @@
         </data-table-column>
         <data-table-column header="Actions">
           <template #dataTableCell let-item="item" let-row="row">
-              <span class="btn-group">
-            <button (click)="getToppings(item)"
-                type="button" class="btn btn-success btn-ladda btn-item"
-                data-style="expand-right" [ladda]='item.deleting?true:false'><i class="fa fa-plus-circle"></i></button>
+            <span>
+              <button (click)="getToppings(item, row.index)"
+                  type="button" class="btn btn-item btn-green"><i class="fa fa-plus-circle"></i></button>
               <button (click)="removeProduct(item, row.index)"
-                  type="button" class="btn btn-danger btn-ladda btn-item"
-                  data-style="expand-right" [ladda]='item.deleting?true:false'><i class="fa fa-trash"></i></button>
-                </span>
-            </template>
+                  type="button" class="btn btn-item btn-red"><i class="fa fa-trash"></i></button>
+            </span>
+          </template>
         </data-table-column>
       </data-table>
     </div>
@@ -502,7 +502,7 @@
           <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
         </div>
         <div class="menu-item" *ngFor="let v of productData | async" (click)="addProduct(v)" [hidden]="isQueryingProduct">
-            <img class="product-thumb" src={{v.thumb}}/>
+            <div class="product-thumb"><img src={{v.thumb}}/></div>
             <div class="product-name-text">{{ v.name }} </div>
             <span class="product-price-text">{{ v.price | accounting}}</span>
         </div>

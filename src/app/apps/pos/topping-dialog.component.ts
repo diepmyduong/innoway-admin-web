@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 @Component({
     selector: 'topping-dialog',
     template: `
+        <div class="topping-dialog-wrapper">
         <h2 class="topping-name">Danh sách topping</h2>
         <div class="topping-wrapper">
             <div *ngFor="let item of toppings">
@@ -13,7 +14,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
                     <mat-radio-group *ngIf="!item.topping.is_select_multiple" [(ngModel)]="single_toppings_models[item.topping.id]" 
                     (ngModelChange)="singleToppingChanged($event, item.topping.id)">
                         <mat-radio-button class="row" *ngFor="let option of item.topping.values"
-                        [value]="option">{{option.name}}</mat-radio-button>
+                        [value]="option.id">{{option.name}}</mat-radio-button>
                     </mat-radio-group>
                     <div *ngIf="item.topping.is_select_multiple">
                         <mat-checkbox class="row" *ngFor="let option of item.topping.values" [checked]="multiple_toppings_models[option.id]" 
@@ -32,8 +33,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
                 <button class="btn-topping-cancel btn btn-md" (click)="onNoClick()">Thoát</button>
             </div>
         </div>
+        </div>
     `,
-    styleUrls: ['./pos.component.scss'],
+    styleUrls: ['./topping-dialog.component.scss'],
 })
 export class ToppingDialog implements OnInit {
     private _dimesionToggle = false;
@@ -55,7 +57,7 @@ export class ToppingDialog implements OnInit {
         console.log(this.data);
         this.selectedToppings.forEach(item => {
             if (item.type == 'single') {
-                this.single_toppings_models[item.topping_id] = item.option;
+                this.single_toppings_models[item.topping_id] = item.option.id;
             } else {
                 this.multiple_toppings_models[item.option.id] = true;
             }
@@ -74,8 +76,24 @@ export class ToppingDialog implements OnInit {
     }
 
     singleToppingChanged(event, topping_id) {
+        let option = {};
+        for (let i = 0; i < this.toppings.length; i++) {
+            let topping = this.toppings[i].topping;
+            if (topping.id == topping_id)
+            {
+                for (let j = 0; j < topping.values.length; j++) {
+                    if (topping.values[j].id == event) {
+                        option = topping.values[j];
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        console.log("option", option);
+
         this.deselectToppingByToppingId(topping_id);
-        this.selectTopping(event, topping_id, 'single');
+        this.selectTopping(option, topping_id, 'single');
         this.updateToppingPrice();
     }
 

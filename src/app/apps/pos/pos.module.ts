@@ -24,7 +24,7 @@ import {
 
 import { PosRoutingModule } from './pos-routing.module';
 import { ToppingDialog } from './topping-dialog.component';
-import { PosComponent, CheckboxToppingChecklistComponent } from './pos.component';
+import { PosComponent } from './pos.component';
 
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TextMaskModule } from 'angular2-text-mask';
@@ -75,7 +75,7 @@ import { DataTableModule } from "angular-2-data-table-bootstrap4";
       language: 'vi-VN'
     }),
   ],
-  entryComponents: [PosComponent, ToppingDialog, CheckboxToppingChecklistComponent],
-  declarations: [PosComponent, ToppingDialog, CheckboxToppingChecklistComponent],
+  entryComponents: [PosComponent, ToppingDialog],
+  declarations: [PosComponent, ToppingDialog],
 })
 export class PosModule { }

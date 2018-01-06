@@ -1,0 +1,102 @@
+@import "../../../scss/bootstrap-variables";
+.topping-name {
+    color: $bluegrey;
+    height: 60px;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px;
+}
+
+    .topping-wrapper {
+    width: 100%;
+    max-height: 60vh;
+    padding: 0px 16px 8px 24px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+    .topping-title {
+    color: $bluegrey-darker;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: left;
+    padding-bottom: 5px;
+}
+
+.topping-options {
+    padding-bottom: 8px;    
+}
+
+.mat-radio-button {
+    width: 100%;
+    margin: 1px;
+}
+.mat-checkbox {
+    margin: 1px;
+}
+.topping-footer {
+    background: $brand-primary;
+    height: 65px;
+    padding: 16px;
+    margin: 0px;
+.topping-total-price {
+    font-weight: bold;
+    color: white;
+    font-size: 0.9rem;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0px;
+}
+.topping-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    padding: 0px;
+    .btn-topping-confirm {
+    color: white;
+    border: 1.5px solid white;
+    border-radius: 4px;
+    margin-right: 16px;
+    margin-bottom: 0px;
+    }
+    .btn-topping-cancel {
+    color: $bluegrey-white;
+    border: 1.5px solid $bluegrey-white;
+    border-radius: 4px;
+    margin-bottom: 0px;
+    }
+}
+}
+/deep/.mat-dialog-container {
+    max-width: 600px !important;
+    width: 45vw !important;
+    height: auto !important;
+    overflow: hidden;
+
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: lighten($brand-light, 30%);
+        border: none;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: lighten($brand-light, 20%);
+        transition: all 0.3s ease;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: lighten($brand-light, 10%);
+    }
+    ::-webkit-scrollbar-thumb:active {
+        background: lighten($brand-light, 10%);
+    }
+}
+
+.topping-dialog-wrapper {
+    margin: -24px;
+}
