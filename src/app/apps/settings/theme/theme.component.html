@@ -26,9 +26,9 @@
               <label class="col-md-2 header-text" for="text-input">Logo</label>
               <div class="col-md-10">
                 <input type="text" #logoControl="ngModel" [(ngModel)]="logo" name="logo" url class="form-control input-control" [placeholder]="image?'':'Nhập logo'" />
-                <small *ngIf="logoControl.errors?.url" class="text-muted danger">
+                <small *ngIf="logoControl.errors?.url" class="error-text">
                     (Link không hợp lệ)
-                  </small>
+                </small>
                 <img *ngIf="logoControl.value && logoControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="logoControl.value" />
               </div>
             </div>
@@ -51,16 +51,6 @@
               <div class="col-md-10">
                 <input type="text" #darkControl="ngModel" [(ngModel)]="dark" name="dark" class="form-control input-control" [placeholder]="'Nhập mã màu'">
                 <input [(colorPicker)]="darkpickerColor" [style.background]="darkpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'dark');darkpickerColor=$event" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Logo</label>
-              <div class="col-md-10">
-                <input type="text" #logoControl="ngModel" [(ngModel)]="logo" name="logo" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <small *ngIf="logoControl.errors?.url" class="text-muted danger">
-                    (Link không hợp lệ)
-                  </small>
-                <img *ngIf="logoControl.value && logoControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="logoControl.value" />
               </div>
             </div>
             <div class="form-group row">

@@ -11,15 +11,16 @@
   font-size: 1.5rem;
 }
 
-.header-text { text-align:right;
+.header-text { 
+  text-align:right;
   color: $bluegrey-darker;
   font-size: 0.85rem;
   font-weight: bold;
-  padding: 0;
+  padding-right: 0px;
+  padding-top: 8px;
   margin: 0;
   display: flex;
   justify-content: flex-end;
-  align-items: center;
 }
 
 .info-text {
@@ -160,4 +161,17 @@ button:hover {
 agm-map {
   height: 300px;
   width: 100% !important;
+}
+
+img {
+  background-color: $grey-lighter;
+  background-image: -webkit-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -webkit-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+  background-image: -moz-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -moz-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+  background-image: -o-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -o-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+  background-image: -ms-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -ms-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+  background-image: linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+  -webkit-background-size:30px 30px;
+  -moz-background-size:30px 30px;
+  background-size:30px 30px;
+  background-position:0 0, 15px 15px;
 }
