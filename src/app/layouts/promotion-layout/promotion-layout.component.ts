@@ -133,24 +133,7 @@ export class PromotionLayoutComponent implements OnInit {
         },
         {
           name: 'Danh sách',
-          link: "./promtion/list",
-          icon: 'icon-menu'
-        }
-      ]
-    },
-    {
-      type: 'parent',
-      name: 'Loại khuyến mãi',
-      icon: 'fa fa-gift',
-      children: [
-        {
-          name: 'Thêm',
-          link: "./promotion-type/add",
-          icon: 'fa fa-plus'
-        },
-        {
-          name: 'Danh sách',
-          link: "./promtion-type/list",
+          link: "./promotion/list",
           icon: 'icon-menu'
         }
       ]

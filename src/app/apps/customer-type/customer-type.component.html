@@ -37,7 +37,7 @@
       </data-table-column>
       <data-table-column property="sex" header="Giới tính" [sortable]="true">
         <template #dataTableCell let-item="item">
-              <span class="badge p-h" [ngClass]="{'badge-success': item.sex == 1, 'badge-default':item.sex == 0, 'badge-danger':item.sex == null}">{{item.sex == null?'không có':(item.sex == 1?"Nam":"Nữ")}}</span>
+              <span class="badge p-h" [ngClass]="{'badge-success': item.sex == 'male', 'badge-default':item.sex == 'female', 'badge-danger':item.sex == null}">{{item.sex == null?'không có':(item.sex == 1?"Nam":"Nữ")}}</span>
             </template>
       </data-table-column>
       <data-table-column property="status" header="Trạng thái" [sortable]="true">

@@ -25,16 +25,15 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     LaddaModule,
     DataTableModule,
     TextMaskModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot(),
+    FroalaEditorModule,
+    FroalaViewModule,
 
     PipesModule
   ],
   declarations: [
     PromotionComponent,
     AddComponent,
-    DetailComponent,
-    FroalaComponent],
+    DetailComponent],
   providers: []
 })
 export class PromotionModule { }

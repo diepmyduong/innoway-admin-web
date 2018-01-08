@@ -141,10 +141,13 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
     code: string,
     address: string,
     customer_fullname: string,
-    greeting: string
+    greeting: string,
+    subscribers: string[],
+    send_by: string,
   }) {
     let { total_price, vat_fee, amount_of_sub_fee, amount_of_promotion,
-      ship_fee, ship_method, created_at, code, address, customer_fullname, greeting } = params;
+      ship_fee, ship_method, created_at, code, address, customer_fullname, greeting,
+      subscribers, send_by } = params;
     let setting = {
       method: 'POST',
       uri: this.apiUrl(`send_invoice_to_customer`),
@@ -155,7 +158,8 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
       json: true,
       body: {
         total_price, vat_fee, amount_of_sub_fee, amount_of_promotion,
-        ship_fee, ship_method, created_at, code, address, customer_fullname, greeting
+        ship_fee, ship_method, created_at, code, address, customer_fullname, greeting,
+        subscribers, send_by
       }
     }
     var res: any = await this.exec(setting);

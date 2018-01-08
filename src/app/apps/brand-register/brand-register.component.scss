@@ -76,7 +76,8 @@
   // margin-top: 10px;
 }
 
-input {
+input,
+select {
   font-family: 'Helvetica Neue';
   font-size: 0.9rem;
   border: none;
@@ -292,4 +293,25 @@ textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus {
   text-align: center;
   margin-top: 5px;
   margin-bottom: 10px;
+}
+
+.text-danger {
+  color: #E91E63 !important;
+  display: block;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+/deep/ select {
+  background: transparent url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAmCAYAAACCjRgBAAAAGXRFW…3BE0BE7nVhk2szd0JksmOTbTv9egOhgzz2PGATsAm87SnAAHQ7hQ0qR6xWAAAAAElFTkSuQmCC") no-repeat !important;
+  border: none !important;
+  color: white;
+  text-align: center;
+  text-align-last: center;
+}
+
+.select-wrapper {
+  width: 84% !important;
+  float: right;
 }

@@ -1,23 +1,24 @@
 @import '../../../scss/bootstrap-variables';
 
 /deep/ .app {
-    margin: 0 !important;
-    height: 100% !important;
-    background-color: white !important;
+  margin: 0 !important;
+  height: 100% !important;
+  background-color: white !important;
 }
 
-.item{
+.item {
   margin-bottom: 1.5rem;
 }
 
-.item img{
+.item img {
   height: 50px;
   width: 100%;
   object-fit: contain;
   padding: 0.25rem;
 }
 
-.header-text { text-align:right;
+.header-text {
+  text-align: right;
   color: $bluegrey-darker;
   font-size: 0.95rem;
   padding: 0.25rem;
@@ -29,36 +30,41 @@
   justify-content: center;
 }
 
-.row{
+.row {
   background: white;
 }
 
-.card, .card-header{
-  background: white;
-  border: 0 !important;
-}
-
-/deep/ tabset .tab-content{
+.card,
+.card-header {
   background: white;
   border: 0 !important;
 }
 
-/deep/ tabset .nav-tabs .active{
+/deep/ tabset .tab-content {
+  background: white;
   border: 0 !important;
 }
 
-/deep/ tabset .nav-item:hover{
+/deep/ tabset .nav-tabs .active {
   border: 0 !important;
 }
 
-/deep/ tabset .nav-link:hover{
+/deep/ tabset .nav-item:hover {
   border: 0 !important;
 }
 
-/deep/ tabset .nav-tabs{
+/deep/ tabset .nav-link:hover {
   border: 0 !important;
 }
 
-/deep/ tabset .nav-link{
+/deep/ tabset .nav-tabs {
   border: 0 !important;
+}
+
+/deep/ tabset .nav-link {
+  border: 0 !important;
+}
+
+/deep/ tabset .nav-tabs {
+  border-bottom: none;
 }

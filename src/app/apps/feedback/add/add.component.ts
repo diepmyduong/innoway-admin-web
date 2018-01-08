@@ -136,7 +136,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       await this.innowayApi.customer.add({ name, avatar, birthday: new Date(birthday), email, fullname, password, phone, sex: sex as any, status })
       this.alertAddSuccess();
       form.reset();
-      form.resetForm(this.setDefaultData);
+      form.resetForm(this.setDefaultData());
     } else {
       this.alertFormNotValid();
     }

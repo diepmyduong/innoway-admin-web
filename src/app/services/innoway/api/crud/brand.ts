@@ -22,12 +22,13 @@ export class Brand extends CrudAPI<iBrand> {
   ) {
     super(api, 'brand')
   }
-  
+
   async registerNewBrand(params: {
     brand_name: string,
     brand_phone: string,
     brand_address: string,
     brand_code: string,
+    brand_category_id: string,
     longitude: number,
     latitude: number,
     admin_fullname: string,
@@ -37,7 +38,7 @@ export class Brand extends CrudAPI<iBrand> {
   }) {
     let { brand_name, brand_phone, brand_address, brand_code,
       admin_fullname, admin_phone, admin_email, admin_password,
-      longitude, latitude } = params;
+      longitude, latitude, brand_category_id } = params;
     let setting = {
       method: 'POST',
       uri: this.apiUrl(`regis_brand`),
@@ -48,7 +49,7 @@ export class Brand extends CrudAPI<iBrand> {
       body: {
         brand_name, brand_phone, brand_address, brand_code,
         admin_fullname, admin_phone, admin_email, admin_password,
-        longitude, latitude
+        longitude, latitude, brand_category_id
       }
     }
     var res: any = await this.exec(setting);

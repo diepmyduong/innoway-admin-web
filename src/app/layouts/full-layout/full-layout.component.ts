@@ -163,6 +163,23 @@ export class FullLayoutComponent implements OnInit {
         }
       ]
     },
+    {
+      type: 'parent',
+      name: 'Nhóm ngành',
+      icon: 'fa fa-star',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./brand-category/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./brand-category/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
     // {
     //   type: 'parent',
     //   name: 'Loại thương hiệu',

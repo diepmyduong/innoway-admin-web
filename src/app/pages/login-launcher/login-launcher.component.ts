@@ -31,7 +31,7 @@ export class LoginLauncherComponent implements OnInit {
 
   email: string;
   password: string;
-  brandName: string;
+  brandCode: string;
   submitting = false;
 
   get log() { return Console(`[Login Page]`).log }
@@ -63,8 +63,8 @@ export class LoginLauncherComponent implements OnInit {
 
     if (form.valid) {
       try {
-        let { email, password, brandName } = this;
-        let user = await this.innowayApi.innowayAuth.loginEmailAndPassword(email, password, brandName)
+        let { email, password, brandCode } = this;
+        let user = await this.innowayApi.innowayAuth.loginEmailAndPassword(email, password, brandCode)
         this.log('success', user)
         this.toDashboard()
         // let user = await this.auth.loginWithEmailAndPassword(email,password);

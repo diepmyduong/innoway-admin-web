@@ -206,8 +206,6 @@ export class BillComponent implements OnInit, ListPageInterface {
         row.item.deleting = false;
       });
     }
-
-
   }
 
   onSearch(e) {
@@ -229,7 +227,6 @@ export class BillComponent implements OnInit, ListPageInterface {
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
     popupWin.document.open();
     this.loadDetailedBill(bill.id, true, popupWin);
-
   }
 
   async loadDetailedBill(id: string, isPrint: boolean, popupWin: any) {
@@ -255,7 +252,6 @@ export class BillComponent implements OnInit, ListPageInterface {
   }
 
   async printBill(data: any, popupWin: any) {
-
     let tableContent = "";
     let index = 0;
     data.items.forEach(item => {

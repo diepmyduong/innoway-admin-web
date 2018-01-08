@@ -132,8 +132,8 @@ export const FullLayoutRouting = {
       loadChildren: 'app/apps/brand/brand.module#BrandModule'
     },
     {
-      path: 'brand-type',
-      loadChildren: 'app/apps/brand-type/brand-type.module#BrandTypeModule'
+      path: 'brand-category',
+      loadChildren: 'app/apps/brand-category/brand-category.module#BrandCategoryModule'
     },
     {
       path: 'branch',

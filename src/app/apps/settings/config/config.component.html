@@ -44,12 +44,14 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Địa chỉ công ty</label>
+              <label class="col-md-2 header-text" for="text-input">Địa chỉ</label>
               <div class="col-md-10">
-                <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control input-control" [placeholder]="'Nhập địa chỉ công ty'" required>
-                <small *ngIf="addressControl.errors?.required" class="text-muted danger">
-                    (Không thể bỏ trống)
-                  </small>
+                <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control input-control" [placeholder]="'Nhập địa chỉ'" required autocorrect="off" autocapitalize="off" spellcheck="off" #addressInput>
+              </div>
+              <div class="col-md-12 mt-1">
+                <agm-map [latitude]="latitudeMap" [longitude]="longitudeMap" [scrollwheel]="false" [zoom]="zoom">
+                  <agm-marker [latitude]="latitudeMap" [longitude]="longitudeMap"></agm-marker>
+                </agm-map>
               </div>
             </div>
             <div class="form-group row">
@@ -59,6 +61,17 @@
                 <small *ngIf="phoneControl.errors?.required" class="text-muted danger">
                     (Không thể bỏ trống)
                   </small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="select">Nhóm ngành</label>
+              <div class="col-md-10">
+                <select id="categorySelect" #brandCategoryControl="ngModel" [(ngModel)]="brandCategory" name="brandCategory" class="form-control input-control">
+                      <option value="null" disabled="true" [selected]="true">Chọn nhóm ngành</option>
+                      <option *ngFor="let v of brandCategories | async" [value]="v.id">
+                        {{v.name}}
+                      </option>
+                    </select>
               </div>
             </div>
             <!-- <div class="form-group row">

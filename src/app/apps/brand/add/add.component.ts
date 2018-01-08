@@ -131,7 +131,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       await this.innowayApi.brand.add({ name, color, logo, trial_expire, status })
       this.alertAddSuccess();
       form.reset();
-      form.resetForm(this.setDefaultData);
+      form.resetForm(this.setDefaultData());
     } else {
       this.alertFormNotValid();
     }

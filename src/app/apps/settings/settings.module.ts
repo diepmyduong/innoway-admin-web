@@ -21,6 +21,7 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
 import { SellComponent } from './sell/sell.component';
 import { ConfigComponent } from './config/config.component';
 import { ThemeComponent } from './theme/theme.component';
+import { AgmCoreModule } from "@agm/core";
 
 @NgModule({
   imports: [
@@ -34,7 +35,12 @@ import { ThemeComponent } from './theme/theme.component';
 
     ColorPickerModule,
     CustomFormsModule,
-    TextMaskModule
+    TextMaskModule,
+
+    AgmCoreModule.forRoot({
+      apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
+      libraries: ["places,drawing"]
+    }),
   ],
   declarations: [SettingsComponent, AreaComponent, ScheduleComponent, ChatbotComponent, SellComponent, ConfigComponent, ThemeComponent],
 })

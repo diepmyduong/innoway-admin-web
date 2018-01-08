@@ -2,7 +2,7 @@
   <div class="circle-outline"></div>
   <div class="circle-outline"></div>
   <div class="circle-outline"></div>
-  <form #loginForm="ngForm" class="absolute-center">
+  <form #registerForm="ngForm" class="absolute-center">
     <!-- (keyup)="keyDownFunction($event,loginForm)" -->
     <img id="logo" src="../../assets/img/logo-white.svg" />
     <!-- <h1 id="login-title">ĐĂNG KÝ</h1> -->
@@ -18,31 +18,51 @@
         </small>
         <div class="input-row">
           <i class="input-icon material-icons md-36">local_phone</i>
-          <input type="text" #brandPhoneControl="ngModel" [(ngModel)]="brandPhone" name="brandPhone" placeholder="Số điện thoại" maxlength="70" tabindex="1" required>
+          <input type="text" #brandPhoneControl="ngModel" [(ngModel)]="brandPhone" name="brandPhone" placeholder="Số điện thoại" pattern="[0-9]*" maxlength="12" tabindex="1" required (keypress)="keyPressPhone($event)">
         </div>
         <small [style.visibility]="brandPhoneControl.errors?.required?'visible':'hidden'" class="text-muted danger">
           (Không được bỏ trống)
         </small>
+        <small *ngIf="brandPhoneControl.hasError('pattern')" class="text-muted danger">
+          (Số điện thoại không hợp lệ - ký tự phải [0-9])
+        </small>
         <div class="input-row">
           <i class="input-icon material-icons md-36">address</i>
-          <input type="text" #brandAddressControl="ngModel" [(ngModel)]="brandAddress" name="brandAddress" placeholder="Địa chỉ" maxlength="70" tabindex="1" required>
+          <!-- <input type="text" #brandAddressControl="ngModel" [(ngModel)]="brandAddress" name="brandAddress" placeholder="Địa chỉ" maxlength="70" tabindex="1" required> -->
+          <input type="text" #brandAddressControl="ngModel" [(ngModel)]="brandAddress" name="brandAddress" [placeholder]="'Nhập địa chỉ'" required autocorrect="off" autocapitalize="off" spellcheck="off" #addressInput>
         </div>
         <small [style.visibility]="brandAddressControl.errors?.required?'visible':'hidden'" class="text-muted danger">
           (Không được bỏ trống)
         </small>
         <div class="input-row">
           <i class="input-icon material-icons md-36">code</i>
-          <input type="text" #brandCodeControl="ngModel" [(ngModel)]="brandCode" name="brandCode" placeholder="Mã doanh nghiệp" maxlength="70" tabindex="1" required>
+          <input type="text" #brandCodeControl="ngModel" [(ngModel)]="brandCode" name="brandCode" placeholder="Mã doanh nghiệp" pattern="[a-z0-9]*" minlength="5" maxlength="12" tabindex="1" required>
         </div>
-        <small [style.visibility]="brandCodeControl.errors?.required?'visible':'hidden'" class="text-muted danger">
-          (Không được bỏ trống)
-        </small>
+        <small class="text-danger">
+          <span [style.visibility]="brandPhoneControl.errors?.required?'visible':'hidden'">
+            &nbsp;
+          </span>
+          <span *ngIf="brandCodeControl.errors?.required || brandCodeControl.hasError('minlength')">
+          (Mã doanh nghiệp không được bỏ trống - từ 5 đến 12 ký tự)
+          </span>
+          <span *ngIf="brandCodeControl.hasError('pattern') && !brandCodeControl.errors?.required">
+            (Mã doanh nghiệp không hợp lệ - ký tự phải [a-z][0-9])
+          </span>
+          </small>
         <div class="input-row">
           <i class="input-icon material-icons md-36">work</i>
-          <input type="text" #brandCategoryControl="ngModel" [(ngModel)]="brandCategory" name="brandCategory" placeholder="Loại dịch vụ" maxlength="70" tabindex="1" required>
+          <span class="select-wrapper">
+            <select #brandCategoryControl="ngModel" [(ngModel)]="brandCategory" name="brandCategory">
+              <option *ngFor="let v of brandCategories | async" [value]="v.id">
+                {{ v.name }}
+              </option>
+            </select>
+          </span>
         </div>
-        <small [style.visibility]="brandCategoryControl.errors?.required?'visible':'hidden'" class="text-muted danger">
-          (Không được bỏ trống)
+        <small class="text-danger">
+          <span [style.visibility]="'hidden'">
+            &nbsp;
+          </span>
         </small>
       </tab>
       <tab>
@@ -56,7 +76,7 @@
         </small>
         <div class="input-row">
           <i class="input-icon material-icons md-36">phone</i>
-          <input type="text" #adminPhoneControl="ngModel" [(ngModel)]="adminPhone" name="adminPhone" placeholder="Số điện thoại" maxlength="70" tabindex="1" required>
+          <input type="text" #adminPhoneControl="ngModel" [(ngModel)]="adminPhone" name="adminPhone" placeholder="Số điện thoại" pattern="[0-9]*" maxlength="12" tabindex="1" required (keypress)="keyPressPhone($event)">
         </div>
         <small [style.visibility]="adminPhoneControl.errors?.required?'visible':'hidden'" class="text-muted danger">
           (Không được bỏ trống)
@@ -70,22 +90,35 @@
         </small>
         <div class="input-row">
           <i class="input-icon material-icons md-36">lock</i>
-          <input type="password" #adminPasswordControl="ngModel" [(ngModel)]="adminPassword" name="adminPassword" placeholder="Mật khẩu" maxlength="70" tabindex="1" required>
+          <input type="password" #adminPasswordControl="ngModel" [(ngModel)]="adminPassword" name="adminPassword" placeholder="Mật khẩu" minlength="8" maxlength="22" tabindex="1" required>
         </div>
-        <small [style.visibility]="adminPasswordControl.errors?.required?'visible':'hidden'" class="text-muted danger">
-          (Không được bỏ trống)
+        <small class="text-danger">
+          <span [style.visibility]="adminPasswordControl.errors?.required?'visible':'hidden'">
+            &nbsp;
+          </span>
+          <span *ngIf="adminPasswordControl.errors?.required || adminPasswordControl.hasError('minlength')">
+          (Mật khẩu không được bỏ trống - từ 8 đến 22 ký tự)
+          </span>
         </small>
+        <!-- <small [style.visibility]="adminPasswordControl.errors?.required?'visible':'hidden'" class="text-muted danger">
+          (Không được bỏ trống)
+        </small> -->
         <div class="input-row">
           <i class="input-icon material-icons md-36">lock</i>
           <input type="password" #adminRepasswordControl="ngModel" [(ngModel)]="adminRepassword" name="adminRepassword" placeholder="Xác nhận mật khẩu" maxlength="70" tabindex="1" required>
         </div>
-        <small [style.visibility]="adminRepasswordControl.errors?.required?'visible':'hidden'" class="text-muted danger">
-          (Không được bỏ trống)
+        <small class="text-danger">
+          <span [style.visibility]="adminRepasswordControl.errors?.required?'visible':'hidden'">
+            &nbsp;
+          </span>
+          <span *ngIf="adminRepasswordControl.value != adminPasswordControl.value ">
+          (Mật khẩu xác nhận không chính xác)
+          </span>
         </small>
       </tab>
     </tabset>
     <div class="input-row" style="text-align: center;border: none;">
-      <button type="button" class="btn btn-login" (click)="registerNewBrand(ngForm)">
+      <button type="button" class="btn btn-login" (click)="registerNewBrand(registerForm)">
       <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner"
         style="font-size:24px"></i>
       <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng ký</span>

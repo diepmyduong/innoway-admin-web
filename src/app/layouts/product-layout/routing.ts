@@ -10,7 +10,7 @@ export const ProductLayoutRouting = {
       path: '',
       redirectTo: 'products',
       pathMatch: 'full',
-    },  
+    },
     {
       path: 'products',
       loadChildren: 'app/apps/products/products.module#ProductsModule'
@@ -24,9 +24,14 @@ export const ProductLayoutRouting = {
       loadChildren: 'app/apps/topping/topping.module#ToppingModule'
     },
     {
-      path: 'topping-type',
-      loadChildren: 'app/apps/topping-type/topping-type.module#ToppingTypeModule'
-    }
+      path: 'product-type',
+      loadChildren: 'app/apps/product-type/product-type.module#ProductTypeModule'
+    },
+    {
+      path: 'category',
+      loadChildren: 'app/apps/category/category.module#CategoryModule'
+    },
+
   ],
 
 }

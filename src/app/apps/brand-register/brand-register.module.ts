@@ -12,6 +12,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
+import { AgmCoreModule } from "@agm/core";
 
 @NgModule({
   imports: [
@@ -27,7 +28,12 @@ import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-not
     FormsModule,
     ReactiveFormsModule,
     SimpleNotificationsModule,
-    PushNotificationsModule
+    PushNotificationsModule,
+
+    AgmCoreModule.forRoot({
+      apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
+      libraries: ["places,drawing"]
+    }),
   ],
   declarations: [BrandRegisterComponent],
   bootstrap: [BrandRegisterComponent],

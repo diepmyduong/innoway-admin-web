@@ -21,12 +21,20 @@ export class InnowayConfigService {
     return `${this.config.host}/api/${this.config.version}/${path}`
   }
 
-  get brandName() {
-    return localStorage.getItem('innoway.brandName')
+  // get brandName() {
+  //   return localStorage.getItem('innoway.brandName')
+  // }
+  //
+  // set brandName(value: string) {
+  //   localStorage.setItem('innoway.brandName', value)
+  // }
+
+  get brandCode() {
+    return localStorage.getItem('innoway.brandCode')
   }
 
-  set brandName(value: string) {
-    localStorage.setItem('innoway.brandName', value)
-  } 
+  set brandCode(value: string) {
+    localStorage.setItem('innoway.brandCode', value)
+  }
 
 }

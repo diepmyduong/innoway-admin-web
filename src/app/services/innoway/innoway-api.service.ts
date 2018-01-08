@@ -28,6 +28,9 @@ import { ThirdPartyChatbot } from './api/crud/thirdparty-chatbot'
 import { DailySummary } from './api/crud/daily-summary'
 import { SmartCode } from './api/crud/smart-code'
 import { BrandTheme } from './api/crud/brand-theme'
+import { BrandCategory } from './api/crud/brand-category'
+import { PromotionCustomer } from './api/crud/promotion-customer'
+import { PromotionCustomerDetail } from './api/crud/promotion-customer-detail'
 
 @Injectable()
 export class InnowayApiService {
@@ -65,4 +68,7 @@ export class InnowayApiService {
   dailySummary = new DailySummary(this)
   smartCode = new SmartCode(this)
   brandTheme = new BrandTheme(this)
+  brandCategory = new BrandCategory(this)
+  promotionCustomer = new PromotionCustomer(this)
+  promotionCustomerDetail = new PromotionCustomerDetail(this)
 }

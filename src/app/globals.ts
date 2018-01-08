@@ -626,7 +626,6 @@ export class Globals {
       code: 'BILL_CANCELLED_AT_BILL_CONFIRMED',
       name: 'đã hủy'
     },
-
     {
       code: 'BILL_PICKING_UP',
       name: 'đang lấy hàng'

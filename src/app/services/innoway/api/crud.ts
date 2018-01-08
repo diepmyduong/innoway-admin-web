@@ -65,7 +65,7 @@ export class CrudAPI<T> extends BaseAPI {
     options: crudOptions
     items: BehaviorSubject<T[]>
     pagination: iCrudPagination
-    localBrandName: string
+    localbrandCode: string
     hashCache: {
         [hash: string]: {
             pagination: iCrudPagination
@@ -90,15 +90,15 @@ export class CrudAPI<T> extends BaseAPI {
         this.activeHashQuery = hashedQuery
         this.activeQuery = options.query
 
-        if (options.local && this.hashCache[hashedQuery] && this.localBrandName == this.api.innowayConfig.brandName) {
+        if (options.local && this.hashCache[hashedQuery] && this.localbrandCode == this.api.innowayConfig.brandCode) {
             let items = this.hashCache[hashedQuery].items
             this.pagination = this.hashCache[hashedQuery].pagination
             if (items.length > 0) { // If local empty, request to server
                 return items
             }
         }
-        if (this.localBrandName != this.api.innowayConfig.brandName)
-            this.localBrandName = this.api.innowayConfig.brandName
+        if (this.localbrandCode != this.api.innowayConfig.brandCode)
+            this.localbrandCode = this.api.innowayConfig.brandCode
         let res = await this.exec(setting)
         let { results, pagination } = res
         let rows = results.objects.rows as T[]
@@ -128,13 +128,13 @@ export class CrudAPI<T> extends BaseAPI {
             json: true // Automatically parses the JSON string in the response
         }
         const hashedQuery = hash(options.query)
-        if (options.local && this.hashCache[hashedQuery] && this.localBrandName == this.api.innowayConfig.brandName) {
+        if (options.local && this.hashCache[hashedQuery] && this.localbrandCode == this.api.innowayConfig.brandCode) {
             let items = this.hashCache[hashedQuery].items
             let item = _.find(items, { id: id })
             if (item) return item
         }
-        if (this.localBrandName != this.api.innowayConfig.brandName)
-            this.localBrandName = this.api.innowayConfig.brandName
+        if (this.localbrandCode != this.api.innowayConfig.brandCode)
+            this.localbrandCode = this.api.innowayConfig.brandCode
         let res = await this.exec(setting)
         let row = res.results.object as T
         if (options.reload) {

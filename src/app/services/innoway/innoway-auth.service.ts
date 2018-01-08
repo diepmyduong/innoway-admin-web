@@ -58,7 +58,7 @@ export class InnowayAuthService {
   googleToken: string
   innowayUser: iInnowayUser
   manuallyLogin: boolean = false
-  
+
   async exec(option: any) {
     if (!option) throw new Error("option undefined in exec")
     try {
@@ -77,9 +77,9 @@ export class InnowayAuthService {
     return this.firebaseApp.auth().currentUser.getIdToken()
   }
 
-  async loginFacebook(brandName: string) {
+  async loginFacebook(brandCode: string) {
     this.manuallyLogin = true
-    this.innowayConfig.brandName = brandName
+    this.innowayConfig.brandCode = brandCode
     const result = await this.firebaseApp.auth().signInWithPopup(this.facebookProvider)
     this.facebookToken = result.credential.accessToken
     this.firebaseUser = result.user
@@ -87,18 +87,18 @@ export class InnowayAuthService {
     return await this.loginInnoway()
   }
 
-  async loginEmailAndPassword(email: string, password: string, brandName: string) {
+  async loginEmailAndPassword(email: string, password: string, brandCode: string) {
     this.manuallyLogin = true
-    this.innowayConfig.brandName = brandName
+    this.innowayConfig.brandCode = brandCode
     const result = await this.firebaseApp.auth().signInWithEmailAndPassword(email, password)
     this.firebaseUser = result
     this.firebaseToken = await this.firebaseUser.getIdToken()
     return await this.loginInnoway()
   }
 
-  async loginGoogle(brandName: string) {
+  async loginGoogle(brandCode: string) {
     this.manuallyLogin = true
-    this.innowayConfig.brandName = brandName
+    this.innowayConfig.brandCode = brandCode
     const result = await this.firebaseApp.auth().signInWithPopup(this.googleProvider)
     this.googleToken = result.credential.accessToken
     this.firebaseUser = result.user
@@ -107,7 +107,7 @@ export class InnowayAuthService {
   }
 
   async loginInnoway() {
-    if (this.firebaseToken && this.innowayConfig.brandName) {
+    if (this.firebaseToken && this.innowayConfig.brandCode) {
       this.log('uid', this.firebaseUser.uid, this.firebaseUser)
       const option = {
         method: 'POST',
@@ -118,7 +118,7 @@ export class InnowayAuthService {
         json: true,
         body: {
           IdToken: this.firebaseToken,
-          brand_name: this.innowayConfig.brandName
+          brand_code: this.innowayConfig.brandCode
         }
       }
       let res = await this.exec(option)

@@ -463,6 +463,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     try {
       let response = await this.innowayApi.bill.changeActivity(bill.id, data)
       console.log("updateBillActivity", JSON.stringify(response))
+      if (response && this.brand.thirdparty_chatbot) {
+        this.sendInvoiceToCustomer(bill);
+      }
       this.alertUpdateSuccess();
       this.setData();
     } catch (err) {
@@ -821,6 +824,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async sendInvoiceToCustomer(bill: any) {
     try {
+      let subscribers: string[] = [];
+      subscribers.push(bill.customer.chatbot_subscriber_id)
       let params = {
         total_price: bill.total_price,
         vat_fee: bill.vat_fee,
@@ -833,6 +838,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         address: bill.address,
         customer_fullname: bill.customer.fullname,
         greeting: "Chào {{first_name}} {{last_name}}, đơn hàng " + bill.code + " của quý khách đã được xác nhận thành công",
+        send_by: "subscriber",
+        subscribers: subscribers
       }
       let response = await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(params)
       console.log(JSON.stringify(response))
