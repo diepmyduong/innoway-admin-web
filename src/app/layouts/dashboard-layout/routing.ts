@@ -17,7 +17,7 @@ export const DashboardLayoutRouting = {
     },
     {
       path: 'bills',
-      loadChildren: 'app/apps/bills/bills.module#BillsModule'
+      loadChildren: 'app/apps/bill/bill.module#BillModule'
     }
   ],
 

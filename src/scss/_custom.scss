@@ -364,7 +364,7 @@ body {
     border-radius: 2px;
     background: $bluegrey-lighter;
     color: transparent;
-}
+  }
 
   input[type=checkbox]:checked:after {
     color: white;
@@ -440,4 +440,63 @@ i.muted {
 }
 .color-bluegrey {
   color: $bluegrey;
+}
+.color-primary {
+    color: $brand-primary;
+}
+.color-dark {
+    color: $brand-dark;
+}
+
+.container-fluid {
+	padding-bottom: 16px;	
+};
+
+// ------------------------------------FORM-------------------------------------------------
+
+.innoway-card {
+  .header-text { 
+    text-align:right;
+    color: $bluegrey-darker;
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 4px;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+    line-height: 18px;
+  }
+  input[type=checkbox].custom-checkbox {
+    width: auto;
+    margin-top: 8px;
+  }
+  input[type=checkbox].custom-checkbox:after{
+    cursor: pointer;
+    cursor: hand;
+    content: '\f00c';
+    line-height: 16px;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    display: block;
+    position: relative;
+    border: none;
+    border-radius: 2px;
+    background: $bluegrey-lighter;
+    color: transparent;
+  }
+  input[type=checkbox].custom-checkbox:checked:after {
+    background: $brand-primary;
+    color: white;
+  }
+  .form-group {
+    margin-bottom: 0px;
+  }
+  .text-danger {
+    padding: 5px;
+    color: #ff0033;
+  }
 }

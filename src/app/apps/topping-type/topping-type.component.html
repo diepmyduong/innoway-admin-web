@@ -1,18 +1,18 @@
 <div class="animated fadeIn">
 
-  <div class="row">
+<div class="row">
     <h3 class="col-6">Danh sách loại topping</h3>
     <div class="col-6">
-      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm loại topping</button>
-      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()"
-      [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa loại topping</button>
+        <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm loại topping</button>
+        <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()"
+        [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa loại topping</button>
     </div>
-  </div>
+</div>
 
-  <div class="table-wrapper">
+<div class="table-wrapper">
     <div class="search-bar">
-      <p>Tìm kiếm</p>
-      <input type="text" class="input-control form-control" (keyup)="onSearch($event)">
+        <p>Tìm kiếm</p>
+        <input type="text" class="input-control form-control" (keyup)="onSearch($event)">
     </div>
     <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async"
     [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true"
@@ -26,7 +26,7 @@
         <data-table-column
             property="description"
             header="Mô tả"
-            [visible]="false"
+            [visible]="true"
             [resizable]="true">
         </data-table-column>
         <data-table-column
@@ -35,7 +35,7 @@
             [sortable]="true"
             >
             <template #dataTableCell let-item="item">
-              <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status != 1}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>
+                <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status != 1}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>
             </template>
         </data-table-column>
         <data-table-column
@@ -50,10 +50,11 @@
                     <button (click)="deleteItem(item)"
                         type="button" class="btn btn-sm btn-danger btn-ladda"
                         data-style="expand-right" [ladda]='item.deleting?true:false'><i class="icon-trash icons font-xl p-q d-block"></i></button> -->
-                          <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
+                    <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i>Chỉnh sửa</button>
+                    <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-trash"></i></button>
                 </span>
             </template>
         </data-table-column>
     </data-table>
-  </div>
+</div>
 </div>

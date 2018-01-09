@@ -12,7 +12,7 @@
     <!-- USER AVATAR AND NAME -->
     <li class="nav-item dropdown" dropdown placement="bottom" id="accountDropdownMenu">
       <button class="nav-link nav-pill avatar dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-        <div *ngIf="!employee.avatar" >{{employee.fullname}}</div>
+        <div *ngIf="!employee.avatar" >{{employee.fullname[0]}}</div>
         <img src="{{employee.avatar?employee.avatar:''}}" class="img-avatar" *ngIf="employee.avatar" onerror="this.style.display = 'none'">
       </button>
       <div class="user-name hidden-md-down"  data-toggle="dropdown">

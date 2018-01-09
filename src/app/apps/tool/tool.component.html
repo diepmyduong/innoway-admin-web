@@ -7,8 +7,8 @@
           <div class="card">
             <div class="card-header">
               <div class="row">
-                <div class="col-md-2 item" *ngFor="let item of data.feature; let i = index">
-                  <img src="{{item.icon}}" [routerLink]="item.link" />
+                <div class="col-md-2 item" *ngFor="let item of data.feature; let i = index" [routerLink]="item.link" style="cursor: pointer">
+                  <img src="{{item.icon}}"/>
                   <label class="header-text">{{item.title}}</label>
                 </div>
               </div>

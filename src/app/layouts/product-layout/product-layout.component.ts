@@ -126,7 +126,7 @@ export class ProductLayoutComponent implements OnInit {
     {
       type: 'parent',
       name: 'Sản phẩm',
-      icon: 'fa fa-cubes',
+      icon: 'fa fa-cube',
       children: [
         {
           name: 'Thêm',
@@ -143,7 +143,7 @@ export class ProductLayoutComponent implements OnInit {
     {
       type: 'parent',
       name: 'Loại sản phẩm',
-      icon: 'fa fa-cube',
+      icon: 'fa fa-cubes',
       children: [
         {
           name: 'Thêm',

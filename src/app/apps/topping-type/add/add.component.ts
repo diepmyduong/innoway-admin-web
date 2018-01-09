@@ -8,7 +8,6 @@ import { CustomValidators } from "ng2-validation/dist";
 import { Globals } from "../../../Globals"
 import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-
 declare let swal: any
 
 @Component({

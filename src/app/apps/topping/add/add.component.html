@@ -20,7 +20,7 @@
             <div class="col-md-10">
               <select id="select1" #toppingControl="ngModel" [(ngModel)]="topping_id" name="topping_id" class="form-control input-control">
                   <option *ngFor="let v of toppings|async" [value]="v.id">
-                    {{v.name}}
+                    {{v.name}} <span class="color-primary" *ngIf="v.description"> - {{v.description}}</span>
                   </option>
                 </select>
             </div>

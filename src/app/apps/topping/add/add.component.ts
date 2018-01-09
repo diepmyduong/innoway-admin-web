@@ -77,7 +77,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   async loadToppingData() {
     try {
       this.toppings.next(await this.innowayApi.topping.getList({
-        query: { fields: ["id", "name"] }
+        query: { fields: ["id", "description", "name"] }
       }))
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }

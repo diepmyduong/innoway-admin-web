@@ -1,7 +1,7 @@
 <div class="animated fadeIn">
   <form class="row" #itemFrm="ngForm">
     <div class="col-md-12">
-      <div class="card">
+      <div class="card innoway-card">
         <div class="card-header">
           <strong>{{isEdit?"Cập nhật":"Thêm"}} loại topping</strong>
         </div>
@@ -21,7 +21,8 @@
             <div class="form-group row">
             <label class="col-md-2 header-text" for="textarea-input">Cho phép chọn nhiều topping</label>
               <div class="col-md-10">
-                <input type="checkbox" #isSelectMultipleControl="ngModel" [(ngModel)]="isSelectMultiple" name="isSelectMultiple" (ngModelChange)="checkSelectMultiple($event)" class="form-control input-control checkbox">
+                <input type="checkbox" #isSelectMultipleControl="ngModel" [(ngModel)]="isSelectMultiple" name="isSelectMultiple" 
+                (ngModelChange)="checkSelectMultiple($event)" class="form-control input-control custom-checkbox">
               </div>
             </div>
             <div class="form-group row">
@@ -30,7 +31,7 @@
                 <textarea #descriptionControl="ngModel" rows="5" [(ngModel)]="description" name="description"
                   class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
               </div>
-   			    </div>
+            </div>
             <div class="form-group row">
               <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
               <div class="col-md-10">
