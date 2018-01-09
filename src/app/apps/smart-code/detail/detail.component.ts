@@ -34,6 +34,9 @@ export class DetailComponent implements OnInit {
 
   isConnectChatbot: boolean = false
 
+  chatbot: any = {}
+  iFrameLink: string;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -61,6 +64,9 @@ export class DetailComponent implements OnInit {
           fields: ["$all"]
         }
       })
+      this.chatbot = data
+      this.iFrameLink="https://bot.mcommerce.com.vn/pages/qrcodeGenerator?link="+encodeURIComponent(data.link)+"&mscode="+encodeURIComponent(data.messenger_code_image)
+
       this.codeType = data.code_type;
       this.startTime = moment(data.start_time).format("MM/DD/YYYY hh:mm")
       this.endTime = moment(data.end_time).format("MM/DD/YYYY hh:mm")
@@ -72,6 +78,7 @@ export class DetailComponent implements OnInit {
       this.messengerCodeImage = data.messenger_code_image;
       this.link = data.link;
       this.isConnectChatbot = data.is_connect_chatbot;
+
     } catch (err) {
       this.backToList();
       console.log(err)

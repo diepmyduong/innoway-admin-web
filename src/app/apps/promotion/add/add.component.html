@@ -119,6 +119,15 @@
               </div>
             </div>
             <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Số lượng</label>
+              <div class="col-md-10">
+                <input type="number" #amountControl="ngModel" [(ngModel)]="amount" name="amount" class="form-control input-control" [placeholder]="'Nhập giới hạn'" required>
+                <small *ngIf="amountControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
+              </div>
+            </div>
+            <div class="form-group row">
               <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
               <div class="col-md-10">
                 <select id="statusSelect" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">

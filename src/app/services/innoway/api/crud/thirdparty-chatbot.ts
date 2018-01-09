@@ -1,5 +1,5 @@
 import { CrudAPI, iCrud } from '../crud'
-
+import { Globals } from './../../../../globals'
 import { InnowayApiService } from '../../innoway-api.service'
 
 export interface iThirdPartyChatbot extends iCrud {
@@ -408,14 +408,20 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
   async sendMessageToCustomer(params: {
     content: string,
     media: any,
+    app: {
+      app_id: string,
+      app_token: string,
+    },
+    send_by: string,
+    send_to: string[]
   }) {
-    let { content, media } = params;
+    let { content, media, app, send_by, send_to } = params;
     let setting = {
       url: "https://mfood-commerce-01.herokuapp.com/api/v1/send",
       method: "POST",
       headers: {
-        app_id: "5a210a848284a72dec826876",
-        app_token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXlsb2FkIjp7fSwicm9sZSI6IndyaXRlIiwiZXhwIjoiMjAxNy0xMi0yMVQwODoxMzowNy42ODdaIn0.jn1r13SdJ3NZGzmsDU10L7d6Z0gjbGMZkAHHWHm9qrI",
+        app_id: app.app_id,
+        app_token: app.app_token,
       },
       json: true,
       body: {
@@ -426,25 +432,26 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
             "option": {
               "text": content
             }
-          },
-          {
-            "type": "template",
-            "payload": {
-              "template_type": "media",
-              "elements": [
-                {
-                  "media_type": media.type,
-                  "url": media.link
-                }
-              ]
-            }
           }
         ],
-        "sendBy": "subscriber", //subscriber or phone
-        "sendTo": [
-          "5a278062c4bc429213bd6311" //subscriber_id or phone_number
-        ]
+        "sendBy": send_by, //subscriber or phone
+        "sendTo": send_to
       }
+    }
+
+    if (media && media.type && media.link) {
+      let mediaContent: any = {
+        "type": media.type,
+        "option": {
+          "attachment": {
+            "type": media.type,
+            "payload": {
+              "url": media.link
+            }
+          }
+        }
+      }
+      setting.body.story.push(mediaContent)
     }
 
     console.log("request body", JSON.stringify(setting))
@@ -459,15 +466,19 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
 
   async sendBillActivityToCustomer(params: {
     content: string,
-    bill: any
+    bill: any,
+    chatbot: any,
+    note: string
+    send_by: string,
+    send_to: string[]
   }) {
-    let { bill, content } = params;
+    let { bill, content, chatbot, send_by, send_to, note } = params;
     let setting = {
       url: "https://mfood-commerce-01.herokuapp.com/api/v1/send",
       method: "POST",
       headers: {
-        app_id: "5a210a848284a72dec826876",
-        app_token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXlsb2FkIjp7fSwicm9sZSI6IndyaXRlIiwiZXhwIjoiMjAxNy0xMi0yMVQwODoxMzowNy42ODdaIn0.jn1r13SdJ3NZGzmsDU10L7d6Z0gjbGMZkAHHWHm9qrI",
+        app_id: chatbot.app_id,
+        app_token: chatbot.access_token,
       },
       json: true,
       body: {
@@ -480,112 +491,137 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
             }
           }
         ],
-        "sendBy": "subscriber", //subscriber or phone
-        "sendTo": [
-          "5a278062c4bc429213bd6311" //subscriber_id or phone_number
-        ]
+        "sendBy": send_by, //subscriber or phone
+        "sendTo": send_to
       }
     }
 
     let contentBillActivity: any = {};
 
-    switch (bill.activity.action) {
-      case "CANCEL": { //if bill was cancel
-        contentBillActivity = {
-          "type": "text",
-          "option": {
-            "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn vừa bị hủy." // null or not null
-          }
+    if (bill.activity.action.indexOf("CANCEL") >= 0) {
+      contentBillActivity = {
+        "type": "text",
+        "option": {
+          "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn vừa bị hủy." // null or not null
         }
-        setting.body.story.push(contentBillActivity)
-        break;
       }
-      case "UPDATED": { //if bill was updated
-        contentBillActivity = {
-          "type": "text",
-          "option": {
-            "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn vừa được cập nhật. {{first_name}} {{last_name}} có thể kiểm tra lại thông tin đơn hàng ở bên dưới." // null or not null
-          }
+      setting.body.story.push(contentBillActivity)
+    } else {
+      contentBillActivity = {
+        "type": "text",
+        "option": {
+          "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn vừa chuyển sang trạng thái " + note, // null or not null
         }
-        let contentReceipt: any = {
-          "type": "generic",
-          "option": {
-            "attachment": {
-              "type": "template",
-              "payload": {
-                "template_type": "receipt",
-                "recipient_name": bill.customer_fullname.toString(),
-                "order_number": bill.code.toString(),
-                "currency": "VND",
-                "payment_method": "Tiền mặt & giao hàng", //tiền mặt + giao hàng/nhận tại cửa hàng
-                "order_url": "http://petersapparel.parseapp.com/order?order_id=123456",
-                "timestamp": "1428444852", //timestamp
-                "address": {
-                  "street_1": bill.address.toString(),
-                  "street_2": "",
-                  "city": "Hồ Chí Minh",
-                  "postal_code": "70000",
-                  "state": "Hồ Chí Minh",
-                  "country": "VN"
-                },
-                "summary": {
-                  "subtotal": bill.amount_of_sub_fee,
-                  "shipping_cost": bill.ship_fee,
-                  "total_tax": bill.vat_fee,
-                  "total_cost": bill.total_price
-                },
-                "adjustments": [ //if amount_of_promotion is not equal 0 => add amount_of_promotion; because amount value must be not equal 0
-                  {
-                    "name": "Khuyến mãi",
-                    "amount": bill.amount_of_promotion != 0 ? bill.amount_of_promotion : 1
-                  }
-                ],
-                "elements": []
-              }
-            }
-          }
-        }
-        setting.body.story.push(contentBillActivity)
-        setting.body.story.push(contentReceipt)
-        break;
       }
-      case "PROCESSING": {
-        contentBillActivity = {
-          "type": "text",
-          "option": {
-            "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn đang được xử lý", // null or not null
-          }
-        }
-        setting.body.story.push(contentBillActivity)
-      }
-      case "DELIVERY": {
-        contentBillActivity = {
-          "type": "text",
-          "option": {
-            "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn đang được giao bởi nhân viên " + bill.employee, // null or not null
-          }
-        }
-        setting.body.story.push(contentBillActivity)
-      }
-      case "PAID": {
-        contentBillActivity = {
-          "type": "text",
-          "option": {
-            "text": "Cám ơn {{first_name}} {{last_name}} đã sử dụng dịch vụ của " + bill.brand_name + ". Đơn hàng đã được thanh toán vào lúc " + bill.activity.created_at, // null or not null
-          }
-        }
-        setting.body.story.push(contentBillActivity)
-      }
-      default: {
-        contentBillActivity = {
-          "type": "text",
-          "option": {
-            "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn vừa chuyển sang trạng thái " + bill.action, // null or not null
-          }
-        }
-        setting.body.story.push(contentBillActivity)
-      }
+      setting.body.story.push(contentBillActivity)
     }
+
+    // switch (bill.activity.action) {
+    //   case "CANCEL": { //if bill was cancel
+    //     contentBillActivity = {
+    //       "type": "text",
+    //       "option": {
+    //         "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn vừa bị hủy." // null or not null
+    //       }
+    //     }
+    //     setting.body.story.push(contentBillActivity)
+    //     break;
+    //   }
+    //   // case "UPDATED": { //if bill was updated
+    //   //   contentBillActivity = {
+    //   //     "type": "text",
+    //   //     "option": {
+    //   //       "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn vừa được cập nhật. {{first_name}} {{last_name}} có thể kiểm tra lại thông tin đơn hàng ở bên dưới." // null or not null
+    //   //     }
+    //   //   }
+    //   //   let contentReceipt: any = {
+    //   //     "type": "generic",
+    //   //     "option": {
+    //   //       "attachment": {
+    //   //         "type": "template",
+    //   //         "payload": {
+    //   //           "template_type": "receipt",
+    //   //           "recipient_name": bill.customer_fullname.toString(),
+    //   //           "order_number": bill.code.toString(),
+    //   //           "currency": "VND",
+    //   //           "payment_method": "Tiền mặt & giao hàng", //tiền mặt + giao hàng/nhận tại cửa hàng
+    //   //           "order_url": "http://petersapparel.parseapp.com/order?order_id=123456",
+    //   //           "timestamp": "1428444852", //timestamp
+    //   //           "address": {
+    //   //             "street_1": bill.address.toString(),
+    //   //             "street_2": "",
+    //   //             "city": "Hồ Chí Minh",
+    //   //             "postal_code": "70000",
+    //   //             "state": "Hồ Chí Minh",
+    //   //             "country": "VN"
+    //   //           },
+    //   //           "summary": {
+    //   //             "subtotal": bill.amount_of_sub_fee,
+    //   //             "shipping_cost": bill.ship_fee,
+    //   //             "total_tax": bill.vat_fee,
+    //   //             "total_cost": bill.total_price
+    //   //           },
+    //   //           "adjustments": [ //if amount_of_promotion is not equal 0 => add amount_of_promotion; because amount value must be not equal 0
+    //   //             {
+    //   //               "name": "Khuyến mãi",
+    //   //               "amount": bill.amount_of_promotion != 0 ? bill.amount_of_promotion : 1
+    //   //             }
+    //   //           ],
+    //   //           "elements": []
+    //   //         }
+    //   //       }
+    //   //     }
+    //   //   }
+    //   //   setting.body.story.push(contentBillActivity)
+    //   //   setting.body.story.push(contentReceipt)
+    //   //   break;
+    //   // }
+    //   // case "PROCESSING": {
+    //   //   contentBillActivity = {
+    //   //     "type": "text",
+    //   //     "option": {
+    //   //       "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn đang được xử lý", // null or not null
+    //   //     }
+    //   //   }
+    //   //   setting.body.story.push(contentBillActivity)
+    //   // }
+    //   // case "PROCESSING": {
+    //   //   contentBillActivity = {
+    //   //     "type": "text",
+    //   //     "option": {
+    //   //       "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn đang được xử lý", // null or not null
+    //   //     }
+    //   //   }
+    //   //   setting.body.story.push(contentBillActivity)
+    //   // }
+    //   // case "DELIVERY": {
+    //   //   contentBillActivity = {
+    //   //     "type": "text",
+    //   //     "option": {
+    //   //       "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn đang được giao bởi nhân viên " + bill.employee, // null or not null
+    //   //     }
+    //   //   }
+    //   //   setting.body.story.push(contentBillActivity)
+    //   // }
+    //   // case "PAID": {
+    //   //   contentBillActivity = {
+    //   //     "type": "text",
+    //   //     "option": {
+    //   //       "text": "Cám ơn {{first_name}} {{last_name}} đã sử dụng dịch vụ của " + bill.brand_name + ". Đơn hàng đã được thanh toán vào lúc " + bill.activity.created_at, // null or not null
+    //   //     }
+    //   //   }
+    //   //   setting.body.story.push(contentBillActivity)
+    //   // }
+    //   default: {
+    //     contentBillActivity = {
+    //       "type": "text",
+    //       "option": {
+    //         "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn vừa chuyển sang trạng thái " + bill.action, // null or not null
+    //       }
+    //     }
+    //     setting.body.story.push(contentBillActivity)
+    //   }
+    // }
 
     console.log("request body", JSON.stringify(setting))
     var res: any = await this.exec(setting);

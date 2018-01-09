@@ -36,8 +36,13 @@ export class AddComponent implements OnInit, AddPageInterface {
   endDate: string;
   value: number = 0;
   customerType: string;
+
   promotionType: 'discount_by_percent' | 'discount_by_price' | 'discount_by_gift';
   promotionTypes: any[];
+
+  promotion: string;
+  promotions: any[];
+
   status: number = 1;
   customerTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   // promotionTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
@@ -129,6 +134,18 @@ export class AddComponent implements OnInit, AddPageInterface {
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
+    }
+  }
+
+  async loadPromotions() {
+    try {
+      this.promotions = await this.innowayApi.promotion.getList({
+        query: {
+          fields: ["$all"]
+        }
+      })
+    } catch (err) {
+
     }
   }
 

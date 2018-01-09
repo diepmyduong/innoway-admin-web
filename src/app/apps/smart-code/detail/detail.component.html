@@ -79,7 +79,7 @@
                 <img *ngIf="messengerCodeImageControl.value && messengerCodeImageControl.valid" style="width:auto;height:80px;margin-top:0.1rem;" [src]="messengerCodeImageControl.value" />
               </div>
             </div>
-            <div class="form-group row" *ngIf="isConnectChatbot">
+            <div class="form-group row" *ngIf="isConnectChatbot" [hidden]="true">
               <label class="col-md-2 header-text" for="textarea-input">QR Code</label>
               <div class="col-md-10">
                 <input type="text" #qrCodeImageControl="ngModel" [(ngModel)]="qrCodeImage" name="qrCodeImage" class="form-control input-control" [placeholder]="image?'':'Nhập url'" url readonly/>
@@ -89,7 +89,9 @@
                 <img *ngIf="qrCodeImageControl.value && qrCodeImageControl.valid" style="width:auto;height:80px;margin-top:0.1rem;" [src]="qrCodeImageControl.value" />
               </div>
             </div>
-
+            <div class="form-group row iframe">
+              <iframe [attr.src]="iFrameLink | safe" frameborder="0" width="400" height="800" style="padding:20px"></iframe>
+            </div>
           </form>
         </div>
         <div class="card-footer">

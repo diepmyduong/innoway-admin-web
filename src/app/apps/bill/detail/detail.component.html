@@ -4,8 +4,10 @@
       <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin đơn hàng</ng-template>
       <div class="row">
         <div class="col-md-12">
-          <span *ngIf="!isCancel" class="float-right cancel-bill" (click)="showCancelBillDialog(bill)"><i class="fa fa-remove mr-h"></i>Hủy đơn hàng</span>
-          <span *ngIf="isCancel" class="float-right cancel-bill">Đơn hàng đã hủy</span>
+          <span *ngIf="isOrderFromChatbot" class="float-right send-bill mr-h" (click)="sendMessageChatbot(bill)"><i class="fa fa-send-o mr-h"></i>Gửi tin nhắn</span>
+          <span *ngIf="isOrderFromChatbot" class="float-right send-bill mr-h" (click)="sendInvoiceToCustomer(bill)"><i class="fa fa-send mr-h"></i>Gửi hóa đơn</span>
+          <span *ngIf="!isCancel" class="float-right cancel-bill mr-h" (click)="showCancelBillDialog(bill)"><i class="fa fa-remove mr-h"></i>Hủy đơn hàng</span>
+          <span *ngIf="isCancel" class="float-right cancel-bill mr-h">Đơn hàng đã hủy</span>
         </div>
         <div class="col-md-12">
           <div class="card" style="border: 1px solid #e1e6ef">

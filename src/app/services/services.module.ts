@@ -9,6 +9,7 @@ import { InnowayAuthService } from './innoway/innoway-auth.service';
 import { InnowayApiService } from './innoway/innoway-api.service';
 import { FcmService } from './innoway/fcm.service'
 import { SharedDataService } from './shared-data/shared-data.service'
+import { Globals } from "app/globals";
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { SharedDataService } from './shared-data/shared-data.service'
     InnowayApiService,
     SharedDataService,
     FirebaseAuthGuard,
-    FcmService
+    FcmService,
+    Globals
   ]
 })
 export class ServicesModule { }

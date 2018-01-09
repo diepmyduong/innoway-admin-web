@@ -236,9 +236,9 @@ export class CustomerComponent implements OnInit, ListPageInterface {
           link: input.media.link
         }
       }
-      let data = await this.innowayApi.thirdpartyChatbot.sendMessageToCustomer(request);
+      // let data = await this.innowayApi.thirdpartyChatbot.sendMessageToCustomer(request);
       this.alertUpdateSuccess()
-      console.log("response", JSON.stringify(data))
+      // console.log("response", JSON.stringify(data))
     } catch (err) {
       this.alertUpdateFail()
       console.log("response", err)

@@ -137,7 +137,24 @@ export class PromotionLayoutComponent implements OnInit {
           icon: 'icon-menu'
         }
       ]
-    }
+    },
+    {
+      type: 'parent',
+      name: 'Smart Code',
+      icon: 'fa fa-usd',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./smart-code/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./smart-code/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
   ];
 
 }

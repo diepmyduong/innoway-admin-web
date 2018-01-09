@@ -55,6 +55,10 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   isCancel: boolean = false;
 
+  isOrderFromChatbot: boolean = false;
+  story: string;
+  stories: any[];
+
   constructor(
     private globals: Globals,
     private route: ActivatedRoute,
@@ -197,7 +201,8 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       this.backToList()
     }
 
-    this.loadBrandByEmployeeData(this.employee.brand_id);
+    // this.loadBrandByEmployeeData(this.employee.brand_id);
+    this.loadCurrentBrandData();
     this.loadEmployeeData();
   }
 
@@ -231,16 +236,16 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     }
   }
 
-  async loadBrandByEmployeeData(brandId: string) {
-    try {
-      this.brand = await this.innowayApi.brand.getItem(brandId, {
-        query: { fields: ["$all"] }
-      })
-      this.ref.detectChanges();
-    } catch (err) {
-
-    }
-  }
+  // async loadBrandByEmployeeData(brandId: string) {
+  //   try {
+  //     this.brand = await this.innowayApi.brand.getItem(brandId, {
+  //       query: { fields: ["$all"] }
+  //     })
+  //     this.ref.detectChanges();
+  //   } catch (err) {
+  //
+  //   }
+  // }
 
   async setData() {
     try {
@@ -287,8 +292,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       }
 
       if (this.bill.activity.action) {
-        if (this.bill.activity.action.indexOf("CANCEL") >= 0
-          || this.bill.activity.action.indexOf("DISTRIBUTED") >= 0) {
+        if (this.bill.activity.action.indexOf("CANCEL") >= 0) {
           this.isCancel = true
         } else {
           this.isCancel = false
@@ -325,14 +329,19 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         this.bill.related_people.payer_note ?
           this.bill.related_people.payer_note : "không có";
 
-      if (this.brand.thirdparty_chatbot) {
-        if (this.bill.channel == "chatbot") {
-          alert("chatbot");
-        }
-        if (this.bill.customer.chatbot_subscriber_id) {
-          alert("chatbot");
-        }
+      // if (this.brand.thirdparty_chatbot) {
+      // if (this.bill.channel == "chatbot") {
+      if (this.bill.customer.chatbot_subscriber_id) {
+        this.isOrderFromChatbot = true
+      } else {
+        this.isOrderFromChatbot = false
       }
+      // } else {
+      //   this.isOrderFromChatbot = false
+      // }
+      // } else {
+      //   this.isOrderFromChatbot = false
+      // }
 
       console.log("setData", JSON.stringify(this.bill));
       this.ref.detectChanges();
@@ -386,6 +395,22 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   alertDeleteFail() {
     return swal({
       title: 'Hủy đơn hàng thất bại',
+      type: 'warning',
+      timer: 2000
+    })
+  }
+
+  alertSendSuccess() {
+    return swal({
+      title: 'Gửi thành công',
+      type: 'success',
+      timer: 2000
+    })
+  }
+
+  alertSendFail() {
+    return swal({
+      title: 'Gửi thất bại',
       type: 'warning',
       timer: 2000
     })
@@ -463,9 +488,23 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     try {
       let response = await this.innowayApi.bill.changeActivity(bill.id, data)
       console.log("updateBillActivity", JSON.stringify(response))
-      if (response && this.brand.thirdparty_chatbot) {
-        this.sendInvoiceToCustomer(bill);
-      }
+      // if (response && this.brand.thirdparty_chatbot) {
+      //   this.sendInvoiceToCustomer(bill);
+      // }
+      let subscribers: any[] = []
+      subscribers.push(bill.customer.chatbot_subscriber_id)
+
+      this.sendInformationAboutBillToCustomer({
+        content: "Dịch vụ chăm sóc khách hàng " + this.brand.name + " kính chào quý khách.",
+        bill: bill,
+        chatbot: {
+          app_id: this.brand.thirdparty_chatbot.app_id,
+          access_token: this.brand.thirdparty_chatbot.access_token
+        },
+        note: this.globals.detectBillActivityByCode(bill.activity.action),
+        sendBy: "subscriber",
+        sendTo: subscribers
+      })
       this.alertUpdateSuccess();
       this.setData();
     } catch (err) {
@@ -831,19 +870,22 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         vat_fee: bill.vat_fee,
         amount_of_sub_fee: bill.amount_of_sub_fee,
         amount_of_promotion: bill.amount_of_promotion,
-        ship_fee: bill.ship_detail.ship_fee ? bill.ship_detail.ship_fee : 0,
-        ship_method: bill.ship_detail.ship_method,
+        ship_fee: bill.bill_ship_detail.ship_fee ? bill.bill_ship_detail.ship_fee : 0,
+        ship_method: 'distance',
         created_at: bill.created_at,
-        code: bill.code,
+        code: bill.code.toString() ? bill.code.toString() : "004",
         address: bill.address,
         customer_fullname: bill.customer.fullname,
         greeting: "Chào {{first_name}} {{last_name}}, đơn hàng " + bill.code + " của quý khách đã được xác nhận thành công",
         send_by: "subscriber",
         subscribers: subscribers
       }
+      console.log(JSON.stringify(params))
       let response = await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(params)
+      this.alertSendSuccess()
       console.log(JSON.stringify(response))
     } catch (err) {
+      this.alertSendFail()
       console.log(err)
     }
   }
@@ -879,6 +921,121 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     } catch (err) {
       this.alertDeleteFail()
       console.log(err)
+    }
+  }
+
+  async sendInformationAboutBillToCustomer(input: any) {
+    try {
+      let response = await this.innowayApi.thirdpartyChatbot.sendBillActivityToCustomer({
+        content: input.content,
+        bill: input.bill,
+        note: input.note,
+        chatbot: input.chatbot,
+        send_by: input.sendBy,
+        send_to: input.sendTo
+      })
+      console.log("sendInformationAboutBillToCustomer", JSON.stringify(response))
+    } catch (err) {
+      console.log("sendInformationAboutBillToCustomer", err)
+    }
+  }
+
+  sendMessageChatbot(item) {
+    let data = {
+
+    };
+
+    let dialogRef = this.dialog.open(SendMessageDialog, {
+      width: '560px',
+      data: data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        this.sendMessage({
+          content: result.contentInput,
+          media: {
+            type: result.mediaType,
+            link: result.mediaLinkInput
+          },
+          app: {
+            app_id: this.brand.thirdparty_chatbot.app_id,
+            app_token: this.brand.thirdparty_chatbot.access_token
+          }
+        })
+      }
+    })
+  }
+
+  async sendMessage(input: any) {
+    try {
+      let subscribers: string[] = [];
+      subscribers.push(this.bill.customer.chatbot_subscriber_id)
+      let request = {
+        content: input.content,
+        media: {
+          type: input.media.type,
+          link: input.media.link
+        },
+        app: {
+          app_id: input.app.app_id,
+          app_token: input.app.app_token
+        },
+        send_by: "subscriber",
+        send_to: subscribers
+      }
+      console.log("response", JSON.stringify(request))
+      let data = await this.innowayApi.thirdpartyChatbot.sendMessageToCustomer(request);
+      this.alertSendSuccess()
+      console.log("response", JSON.stringify(data))
+    } catch (err) {
+      this.alertSendFail()
+      console.log("response", err)
+    }
+  }
+
+  sendStoryChatbot(item) {
+
+    let data = {
+      stories: this.stories ? this.stories : [],
+      subscriberId: item.id
+    };
+
+    let dialogRef = this.dialog.open(SendStoryDialog, {
+      width: '560px',
+      data: data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        if (result.result) {
+          this.sendStory(result.storyId)
+        }
+      }
+    })
+  }
+
+  async getStories() {
+    try {
+      let response = await this.innowayApi.thirdpartyChatbot.getStories();
+      this.stories = response.rows;
+      this.story = this.stories[0]._id;
+      console.log("getStories", response);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async sendStory(storyId: string) {
+    try {
+      let response = await this.innowayApi.thirdpartyChatbot.sendStory({
+        story_id: storyId
+      });
+      console.log("send message", JSON.stringify(response))
+      alert(true)
+    } catch (err) {
+      console.log("send message", err)
+      alert(false)
     }
   }
 }

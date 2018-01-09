@@ -16,8 +16,12 @@ export const PromotionLayoutRouting = {
       loadChildren: 'app/apps/promotion/promotion.module#PromotionModule'
     },
     {
-      path: 'promotion-type',
-      loadChildren: 'app/apps/promotion-type/promotion-type.module#PromotionTypeModule'
+      path: 'customer-type',
+      loadChildren: 'app/apps/customer-type/customer-type.module#CustomerTypeModule'
+    },
+    {
+      path: 'smart-code',
+      loadChildren: 'app/apps/smart-code/smart-code.module#SmartCodeModule'
     }
   ],
 
