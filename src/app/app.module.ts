@@ -64,6 +64,8 @@ import { TextMaskModule } from 'angular2-text-mask';
     LayoutsModule,
     FormsModule,
     TextMaskModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot(),
     // BsDropdownModule.forRoot(),
     ColorPickerModule,
   ],

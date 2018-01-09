@@ -44,6 +44,12 @@
               </div>
             </div>
             <div class="form-group row">
+              <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
+              <div class="col-md-10">
+                <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
+              </div>
+            </div>
+            <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Địa chỉ</label>
               <div class="col-md-10">
                 <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control input-control" [placeholder]="'Nhập địa chỉ'" required autocorrect="off" autocapitalize="off" spellcheck="off" #addressInput>

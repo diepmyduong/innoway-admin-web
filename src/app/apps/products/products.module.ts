@@ -53,8 +53,6 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     DataTableModule,
     PipesModule,
     SwiperModule,
-    FroalaEditorModule,
-    FroalaViewModule,
     // UploadImageByUrlComponent
   ],
   declarations: [ProductsComponent, AddComponent, DetailComponent],  //UploadImageByUrlComponent

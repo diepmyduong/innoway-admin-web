@@ -31,6 +31,7 @@ export class ConfigComponent implements OnInit {
   closeHour: string;
   address: string;
   phone: string;
+  description: string;
 
   latitude: string;
   longitude: string;
@@ -194,6 +195,7 @@ export class ConfigComponent implements OnInit {
       this.phone = data.phone
       this.openHour = data.open_hour_online
       this.closeHour = data.close_hour_online
+      this.description = data.description
       this.brandCategory = data.brand_category_id ? data.brand_category_id : null
       data.open_days_of_week.forEach(item => {
         console.log(JSON.stringify(item));
@@ -276,7 +278,7 @@ export class ConfigComponent implements OnInit {
   async addItem(form: NgForm) {
     if (form.valid) {
 
-      let { name, color, logo, trialExpire, address, vatValue, openHour, closeHour, brandCategory, status } = this;
+      let { name, color, logo, trialExpire, description, address, vatValue, openHour, closeHour, brandCategory, status } = this;
       let brand_category_id = brandCategory
       let trial_expire = trialExpire
       let vat_value = vatValue
@@ -289,7 +291,7 @@ export class ConfigComponent implements OnInit {
         }
       });
       await this.innowayApi.brand.add({
-        name, color, logo, trial_expire, address, vat_value,
+        name, color, logo, trial_expire, description, address, vat_value,
         open_hour_online, close_hour_online, open_days_of_week, brand_category_id, status
       })
       this.alertAddSuccess();
@@ -303,7 +305,7 @@ export class ConfigComponent implements OnInit {
   async updateItem(form: NgForm) {
     if (form.valid) {
       try {
-        let { name, color, logo, trialExpire, address, phone, vatValue, openHour, closeHour, brandCategory, status } = this;
+        let { name, color, logo, trialExpire, description, address, phone, vatValue, openHour, closeHour, brandCategory, status } = this;
         let brand_category_id = brandCategory
         let trial_expire = trialExpire;
         let vat_value = vatValue
@@ -317,7 +319,7 @@ export class ConfigComponent implements OnInit {
         });
 
         await this.innowayApi.brand.update(this.employee.brand_id, {
-          name, color, logo, trial_expire, address, vat_value, phone,
+          name, color, logo, trial_expire, description, address, vat_value, phone,
           open_hour_online, close_hour_online, open_days_of_week, brand_category_id, status
         })
         this.alertUpdateSuccess();
