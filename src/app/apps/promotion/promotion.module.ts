@@ -25,7 +25,8 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     LaddaModule,
     DataTableModule,
     TextMaskModule,
-
+    FroalaEditorModule,
+    FroalaViewModule,
 
     PipesModule
   ],

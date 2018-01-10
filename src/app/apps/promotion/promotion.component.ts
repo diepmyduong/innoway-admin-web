@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayApiService } from "app/services/innoway";
 import { Globals } from "./../../Globals"
 declare let swal: any
-declare var accounting:any;
+declare var accounting: any;
 
 @Component({
   selector: 'app-promotion',
@@ -18,7 +18,7 @@ export class PromotionComponent implements OnInit {
   items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   itemCount: number = 0;
   thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";;
-  itemFields: any = ["$all", { customer_types: ["$all", {customer_type: ["$all"]}] }];
+  itemFields: any = ["$all", { customer_types: ["$all", { customer_type: ["$all"] }] }];
   query: any = {};
   searchTimeOut: number = 250;
   searchRef: any;
@@ -72,9 +72,9 @@ export class PromotionComponent implements OnInit {
     this.router.navigate(['../add', item.id], { relativeTo: this.route });
   }
 
-  viewItem(item) {
-    this.router.navigate(['../detail', item.id], { relativeTo: this.route });
-  }
+  // viewItem(item) {
+  //   this.router.navigate(['../detail', item.id], { relativeTo: this.route });
+  // }
 
   async confirmDelete() {
     return await swal({
@@ -192,7 +192,7 @@ export class PromotionComponent implements OnInit {
       } else if (typeof (value) === "number") {
         number = value;
       }
-      return accounting.formatMoney(number,options);
+      return accounting.formatMoney(number, options);
     } catch (err) {
       return "NAN";
     }
@@ -213,9 +213,21 @@ export class PromotionComponent implements OnInit {
       } else if (typeof (value) === "number") {
         number = value;
       }
-      return accounting.formatMoney(number,options);
+      return accounting.formatMoney(number, options);
     } catch (err) {
       return "NAN";
+    }
+  }
+
+  async viewItem(item) {
+    try {
+      let response = await this.innowayApi.promotion.getDetailPromotion(item.id, {
+        is_show_used_customer: true,
+        is_show_used_bill: true,
+      })
+      console.log("detail", JSON.stringify(response))
+    } catch (err) {
+      console.log("detail", err)
     }
   }
 }

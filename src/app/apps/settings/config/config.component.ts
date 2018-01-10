@@ -31,7 +31,7 @@ export class ConfigComponent implements OnInit {
   closeHour: string;
   address: string;
   phone: string;
-  description: string;
+  public description;
 
   latitude: string;
   longitude: string;

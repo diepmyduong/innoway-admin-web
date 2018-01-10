@@ -209,11 +209,11 @@
                     </ng-select>
                   </div>
                 </div>
-                <div class="form-group row remove-pb" *ngFor="let topping of toppings | async" [hidden]="toppings!=null?false:true">
+                <div class="form-group row remove-pb" *ngFor="let topping of topping_items | async" [hidden]="toppings!=null?false:true">
                   <label class="col-md-2 sub-header-text" *ngIf="topping.selected && topping.values">{{topping.name}}<span *ngIf="topping.description" class="color-primary"> ({{topping.description}})</span></label>
-                  <div class="col-md-12" *ngIf="topping.selected && topping.values">
+                  <div class="col-md-12" *ngIf="topping.selected && topping.src.values">
                     <div class="row remove-pb">
-                      <div class="col-md-2" *ngFor="let value of topping.values">
+                      <div class="col-md-2" *ngFor="let value of topping.src.values">
                         <label class="checkbox-inline" for="inline-checkbox1">
                             <i class="icon-check icons mr-h"></i> {{value.name}} <span class="color-dark">(+{{value.price | accounting}}) -> {{showPrice(value.price) | accounting}}</span>
                         </label>

@@ -17,17 +17,17 @@
       [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
       <data-table-column property="name" header="Tên" [sortable]="true">
       </data-table-column>
-      <data-table-column property="type" header="Loại chi nhánh" [sortable]="true" [resizable]="true">
+      <!-- <data-table-column property="type" header="Loại chi nhánh" [sortable]="true" [resizable]="true">
         <template #dataTableCell let-item="item">
               <span class="p-h">{{item.type == 1?"Sở hửu":"Nhượng quyền"}}</span>
             </template>
-      </data-table-column>
+      </data-table-column> -->
       <data-table-column property="address" header="Địa chỉ" [resizable]="true">
       </data-table-column>
       <data-table-column property="phone" header="Số điện thoại" [resizable]="true">
       </data-table-column>
-      <data-table-column property="employee_id" header="Nhân viên" [visible]="false" [resizable]="true">
-      </data-table-column>
+      <!-- <data-table-column property="employee_id" header="Nhân viên" [visible]="false" [resizable]="true">
+      </data-table-column> -->
       <data-table-column property="status" header="Trạng thái" [sortable]="true">
         <template #dataTableCell let-item="item">
               <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>

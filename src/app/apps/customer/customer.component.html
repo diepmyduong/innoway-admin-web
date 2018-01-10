@@ -27,7 +27,7 @@
               <span>{{item.fullname?item.fullname:"không có"}}</span>
             </template>
       </data-table-column>
-      <data-table-column property="chatbot" header="Chatbot" [sortable]="true">
+      <data-table-column header="Chatbot" [sortable]="true">
         <template #dataTableCell let-item="item">
               <span>{{item.chatbot_subscriber_id?"có kết nối":"không kết nối"}}</span>
             </template>

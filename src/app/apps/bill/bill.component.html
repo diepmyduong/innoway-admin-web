@@ -4,7 +4,7 @@
     <h3 class="col-6">Danh sách đơn hàng</h3>
     <div class="col-6">
       <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm đơn hàng</button>
-      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa đơn hàng</button>
+      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length" [hidden]="true"><i class="fa fa-trash"></i>Xóa đơn hàng</button>
     </div>
   </div>
 
@@ -88,9 +88,9 @@
       <data-table-column header="Thao tác" [width]="100" [resizable]="false">
         <template #dataTableCell let-item="item">
             <div>
-              <button (click)="print(item)" class="btn btn-sm btn-table btn-green"><i class="fa fa-print"></i></button>
-              <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-eye"></i></button>
-              <button *ngIf="!detectBillCancel(item)" (click)="showCancelBillDialog(item)" class="btn btn-sm btn-table btn-red"><i class="fa fa-remove"></i></button>
+              <button matTooltip="In" class="material-icons color-bluegrey-light" (click)="print(item)" class="btn btn-sm btn-table btn-green"><i class="fa fa-print"></i></button>
+              <button matTooltip="Xem" class="material-icons color-bluegrey-light" (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-eye"></i></button>
+              <button matTooltip="Hủy" *ngIf="!detectBillCancel(item)" (click)="showCancelBillDialog(item)" class="btn btn-sm btn-table btn-red"><i class="fa fa-remove"></i></button>
             </div>
           </template>
       </data-table-column>

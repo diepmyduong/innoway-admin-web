@@ -17,7 +17,7 @@
       [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
       <data-table-column property="name" header="Tên" [sortable]="true">
       </data-table-column>
-      <data-table-column property="topping" header="Topping" [resizable]="true" [sortable]="true">
+      <data-table-column header="Topping" [resizable]="true" [sortable]="true">
         <template #dataTableCell let-item="item">
               {{item.topping?.name?item.topping.name:"không có"}}
             </template>
