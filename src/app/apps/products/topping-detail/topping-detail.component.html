@@ -1,0 +1,15 @@
+<div class="form-group row remove-pb">
+  <label class="col-md-2 sub-header-text">{{topping.name}}
+    <span *ngIf="topping.description" class="color-primary"> ({{topping.description}})</span>
+  </label>
+  <div class="col-md-12" *ngIf="topping.values">
+    <div class="row remove-pb">
+      <div class="col-md-2" *ngFor="let value of topping.values">
+        <label class="checkbox-inline" for="inline-checkbox1">
+          <i class="icon-check icons mr-h"></i> {{value.name}}
+          <span class="color-dark">(+{{value.price | accounting}}) -> {{showPrice(value.price) | accounting}}</span>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

@@ -33,6 +33,7 @@ import { SwiperModule } from 'angular2-useful-swiper';
 
 import { FroalaComponent } from "app/editor/froala.component";
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { ToppingDetailComponent } from './topping-detail/topping-detail.component';
 
 @NgModule({
   imports: [
@@ -57,7 +58,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     FroalaViewModule,
     // UploadImageByUrlComponent
   ],
-  declarations: [ProductsComponent, AddComponent, DetailComponent],  //UploadImageByUrlComponent
+  declarations: [ProductsComponent, AddComponent, DetailComponent, ToppingDetailComponent],  //UploadImageByUrlComponent
   providers: []
 })
 export class ProductsModule { }

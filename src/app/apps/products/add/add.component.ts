@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription'
 import { SelectComponent } from 'ng2-select';
 import * as Ajv from 'ajv';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
-import { InnowayApiService } from 'app/services/innoway'
+import { InnowayApiService, iTopping } from 'app/services/innoway'
 import { Globals } from './../../../globals';
 
 declare var swal, _: any;
@@ -40,7 +40,7 @@ export class AddComponent implements OnInit {
 
   toppingValues = new BehaviorSubject<any[]>([]);
   categories = new BehaviorSubject<any[]>([]);
-  toppings = new BehaviorSubject<any[]>([]);
+  toppings = new BehaviorSubject<iTopping[]>([]);
   units = new BehaviorSubject<any[]>([]);
   attributes = new BehaviorSubject<any[]>([]);
   productTypes = new BehaviorSubject<any[]>([]);
@@ -76,11 +76,12 @@ export class AddComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-
-    await this.loadCategoryData();
-    await this.loadToppingData();
-    await this.loadUnitData();
-    await this.loadProductTypeData();
+    await Promise.all([
+      this.loadCategoryData(),
+      this.loadToppingData(),
+      this.loadUnitData(),
+      this.loadProductTypeData()
+    ])
     if (this.id == null) {
       this.isEdit = false;
       this.setDefaultData();
@@ -168,22 +169,22 @@ export class AddComponent implements OnInit {
 
   async loadToppingData() {
     try {
-      this.subscriptions.push(this.toppings.subscribe(toppings => {
-        let items = toppings.map(topping => {
-          return {
-            text: `${topping.name} ${(topping.description)?(' (' + topping.description + ')'):''}`,
-            id: topping.id
-          }
-        })
-        this.topping_items.next(items);
-      }))
-      this.toppings.next(await this.innowayApi.topping.getList({
+      const toppings = await this.innowayApi.topping.getList({
         local: true, query: {
-          fields: ["id", "description", "name"],
+          fields: ["id", "description", "name", {
+            values: ["$all"]
+          }],
           limit: 0
         }
+      })
+      this.toppings.next(toppings)
+      this.topping_items.next(toppings.map(topping => {
+        return {
+          text: `${topping.name} ${(topping.description)?(' (' + topping.description + ')'):''}`,
+          id: topping.id
+        }
       }))
-      console.log(this.toppings.getValue())
+      console.log('toppings', toppings)
     } catch (err) {
       console.error("cannot load toppings", err);
     }
@@ -223,16 +224,17 @@ export class AddComponent implements OnInit {
       let product = await this.innowayApi.product.getItem(this.id, {
         local: true, reload: true, query: {
           fields: ["$all", {
-            toppings: ["id", {
-              topping: ["id", "description", "name", {
-                values: ["$all"]
-              }]
-            }]
+            toppings: ["id", "topping_id"]
+            // {
+            //   topping: ["id", "description", "name", {
+            //     values: ["$all"]
+            //   }]
+            // }]
           }]
         }
       })
 
-      console.log("setdata", JSON.stringify(product))
+      console.log("setdata", product)
       this.name = product.name
       this.thumb = product.thumb
       this.description = product.description
@@ -244,17 +246,18 @@ export class AddComponent implements OnInit {
       this.category = product.category_id ? product.category_id : null
       this.list_image = product.list_image
       this.product_type = product.product_type_id ? product.product_type_id : null
-      let toppings = this.toppings.getValue();
+      let toppings = this.toppings.getValue()
       this.toppingSelecter.active = product.toppings.map(product_topping => {
-        let index = _.findIndex(toppings, { id: product_topping.topping.id });
-        toppings[index].values = product_topping.topping.values;
-        toppings[index].selected = true;
+        const topping = toppings.find(t => t.id === product_topping.topping_id )
+        // let index = _.findIndex(toppings, { id: product_topping.topping.id });
+        // toppings[index].values = product_topping.topping.values;
+        // toppings[index].selected = true;
         return {
-          id: product_topping.topping.id,
-          text: `${product_topping.topping.name} ${(product_topping.topping.description)?(' (' + product_topping.topping.description + ')'):''}`,
+          id: topping.id,
+          text: `${topping.name} ${(topping.description)?(' (' + topping.description + ')'):''}`,
         }
       })
-      this.toppings.next(toppings);
+      // this.toppings.next(toppings);
       this.ref.detectChanges();
     } catch (err) {
       console.log('ERROR', err);
@@ -475,7 +478,7 @@ export class AddComponent implements OnInit {
     this.toppings.next(toppings);
   }
 
-  async showPrice(value_price) {
-    return value_price + parseInt(this.price);
+  getTopping(id: string) {
+    return this.toppings.getValue().find(t => t.id === id)
   }
 }

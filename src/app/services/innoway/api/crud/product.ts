@@ -1,6 +1,8 @@
 import { CrudAPI, iCrud, crudOptions } from '../crud'
 import { InnowayApiService } from '../../innoway-api.service'
 import * as _ from 'lodash'
+import { iTopping } from 'app/services/innoway';
+import { iProductTopping } from 'app/services/innoway/api/crud/product-topping';
 
 export interface iProduct extends iCrud {
     base_price?: number,
@@ -19,6 +21,8 @@ export interface iProduct extends iCrud {
     code?: number,
     is_available?: boolean,
     rate?: number,
+
+    toppings?: iProductTopping[]
 }
 
 export class Product extends CrudAPI<iProduct> {

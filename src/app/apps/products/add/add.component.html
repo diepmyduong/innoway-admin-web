@@ -209,18 +209,20 @@
                     </ng-select>
                   </div>
                 </div>
-                <div class="form-group row remove-pb" *ngFor="let topping of topping_items | async" [hidden]="toppings!=null?false:true">
-                  <label class="col-md-2 sub-header-text" *ngIf="topping.selected && topping.values">{{topping.name}}<span *ngIf="topping.description" class="color-primary"> ({{topping.description}})</span></label>
-                  <div class="col-md-12" *ngIf="topping.selected && topping.src.values">
+                <app-topping-detail [topping]="getTopping(item.id)" [price]="price" *ngFor="let item of toppingSelecter.active"></app-topping-detail>
+                <!-- <div class="form-group row remove-pb" *ngFor="let item of toppingSelecter.active" [hidden]="toppings!=null?false:true">
+                  <pre>{{item | json}}</pre>
+                  <label class="col-md-2 sub-header-text">{{item.src.name}}<span *ngIf="item.src.description" class="color-primary"> ({{item.src.description}})</span></label>
+                  <div class="col-md-12" *ngIf="item.src.values">
                     <div class="row remove-pb">
-                      <div class="col-md-2" *ngFor="let value of topping.src.values">
+                      <div class="col-md-2" *ngFor="let value of item.src.values">
                         <label class="checkbox-inline" for="inline-checkbox1">
                             <i class="icon-check icons mr-h"></i> {{value.name}} <span class="color-dark">(+{{value.price | accounting}}) -> {{showPrice(value.price) | accounting}}</span>
                         </label>
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
