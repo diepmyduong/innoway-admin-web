@@ -315,3 +315,16 @@ textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus {
   width: 84% !important;
   float: right;
 }
+
+.register-form {
+    position: relative;
+    height: 90%;
+    width: 30%;
+    min-width: 22rem;
+    max-width: 35rem;
+    margin: auto;
+    @media screen and (max-width: 540px) {
+        width: 100%;
+        height: 100%;
+    }
+}
