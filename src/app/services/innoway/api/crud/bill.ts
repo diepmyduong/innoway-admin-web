@@ -29,19 +29,48 @@ export class Bill extends CrudAPI<iBill> {
   ) {
     super(api, 'bill')
     this.fcmSubscription = this.api.fcm.onMessage.subscribe(message => {
+      this.log('fcm message ', message)
       if (message === undefined) return
-      if (message.topic == 'bills') {
-        this.log('on bill change', message.json)
-        this.onBillChange.next(message.json)
+      message.json.topic = message.topic
+
+      switch (message.topic) {
+        case 'order_at_store':
+          this.onInformationBillFromFCM.next(message.json)
+          break;
+        case 'order_online_by_employee':
+          this.onInformationBillFromFCM.next(message.json)
+          break;
+        case 'order_online_by_customer':
+          this.onInformationBillFromFCM.next(message.json)
+          break;
+        case 'update_subfee':
+          this.onInformationBillFromFCM.next(message.json)
+          break;
+        case 'update_paid_history':
+          this.onInformationBillFromFCM.next(message.json)
+          break;
+        case 'cancel_bill':
+          this.onInformationBillFromFCM.next(message.json)
+          break;
+        case 'change_bill_activity':
+          this.onInformationBillFromFCM.next(message.json)
+          break;
       }
+      // if (message.topic == 'bills') {
+      //   this.log('on bill change', message.json)
+      //   this.onBillChange.next(message.json)
+      // } else if ()
     })
   }
 
   onBillChange = new BehaviorSubject<any>(undefined)
+  onInformationBillFromFCM = new BehaviorSubject<any>(undefined)
+  onBillOrderAtStore = new BehaviorSubject<any>(undefined)
   fcmSubscription: Subscription
 
   async subscribe() {
     const registrationToken = await this.api.fcm.getMessageToken()
+    console.log("fcm", registrationToken)
     let setting = {
       method: 'POST',
       uri: this.apiUrl(`subscribe`),
@@ -53,7 +82,7 @@ export class Bill extends CrudAPI<iBill> {
       body: { registration_token: registrationToken }
     }
     let res: any = await this.exec(setting);
-    return this.onBillChange
+    return this.onInformationBillFromFCM
   }
 
   async changeActivity(billId: string, params: {

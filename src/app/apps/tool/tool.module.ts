@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-notifications';
 
 import { TabsModule } from 'ng2-bootstrap/tabs';
+import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster';
 
 @NgModule({
   imports: [
@@ -27,7 +28,9 @@ import { TabsModule } from 'ng2-bootstrap/tabs';
     SimpleNotificationsModule,
     PushNotificationsModule,
 
-    TabsModule.forRoot()
+    TabsModule.forRoot(),
+
+    ToasterModule
   ],
   declarations: [ToolComponent],
   bootstrap: [ToolComponent],

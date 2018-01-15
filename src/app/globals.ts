@@ -3,6 +3,38 @@ import { Injectable } from '@angular/core';
 Injectable()
 export class Globals {
 
+  TYPE_FCM_NOTIFICATIONS = [
+    {
+      code: 'order_at_store',
+      name: 'đặt hàng tại cửa hàng'
+    },
+    {
+      code: 'order_online_by_employee',
+      name: 'đặt hàng online từ nhân viên'
+    },
+    {
+      code: 'order_online_by_customer',
+      name: 'đặt hàng online từ người tiêu dùng'
+    },
+    {
+      code: 'update_subfee',
+      name: 'cập nhật phụ phí'
+    },
+    {
+      code: 'update_paid_history',
+      name: 'cập nhật chi phí'
+    },
+    {
+      code: 'cancel_bill',
+      name: 'hủy đơn hàng'
+    },
+    {
+      code: 'change_bill_activity',
+      name: 'thay đổi trạng thái đơn hàng'
+    }
+  ]
+
+
   SEND_MESSAGE_METHODS_ON_CHATBOT = [
     {
       code: 'notification',

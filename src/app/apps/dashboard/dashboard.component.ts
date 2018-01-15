@@ -33,6 +33,46 @@ export class DashboardComponent implements OnInit {
   filter: any;
   area: any;
 
+  areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  customerData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  customerNameData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
+  autocompleteCustomerData: Array<any> = new Array<any>();
+  autocompleteCustomerNameData: Array<any> = new Array<any>();
+
+  callLoadDailySummary: boolean = false;
+
+  actions: any;
+
+  billChangeObservable: BehaviorSubject<any> = new BehaviorSubject<any>({});
+
+  private toasterService: ToasterService;
+
+  public toasterconfig: ToasterConfig =
+  new ToasterConfig({
+    tapToDismiss: true,
+    timeout: 5000
+  });
+
+  top_right_infos = [];
+
+  sub_header_infos = [];
+
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    public innowayApi: InnowayApiService,
+    private ref: ChangeDetectorRef,
+    private globals: Globals,
+    toasterService: ToasterService,
+    private dashboardService: DashboardService,
+    public sharedDataService: SharedDataService) {
+
+    this.employeeData = this.innowayApi.innowayAuth.innowayUser
+    this.toasterService = toasterService;
+
+    this.actions = this.globals.getBillActivitiesOnDashboardLayout();
+  }
+
   get billFilterInfo(): any {
     return this.sharedDataService.billFilterInfo;
   }
@@ -48,90 +88,9 @@ export class DashboardComponent implements OnInit {
     this.sharedDataService.employees = value;
   }
 
-  areas: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  //employees: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  customerData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  customerNameData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
-  autocompleteCustomerData: Array<any> = new Array<any>();
-  autocompleteCustomerNameData: Array<any> = new Array<any>();
-
-  callLoadDailySummary: boolean = false;
-
-  actions: any;
-
-  private toasterService: ToasterService;
-
-  public toasterconfig: ToasterConfig =
-  new ToasterConfig({
-    tapToDismiss: true,
-    timeout: 5000
-  });
-
-  top_right_infos = [
-    // {
-    //   number: 78744,
-    //   text: 'Khách hàng',
-    // },
-    // {
-    //   number: 12333,
-    //   text: 'Phản hồi',
-    // },
-    // {
-    //   number: 8684234,
-    //   text: 'Đơn hàng',
-    // },
-    // {
-    //   number: 45654,
-    //   text: 'Truy cập',
-    // },
-  ];
-
-  sub_header_infos = [
-    // {
-    //   number: 56,
-    //   text: 'THÀNH CÔNG',
-    // },
-    // {
-    //   number: 23,
-    //   text: 'ĐANG XỬ LÝ',
-    // },
-    // {
-    //   number: 78,
-    //   text: 'ĐÃ CHUẨN BỊ',
-    // },
-    // {
-    //   number: 12,
-    //   text: 'ĐANG GIAO',
-    // },
-    // {
-    //   number: 411,
-    //   text: 'THANH TOÁN',
-    // },
-    // {
-    //   number: 19,
-    //   text: 'ĐÃ HỦY',
-    // },
-  ];
-
-  constructor(private router: Router,
-    private route: ActivatedRoute,
-    public innowayApi: InnowayApiService,
-    private ref: ChangeDetectorRef,
-    private globals: Globals,
-    toasterService: ToasterService,
-    private dashboardService: DashboardService,
-    public sharedDataService: SharedDataService) {
-
-    this.employeeData = this.innowayApi.innowayAuth.innowayUser
-    this.toasterService = toasterService;
-
-    //init actions
-    this.actions = this.globals.getBillActivitiesOnDashboardLayout();
-  }
-
-  showSuccess() {
-    this.toasterService.pop('success', 'Success Toaster', 'This is toaster description');
+  showNotification(notification: any) {
+    this.toasterService.pop(notification.type, notification.title, notification.content);
   }
 
   async ngOnInit() {
@@ -150,6 +109,114 @@ export class DashboardComponent implements OnInit {
     // this.getSummaryInformation();
     this.loadDailySummary();
     this.subscribeLoadDailySummary();
+    this.subscribeTopicByFCM();
+  }
+
+  async subscribeTopicByFCM() {
+    this.billChangeObservable = await this.innowayApi.bill.subscribe()
+    this.billChangeObservable.subscribe(message => {
+      try {
+        console.log("subscribeTopicByFCM", JSON.stringify(message))
+        let title;
+        let content;
+        switch (message.topic) {
+          case 'order_at_store':
+          case 'order_online_by_employee':
+          case 'order_online_by_customer':
+          case 'update_subfee':
+          case 'update_paid_history':
+          case 'cancel_bill':
+          case 'change_bill_activity':
+            this.dashboardService.getTopicFromFCM(message);
+            this.showInformationAboutBillFromFCM(message)
+            break;
+        }
+      }
+      catch (err) {
+        console.log("subscribeTopicByFCM", err);
+      }
+    });
+  }
+
+  async showInformationAboutBillFromFCM(message: any) {
+    try {
+      let data = await this.innowayApi.bill.getItem(message.bill_id, {
+        query: {
+          fields: ["$all", {
+            activity: ['$all', {
+              employee: ['$all']
+            }],
+            paid_history: ['$all', {
+              employee: ['$all']
+            }],
+            customer: ["$all"]
+          }]
+        }
+      })
+      console.log("loadBill", JSON.stringify(data))
+      switch (message.topic) {
+        case 'order_at_store': {
+          this.showNotification({
+            type: 'success',
+            title: 'Đơn hàng ' + data.code + ' đặt thành công',
+            content: 'Đơn hàng được đặt tại chi nhánh ' + this.branch.name
+          })
+          break;
+        }
+        case 'order_online_by_employee': {
+          this.showNotification({
+            type: 'success',
+            title: 'Đơn hàng ' + data.code + ' đặt thành công',
+            content: 'Đơn hàng cần giao đến ' + data.address + ' bởi nhân viên ' + data.activity.employee.fullname
+          })
+          break;
+        }
+        case 'order_online_by_customer': {
+          this.showNotification({
+            type: 'success',
+            title: 'Đơn hàng ' + data.code + ' được đặt thành công',
+            content: 'Đơn hàng được đặt tại chi nhánh ' + this.branch.name + ' bởi nhân viên ' + data.customer.fullname
+          })
+          break;
+        }
+        case 'update_subfee': {
+          this.showNotification({
+            type: 'success',
+            title: 'Đơn hàng ' + data.code + ' thay đổi phụ phí',
+            content: 'Đơn hàng vừa được khách hàng cập nhật phụ phí ' + message.price + ' được ghi nhận bởi ' + data.paid_history.employee.fullname
+          })
+          break;
+        }
+        case 'update_paid_history': {
+          this.showNotification({
+            type: 'success',
+            title: 'Đơn hàng ' + data.code + ' thay đổi tiền thanh toán',
+            content: 'Đơn hàng vừa được khách hàng ' + data.customer.fullname + ' trả ' + message.pay_amount + ' được ghi nhận bởi ' + data.paid_history.employee.fullname
+          })
+          break;
+        }
+        case 'cancel_bill': {
+          this.showNotification({
+            type: 'warning',
+            title: 'Đơn hàng ' + data.code + ' đã hủy',
+            content: 'Đơn hàng vừa bị hủy, được xác nhận bởi nhân viên ' + data.activity.employee.fullname
+          })
+          break;
+        }
+        case 'change_bill_activity': {
+          if (data.activity.action.indexOf("CANCEL") == -1) {
+            this.showNotification({
+              type: 'success',
+              title: 'Đơn hàng ' + data.code + ' cập nhật trạng thái',
+              content: 'Đơn hàng vừa được thay đổi sang trạng thái ' + '\"' + this.globals.detectBillActivityByCode(data.activity.action) + '\"' + ' bởi nhân viên ' + data.activity.employee.fullname
+            })
+          }
+          break;
+        }
+      }
+    } catch (err) {
+
+    }
   }
 
   async loadEmployeeDataByBranchData() {

@@ -1038,4 +1038,18 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       alert(false)
     }
   }
+
+  detectShowCancelButton(bill): boolean {
+    if (bill.activity.action) {
+      if (bill.activity.action.indexOf("CANCEL") >= 0
+        || bill.activity.action.indexOf("DISTRIBUTED") >= 0
+        || bill.activity.action.indexOf("PAID") >= 0
+        || bill.activity.action.indexOf("COLLECTED_MONEY") >= 0) {
+        return true
+      }else{
+        return false
+      }
+    }
+    return false
+  }
 }

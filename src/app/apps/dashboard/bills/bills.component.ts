@@ -18,6 +18,7 @@ import * as moment from 'moment';
 import { Behavior } from 'ng2-select';
 import { UpdatePaidHistoryDialog } from "../../../modal/update-paid-history/update-paid-history.component";
 import { UpdateBillDataDialog } from "app/modal/update-bill-data/update-bill-data.component";
+import { NotificationsService } from "angular2-notifications";
 declare let swal: any;
 
 @Component({
@@ -31,7 +32,8 @@ export class BillsComponent implements OnInit {
   itemFields: any = ["$all", {
     customer: ["phone"],
     activities: ["action"],
-    bill_ship_detail: ["fee"]
+    bill_ship_detail: ["fee"],
+    sub_fees: ['$all'],
   }];
 
   subscribers: any = {}
@@ -42,7 +44,13 @@ export class BillsComponent implements OnInit {
   successColor: string = "#2ecc71";
   cancelColor: string = "#e74c3c";
 
-  billChangeObservable: BehaviorSubject<any>;
+  options = {
+    position: ["top", "right"],
+    timeOut: 2000,
+    lastOnBottom: true
+  }
+
+  billChangeObservable: BehaviorSubject<any> = new BehaviorSubject<any>({});
   bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   employees: any[];
@@ -56,6 +64,7 @@ export class BillsComponent implements OnInit {
   selectedCustomer: any;
   selectedBill: any;
   selectedCustomerName: any;
+  currentDataFromFCM: any;
 
   employeeData: any;
   branch: any;
@@ -85,7 +94,8 @@ export class BillsComponent implements OnInit {
     private ref: ChangeDetectorRef,
     public zone: NgZone,
     public dialog: MatDialog,
-    public sharedDataService: SharedDataService
+    public sharedDataService: SharedDataService,
+    private _notificationsService: NotificationsService
   ) {
     this.employeeData = this.innowayApi.innowayAuth.innowayUser
     //this.subscribeDashboardParent();
@@ -177,25 +187,15 @@ export class BillsComponent implements OnInit {
       });
   }
 
-  // async loadDailySummary() {
-  //   try {
-  //     let data = this.innowayApi.dailySummary.getList({
-  //       query: {
-  //         fields: ["$all"]
-  //       }
-  //     })
-  //     console.log("bi-summary", JSON.stringify(data))
-  //   } catch (err) {
-  //     console.log("bi-summary", err)
-  //   }
-  // }
-
   async subscribeTopicByFCM() {
-    this.billChangeObservable = await this.innowayApi.bill.subscribe()
-    this.subscribers.bill = this.billChangeObservable.subscribe(data => {
-      // this.onBillChange.bind(this)
-      console.log("subscribeTopicByFCM", JSON.stringify(data))
-    });
+    this.dashboardService.updateTopicFromFCM.subscribe(
+      data => {
+        this.currentDataFromFCM = data;
+        if (this.currentDataFromFCM != null) {
+          this.loadBillData();
+          this.onLoadDailySummary(true);
+        }
+      });
   }
 
   async ngOnDestroy() {
@@ -203,26 +203,6 @@ export class BillsComponent implements OnInit {
     _.forEach(this.subscribers, (subscription: Subscription) => {
       subscription.unsubscribe()
     })
-  }
-
-  async onBillChange(bill) {
-    let item = await this.innowayApi.bill.getItem(bill.id, {
-      query: {
-        fields: ["$all", {
-          activities: ["$all", {
-            employee: ["$all"]
-          }],
-          customer: ["$all"]
-        }]
-      }
-    })
-    console.log('on bill change', item)
-    let bills = this.bills.getValue()
-    bills.unshift(item)
-    this.zone.run(() => {
-      this.bills.next(bills)
-    })
-
   }
 
   async print(bill) {
@@ -387,7 +367,8 @@ export class BillsComponent implements OnInit {
             customer: ["$all"],
             activity: ["$all"],
             bill_ship_detail: ["$all"],
-            paid_history: ["$all"]
+            paid_history: ["$all"],
+            sub_fees: ['$all'],
           }],
           filter: {
             created_at: {
@@ -425,51 +406,6 @@ export class BillsComponent implements OnInit {
     result = this.globals.detectBillActivityByCode(action);
     return result;
   }
-
-  // async changeStatusBill(bill) {
-  //
-  //   let actions = [];
-  //   let options = this.globals.avaibleBillActivityOption(bill.activity ? bill.activity.action : '');
-  //
-  //   options.forEach(option => {
-  //     actions.push({ code: Object.keys(option)[0], name: option[Object.keys(option)[0]] });
-  //   });
-  //
-  //   console.log(bill);
-  //   let currentAction = this.globals.detectBillActivityByCode(bill.activity.action);
-  //   console.log(bill.activity.action)
-  //
-  //   let dialogRef = this.dialog.open(EditOrderStatusDialog, {
-  //     width: '500px',
-  //     data: { actions: actions, employees: this.employees, currentAction: currentAction }
-  //   });
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       this.updateAction(bill, result.action, result.employee, result.note);
-  //       // alert(JSON.stringify(result));
-  //       console.log(result);
-  //     }
-  //   })
-  // }
-  //
-  // async updateAction(bill, action, employee, note) {
-  //   console.log("bambi: updateAction " + bill.id + " ---- " + action);
-  //   try {
-  //     // await this.billActitivyService.add({ bill_id, action });
-  //     await this.innowayApi.bill.changeActivity(bill.id, {
-  //       activity: action,
-  //       employeeId: employee,
-  //       note: note,
-  //     })
-  //     this.alertAddSuccess();
-  //     this.bills.next([]);
-  //     this.loadBillData();
-  //   }
-  //   catch (err) {
-  //     console.log("bambi: " + err.toString());
-  //     this.alertAddFailed();
-  //   }
-  // }
 
   alertItemNotFound() {
     swal({
@@ -630,7 +566,7 @@ export class BillsComponent implements OnInit {
     try {
       console.log("updatePaidHistory request", JSON.stringify(data));
       let response = await this.innowayApi.paidHistory.updatePaidHistory(data);
-      this.loadBillData();
+      //this.loadBillData();
       this.alertUpdateSuccess();
     } catch (err) {
       this.alertUpdateFailed();
@@ -718,7 +654,7 @@ export class BillsComponent implements OnInit {
       let response = await this.innowayApi.bill.changeActivity(bill.id, data)
       console.log("updateBillActivity", JSON.stringify(response))
       this.alertUpdateSuccess();
-      this.loadBillData();
+      //this.loadBillData();
     } catch (err) {
       console.log("updateBillActivity", err);
       this.alertUpdateFailed();
@@ -730,7 +666,7 @@ export class BillsComponent implements OnInit {
       if (bill.sub_fees != null && bill.sub_fees.length > 0) {
         let response = await this.innowayApi.bill.updateSubFee(bill.id, bill.sub_fees[0].id, data);
         this.alertUpdateSuccess();
-        this.loadBillData();
+        //this.loadBillData();
         console.log("updateSubFee", JSON.stringify(response));
       }
     } catch (err) {
@@ -743,7 +679,7 @@ export class BillsComponent implements OnInit {
       let response = await this.innowayApi.bill.update(bill.id, data)
       console.log("updateBillActivity", JSON.stringify(response))
       this.alertUpdateSuccess();
-      this.loadBillData();
+      //this.loadBillData();
     } catch (err) {
       this.alertUpdateFailed();
     }
@@ -798,7 +734,9 @@ export class BillsComponent implements OnInit {
   detectShowCancelButton(bill): boolean {
     if (bill.activity.action) {
       if (bill.activity.action.indexOf("CANCEL") >= 0
-        || bill.activity.action.indexOf("DISTRIBUTED") >= 0) {
+        || bill.activity.action.indexOf("DISTRIBUTED") >= 0
+        || bill.activity.action.indexOf("PAID") >= 0
+        || bill.activity.action.indexOf("COLLECTED_MONEY") >= 0) {
         return true
       }
     }
@@ -819,5 +757,19 @@ export class BillsComponent implements OnInit {
       type: 'warning',
       timer: 2000
     })
+  }
+
+  showNotification(title: string, content: string) {
+    this._notificationsService.success(
+      title,
+      content,
+      {
+        timeOut: 5000,
+        showProgressBar: true,
+        pauseOnHover: false,
+        clickToClose: false,
+        maxLength: 10
+      }
+    );
   }
 }

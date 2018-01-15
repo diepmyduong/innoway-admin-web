@@ -71,6 +71,20 @@ export class ChatbotComponent implements OnInit {
     }
   }
 
+  async disconnectChatbotSystem() {
+    try {
+      let data: any = await this.innowayApi.thirdpartyChatbot.disconnect({
+        app_id: this.appId,
+        app_secret: this.appSecret
+      })
+      this.getStories();
+      // this.accessToken = data.access_token;
+      // console.log("integrateToChatbotSystem", data);
+    } catch (err) {
+
+    }
+  }
+
   async getStories() {
     try {
       let response = await this.innowayApi.thirdpartyChatbot.getStories();

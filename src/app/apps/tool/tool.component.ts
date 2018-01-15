@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Router, ActivatedRoute } from "@angular/router";
+import { InnowayApiService } from "app/services/innoway";
+import { Globals } from "app/globals";
+import { ToasterModule, ToasterService, ToasterConfig } from 'angular2-toaster/angular2-toaster';
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 @Component({
   selector: 'app-tool',
@@ -95,10 +100,153 @@ export class ToolComponent implements OnInit {
     ]
   }
 
-  constructor() { }
+  billChangeObservable: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  branch: any = {}
+
+  private toasterService: ToasterService;
+
+  public toasterconfig: ToasterConfig =
+  new ToasterConfig({
+    tapToDismiss: true,
+    timeout: 5000
+  });
+
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    public innowayApi: InnowayApiService,
+    private ref: ChangeDetectorRef,
+    private globals: Globals,
+    toasterService: ToasterService) {
+
+    this.toasterService = toasterService;
+
+  }
 
   ngOnInit() {
+    let employee = this.innowayApi.innowayAuth.innowayUser
+    this.subscribeTopicByFCM()
+    this.loadBranchByEmployeeData(employee.branch_id)
+  }
 
+  async loadBranchByEmployeeData(branchId: string) {
+    try {
+      this.branch = await this.innowayApi.branch.getItem(branchId, {
+        query: { fields: ["$all"] }
+      })
+      this.ref.detectChanges();
+    } catch (err) {
+
+    }
+  }
+
+  showNotification(notification: any) {
+    this.toasterService.pop(notification.type, notification.title, notification.content);
+  }
+
+  async subscribeTopicByFCM() {
+    this.billChangeObservable = await this.innowayApi.bill.subscribe()
+    this.billChangeObservable.subscribe(message => {
+      try {
+        console.log("subscribeTopicByFCM", JSON.stringify(message))
+        let title;
+        let content;
+        switch (message.topic) {
+          case 'order_at_store':
+          case 'order_online_by_employee':
+          case 'order_online_by_customer':
+          case 'update_subfee':
+          case 'update_paid_history':
+          case 'cancel_bill':
+          case 'change_bill_activity':
+            this.showInformationAboutBillFromFCM(message)
+            break;
+        }
+      }
+      catch (err) {
+        console.log("subscribeTopicByFCM", err);
+      }
+    });
+  }
+
+  async showInformationAboutBillFromFCM(message: any) {
+    try {
+      let data = await this.innowayApi.bill.getItem(message.bill_id, {
+        query: {
+          fields: ["$all", {
+            activity: ['$all', {
+              employee: ['$all']
+            }],
+            paid_history: ['$all', {
+              employee: ['$all']
+            }],
+            customer: ["$all"]
+          }]
+        }
+      })
+      console.log("loadBill", JSON.stringify(data))
+      switch (message.topic) {
+        case 'order_at_store': {
+          this.showNotification({
+            type: 'success',
+            title: 'Đơn hàng ' + data.code + ' đặt thành công',
+            content: 'Đơn hàng được đặt tại chi nhánh ' + this.branch.name
+          })
+          break;
+        }
+        case 'order_online_by_employee': {
+          this.showNotification({
+            type: 'success',
+            title: 'Đơn hàng ' + data.code + ' đặt thành công',
+            content: 'Đơn hàng cần giao đến ' + data.address + ' bởi nhân viên ' + data.activity.employee.fullname
+          })
+          break;
+        }
+        case 'order_online_by_customer': {
+          this.showNotification({
+            type: 'success',
+            title: 'Đơn hàng ' + data.code + ' được đặt thành công',
+            content: 'Đơn hàng được đặt tại chi nhánh ' + this.branch.name + ' bởi nhân viên ' + data.customer.fullname
+          })
+          break;
+        }
+        case 'update_subfee': {
+          this.showNotification({
+            type: 'success',
+            title: 'Đơn hàng ' + data.code + ' thay đổi phụ phí',
+            content: 'Đơn hàng vừa được khách hàng cập nhật phụ phí ' + message.price.toString() + ' được ghi nhận bởi ' +data.activity.employee.fullname
+          })
+          break;
+        }
+        case 'update_paid_history': {
+          this.showNotification({
+            type: 'success',
+            title: 'Đơn hàng ' + data.code + ' thay đổi tiền thanh toán',
+            content: 'Đơn hàng vừa được khách hàng ' + data.customer.fullname + ' trả ' + message.pay_amount + ' được ghi nhận bởi ' + data.paid_history.employee.fullname
+          })
+          break;
+        }
+        case 'cancel_bill': {
+          this.showNotification({
+            type: 'warning',
+            title: 'Đơn hàng ' + data.code + ' đã hủy',
+            content: 'Đơn hàng vừa bị hủy, được xác nhận bởi nhân viên ' + data.activity.employee.fullname
+          })
+          break;
+        }
+        case 'change_bill_activity': {
+          if (data.activity.action.indexOf("CANCEL") == -1) {
+            this.showNotification({
+              type: 'success',
+              title: 'Đơn hàng ' + data.code + ' cập nhật trạng thái',
+              content: 'Đơn hàng vừa được thay đổi sang trạng thái ' + '\"' + this.globals.detectBillActivityByCode(data.activity.action) + '\"' + ' bởi nhân viên ' + data.activity.employee.fullname
+            })
+          }
+          break;
+        }
+      }
+    } catch (err) {
+
+    }
   }
 
 }

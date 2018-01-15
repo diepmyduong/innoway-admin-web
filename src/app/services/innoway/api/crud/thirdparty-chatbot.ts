@@ -35,6 +35,26 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
     return row;
   }
 
+  async disconnect(params: {
+    app_id: string,
+    app_secret: string
+  }) {
+    let { app_id, app_secret } = params;
+    let setting = {
+      method: 'POST',
+      uri: this.apiUrl(`disconnect_chatbot`),
+      headers: {
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body: { app_id, app_secret }
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
+
   async getStories() {
     let setting = {
       method: 'GET',

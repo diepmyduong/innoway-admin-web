@@ -82,7 +82,10 @@ export class BillDetailComponent implements OnInit {
       })
 
       if (this.item.activity) {
-        if (this.item.activity.action.indexOf("CANCEL") >= 0) {
+        if (this.item.activity.action.indexOf("CANCEL") >= 0
+          || this.item.activity.action.indexOf("DISTRIBUTED") >= 0
+          || this.item.activity.action.indexOf("PAID") >= 0
+          || this.item.activity.action.indexOf("COLLECTED_MONEY") >= 0) {
           this.isCancel = true
         } else {
           this.isCancel = false

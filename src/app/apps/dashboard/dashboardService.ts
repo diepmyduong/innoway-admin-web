@@ -24,6 +24,13 @@ export class DashboardService {
   private loadDailySummarySource = new BehaviorSubject<boolean>(false);
   loadDailySummary = this.loadDailySummarySource.asObservable();
 
+  private updateTopicFromFCMSource = new BehaviorSubject<any>({});
+  updateTopicFromFCM = this.updateTopicFromFCMSource.asObservable();
+
+  getTopicFromFCM(update: any) {
+    this.updateTopicFromFCMSource.next(update);
+  }
+
   updateAction(update: any) {
     this.actionSource.next(update);
   }
