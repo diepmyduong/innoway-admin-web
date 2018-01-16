@@ -46,6 +46,8 @@ export class DashboardComponent implements OnInit {
 
   billChangeObservable: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
+  subscriptions: Subscription[] = []
+
   private toasterService: ToasterService;
 
   public toasterconfig: ToasterConfig =
@@ -112,9 +114,13 @@ export class DashboardComponent implements OnInit {
     this.subscribeTopicByFCM();
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach(s => s.unsubscribe())
+  }
+
   async subscribeTopicByFCM() {
     this.billChangeObservable = await this.innowayApi.bill.subscribe()
-    this.billChangeObservable.subscribe(message => {
+    this.subscriptions.push(this.billChangeObservable.subscribe(message => {
       try {
         console.log("subscribeTopicByFCM", JSON.stringify(message))
         let title;
@@ -135,7 +141,7 @@ export class DashboardComponent implements OnInit {
       catch (err) {
         console.log("subscribeTopicByFCM", err);
       }
-    });
+    }));
   }
 
   async showInformationAboutBillFromFCM(message: any) {

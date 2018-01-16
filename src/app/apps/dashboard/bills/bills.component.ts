@@ -77,14 +77,6 @@ export class BillsComponent implements OnInit {
     this.sharedDataService.billFilterInfo = value;
   }
 
-  // get employees(): BehaviorSubject<any[]> {
-  //   return this.sharedDataService.employees;
-  // }
-  //
-  // set employees(value: BehaviorSubject<any[]>) {
-  //   this.sharedDataService.employees = value;
-  // }
-
   constructor(
     private globals: Globals,
     private router: Router,
@@ -98,7 +90,6 @@ export class BillsComponent implements OnInit {
     private _notificationsService: NotificationsService
   ) {
     this.employeeData = this.innowayApi.innowayAuth.innowayUser
-    //this.subscribeDashboardParent();
   }
 
   async ngOnInit() {
@@ -151,9 +142,7 @@ export class BillsComponent implements OnInit {
       data => {
         this.selectedEmployee = data;
         if (this.selectedEmployee.id != null) {
-          //this.filterByCustomerId(this.selectedEmployee.id);
         }
-        // alert(JSON.stringify(data));
       });
 
     this.dashboardService.selectedArea.subscribe(
@@ -165,9 +154,7 @@ export class BillsComponent implements OnInit {
       data => {
         this.selectedCustomer = data;
         if (this.selectedCustomer != null) {
-          // alert(JSON.stringify(data));
-          //this.filterByCustomerId(this.selectedCustomer.id);
-          // this.filterByCustomerId(this.selectedCustomer.id);
+
         }
       });
 
@@ -175,9 +162,7 @@ export class BillsComponent implements OnInit {
       data => {
         this.selectedCustomerName = data;
         if (this.selectedCustomerName != null) {
-          // alert(JSON.stringify(data));
-          //this.filterByCustomerId(this.selectedCustomerName.id);
-          // this.filterByCustomerId(this.selectedCustomerName.id);
+          
         }
       });
 

@@ -4,6 +4,7 @@ import { InnowayApiService } from "app/services/innoway";
 import { Globals } from "app/globals";
 import { ToasterModule, ToasterService, ToasterConfig } from 'angular2-toaster/angular2-toaster';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Subscription } from 'rxjs/Subscription'
 
 @Component({
   selector: 'app-tool',
@@ -102,6 +103,7 @@ export class ToolComponent implements OnInit {
 
   billChangeObservable: BehaviorSubject<any> = new BehaviorSubject<any>({});
   branch: any = {}
+  subscriptions: Subscription[] = []
 
   private toasterService: ToasterService;
 
@@ -128,6 +130,10 @@ export class ToolComponent implements OnInit {
     this.loadBranchByEmployeeData(employee.branch_id)
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach(s => s.unsubscribe())
+  }
+
   async loadBranchByEmployeeData(branchId: string) {
     try {
       this.branch = await this.innowayApi.branch.getItem(branchId, {
@@ -145,11 +151,9 @@ export class ToolComponent implements OnInit {
 
   async subscribeTopicByFCM() {
     this.billChangeObservable = await this.innowayApi.bill.subscribe()
-    this.billChangeObservable.subscribe(message => {
+    this.subscriptions.push(this.billChangeObservable.subscribe(message => {
       try {
         console.log("subscribeTopicByFCM", JSON.stringify(message))
-        let title;
-        let content;
         switch (message.topic) {
           case 'order_at_store':
           case 'order_online_by_employee':
@@ -165,7 +169,7 @@ export class ToolComponent implements OnInit {
       catch (err) {
         console.log("subscribeTopicByFCM", err);
       }
-    });
+    }));
   }
 
   async showInformationAboutBillFromFCM(message: any) {

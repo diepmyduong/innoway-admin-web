@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs/Observable";
 import { ToasterModule, ToasterService, ToasterConfig } from 'angular2-toaster/angular2-toaster';
 import { Globals } from './../../globals';
+import { Subscription } from "rxjs/Subscription";
 
 @Component({
   selector: 'app-bill-layout',
@@ -24,6 +25,7 @@ export class BillLayoutComponent implements OnInit {
   billActitivyService: any;
   billChangeObservable: Observable<any>;
   subscribers: any = {};
+  subscriptions: Subscription[] = []
 
   private toasterService: ToasterService;
 
@@ -107,9 +109,13 @@ export class BillLayoutComponent implements OnInit {
     this.toasterService.pop(notification.type, notification.title, notification.content);
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach(s => s.unsubscribe())
+  }
+
   async subscribeTopicByFCM() {
     this.billChangeObservable = await this.innowayApi.bill.subscribe()
-    this.billChangeObservable.subscribe(message => {
+    this.subscriptions.push(this.billChangeObservable.subscribe(message => {
       try {
         console.log("subscribeTopicByFCM", JSON.stringify(message))
         let title;
@@ -129,7 +135,7 @@ export class BillLayoutComponent implements OnInit {
       catch (err) {
         console.log("subscribeTopicByFCM", err);
       }
-    });
+    }));
   }
 
   async showInformationAboutBillFromFCM(message: any) {
