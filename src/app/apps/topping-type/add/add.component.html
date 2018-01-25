@@ -6,42 +6,38 @@
           <strong>{{isEdit?"Cập nhật":"Thêm"}} loại topping</strong>
         </div>
         <div class="card-block">
-            <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Loại topping</label>
-              <div class="col-md-10">
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="text-input">Loại topping</label>
+            <div class="col-md-10">
 
-                <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name"
-                  class="form-control input-control" [placeholder]="'Nhập tên loại topping'" required/>
-                <small *ngIf="nameControl.errors?.required"
-                class="text-muted danger" >
+              <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Nhập tên loại topping'" required/>
+              <small *ngIf="nameControl.errors?.required" class="text-muted danger">
                   (Không được bỏ trống)
                 </small>
-              </div>
             </div>
-            <div class="form-group row">
+          </div>
+          <div class="form-group row">
             <label class="col-md-2 header-text" for="textarea-input">Cho phép chọn nhiều topping</label>
-              <div class="col-md-10">
-                <input type="checkbox" #isSelectMultipleControl="ngModel" [(ngModel)]="isSelectMultiple" name="isSelectMultiple" 
-                (ngModelChange)="checkSelectMultiple($event)" class="form-control input-control custom-checkbox">
-              </div>
+            <div class="col-md-10">
+              <input type="checkbox" #isSelectMultipleControl="ngModel" [(ngModel)]="isSelectMultiple" name="isSelectMultiple" (ngModelChange)="checkSelectMultiple($event)" class="form-control input-control custom-checkbox">
             </div>
-            <div class="form-group row">
-              <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
-              <div class="col-md-10">
-                <textarea #descriptionControl="ngModel" rows="5" [(ngModel)]="description" name="description"
-                  class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
-              </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
+            <div class="col-md-10">
+              <textarea #descriptionControl="ngModel" rows="5" [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
             </div>
-            <div class="form-group row">
-              <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
-              <div class="col-md-10">
-                <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
+            <div class="col-md-10">
+              <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">
                   <option *ngFor="let v of [0,1]" [value]="v">
                     {{ v===1?"Hoạt động":"Không hoạt động"}}
                   </option>
                 </select>
-              </div>
             </div>
+          </div>
 
         </div>
         <div class="card-footer">

@@ -56,6 +56,7 @@ export class Bill extends CrudAPI<iBill> {
           this.onInformationBillFromFCM.next(message.json)
           break;
       }
+      this.onInformationBillFromFCM.next(undefined)
       // if (message.topic == 'bills') {
       //   this.log('on bill change', message.json)
       //   this.onBillChange.next(message.json)

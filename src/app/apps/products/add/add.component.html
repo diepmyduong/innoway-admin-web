@@ -50,6 +50,9 @@
                           </option>
                         </select>
                   </div>
+                  <div class="col-md-10 offset-md-2">
+                    <span class="add-title" (click)="showDialogAddNewEntity('category')"><i class="fa fa-plus"></i> Thêm loại sản phẩm mới</span>
+                  </div>
                 </div>
                 <div class="form-group row">
                   <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
@@ -120,11 +123,14 @@
                   <label class="col-md-2 header-text" for="text-input">Trạng thái sản phẩm</label>
                   <div class="col-md-10">
                     <select id="productTypeSelect" #productTypeControl="ngModel" [(ngModel)]="product_type" name="product_type" class="form-control input-control" placeholder="Trạng thái sản phẩm">
-                          <option value="null" disabled="true" [selected]="true">Chọn trạng thái sản phẩm</option>
+                          <option value="null" [selected]="true">Chọn trạng thái sản phẩm</option>
                           <option *ngFor="let v of productTypes | async" [value]="v.id">
                             {{v.name}}
                           </option>
                         </select>
+                  </div>
+                  <div class="col-md-10 offset-md-2">
+                    <span class="add-title" (click)="showDialogAddNewEntity('product-type')"><i class="fa fa-plus"></i> Thêm trạng thái sản phẩm mới</span>
                   </div>
                 </div>
               </div>
@@ -145,6 +151,9 @@
                             {{v.name}}
                           </option>
                         </select>
+                  </div>
+                  <div class="col-md-10 offset-md-2">
+                    <span class="add-title" (click)="showDialogAddNewEntity('unit')"><i class="fa fa-plus"></i> Thêm đơn vị mới</span>
                   </div>
                 </div>
               </div>
@@ -204,25 +213,31 @@
               <div class="card-block">
                 <div class="form-group row remove-pb">
                   <label class="col-md-2 header-text">Topping:</label>
-                  <div class="col-md-10">
+                  <div class="col-md-12 mt-1 mb-1">
+                    <span class="add-title" (click)="showDialogAddNewEntity('topping-type')"><i class="fa fa-plus"></i> Thêm topping mới</span><br>
+                    <span class="add-title" (click)="showDialogAddNewEntity('topping')"><i class="fa fa-plus"></i> Thêm trạng thái sản phẩm mới</span>
+                  </div>
+                  <div class="col-md-12">
                     <ng-select class="form-group input-control" [multiple]="true" #toppingSelecter [allowClear]="true" [items]="topping_items | async" (selected)="toppingSelected($event)" (removed)="toppingRemoved($event)" placeholder="Chọn loại topping">
                     </ng-select>
                   </div>
+                  <div class="col-md-12">
+                    <app-topping-detail [topping]="getTopping(item.id)" [price]="price" *ngFor="let item of toppingSelecter.active"></app-topping-detail>
+                  </div>
                 </div>
-                <app-topping-detail [topping]="getTopping(item.id)" [price]="price" *ngFor="let item of toppingSelecter.active"></app-topping-detail>
                 <!-- <div class="form-group row remove-pb" *ngFor="let item of toppingSelecter.active" [hidden]="toppings!=null?false:true">
                   <pre>{{item | json}}</pre>
                   <label class="col-md-2 sub-header-text">{{item.src.name}}<span *ngIf="item.src.description" class="color-primary"> ({{item.src.description}})</span></label>
-                  <div class="col-md-12" *ngIf="item.src.values">
-                    <div class="row remove-pb">
-                      <div class="col-md-2" *ngFor="let value of item.src.values">
-                        <label class="checkbox-inline" for="inline-checkbox1">
+                    <div class="col-md-12" *ngIf="item.src.values">
+                      <div class="row remove-pb">
+                        <div class="col-md-2" *ngFor="let value of item.src.values">
+                          <label class="checkbox-inline" for="inline-checkbox1">
                             <i class="icon-check icons mr-h"></i> {{value.name}} <span class="color-dark">(+{{value.price | accounting}}) -> {{showPrice(value.price) | accounting}}</span>
                         </label>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div> -->
+                  </div> -->
               </div>
             </div>
           </div>
@@ -234,7 +249,7 @@
                     Thêm sản phẩm
                   </div>
                   <div class="card-block">
-                    <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
+                    <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
                     <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
                     <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
                   </div>

@@ -42,7 +42,7 @@ export class DashboardLayoutComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.subscribeTopicByFCM();
+    //this.subscribeTopicByFCM();
     console.log("bambi: " + JSON.stringify(this.employee));
   }
 

@@ -34,7 +34,14 @@ export class AddComponent implements OnInit {
   endTime: string
   codeType: string
   codeTypes: any[]
+  entityId: string
   status: number = 1
+
+  isPromotionCodeType: boolean = null
+  isSelectedPromotion: boolean = false
+
+  promotion: string = null
+  promotions: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -59,11 +66,13 @@ export class AddComponent implements OnInit {
     if (this.isEdit) {
       this.setData();
     }
+
+    this.getPromotion();
   }
 
   setDefaultData() {
     this.codeTypes = this.globals.SMART_CODE_TYPES;
-    this.codeType = this.codeTypes[0].code;
+    this.codeType = null;
     this.startTime = moment(Date.now()).format("MM/DD/YYYY HH:mm");
     this.endTime = moment(Date.now()).add(1, 'days').format("MM/DD/YYYY HH:mm");
     this.code = null
@@ -71,6 +80,9 @@ export class AddComponent implements OnInit {
     this.limit = 0
     this.amount = 0
     this.status = 1
+    if (this.promotions.getValue()[0]) {
+      this.promotion = this.promotions.getValue()[0].id;
+    }
     return {
       codeTypes: this.codeTypes,
       codeType: this.codeType,
@@ -80,7 +92,8 @@ export class AddComponent implements OnInit {
       content: this.content,
       limit: this.limit,
       amount: this.amount,
-      status: this.status
+      status: this.status,
+      promotion: this.promotion
     }
   }
 
@@ -91,6 +104,7 @@ export class AddComponent implements OnInit {
           fields: ["$all"]
         }
       })
+      console.log("data", JSON.stringify(data))
       this.codeType = data.code_type;
       this.startTime = moment(data.start_time).format("MM/DD/YYYY hh:mm")
       this.endTime = moment(data.end_time).format("MM/DD/YYYY hh:mm")
@@ -98,6 +112,12 @@ export class AddComponent implements OnInit {
       this.content = data.content;
       this.limit = data.limit;
       this.amount = data.amount;
+      if (data.entity_id) {
+        this.promotion = data.entity_id;
+        this.isSelectedPromotion = true;
+      } else {
+        this.isSelectedPromotion = false;
+      }
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -162,12 +182,13 @@ export class AddComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { codeType, code, startTime, endTime, content, limit, amount, status } = this;
+      let { codeType, code, startTime, endTime, content, limit, amount, status, promotion } = this;
       let start_time = moment(this.startTime, "MM/DD/YYYY HH:mm").format();
       let end_time = moment(this.endTime, "MM/DD/YYYY HH:mm").format();
       let code_type = codeType;
+      let entity_id = promotion;
       await this.innowayApi.smartCode.add({
-        code_type, code, start_time, end_time, content, limit, amount, status
+        code_type, code, start_time, end_time, content, limit, amount, status, entity_id
       })
 
       this.alertAddSuccess();
@@ -180,12 +201,13 @@ export class AddComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { codeType, code, startTime, endTime, content, limit, amount, status } = this;
+      let { codeType, code, startTime, endTime, content, limit, amount, status, promotion } = this;
       let start_time = moment(this.startTime, "MM/DD/YYYY HH:mm").format();
       let end_time = moment(this.endTime, "MM/DD/YYYY HH:mm").format();
       let code_type = codeType;
+      let entity_id = promotion;
       await this.innowayApi.smartCode.update(this.id, {
-        code_type, code, start_time, end_time, content, limit, amount, status
+        code_type, code, start_time, end_time, content, limit, amount, status, entity_id
       })
 
       this.alertUpdateSuccess();
@@ -258,4 +280,70 @@ export class AddComponent implements OnInit {
     }
   }
 
+  async getPromotion() {
+    try {
+      this.promotions.next(await this.innowayApi.promotion.getList({
+        query: {
+          fields: ["$all"]
+        }
+      }))
+      this.promotion = null;//this.promotions.getValue()[0].id ? this.promotions.getValue()[0].id : null
+      console.log("promotion", JSON.stringify(this.promotions))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  onChangeCodeType(data) {
+    if (data == 'promotion') {
+      this.isPromotionCodeType = true;
+    } else {
+      this.isPromotionCodeType = false;
+      this.isSelectedPromotion = false
+      this.code = null
+      this.limit = 0
+      this.amount = 0
+      this.startTime = moment(Date.now()).format("MM/DD/YYYY hh:mm");
+      this.endTime = moment(Date.now()).add(1, 'days').format("MM/DD/YYYY hh:mm");
+    }
+    this.ref.detectChanges();
+  }
+
+  async onChangePromotion(promotionId) {
+    console.log("onChangePromotion", promotionId);
+    if (promotionId != null) {
+      this.isSelectedPromotion = true
+      try {
+        console.log("id", promotionId)
+        let data: any = await this.innowayApi.promotion.getItem(promotionId, {
+          query: {
+            fields: ["code", "limit", "amount", "start_date", "end_date"]
+          }
+        })
+        console.log("data", data)
+        this.code = data.code
+        this.limit = data.limit
+        this.amount = data.amount
+        this.startTime = moment(data.start_date).format("MM/DD/YYYY hh:mm");
+        this.endTime = moment(data.end_date).format("MM/DD/YYYY hh:mm");
+      } catch (err) {
+
+      }
+    } else {
+      this.isSelectedPromotion = false
+      this.code = null
+      this.limit = 0
+      this.amount = 0
+      this.startTime = moment(Date.now()).format("MM/DD/YYYY hh:mm");
+      this.endTime = moment(Date.now()).add(1, 'days').format("MM/DD/YYYY hh:mm");
+    }
+  }
+
+  async disconnectChatbot() {
+    try {
+
+    } catch (err) {
+
+    }
+  }
 }

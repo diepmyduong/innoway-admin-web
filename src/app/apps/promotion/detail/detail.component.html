@@ -1,105 +1,81 @@
 <div class="animated fadeIn">
+
   <div class="row">
-    <div class="col-md-4" [hidden]="true">
-      <div class="card">
-        <div class="card-header">
-          <strong>Ảnh đại diện</strong>
-        </div>
-        <div class="card-block">
-          <div class="col-md-12">
-            <img src="https://freeiconshop.com/wp-content/uploads/edd/person-flat.png" width="100%">
-          </div>
-          <div class="col-md-12 mt-h">
-            <input type="file" id="file-input" name="file-input">
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">
-          <strong>Thông tin</strong>
-        </div>
-        <div class="card-block">
-          <form #itemFrm="ngForm">
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Tên khuyến mãi</label>
-              <div class="col-md-8">
-                <input type="text" [value]="item?.name" name="name"
-                  class="form-control" readonly>
-              </div>
+      <div class="card" style="border: 1px solid #e1e6ef">
+        <div class="card-block" style="padding: 1.5rem 1rem 1rem;">
+          <div class="row mb-2">
+            <div class="col-sm-4 info-column">
+              <h6><i class="fa fa-file-text-o"></i> Thông tin chi tiết khuyến mãi</h6>
+              <div>Tổng số lượng sử dụng: {{information.number_of_used_time?(information.number_of_used_time | number):0}}</div>
+              <div>Tổng số lượng người dùng sử dụng: {{information.number_of_used_customer?(information.number_of_used_customer | number):0}}</div>
+              <div>Tổng tiền khuyến mãi: {{information.number_of_purchase?(information.number_of_purchase | accounting):'0 đ'}}</div>
             </div>
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
-              <div class="col-md-8">
-                  <textarea type="textarea" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control" [value]="item?.description" readonly></textarea>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Mã code</label>
-              <div class="col-md-8">
-                <input type="text" [value]="item?.code" name="code"
-                  class="form-control" readonly>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Ngày bắt đầu</label>
-              <div class="col-md-8">
-                <input type="text" [value]="item?.start_date | date:'dd/MM/yyyy'" name="start_date"
-                  class="form-control" readonly>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Ngày kết thúc</label>
-              <div class="col-md-8">
-                <input type="text" [value]="item?.end_date | date:'dd/MM/yyyy'" name="end_date"
-                  class="form-control" readonly>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="select">Loại khuyến mãi</label>
-              <div class="col-md-8">
-                <input type="text" [value]="item?.promotion_type?.name" name="promotion_type"
-                  class="form-control" readonly>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="select">Loại khách hàng</label>
-              <div class="col-md-8">
-                <input type="text" [value]="item?.customer_type?.name" name="customer_type"
-                  class="form-control" readonly>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Giá trị</label>
-              <div class="col-md-8">
-                <input type="text" [value]="item?.value" name="value"
-                  class="form-control" readonly>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Giới hạn</label>
-              <div class="col-md-8">
-                <input type="text" [value]="item?.limit" name="limit"
-                  class="form-control" readonly>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
-              <div class="col-md-8">
-                <input type="text" [value]="item?.status?'Hoạt động':'Không hoạt động'" name="status"
-                  class="form-control" readonly>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="card-footer">
-          <button (click)="editItem()" class="btn btn-sm btn-primary" data-style="expand-right">
-            Cập nhật
-          </button>
+          </div>
         </div>
       </div>
     </div>
-    <!--/.col-->
   </div>
+
+  <tabset class="tabset-control">
+    <tab>
+      <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin đơn hàng</ng-template>
+      <div class="table-wrapper">
+        <h5 class="col-6">Danh sách đơn hàng sử dụng khuyến mãi</h5>
+
+        <data-table #itemsTable indexColumnHeader="STT" [items]="bills" [pagination]="false" [indexColumn]="true" [selectColumn]="false" [multiSelect]="false" [substituteRows]="false">
+          <!-- <data-table-column property="id" header="Tên" [sortable]="true">
+      </data-table-column> -->
+          <data-table-column header="Mã đơn hàng" [resizable]="true" [sortable]="true">
+            <template #dataTableCell let-item="item">
+            {{item.code?item.code:"không có"}}
+          </template>
+          </data-table-column>
+          <data-table-column header="Khách hàng" [resizable]="true" [sortable]="true">
+            <template #dataTableCell let-item="item">
+            {{item.customer?.fullname?item.customer.fullname:"không có"}}
+          </template>
+          </data-table-column>
+          <data-table-column header="Trạng thái" [resizable]="true" [sortable]="true">
+            <template #dataTableCell let-item="item">
+            {{item.activity?.action?item.activity.action:"không có"}}
+          </template>
+          </data-table-column>
+          <data-table-column header="Actions">
+            <template #dataTableCell let-item="item">
+              <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
+                <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-eye"></i></button>
+            </template>
+          </data-table-column>
+        </data-table>
+      </div>
+    </tab>
+    <tab>
+      <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin khách hàng</ng-template>
+      <div class="table-wrapper">
+        <h5 class="col-6">Danh sách đơn hàng sử dụng khuyến mãi</h5>
+
+        <data-table #itemsTable indexColumnHeader="STT" [items]="customers" [pagination]="false" [indexColumn]="true" [selectColumn]="false" [multiSelect]="false" [substituteRows]="false">
+          <data-table-column property="fullname" header="Họ tên" [sortable]="true">
+          </data-table-column>
+          <data-table-column header="Tổng đơn hàng" [resizable]="true" [sortable]="true">
+            <template #dataTableCell let-item="item">
+            {{item.number_of_bill?(item.number_of_bill|number):"0"}}
+          </template>
+          </data-table-column>
+          <data-table-column header="Tổng tiền đã thanh toán" [resizable]="true" [sortable]="true">
+            <template #dataTableCell let-item="item">
+            {{item.amount_of_purchase?(item.amount_of_purchase | accounting):"0 đ"}}
+          </template>
+          </data-table-column>
+          <data-table-column header="Actions">
+            <template #dataTableCell let-item="item">
+              <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
+                <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-eye"></i></button>
+            </template>
+          </data-table-column>
+        </data-table>
+      </div>
+    </tab>
+  </tabset>
 </div>

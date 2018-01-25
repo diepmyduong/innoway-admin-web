@@ -47,7 +47,7 @@ export class ProductLayoutComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.subscribeTopicByFCM();
+    //this.subscribeTopicByFCM();
     console.log("bambi: " + JSON.stringify(this.employee));
   }
 
@@ -232,12 +232,12 @@ export class ProductLayoutComponent implements OnInit {
       children: [
         {
           name: 'Thêm',
-          link: "./attribute/add",
+          link: "./product-type/add",
           icon: 'fa fa-plus'
         },
         {
           name: 'Danh sách',
-          link: "./attribute/list",
+          link: "./product-type/list",
           icon: 'fa fa-list-ul'
         }
       ]

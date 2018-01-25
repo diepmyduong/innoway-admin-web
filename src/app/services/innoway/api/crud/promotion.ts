@@ -11,6 +11,7 @@ export interface iPromotion extends iCrud {
   limit?: number,
   name?: string,
   promotion_type_id?: string,
+  is_must_use_scanning_code?: boolean,
   promotion_type?: 'discount_by_percent' | 'discount_by_price' | 'discount_by_gift',
   start_date?: Date,
   value?: number,

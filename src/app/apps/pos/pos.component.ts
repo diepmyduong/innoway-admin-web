@@ -825,6 +825,7 @@ export class PosComponent implements OnInit {
       })
       this.promotionData = data;
       this.ref.detectChanges();
+      console.log("promotion",JSON.stringify(data))
       // alert(JSON.stringify(data))
     } catch (err) {
       console.log(err.message)
@@ -1073,7 +1074,7 @@ export class PosComponent implements OnInit {
     this.paidType = this.globals.PAID_HISTORY_TYPES[0].code;
 
     this.receivedTime = "0";
-    
+
     this.receiverName = "",
     this.receiverPhone = "",
     this.receiverAddress = "",
@@ -1082,7 +1083,7 @@ export class PosComponent implements OnInit {
     this.payerPhone = "",
     this.payerAddress = "",
     this.payerNote = "",
-    
+
     this.customerPhoneAtStore = "";
     this.customerNamePlaceholder = "Khách vãng lai";
     this.customerNameAtStore = "";

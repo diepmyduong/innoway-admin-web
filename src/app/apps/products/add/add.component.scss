@@ -107,7 +107,7 @@
 }
 
 .remove-pb {
-  padding-bottom: 0px !important;
+  padding-bottom: 0 !important;
 }
 
 label.checkbox-inline {
@@ -123,23 +123,34 @@ label.checkbox-inline {
   font-size: 0.85rem;
 }
 
-/deep/ ng-select .ui-select-choices li .active {
+/deep/ ng-select .ui-select-choices li .active{
   background-color: #428bca !important;
 }
 
-/deep/ ng-select .dropdown-item div {
+/deep/ ng-select .dropdown-item div{
   padding-top: 0.5rem !important;
 }
 
-.n-mb-card {
-  margin-bottom: 0px !important;
-  border-bottom: none;
+button {
+  margin: 0;
+  color: $grey-dark;
+  border: 1px solid $grey-mild;
+  border-radius: 5px;
+  text-transform: none !important;
+  i {
+    margin-right: 3px;
+  }
+  transition: all 0.3s ease;
 }
 
-/deep/ .ui-select-multiple input.ui-select-search{
-  // display: none;
+button:hover {
+  border-color: transparent;
+  background-color: $brand-primary;
+  color: $grey-white;
 }
 
-/deep/ .ui-select-multiple {
-  min-height: 2rem;
+.add-title{
+  padding-top: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
 }

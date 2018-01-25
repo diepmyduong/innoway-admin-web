@@ -8,6 +8,8 @@ import * as Ajv from 'ajv';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import { InnowayApiService, iTopping } from 'app/services/innoway'
 import { Globals } from './../../../globals';
+import { MatDialog } from '@angular/material';
+import { EditInfoDialog } from "../../../modal/edit-info/edit-info.component";
 
 declare var swal, _: any;
 
@@ -70,7 +72,8 @@ export class AddComponent implements OnInit {
     private router: Router,
     private ref: ChangeDetectorRef,
     public innowayApi: InnowayApiService,
-    public globals: Globals
+    public globals: Globals,
+    public dialog: MatDialog,
   ) {
   }
 
@@ -144,11 +147,12 @@ export class AddComponent implements OnInit {
   async loadCategoryData() {
     try {
       this.categories.next(await this.innowayApi.productCategory.getList({
-        local: true, query: {
+        local: false, query: {
           fields: ["id", "name"],
           limit: 0
         }
       }))
+      this.ref.detectChanges()
     } catch (err) {
       console.error('Cannot load category', err);
     }
@@ -157,11 +161,12 @@ export class AddComponent implements OnInit {
   async loadProductTypeData() {
     try {
       this.productTypes.next(await this.innowayApi.productType.getList({
-        local: true, query: {
+        local: false, query: {
           fields: ["id", "name"],
           limit: 0
         }
       }))
+      this.ref.detectChanges()
     } catch (err) {
       console.error('Cannot load product_type', err);
     }
@@ -170,7 +175,7 @@ export class AddComponent implements OnInit {
   async loadToppingData() {
     try {
       const toppings = await this.innowayApi.topping.getList({
-        local: true, query: {
+        local: false, query: {
           fields: ["id", "description", "name", {
             values: ["$all"]
           }],
@@ -180,11 +185,12 @@ export class AddComponent implements OnInit {
       this.toppings.next(toppings)
       this.topping_items.next(toppings.map(topping => {
         return {
-          text: `${topping.name} ${(topping.description)?(' (' + topping.description + ')'):''}`,
+          text: `${topping.name} ${(topping.description) ? (' (' + topping.description + ')') : ''}`,
           id: topping.id
         }
       }))
       console.log('toppings', toppings)
+      this.ref.detectChanges()
     } catch (err) {
       console.error("cannot load toppings", err);
     }
@@ -193,11 +199,12 @@ export class AddComponent implements OnInit {
   async loadUnitData() {
     try {
       this.units.next(await this.innowayApi.unit.getList({
-        local: true, query: {
+        local: false, query: {
           fields: ["id", "name"],
           limit: 0
         }
       }))
+      this.ref.detectChanges()
     } catch (err) {
       console.error("cannot load units", err);
     }
@@ -206,7 +213,7 @@ export class AddComponent implements OnInit {
   async getToppingValues(topping_id: string) {
     try {
       let topping = await this.innowayApi.topping.getItem(topping_id, {
-        local: true, reload: true, query: {
+        local: false, reload: true, query: {
           fields: [{
             values: ["$all"]
           }]
@@ -222,7 +229,7 @@ export class AddComponent implements OnInit {
   async setData() {
     try {
       let product = await this.innowayApi.product.getItem(this.id, {
-        local: true, reload: true, query: {
+        local: false, reload: true, query: {
           fields: ["$all", {
             toppings: ["id", "topping_id"]
             // {
@@ -248,13 +255,13 @@ export class AddComponent implements OnInit {
       this.product_type = product.product_type_id ? product.product_type_id : null
       let toppings = this.toppings.getValue()
       this.toppingSelecter.active = product.toppings.map(product_topping => {
-        const topping = toppings.find(t => t.id === product_topping.topping_id )
+        const topping = toppings.find(t => t.id === product_topping.topping_id)
         // let index = _.findIndex(toppings, { id: product_topping.topping.id });
         // toppings[index].values = product_topping.topping.values;
         // toppings[index].selected = true;
         return {
           id: topping.id,
-          text: `${topping.name} ${(topping.description)?(' (' + topping.description + ')'):''}`,
+          text: `${topping.name} ${(topping.description) ? (' (' + topping.description + ')') : ''}`,
         }
       })
       // this.toppings.next(toppings);
@@ -480,5 +487,235 @@ export class AddComponent implements OnInit {
 
   getTopping(id: string) {
     return this.toppings.getValue().find(t => t.id === id)
+  }
+
+  showDialogAddNewEntity(entityType) {
+
+    let data = {
+      title: "Cập nhật thông tin",
+      button_yes: "Cập nhật",
+      button_no: "Bỏ qua",
+      inputs: [],
+    };
+
+    let input: any = {};
+
+    switch (entityType) {
+      case "category":
+        data.inputs.push({
+          title: "Loại sản phẩm",
+          property: "name",
+          type: "text",
+          current: "",
+        })
+
+        data.inputs.push({
+          title: "Mô tả ngắn",
+          property: "short_description",
+          type: "text",
+          current: "",
+        })
+
+        data.inputs.push({
+          title: "Mô tả",
+          property: "description",
+          type: "text",
+          current: "",
+        })
+
+        data.inputs.push({
+          title: "Hình ảnh",
+          property: "image",
+          type: "text",
+          current: "",
+        })
+        break;
+      case "product-type":
+        data.inputs.push({
+          title: "Loại trạng thái",
+          property: "name",
+          type: "text",
+          current: "",
+        })
+
+        data.inputs.push({
+          title: "Mô tả",
+          property: "description",
+          type: "text",
+          current: "",
+        })
+
+        break;
+      case "topping-type":
+        data.inputs.push({
+          title: "Loại topping",
+          property: "name",
+          type: "text",
+          current: "",
+        })
+
+        data.inputs.push({
+          title: "Mô tả",
+          property: "description",
+          type: "text",
+          current: "",
+        })
+
+        break;
+      case "topping":
+        data.inputs.push({
+          title: "Topping",
+          property: "name",
+          type: "text",
+          current: "",
+        })
+
+        let options = []
+        this.toppings.getValue().forEach(item => {
+          options.push({
+            code: item.id,
+            display: item.name,
+          })
+        })
+
+        data.inputs.push({
+          title: "Loại topping",
+          property: "toppings",
+          type: "select",
+          current: "",
+          options: options,
+        })
+
+        data.inputs.push({
+          title: "Mô tả",
+          property: "description",
+          type: "text",
+          current: "",
+        })
+
+        data.inputs.push({
+          title: "Chi phí",
+          property: "price",
+          type: "number",
+          current: "",
+        })
+
+        break;
+      case "unit":
+        data.inputs.push({
+          title: "Đơn vị",
+          property: "name",
+          type: "text",
+          current: "",
+        })
+
+        data.inputs.push({
+          title: "Bước nhảy",
+          property: "offset",
+          type: "number",
+          current: "",
+        })
+
+        data.inputs.push({
+          title: "Mô tả",
+          property: "description",
+          type: "text",
+          current: "",
+        })
+
+        break;
+    }
+
+    let dialogRef = this.dialog.open(EditInfoDialog, {
+      width: '560px',
+      data: data
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        switch (entityType) {
+          case "category":
+            this.addNewCategory({
+              name: result.name,
+              short_description: result.short_description,
+              description: result.description,
+              image: result.image,
+            })
+            break;
+          case "product-type":
+            this.addNewProductType({
+              name: result.name,
+              description: result.description
+            })
+            break;
+          case "topping-type":
+            this.addNewToppingType({
+              name: result.name,
+              description: result.description
+            })
+            break;
+          case "topping":
+            this.addNewTopping({
+              name: result.name,
+              description: result.description,
+              price: result.price,
+              topping_id: result.toppings
+            })
+            break;
+          case "unit":
+            this.addNewUnit({
+              name: result.name,
+              offset: result.offset,
+              description: result.description
+            })
+            break;
+        }
+      }
+    })
+  }
+
+  async addNewCategory(data) {
+    try {
+      await this.innowayApi.productCategory.add(data);
+      this.loadCategoryData();
+    } catch (err) {
+      console.log("addNewCategory", err)
+    }
+  }
+
+  async addNewProductType(data) {
+    try {
+      await this.innowayApi.productType.add(data);
+      this.loadProductTypeData()
+    } catch (err) {
+
+    }
+  }
+
+  async addNewToppingType(data) {
+    try {
+      await this.innowayApi.topping.add(data);
+      this.loadToppingData()
+    } catch (err) {
+
+    }
+  }
+
+  async addNewTopping(data) {
+    try {
+      await this.innowayApi.toppingValue.add(data);
+      this.loadToppingData()
+    } catch (err) {
+
+    }
+  }
+
+  async addNewUnit(data) {
+    try {
+      await this.innowayApi.unit.add(data);
+      this.loadUnitData()
+    } catch (err) {
+
+    }
   }
 }

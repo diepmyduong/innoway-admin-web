@@ -1,14 +1,31 @@
 <div class="animated fadeIn">
   <div class="row">
-    <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <span class="title"><i class="fa fa-cog"></i> Tính năng</span>
+        <span class="title float-right"><i class="fa fa-info-circle"> </i> Hướng dẫn</span>
+      </div>
+      <div class="card-block">
+        <div class="row">
+          <div class="col-md-2 item" *ngFor="let item of data.feature; let i = index" [routerLink]="item.link" style="cursor: pointer">
+            <img src="{{item.icon}}" matTooltip="{{item.hint}}" matTooltipPosition="above" />
+            <label class="header-text">{{item.title}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="col-lg-12">
       <tabset>
         <tab>
           <ng-template tabHeading><i class="icon-settings"></i> Tính năng</ng-template>
+          <i class="fa fa-info"></i>
           <div class="card">
             <div class="card-header">
               <div class="row">
                 <div class="col-md-2 item" *ngFor="let item of data.feature; let i = index" [routerLink]="item.link" style="cursor: pointer">
-                  <img src="{{item.icon}}"/>
+                  <img src="{{item.icon}}" matTooltip="{{item.hint}}" matTooltipPosition="above"/>
                   <label class="header-text">{{item.title}}</label>
                 </div>
               </div>
@@ -27,11 +44,11 @@
               </div>
             </div>
           </div>
-        </tab> -->
+        </tab>
       </tabset>
       <div class="card-block">
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <toaster-container [toasterconfig]="toasterconfig"></toaster-container>

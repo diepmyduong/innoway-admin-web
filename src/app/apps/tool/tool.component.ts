@@ -19,40 +19,49 @@ export class ToolComponent implements OnInit {
         title: "Thiết lập",
         icon: "https://farm5.staticflickr.com/4521/38018892844_81b009a668_o.png",
         link: "/setting-layout",
+        hint: "thiết lập kinh doanh"
       },
       {
         title: "Trang điều phối",
         icon: "https://farm5.staticflickr.com/4574/38018893524_94f1d2622b_o.png",
         link: "/dashboard-layout",
+        hint: "điều phối hoạt động"
       }, {
         title: "Chi nhánh",
         icon: "https://farm5.staticflickr.com/4536/38018893464_2243305580_o.png",
         link: "/branch-layout",
+        hint: "quản lí chi nhánh"
       },
       {
         title: "Nhân viên",
         icon: "https://farm5.staticflickr.com/4533/38018893334_5e118b5f3f_o.png",
         link: "/employee-layout",
+        hint: "quản lý nhân viên"
       }, {
         title: "Sản phẩm",
         icon: "https://farm5.staticflickr.com/4573/38018893214_d3fa023850_o.png",
         link: "/product-layout",
+        hint: "quản lý sản phẩm"
       }, {
-        title: "Người dùng",
+        title: "Khách hàng",
         icon: "https://farm5.staticflickr.com/4537/38018893194_f8e3a08b37_o.png",
         link: "/customer-layout",
+        hint: "quản lý khách hàng"
       }, {
         title: "Đơn hàng",
         icon: "https://farm5.staticflickr.com/4567/38018893154_5db60221a1_o.png",
         link: "/bill-layout",
+        hint: "quản lý đơn hàng"
       }, {
         title: "Khuyến mãi",
         icon: "https://farm5.staticflickr.com/4585/38018893044_97c6c9f5ed_o.png",
         link: "/promotion-layout",
+        hint: "thiết lập chiến dịch khuyến mãi"
       }, {
         title: "POS",
         icon: "https://farm5.staticflickr.com/4528/24866458148_a12c9693af_o.png",
         link: "/pos",
+        hint: "hỗ trợ bán hàng"
       }
       // , {
       //   title: "Phản hồi",
@@ -150,8 +159,10 @@ export class ToolComponent implements OnInit {
   }
 
   async subscribeTopicByFCM() {
-    this.billChangeObservable = await this.innowayApi.bill.subscribe()
-    this.subscriptions.push(this.billChangeObservable.subscribe(message => {
+
+    // this.billChangeObservable = await this.innowayApi.bill.subscribe()
+    this.subscriptions.push(this.innowayApi.bill.onInformationBillFromFCM.subscribe(message => {
+      if (!message) return
       try {
         console.log("subscribeTopicByFCM", JSON.stringify(message))
         switch (message.topic) {
@@ -217,7 +228,7 @@ export class ToolComponent implements OnInit {
           this.showNotification({
             type: 'success',
             title: 'Đơn hàng ' + data.code + ' thay đổi phụ phí',
-            content: 'Đơn hàng vừa được khách hàng cập nhật phụ phí ' + message.price.toString() + ' được ghi nhận bởi ' +data.activity.employee.fullname
+            content: 'Đơn hàng vừa được khách hàng cập nhật phụ phí ' + message.price.toString() + ' được ghi nhận bởi ' + data.activity.employee.fullname
           })
           break;
         }

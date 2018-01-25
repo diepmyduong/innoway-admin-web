@@ -128,6 +128,12 @@
               </div>
             </div>
             <div class="form-group row">
+              <label class="col-md-2 header-text" for="textarea-input">Buộc phải scan code</label>
+              <div class="col-md-10">
+                <input type="checkbox" #isMustUseScanningCodeControl="ngModel" [(ngModel)]="isMustUseScanningCode" name="isMustUseScanningCode" (ngModelChange)="checkSelectMustUseScanningCode($event)" class="form-control input-control custom-checkbox">
+              </div>
+            </div>
+            <div class="form-group row">
               <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
               <div class="col-md-10">
                 <select id="statusSelect" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">

@@ -72,9 +72,9 @@ export class PromotionComponent implements OnInit {
     this.router.navigate(['../add', item.id], { relativeTo: this.route });
   }
 
-  // viewItem(item) {
-  //   this.router.navigate(['../detail', item.id], { relativeTo: this.route });
-  // }
+  viewItem(item) {
+    this.router.navigate(['../detail', item.id], { relativeTo: this.route });
+  }
 
   async confirmDelete() {
     return await swal({
@@ -219,15 +219,15 @@ export class PromotionComponent implements OnInit {
     }
   }
 
-  async viewItem(item) {
-    try {
-      let response = await this.innowayApi.promotion.getDetailPromotion(item.id, {
-        is_show_used_customer: true,
-        is_show_used_bill: true,
-      })
-      console.log("detail", JSON.stringify(response))
-    } catch (err) {
-      console.log("detail", err)
-    }
-  }
+  // async viewItem(item) {
+  //   try {
+  //     let response = await this.innowayApi.promotion.getDetailPromotion(item.id, {
+  //       is_show_used_customer: true,
+  //       is_show_used_bill: true,
+  //     })
+  //     console.log("detail", JSON.stringify(response))
+  //   } catch (err) {
+  //     console.log("detail", err)
+  //   }
+  // }
 }

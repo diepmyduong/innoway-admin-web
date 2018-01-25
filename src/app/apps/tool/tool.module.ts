@@ -14,6 +14,8 @@ import { SimpleNotificationsModule, PushNotificationsModule } from 'angular2-not
 import { TabsModule } from 'ng2-bootstrap/tabs';
 import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster';
 
+import { MatTooltipModule } from '@angular/material';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster'
 
     TabsModule.forRoot(),
 
-    ToasterModule
+    ToasterModule,
+    MatTooltipModule
   ],
   declarations: [ToolComponent],
   bootstrap: [ToolComponent],

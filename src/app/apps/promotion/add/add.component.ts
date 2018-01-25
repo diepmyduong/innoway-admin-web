@@ -36,6 +36,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   endDate: string;
   value: number = 0;
   customerType: string;
+  isMustUseScanningCode: boolean = false;
 
   promotionType: 'discount_by_percent' | 'discount_by_price' | 'discount_by_gift';
   promotionTypes: any[];
@@ -88,6 +89,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.description = "";
     this.shortDescription = "";
     this.image = "";
+    this.isMustUseScanningCode = false;
     this.promotionType = this.promotionTypes[0].code;
     if (this.customerTypeData.getValue()[0]) {
       this.customerType = this.customerTypeData.getValue()[0].id;
@@ -104,6 +106,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       code: this.code,
       description: this.description,
       shortDescription: this.shortDescription,
+      isMustUseScanningCode: this.isMustUseScanningCode,
       image: this.image
     }
   }
@@ -130,6 +133,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.promotionType = data.promotion_type
       this.status = data.status
       this.image = data.image
+      this.isMustUseScanningCode = data.is_must_use_scanning_code
 
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
@@ -230,20 +234,18 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   async addItem(form: NgForm) {
-    // alert(this.startDate)
-    // alert(moment(this.startDate, "MM/DD/YYYY hh:mm").format())
-    // alert(new Date(this.startDate).toString()+"\n"+new Date(this.endDate).toString());
     if (form.valid && this.detectDate(this.startDate, this.endDate)
       && ((this.promotionType == this.globals.PROMOTION_TYPES[1].code && this.value <= 100 && this.value > 0)
         || (this.promotionType == this.globals.PROMOTION_TYPES[0].code) && this.value > 0)) {
-      let { name, amount, code, limit, shortDescription, description, value, status, image } = this;
+      let { name, amount, code, limit, shortDescription, description, value, status, image, isMustUseScanningCode } = this;
       let start_date = moment(this.startDate, "MM/DD/YYYY hh:mm").format();
       let short_description = shortDescription;
       let end_date = moment(this.endDate, "MM/DD/YYYY hh:mm").format();
       let customer_type_id = this.customerType;
       let promotion_type = this.promotionType;
+      let is_must_use_scanning_code = this.isMustUseScanningCode;
       let promotion = await this.innowayApi.promotion.add({
-        name, amount, code, limit, short_description,
+        name, amount, code, limit, short_description, is_must_use_scanning_code,
         description, start_date: new Date(start_date), end_date: new Date(end_date), value, promotion_type, status, image
       })
 
@@ -263,14 +265,15 @@ export class AddComponent implements OnInit, AddPageInterface {
     if (form.valid && this.detectDate(this.startDate, this.endDate)
       && ((this.promotionType == this.globals.PROMOTION_TYPES[1].code && this.value <= 100 && this.value > 0)
         || (this.promotionType == this.globals.PROMOTION_TYPES[0].code) && this.value > 0)) {
-      let { name, amount, code, limit, shortDescription, description, value, status, image } = this;
+      let { name, amount, code, limit, shortDescription, description, value, status, image, isMustUseScanningCode } = this;
       let start_date = moment(this.startDate, "MM/DD/YYYY hh:mm").format();
       let short_description = shortDescription;
       let end_date = moment(this.endDate, "MM/DD/YYYY hh:mm").format();
       let customer_type_id = this.customerType;
       let promotion_type = this.promotionType;
+      let is_must_use_scanning_code = this.isMustUseScanningCode;
       let promotion = await this.innowayApi.promotion.update(this.id, {
-        name, amount, code, limit, short_description,
+        name, amount, code, limit, short_description, is_must_use_scanning_code,
         description, start_date: new Date(start_date), end_date: new Date(end_date), value, customer_type_id, promotion_type, status, image
       })
 
@@ -323,11 +326,8 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
-  async send() {
-    let customer_type_ids: string[] = [];
-    // alert(JSON.stringify(this.customerType));
-    // customer_type_ids.push(this.customerType);
-    await this.innowayApi.promotion.sendPromotionToMessenger(this.id, "BCSBCS");
+  checkSelectMustUseScanningCode(event) {
+    this.isMustUseScanningCode = event;
   }
 
 

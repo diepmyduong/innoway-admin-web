@@ -34,10 +34,12 @@
   background: white;
 }
 
-.card,
-.card-header {
-  background: white;
-  border: 0 !important;
+/deep/ .card,
+/deep/ .card-header {
+  // background: white;
+  // border: 0 !important;
+  // padding-left: 16px;
+  // padding-right: 16px;
 }
 
 /deep/ tabset .tab-content {
@@ -67,4 +69,8 @@
 
 /deep/ tabset .nav-tabs {
   border-bottom: none;
+}
+
+.title {
+  font-size: 1.1rem;
 }

@@ -97,7 +97,7 @@ export class BillsComponent implements OnInit {
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
     this.loadBrandByEmployeeData(this.employeeData.brand_id);
     this.loadEmployeeData();
-    this.subscribeTopicByFCM();
+    // //this.subscribeTopicByFCM();
 
     moment.locale('vi');
   }
@@ -162,7 +162,7 @@ export class BillsComponent implements OnInit {
       data => {
         this.selectedCustomerName = data;
         if (this.selectedCustomerName != null) {
-          
+
         }
       });
 
