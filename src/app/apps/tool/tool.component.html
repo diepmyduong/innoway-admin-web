@@ -1,13 +1,13 @@
 <div class="animated fadeIn">
   <div class="row">
-    <div class="card">
+    <div class="card something">
       <div class="card-header">
         <span class="title"><i class="fa fa-cog"></i> Tính năng</span>
-        <span class="title float-right"><i class="fa fa-info-circle"> </i> Hướng dẫn</span>
+        <span class="title float-right" (click)="runIntro()"><i class="fa fa-info-circle"> </i> Hướng dẫn</span>
       </div>
       <div class="card-block">
         <div class="row">
-          <div class="col-md-2 item" *ngFor="let item of data.feature; let i = index" [routerLink]="item.link" style="cursor: pointer">
+          <div class="col-md-2 item" *ngFor="let item of data.feature; let i = index" id="{{item.id}}" [routerLink]="item.link" style="cursor: pointer">
             <img src="{{item.icon}}" matTooltip="{{item.hint}}" matTooltipPosition="above" />
             <label class="header-text">{{item.title}}</label>
           </div>

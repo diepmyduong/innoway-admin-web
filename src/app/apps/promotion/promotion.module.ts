@@ -17,6 +17,8 @@ import { FroalaComponent } from "app/editor/froala.component";
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 import { TabsModule } from 'ngx-bootstrap/tabs';
+
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 // import { FroalaComponent } from "app/apps/promotion/add/froala.component";
 @NgModule({
   imports: [
@@ -31,7 +33,9 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     FroalaViewModule,
 
     PipesModule,
-    TabsModule
+    TabsModule,
+
+    ChartsModule
   ],
   declarations: [
     PromotionComponent,

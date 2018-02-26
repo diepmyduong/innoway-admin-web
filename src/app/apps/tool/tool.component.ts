@@ -5,6 +5,8 @@ import { Globals } from "app/globals";
 import { ToasterModule, ToasterService, ToasterConfig } from 'angular2-toaster/angular2-toaster';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Subscription } from 'rxjs/Subscription'
+import { IntroService } from "app/services/intro.service";
+import { ENTER } from '@angular/cdk/keycodes'
 
 @Component({
   selector: 'app-tool',
@@ -19,49 +21,64 @@ export class ToolComponent implements OnInit {
         title: "Thiết lập",
         icon: "https://farm5.staticflickr.com/4521/38018892844_81b009a668_o.png",
         link: "/setting-layout",
-        hint: "thiết lập kinh doanh"
+        hint: "thiết lập kinh doanh",
+        id: "setting-id"
       },
       {
         title: "Trang điều phối",
         icon: "https://farm5.staticflickr.com/4574/38018893524_94f1d2622b_o.png",
         link: "/dashboard-layout",
-        hint: "điều phối hoạt động"
+        hint: "điều phối hoạt động",
+        id: "dashboard-id"
       }, {
         title: "Chi nhánh",
         icon: "https://farm5.staticflickr.com/4536/38018893464_2243305580_o.png",
         link: "/branch-layout",
-        hint: "quản lí chi nhánh"
+        hint: "quản lý chi nhánh",
+        id: "branch-id"
       },
       {
         title: "Nhân viên",
         icon: "https://farm5.staticflickr.com/4533/38018893334_5e118b5f3f_o.png",
         link: "/employee-layout",
-        hint: "quản lý nhân viên"
+        hint: "quản lý nhân viên",
+        id: "employee-id"
       }, {
         title: "Sản phẩm",
         icon: "https://farm5.staticflickr.com/4573/38018893214_d3fa023850_o.png",
         link: "/product-layout",
-        hint: "quản lý sản phẩm"
+        hint: "quản lý sản phẩm",
+        id: "product-id"
       }, {
         title: "Khách hàng",
         icon: "https://farm5.staticflickr.com/4537/38018893194_f8e3a08b37_o.png",
         link: "/customer-layout",
-        hint: "quản lý khách hàng"
+        hint: "quản lý khách hàng",
+        id: "customer-id"
       }, {
         title: "Đơn hàng",
         icon: "https://farm5.staticflickr.com/4567/38018893154_5db60221a1_o.png",
         link: "/bill-layout",
-        hint: "quản lý đơn hàng"
+        hint: "quản lý đơn hàng",
+        id: "bill-id"
       }, {
         title: "Khuyến mãi",
         icon: "https://farm5.staticflickr.com/4585/38018893044_97c6c9f5ed_o.png",
         link: "/promotion-layout",
-        hint: "thiết lập chiến dịch khuyến mãi"
+        hint: "thiết lập chiến dịch khuyến mãi",
+        id: "promotion-id"
       }, {
         title: "POS",
         icon: "https://farm5.staticflickr.com/4528/24866458148_a12c9693af_o.png",
         link: "/pos",
-        hint: "hỗ trợ bán hàng"
+        hint: "hỗ trợ bán hàng",
+        id: "pos-id"
+      },{
+        title: "Thống kê",
+        icon: "https://farm5.staticflickr.com/4528/24866458148_a12c9693af_o.png",
+        link: "/summary-layout",
+        hint: "thống kê quy trình kinh doanh",
+        id: "summary-id"
       }
       // , {
       //   title: "Phản hồi",
@@ -113,6 +130,7 @@ export class ToolComponent implements OnInit {
   billChangeObservable: BehaviorSubject<any> = new BehaviorSubject<any>({});
   branch: any = {}
   subscriptions: Subscription[] = []
+  introInstance: any
 
   private toasterService: ToasterService;
 
@@ -127,10 +145,75 @@ export class ToolComponent implements OnInit {
     public innowayApi: InnowayApiService,
     private ref: ChangeDetectorRef,
     private globals: Globals,
-    toasterService: ToasterService) {
+    toasterService: ToasterService,
+    public intro: IntroService
+  ) {
 
     this.toasterService = toasterService;
 
+  }
+
+  runIntro() {
+    this.introInstance = this.intro.getInstance([
+      {
+        'click #setting-id': 'Thiết lập quy trình kinh doanh của doanh nghiệp',
+        'nextButton': { className: "myNext", text: "Tiếp" },
+        'skipButton': { className: "mySkip", text: "Bỏ qua" },
+        showSkip: true,
+        showNext: true
+      },
+      {
+        'click #branch-id': 'Quản lý chi nhánh của doanh nghiệp',
+        'nextButton': { className: "myNext", text: "Tiếp" },
+        'skipButton': { className: "mySkip", text: "Bỏ qua" },
+        showSkip: true,
+        showNext: true
+      },
+      {
+        'click #product-id': 'Quản lý sản phẩm của doanh nghiệp',
+        'nextButton': { className: "myNext", text: "Tiếp" },
+        'skipButton': { className: "mySkip", text: "Bỏ qua" },
+        showSkip: true,
+        showNext: true
+      },
+      {
+        'click #employee-id': 'Quản lý nhân viên của doanh nghiệp',
+        'nextButton': { className: "myNext", text: "Tiếp" },
+        'skipButton': { className: "mySkip", text: "Bỏ qua" },
+        showSkip: true,
+        showNext: true
+      },
+      {
+        'click #customer-id': 'Quản lý khách hàng của doanh nghiệp',
+        'nextButton': { className: "myNext", text: "Tiếp" },
+        'skipButton': { className: "mySkip", text: "Bỏ qua" },
+        showSkip: true,
+        showNext: true
+      },
+      {
+        'click #bill-id': 'Quản lý đơn hàng của doanh nghiệp',
+        'nextButton': { className: "myNext", text: "Tiếp" },
+        'skipButton': { className: "mySkip", text: "Bỏ qua" },
+        showSkip: true,
+        showNext: true
+      },
+      {
+        'click #promotion-id': 'Quản lý khuyến mãi của doanh nghiệp',
+        'nextButton': { className: "myNext", text: "Tiếp" },
+        'skipButton': { className: "mySkip", text: "Bỏ qua" },
+        showSkip: true,
+        showNext: true
+      },
+      {
+        'click #pos-id': 'Trang bán hàng của doanh nghiệp',
+        'nextButton': { className: "myNext", text: "Tiếp" },
+        'skipButton': { className: "mySkip", text: "Bỏ qua" },
+        showSkip: true,
+        showNext: true
+      },
+    ])
+
+    this.introInstance.run()
   }
 
   ngOnInit() {
@@ -141,6 +224,10 @@ export class ToolComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscriptions.forEach(s => s.unsubscribe())
+  }
+
+  ngAfterViewInit() {
+    // this.runIntro()
   }
 
   async loadBranchByEmployeeData(branchId: string) {

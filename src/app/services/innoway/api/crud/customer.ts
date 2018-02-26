@@ -58,4 +58,35 @@ export class Customer extends CrudAPI<iCustomer> {
         let rows = res.results.objects.rows
         return rows;
     }
+
+    async export() {
+      let setting = {
+        method: 'GET',
+        uri: this.apiUrl(`export`),
+        headers: { //headers
+          'User-Agent': 'Request-Promise',
+          'access_token': this.api.innowayAuth.adminToken
+        },
+      }
+      let res: any = await this.exec(setting);
+      return res;
+    }
+
+    async import(file, params: {
+      mode: string
+    }) {
+      let { mode } = params;
+
+      var data = new FormData();
+      data.append("file", file);
+      data.append("mode", mode);
+
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', this.apiUrl(`import`), false);
+      xhr.setRequestHeader('access_token', this.api.innowayAuth.adminToken);
+      // xhr.send(params);
+      xhr.send(data);
+      let responseObject = JSON.parse(xhr.response)
+      return responseObject.data
+    }
 }

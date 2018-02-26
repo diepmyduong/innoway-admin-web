@@ -37,9 +37,19 @@ export class EmployeeComponent implements OnInit, ListPageInterface {
   ) {
   }
 
+  subscriptions:any = {}
+
   ngOnInit() {
+    this.subscriptions.onItemsChange = this.innowayApi.smartCode.items.subscribe(items => {
+      if(items)  this.itemsTable.reloadItems()
+    })
   }
 
+  ngAfterViewDestroy() {
+    this.subscriptions.forEach(s => {
+      s.unsubscribe()
+    })
+  }
   async reloadItems(params) {
     let { limit, offset, sortBy, sortAsc } = params;
     this.query.limit = limit;

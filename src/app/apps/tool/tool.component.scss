@@ -72,5 +72,14 @@
 }
 
 .title {
-  font-size: 1.1rem;
+  font-size: 1rem;
+}
+
+.mySkip {
+    color: white;
+    border-color: white;
+}
+
+/deep/ .enjoyhint div{
+  font-family: Roboto,Helvetica,Arial,sans-serif !important;
 }

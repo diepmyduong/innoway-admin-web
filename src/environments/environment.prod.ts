@@ -10,7 +10,8 @@ export const environment = {
     version: "v1"
   },
   innoway: {
-    host: "https://m-commerce-cloud-service.appspot.com",
+    // host: "https://m-commerce-cloud-service.appspot.com",
+    host: "https://innoway-server.mcommerce.com.vn",
     version: "v1",
     firebase: {
       apiKey: "AIzaSyCV7iiP9I8axVH3zT1AzltHlvcDWYoOySs",

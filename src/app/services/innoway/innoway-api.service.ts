@@ -31,6 +31,27 @@ import { BrandTheme } from './api/crud/brand-theme'
 import { BrandCategory } from './api/crud/brand-category'
 import { PromotionCustomer } from './api/crud/promotion-customer'
 import { PromotionCustomerDetail } from './api/crud/promotion-customer-detail'
+import { Summary } from './api/crud/summary'
+import { Upload } from "./api/crud/upload";
+import { Contract } from "./api/crud/contract";
+import { License } from "./api/crud/license";
+import { LicenseDetail } from "./api/crud/license-detail";
+import { Device } from "./api/crud/device";
+import { Room } from "./api/crud/room";
+import { Scene } from "./api/crud/scene";
+import { TicketComment } from "./api/crud/ticket-comment";
+import { TicketType } from "./api/crud/ticket-type";
+import { Ticket } from "./api/crud/ticket";
+import { Shipment } from "./api/crud/shipment";
+import { ShipmentDetail } from "./api/crud/shipment-detail";
+import { ShipmentArea } from "./api/crud/shipment-area";
+import { ThirdpartyGHNHub } from "./api/crud/thirdparty-ghn-hub";
+import { ThirdpartyGHNOrder } from "./api/crud/thirdparty-ghn-order";
+import { ThirdpartyGHNService } from "./api/crud/thirdparty-ghn-service";
+import { ThirdpartyKiotViet } from "./api/crud/thirdparty-kiotviet";
+import { ThirdpartyShipper } from "./api/crud/thirdparty-shipper";
+import { McomManager } from "./api/crud/mcom-manager";
+import { McomManagerType } from "./api/crud/mcom-manager-type";
 
 @Injectable()
 export class InnowayApiService {
@@ -71,4 +92,30 @@ export class InnowayApiService {
   brandCategory = new BrandCategory(this)
   promotionCustomer = new PromotionCustomer(this)
   promotionCustomerDetail = new PromotionCustomerDetail(this)
+  summary = new Summary(this)
+  upload = new Upload(this)
+  contract = new Contract(this)
+  license = new License(this)
+  licenseDetail = new LicenseDetail(this)
+  room = new Room(this)
+  device = new Device(this)
+  scene = new Scene(this)
+  ticket = new Ticket(this)
+  ticketType = new TicketType(this)
+  ticketComment = new TicketComment(this)
+
+  shipment=new Shipment(this)
+  shipmentDetail=new ShipmentDetail(this)
+  shipmentArea=new ShipmentArea(this)
+
+  thirdpartyGHNHub=new ThirdpartyGHNHub(this)
+  thirdpartyGHNOrder=new ThirdpartyGHNOrder(this)
+  thirdpartyGHNService=new ThirdpartyGHNService(this)
+
+  thirdpartyKiotViet =new ThirdpartyKiotViet(this)
+
+  thirdpartyShipper=new ThirdpartyShipper(this)
+
+  mcomManager=new McomManager(this)
+  mComManagerType=new McomManagerType(this)
 }

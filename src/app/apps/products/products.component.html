@@ -2,7 +2,7 @@
 
   <div class="row">
     <h3 class="col-6">Danh sách sản phẩm</h3>
-    <div class="col-6">
+    <div class="col-6 button-center">
       <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm sản phẩm</button>
       <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa sản phẩm</button>
     </div>
@@ -12,6 +12,9 @@
     <div class="search-bar">
       <p>Tìm kiếm</p>
       <input type="text" class="input-control form-control" (keyup)="onSearch($event)">
+      <button class="btn btn-md button-default-primary ml-h" (click)="export()"><i class="fa fa-export"></i>Xuất dữ liệu</button>
+      <input type="file" #fileImportUploader name="file-input" #file (change)="import($event)" [hidden]="true">
+      <button class="btn btn-md button-default-primary ml-h" (click)="file.click()"><i class="fa fa-import"></i>Nhập dữ liệu</button>
     </div>
     <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true" [substituteRows]="false"
       [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">

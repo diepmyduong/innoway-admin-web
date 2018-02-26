@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -43,8 +43,21 @@ import { UpdateBillDataDialog } from "./modal/update-bill-data/update-bill-data.
 import { UpdatePaidHistoryDialog } from "./modal/update-paid-history/update-paid-history.component";
 import { SendMessageDialog } from "./modal/send-message/send-message.component";
 import { SendStoryDialog } from "./modal/send-story/send-story.component";
+import { GuideCustomerDialog } from "./modal/guide-customer/guide-customer.component";
 import { TextMaskModule } from 'angular2-text-mask';
 
+import Raven = require('raven-js');
+
+Raven
+  .config('https://997c474fe1004e2da0f34f05c79c540e@sentry.io/278600')
+  .install();
+
+export class RavenErrorHandler implements ErrorHandler {
+  handleError(err: any): void {
+    Raven.captureException(err.originalError || err);
+    console.error(err)
+  }
+}
 
 @NgModule({
   imports: [
@@ -81,12 +94,19 @@ import { TextMaskModule } from 'angular2-text-mask';
     UpdateBillDataDialog,
     UpdatePaidHistoryDialog,
     SendMessageDialog,
-    SendStoryDialog
+    SendStoryDialog,
+    GuideCustomerDialog,
   ],
-  providers: [{
-    provide: LocationStrategy,
-    useClass: PathLocationStrategy
-  }],
+  providers: [
+    {
+      provide: LocationStrategy,
+      useClass: PathLocationStrategy
+    },
+    {
+      provide: ErrorHandler,
+      useClass: RavenErrorHandler
+    }
+  ],
   bootstrap: [AppComponent],
   entryComponents: [
     EditOrderStatusDialog,
@@ -96,7 +116,8 @@ import { TextMaskModule } from 'angular2-text-mask';
     UpdateBillDataDialog,
     UpdatePaidHistoryDialog,
     SendMessageDialog,
-    SendStoryDialog
+    SendStoryDialog,
+    GuideCustomerDialog
   ]
 })
 export class AppModule { }

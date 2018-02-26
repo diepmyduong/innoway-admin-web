@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { CustomValidators } from "ng2-validation/dist";
 import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
@@ -7,6 +7,8 @@ import { AddPageInterface } from "app/apps/interface/addPageInterface";
 import { NgForm } from "@angular/forms";
 import { Globals } from "./../../../Globals"
 import * as moment from 'moment';
+import { Angular2Csv } from 'angular2-csv/Angular2-csv';
+import { BaseChartDirective } from "ng2-charts";
 
 declare let accounting: any;
 declare let swal: any;
@@ -19,6 +21,7 @@ declare let swal: any;
   styleUrls: ['./add.component.scss']
 })
 export class AddComponent implements OnInit, AddPageInterface {
+  [name: string]: any;
   id: any;
   isEdit: boolean = false;
   submitting: boolean = false;
@@ -47,15 +50,27 @@ export class AddComponent implements OnInit, AddPageInterface {
   status: number = 1;
   customerTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   // promotionTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  model: any;
+
+  @ViewChild("fileUploader")
+  fileUploader: ElementRef;
+
+  @ViewChild("fileImportUploader")
+  fileImportUploader: ElementRef;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
     private globals: Globals,
+    private ngZone: NgZone,
     public innowayApi: InnowayApiService) {
 
     this.promotionTypes = this.globals.PROMOTION_TYPES;
     this.promotionType = this.promotionTypes[0].code;
+
+    this.model = {
+      method: "url"
+    };
   }
 
   changeText(event) {
@@ -76,7 +91,50 @@ export class AddComponent implements OnInit, AddPageInterface {
     if (this.isEdit) {
       this.setData();
     }
+
+    this.summaryProduct();
+    let employee = this.innowayApi.innowayAuth.innowayUser;
+    this.summaryEmployee(employee.id);
+    this.summaryCustomer("")
+
+    BaseChartDirective.prototype.ngOnChanges = function(changes) {
+      if (this.initFlag) {
+        // Check if the changes are in the data or datasets
+        if (changes.hasOwnProperty('data') || changes.hasOwnProperty('datasets')) {
+          if (changes['data']) {
+            this.updateChartData(changes['data'].currentValue);
+          }
+          else {
+            this.updateChartData(changes['datasets'].currentValue);
+          }
+          // add label change detection every time
+          if (changes['labels']) {
+            if (this.chart && this.chart.data && this.chart.data.labels) {
+              this.chart.data.labels = changes['labels'].currentValue;
+            }
+          }
+          this.chart.update();
+        }
+        else {
+          // otherwise rebuild the chart
+          this.refresh();
+        }
+      }
+    };
   }
+
+  private pieChartColors = [
+    {
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.9)',
+        'rgba(54, 162, 235, 0.9)',
+        'rgba(255, 206, 86, 0.9)',
+        'rgba(0, 255, 0, 0.9)',
+        'rgba(102, 0, 204, 0.9)',
+        'rgba(255, 128, 0, 0.9)'
+      ]
+    }
+  ]
 
   setDefaultData() {
     this.status = 1;
@@ -243,15 +301,17 @@ export class AddComponent implements OnInit, AddPageInterface {
       let end_date = moment(this.endDate, "MM/DD/YYYY hh:mm").format();
       let customer_type_id = this.customerType;
       let promotion_type = this.promotionType;
-      let is_must_use_scanning_code = this.isMustUseScanningCode;
-      let promotion = await this.innowayApi.promotion.add({
-        name, amount, code, limit, short_description, is_must_use_scanning_code,
+      let is_must_use_scanning_code: boolean = this.isMustUseScanningCode;
+      let request = {
+        name, amount, code, limit, short_description, is_must_use_scanning_code, customer_type_id,
         description, start_date: new Date(start_date), end_date: new Date(end_date), value, promotion_type, status, image
-      })
+      }
+      console.log("request", request);
+      let promotion = await this.innowayApi.promotion.createPromotion(request)
 
-      let customer_type_ids: string[] = [];
-      customer_type_ids.push(customer_type_id);
-      await this.innowayApi.promotion.addCustomerTypes(promotion.id, customer_type_ids);
+      // let customer_type_ids: string[] = [];
+      // customer_type_ids.push(customer_type_id);
+      // await this.innowayApi.promotion.addCustomerTypes(promotion.id, customer_type_ids);
 
       this.alertAddSuccess();
       form.reset();
@@ -271,7 +331,7 @@ export class AddComponent implements OnInit, AddPageInterface {
       let end_date = moment(this.endDate, "MM/DD/YYYY hh:mm").format();
       let customer_type_id = this.customerType;
       let promotion_type = this.promotionType;
-      let is_must_use_scanning_code = this.isMustUseScanningCode;
+      let is_must_use_scanning_code: boolean = this.isMustUseScanningCode;
       let promotion = await this.innowayApi.promotion.update(this.id, {
         name, amount, code, limit, short_description, is_must_use_scanning_code,
         description, start_date: new Date(start_date), end_date: new Date(end_date), value, customer_type_id, promotion_type, status, image
@@ -330,5 +390,219 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.isMustUseScanningCode = event;
   }
 
+  async onChangeImageFile(event) {
+    // var files: Array<File> = <Array<File>> event.target.files;
+
+    let files = this.fileUploader.nativeElement.files
+    let file = files[0];
+    console.log("onChangeImageFile", files);
+    try {
+
+      let fileList: FileList = event.target.files;
+      if (fileList.length > 0) {
+        let file: File = fileList[0];
+        let img: any = document.querySelector("#preview-image");
+        img.src = file;
+
+        var reader = new FileReader();
+        reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+        reader.readAsDataURL(file);
+      }
+
+      // let response = await this.innowayApi.upload.uploadImage(file)
+      // this.upload(files)
+      // console.log("onChangeImageFile", response);
+    } catch (err) {
+      console.log("onChangeImageFile", err);
+    }
+  }
+
+  async onChangeImportFile(event) {
+    let files = this.fileImportUploader.nativeElement.files
+    let file = files[0];
+    console.log("onChangeImportFile", file);
+    try {
+      let response = await this.innowayApi.product.import(file, {
+        mode: "overwrite"
+      })
+      // this.upload(files)
+      console.log("onChangeImportFile", response);
+    } catch (err) {
+      console.log("onChangeImportFile", err);
+    }
+  }
+
+  async export() {
+    try {
+      let response: any = await this.innowayApi.product.export()
+      this.downloadFile(response)
+    } catch (err) {
+      console.log("export", err);
+    }
+  }
+
+  downloadFile(data) {
+    let blob = new Blob(['\ufeff' + data], { type: 'text/csv;charset=utf-8;' });
+    let dwldLink = document.createElement("a");
+    let url = URL.createObjectURL(blob);
+    let isSafariBrowser = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;
+    if (isSafariBrowser) {  //if Safari open in new window to save file with random filename.
+      dwldLink.setAttribute("target", "_blank");
+    }
+    dwldLink.setAttribute("href", url);
+    dwldLink.setAttribute("download", "Enterprise.csv");
+    dwldLink.style.visibility = "hidden";
+    document.body.appendChild(dwldLink);
+    dwldLink.click();
+    document.body.removeChild(dwldLink);
+  }
+
+  upload(files: Array<File>) {
+    this.makeFileRequest("https://api.imgur.com/3/image", [], files).then((result) => {
+      console.log("upload", result);
+    }, (error) => {
+      console.error("upload", error);
+    });
+
+    // var data = files;
+    //
+    // var xhr = new XMLHttpRequest();
+    // xhr.withCredentials = true;
+    //
+    // xhr.addEventListener("readystatechange", function() {
+    //   if (this.readyState === 4) {
+    //     console.log(this.responseText);
+    //   }
+    // });
+    //
+    // xhr.open("POST", "https://api.imgur.com/3/image");
+    // xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+    // xhr.setRequestHeader("authorization", "Client-ID d4de8224fa0042f");
+    //
+    // xhr.send(data);
+  }
+
+  makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
+    return new Promise((resolve, reject) => {
+      var formData: any = new FormData();
+      var xhr = new XMLHttpRequest();
+      for (var i = 0; i < files.length; i++) {
+        formData.append("image", files[i]);
+      }
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+          if (xhr.status == 200) {
+            resolve(JSON.parse(xhr.response));
+          } else {
+            reject(xhr.response);
+          }
+        }
+      }
+
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+      xhr.setRequestHeader("authorization", "Client-ID d4de8224fa0042f");
+      xhr.setRequestHeader("mimeType", "multipart/form-data");
+      xhr.send(formData);
+    });
+  }
+
+  async summaryEmployee(id: string) {
+    try {
+      let params = {
+        start_time: "2017-01-01",
+        end_time: "2018-12-12",
+        is_show_activity: true,
+        is_show_feedback: true,
+      }
+      let response = await this.innowayApi.summary.summaryEmployee(id, params);
+      console.log("summaryEmployee", JSON.stringify(response))
+    } catch (err) {
+
+    }
+  }
+
+  async summaryCustomer(id: string) {
+    try {
+      let params = {
+        start_time: "2017-01-01",
+        end_time: "2018-12-12",
+        is_show_promotion: true,
+        is_show_feedback: true,
+      }
+      let response = await this.innowayApi.summary.summaryCustomer("e02694b0-f679-11e7-bdfd-35e19d6c47de", params);
+      console.log("summaryCustomer", JSON.stringify(response))
+    } catch (err) {
+
+    }
+  }
+
+  async summaryProduct() {
+    try {
+      let params = {
+        start_time: "2017-01-01",
+        end_time: "2018-12-12",
+        product_type_id: undefined,
+        category_id: undefined,
+        is_show_branch: true,
+      }
+      let response: any = await this.innowayApi.summary.summaryProduct(params);
+
+      let max = 5;
+      let data: Array<any> = new Array<any>();
+      let labels: Array<any> = new Array<any>();
+      let values: Array<number> = new Array<number>();
+      let other: any = {
+        label: 'Khác',
+        value: 0
+      };
+
+      response.products.forEach((item, index) => {
+        let percent: number = item.rate_about_quantity * 100;
+        data.push({
+          label: item.product_name,
+          value: Math.round(percent).toFixed(2)
+        })
+      })
+
+      data.sort(function(a, b) { return b.value - a.value });
+
+      data.forEach((item, index) => {
+        if (index >= max - 1) {
+          other.value += Number.parseFloat(item.value)
+        } else {
+          values.push(Number.parseFloat(item.value))
+          labels.push(item.label)
+        }
+      })
+
+      values.push(other.value)
+      labels.push(other.label)
+
+      console.log("other", JSON.stringify(other));
+
+      this.pieChartData.next(values)
+      this.pieChartLabels.next(labels)
+
+      console.log("values", JSON.stringify(values));
+
+      this.ref.detectChanges()
+    } catch (err) {
+      console.log("summaryProduct", err);
+    }
+  }
+
+  public pieChartData: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>([]);
+  public pieChartLabels: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
+  public pieChartType: string = 'pie';
+
+  // events
+  public chartClicked(e: any): void {
+    console.log(e);
+  }
+
+  public chartHovered(e: any): void {
+    console.log(e);
+  }
 
 }

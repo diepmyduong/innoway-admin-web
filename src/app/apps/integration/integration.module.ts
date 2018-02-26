@@ -19,6 +19,8 @@ import { AgmCoreModule } from '@agm/core';
 
 import { MatTooltipModule } from '@angular/material';
 import { TooltipModule } from 'ngx-bootstrap';
+import { UberDeliverComponent } from './uber-deliver/uber-deliver.component';
+import { GhtkComponent } from './ghtk/ghtk.component';
 
 @NgModule({
   imports: [
@@ -34,6 +36,6 @@ import { TooltipModule } from 'ngx-bootstrap';
     MatTooltipModule,
     TooltipModule.forRoot(),
   ],
-  declarations: [IntegrationComponent, KiotvietComponent, ApiAiComponent, GiaohangnhanhComponent, AhamoveComponent, ChatbotComponent, MitekComponent]
+  declarations: [IntegrationComponent, KiotvietComponent, ApiAiComponent, GiaohangnhanhComponent, AhamoveComponent, ChatbotComponent, MitekComponent, UberDeliverComponent, GhtkComponent]
 })
 export class IntegrationModule { }

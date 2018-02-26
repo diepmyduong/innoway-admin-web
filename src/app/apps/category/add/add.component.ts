@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { InnowayApiService } from 'app/services/innoway';
@@ -23,6 +23,16 @@ export class AddComponent implements OnInit {
   image: string;
   status: number;
 
+  @ViewChild("fileUploader")
+  fileUploader: ElementRef;
+
+  progress: boolean | number = false;
+
+  isUploadImage: boolean = false;
+  fileUpload: File;
+  previewImage: string;
+  closeImage: string = "https://d30y9cdsu7xlg0.cloudfront.net/png/55049-200.png";
+  errorImage: string = "http://saveabandonedbabies.org/wp-content/uploads/2015/08/default.png";
 
   constructor(
     private route: ActivatedRoute,
@@ -47,9 +57,17 @@ export class AddComponent implements OnInit {
   }
 
   setDefaultData() {
-    this.status = 1;
+    this.status = 1
+    this.name = null
+    this.shortDescription = null
+    this.description = null
+    this.previewImage = null
     return {
-      status: this.status
+      status: this.status,
+      name: this.name,
+      shortDescription: this.shortDescription,
+      description: this.description,
+      previewImage: this.previewImage
     }
   }
 
@@ -60,6 +78,7 @@ export class AddComponent implements OnInit {
       })
       this.name = category.name
       this.image = category.image
+      this.previewImage = category.image
       this.shortDescription = category.short_description
       this.description = category.description
       this.status = category.status
@@ -127,9 +146,10 @@ export class AddComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, image, status, shortDescription } = this;
+      let { name, description, previewImage, status, shortDescription } = this;
       let short_description = shortDescription;
-      await this.innowayApi.productCategory.add({ name, description, short_description, image, status})
+      let image = previewImage
+      await this.innowayApi.productCategory.add({ name, description, short_description, image, status })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -140,9 +160,10 @@ export class AddComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, image, status, shortDescription } = this;
+      let { name, description, previewImage, status, shortDescription } = this;
       let short_description = shortDescription;
-      await this.innowayApi.productCategory.update(this.id, { name, description, short_description, image, status})
+      let image = previewImage;
+      await this.innowayApi.productCategory.update(this.id, { name, description, short_description, image, status })
       this.alertUpdateSuccess();
       form.reset();
     } else {
@@ -151,7 +172,6 @@ export class AddComponent implements OnInit {
   }
 
   async submitAndNew(form: NgForm) {
-    console.log('submit', form);
     this.submitting = true;
     try {
       await this.addItem(form);
@@ -184,5 +204,45 @@ export class AddComponent implements OnInit {
     } finally {
       this.submitting = false;
     }
+  }
+
+  async onChangeImageFile(event) {
+    this.startLoading()
+    let files = this.fileUploader.nativeElement.files
+    let file = files[0]
+    try {
+      let response = await this.innowayApi.upload.uploadImage(file)
+      this.previewImage = response.link
+      this.endLoading()
+    } catch (err) {
+      this.endLoading()
+    }
+  }
+
+  onImageError(event) {
+    this.previewImage = this.errorImage;
+  }
+
+  onImageChangeData(event) {
+    this.previewImage = event;
+  }
+
+  removeImage() {
+    this.previewImage = undefined;
+  }
+
+  startLoading() {
+    this.progress = 0;
+    setTimeout(() => {
+      this.progress = 0.5;
+    }, 30000);
+  }
+
+  endLoading() {
+    this.progress = 1;
+
+    setTimeout(() => {
+      this.progress = false;
+    }, 200);
   }
 }

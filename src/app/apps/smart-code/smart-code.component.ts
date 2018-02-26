@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { InnowayApiService } from "app/services/innoway";
 import { Globals } from "./../../Globals"
 declare let swal: any
-declare var accounting:any;
+declare var accounting: any;
 
 @Component({
   selector: 'app-smart-code',
@@ -34,7 +34,18 @@ export class SmartCodeComponent implements OnInit {
   ) {
   }
 
+  subscriptions:any = {}
+
   ngOnInit() {
+    this.subscriptions.onItemsChange = this.innowayApi.smartCode.items.subscribe(items => {
+      if(items)  this.itemsTable.reloadItems()
+    })
+  }
+
+  ngAfterViewDestroy() {
+    this.subscriptions.forEach(s => {
+      s.unsubscribe()
+    })
   }
 
   async reloadItems(params) {

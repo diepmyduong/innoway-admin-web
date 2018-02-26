@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { InnowayApiService } from 'app/services/innoway'
@@ -32,19 +32,32 @@ export class ProductsComponent implements OnInit {
   public query: any = {}
   public searchTimeOut = 250;
   public searchRef: any;
-  subscriptions: Subscription[] = []
+  // subscriptions: Subscription[] = []
 
   @ViewChild('itemsTable') itemsTable: DataTable;
 
+  @ViewChild("fileImportUploader")
+  fileImportUploader: ElementRef;
+
+  subscriptions:any = {}
+
   ngOnInit() {
-
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach(subscription => {
-      subscription.unsubscribe()
+    this.subscriptions.onItemsChange = this.innowayApi.smartCode.items.subscribe(items => {
+      if(items)  this.itemsTable.reloadItems()
     })
   }
+
+  ngAfterViewDestroy() {
+    this.subscriptions.forEach(s => {
+      s.unsubscribe()
+    })
+  }
+
+  // ngOnDestroy() {
+  //   this.subscriptions.forEach(subscription => {
+  //     subscription.unsubscribe()
+  //   })
+  // }
 
   async reloadItems(params) {
     let { limit, offset, sortBy, sortAsc } = params;
@@ -177,4 +190,43 @@ export class ProductsComponent implements OnInit {
     }, this.searchTimeOut);
   }
 
+  async export() {
+    try {
+      let response: any = await this.innowayApi.product.export()
+      this.downloadFile(response)
+    } catch (err) {
+      console.log("export", err);
+    }
+  }
+
+  downloadFile(data) {
+    let blob = new Blob(['\ufeff' + data], { type: 'text/csv;charset=utf-8;' });
+    let dwldLink = document.createElement("a");
+    let url = URL.createObjectURL(blob);
+    let isSafariBrowser = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;
+    if (isSafariBrowser) {  //if Safari open in new window to save file with random filename.
+      dwldLink.setAttribute("target", "_blank");
+    }
+    dwldLink.setAttribute("href", url);
+    dwldLink.setAttribute("download", "file-sản-phẩm.csv");
+    dwldLink.style.visibility = "hidden";
+    document.body.appendChild(dwldLink);
+    dwldLink.click();
+    document.body.removeChild(dwldLink);
+  }
+
+  async import(event) {
+    let files = this.fileImportUploader.nativeElement.files
+    let file = files[0];
+    console.log("onChangeImportFile", file);
+    try {
+      // let response = await this.innowayApi.product.import(file, {
+      //   mode: "overwrite"
+      // })
+      // // this.upload(files)
+      // console.log("onChangeImportFile", response);
+    } catch (err) {
+      console.log("onChangeImportFile", err);
+    }
+  }
 }
