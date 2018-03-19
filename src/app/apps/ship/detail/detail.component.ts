@@ -46,6 +46,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   async setData() {
     try {
       this.item = await this.innowayApi.brand.getItem(this.id, {
+        local: false,
         query: { fields: this.itemFields }
       })
     } catch (err) {

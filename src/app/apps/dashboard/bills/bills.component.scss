@@ -5,6 +5,10 @@
   margin-bottom: -16px !important;
 }
 
+.breadcrumb {
+    display: none !important;
+}
+
 .callout {
   height: 120px;
 }
@@ -34,53 +38,63 @@
   display: flex;
   justify-content: flex-start;
   padding: 15px;
-  margin: 0px !important;
+  margin: 0 !important;
+
   .branch-info {
-    padding: 0px;
+    padding: 0;
+    width: 100%;
     color: $grey-dark;
+
     div {
       text-overflow: ellipsis;
       overflow: hidden;
     }
   }
-  button {
-    float: right;
-    color: $grey-dark;
-    border: 1px solid $grey-mild;
-    border-radius: 5px;
-    text-transform: none !important;
-    i {
-      margin-right: 3px;
-    }
-    transition: all 0.3s ease;
+}
+
+.btn {
+  // float: right;
+  color: $grey-dark;
+  border: 1px solid $grey-mild;
+  border-radius: 5px;
+  text-transform: none !important;
+
+  i {
+    margin-right: 3px;
   }
-  button:hover {
-    border-color: transparent;
-    background-color: $brand-primary;
-    color: $grey-white;
-  }
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  border-color: transparent;
+  background-color: $brand-primary;
+  color: $grey-white;
 }
 
 .content {
-  height: calc(100% - 80px);
+  height: calc(100% - 100px);
   overflow-y: scroll;
+
   .list-group {
     height: 100%;
     margin-bottom: 10px;
-    padding: 0px;
+    padding: 0;
     border: none;
+
     .list-group-item:after {
       content: "";
       position: absolute;
-      bottom: 0px;
+      bottom: 0;
       width: 96%;
       left: 2%;
       height: 2px;
       background: $grey-light;
     }
+
     .list-group-item:hover {
       border-left: 2px solid $brand-primary;
     }
+
     .list-group-item {
       display: block;
       height: auto;
@@ -88,22 +102,24 @@
       display: flex;
       justify-content: flex-start;
       flex-wrap: nowrap;
-      padding: 0px;
+      padding: 0;
       border: none;
       cursor: pointer;
       border-left: 2px solid transparent;
       transition: border-left 0.3s ease;
+
       .bill-avatar {
         width: 120px;
         height: 100%;
-        margin-right: 0px;
+        margin-right: 0;
         display: flex;
         text-align: center;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        padding: 10px 0px;
+        padding: 10px 0;
         flex-shrink: 0;
+
         .img-avatar {
           margin: auto;
           width: 60px;
@@ -111,11 +127,13 @@
           object-fit: cover;
           border-radius: 50%;
         }
+
         .user-info {
           margin-top: 8px;
           color: $bluegrey-mild;
           font-size: 0.75rem;
         }
+
         .user-info:first-child {
           color: $grey-mild;
         }
@@ -125,47 +143,56 @@
         flex-grow: 1;
         height: 100%;
         width: auto;
-        padding: 15px;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        padding: 20px 15px;
         flex-direction: column;
+
         .bill-main {
-          margin-right: 0px;
+          margin-right: 0;
+
           .bill-main-info {
             flex-grow: 1;
             color: $grey-dark;
             font-size: 0.85rem;
-            margin-right: 0px;
+            margin-right: 0;
+
             div {
               margin-bottom: 10px;
+
               span {
-                 width: 40%;
+                width: 40%;
               }
+
               i {
                 color: $brand-primary;
                 margin-right: 5px;
               }
+
               b {
                 color: $bluegrey-dark;
               }
             }
+
             .bill-address {
               min-height: 30px;
+
               i {
                 float: left;
               }
+
               div {
                 white-space: pre-line;
                 margin-left: 20px;
               }
             }
           }
+
           .bill-date-time {
             position: absolute;
             top: 15px;
             right: 15px;
+
             div {
-              margin: 0px;
+              margin: 0;
               text-align: right;
               color: $grey-mild;
               font-size: 0.75rem;
@@ -173,11 +200,13 @@
             }
           }
         }
+
         .bill-button {
           flex-grow: 1;
+
           button {
             padding: 3px 5px;
-            margin-right: 0px;
+            margin-right: 0;
             color: $brand-primary;
             border: 1px solid $brand-primary;
             border-radius: 5px;
@@ -186,12 +215,13 @@
           }
         }
       }
+
       .separator {
         height: 1px;
         width: 94%;
         left: 3%;
         position: absolute;
-        bottom: 0px;
+        bottom: 0;
         border-bottom: 1px solid $grey-lighter;
       }
     }
@@ -201,13 +231,23 @@
   }
 }
 
-.bill-main-info, .bill-address{
-  min-height: 0px !important;
+.bill-address,
+.bill-main-info {
+  min-height: 0 !important;
 }
 
-.cancel-bill{
+.cancel-bill {
   font-size: 0.75rem;
   font-weight: 600;
   color: red;
   padding: 0.1rem;
+}
+
+.sort-title {
+  margin-left: 4px;
+  margin-right: 8px;
+}
+
+.toolbar{
+  border-bottom: 0px !important;
 }

@@ -49,7 +49,7 @@ export class LoginLauncherComponent implements OnInit {
     this.router.navigate(["launcher"])
   }
 
-  register(){
+  register() {
     this.router.navigate(["brand-register"])
   }
 
@@ -91,12 +91,14 @@ export class LoginLauncherComponent implements OnInit {
             break;
           default:
             this.log(err)
-            if(err.error.type === "Wrong brand") {
+            console.log("login error", err)
+            if (err.error.type === "Wrong brand") {
               this.alertAuthError("Cửa hàng không tồn tại")
-            } else if(err.error.type === "Email not verified"){
+            } else if (err.error.type === "Email not verified") {
               await this.checkEmailVerified()
             } else {
-              this.alertAuthError("Đăng nhập không thành công");
+              // this.alertAuthError("Đăng nhập không thành công");
+              await this.checkEmailVerified()
             }
 
         }
@@ -136,7 +138,7 @@ export class LoginLauncherComponent implements OnInit {
   checkEmailVerified() {
     return new Promise((resolve, reject) => {
       const firebaseUser = this.innowayApi.innowayAuth.firebaseUser
-      if(!firebaseUser.emailVerified) {
+      if (!firebaseUser.emailVerified) {
         swal({
           title: 'Email chưa được xác thực',
           text: "Vui lòng kiểm tra lại họp thư",

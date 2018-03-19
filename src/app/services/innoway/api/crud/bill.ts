@@ -57,10 +57,6 @@ export class Bill extends CrudAPI<iBill> {
           break;
       }
       this.onInformationBillFromFCM.next(undefined)
-      // if (message.topic == 'bills') {
-      //   this.log('on bill change', message.json)
-      //   this.onBillChange.next(message.json)
-      // } else if ()
     })
   }
 
@@ -86,12 +82,7 @@ export class Bill extends CrudAPI<iBill> {
     return this.onInformationBillFromFCM
   }
 
-  async changeActivity(billId: string, params: {
-    activity: string,
-    employeeId: string,
-    note: string
-  }) {
-    let { activity, employeeId, note } = params
+  async changeActivity(billId: string, params: any) {
     let setting: any = {
       method: 'POST',
       headers: { //headers
@@ -99,9 +90,9 @@ export class Bill extends CrudAPI<iBill> {
         'access_token': this.api.innowayAuth.adminToken
       },
       json: true,
-      body: { employee_id: employeeId, note }
+      body: { employee_id: params.employeeId, note: params.note }
     }
-    switch (activity) {
+    switch (params.activity) {
       case ActivityEnum.BILL_SENT_SUCCESSFULLY:
         setting.uri = this.apiUrl(`${billId}/activity/sentSuccessfullyBillStatus`);
         break;
@@ -164,6 +155,113 @@ export class Bill extends CrudAPI<iBill> {
         break;
       case ActivityEnum.BILL_SENT_SHIPPER:
         setting.uri = this.apiUrl(`${billId}/activity/sentShipperBillStatus`);
+        switch (params.type) {
+          case "GHN": {
+            setting.body = {
+              employee_id: params.employeeId,
+              note: params.note,
+              type: "GHN",
+              PaymentTypeID: params.PaymentTypeID,
+              FromDistrict: params.FromDistrict,
+              ToDistrict: params.ToDistrict,
+              Note: params.Note,
+              SealCode: params.SealCode,
+              ExternalCode: params.ExternalCode,
+              ClientContactName: params.ClientContactName,
+              ClientContactPhone: params.ClientContactPhone,
+              ClientAddress: params.ClientAddress,
+              CustomerName: params.CustomerName,
+              CustomerPhone: params.CustomerPhone,
+              ShippingAddress: params.ShippingAddress,
+              CoDAmount: params.CoDAmount,
+              NoteCode: params.NoteCode,
+              InsuranceFee: params.InsuranceFee,
+              ClientHubID: params.ClientHubID,
+              ToLatitude: params.ToLatitude,
+              ToLongitude: params.ToLongitude,
+              IsSmsSent: params.IsSmsSent,
+              FromLat: params.FromLat,
+              FromLng: params.FromLng,
+              Content: params.Content,
+              CouponCode: params.CouponCode,
+              Weight: params.Weight,
+              Length: params.Length,
+              Width: params.Width,
+              Height: params.Height,
+              CheckMainBankAccount: params.CheckMainBankAccount,
+              ReturnContactName: params.ReturnContactName,
+              ReturnContactPhone: params.ReturnContactPhone,
+              ReturnAddress: params.ReturnAddress,
+              ReturnDistrictCode: params.ReturnDistrictCode,
+              ExternalReturnCode: params.ExternalReturnCode,
+              IsCreditCreate: params.IsCreditCreate,
+              FromWardCode: params.FromWardCode,
+              ToWardCode: params.ToWardCode,
+              AffiliateID: params.AffiliateID,
+              ShippingOrderCosts: params.ShippingOrderCosts
+            }
+            break;
+          }
+          case "GHTK": {
+            setting.body = {
+              employee_id: params.employeeId,
+              note: params.note,
+              type: "GHTK",
+              products: params.products,
+              order: {
+                id: billId,
+                pick_name: params.pick_name,
+                pick_address: params.pick_address,
+                pick_province: params.pick_province,
+                pick_district: params.pick_district,
+                pick_tel: params.pick_tel,
+                tel: params.tel,
+                name: params.name,
+                address: params.address,
+                province: params.province,
+                district: params.district,
+                pick_date: params.pick_date, //yyyy-mm-dd
+                pick_money: params.pick_money
+              }
+            }
+            break;
+          }
+          case "UBER_DELIVER": {
+            setting.body = {
+              employee_id: params.employeeId,
+              note: params.note,
+              type: "UBER_DELIVER",
+              // start_latitude: params.start_latitude,
+              // start_longitude: params.start_longitude,
+              // end_latitude: params.end_latitude,
+              // end_longitude: params.end_longitude,
+              // user_token: params.user_token
+              data: {
+                pick_address: {
+                  longitude: params.data.pick_address.longitude,
+                  latitude: params.data.pick_address.latitude
+                },
+                receive_address: {
+                  longitude: params.data.receive_address.longitude,
+                  latitude: params.data.receive_address.latitude
+                },
+                user: {
+                  token: params.data.user.token
+                }
+              }
+            }
+            break;
+          }
+          case "MCOM":
+          default: {
+            setting.body = {
+              employee_id: params.employeeId,
+              note: params.note,
+              type: "MCOM",
+            }
+            break;
+          }
+        }
         break;
       case ActivityEnum.BILL_MODIFIED_AT_SENT_SHIPPER:
         setting.uri = this.apiUrl(`${billId}/activity/sentShipperBillStatus/modified`);

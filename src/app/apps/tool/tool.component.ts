@@ -246,8 +246,6 @@ export class ToolComponent implements OnInit {
   }
 
   async subscribeTopicByFCM() {
-
-    // this.billChangeObservable = await this.innowayApi.bill.subscribe()
     this.subscriptions.push(this.innowayApi.bill.onInformationBillFromFCM.subscribe(message => {
       if (!message) return
       try {

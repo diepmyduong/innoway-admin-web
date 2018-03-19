@@ -1,5 +1,5 @@
-<div class="animated fadeIn">
-  <div class="row">    
+<div class="animated fadeIn" [hidden]="true">
+  <div class="row">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
@@ -12,7 +12,7 @@
               <div class="col-md-9">
                 <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Loại dịch vụ">
               </div>
-            </div>        
+            </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="textarea-input">Mô tả</label>
               <div class="col-md-9">
@@ -28,7 +28,7 @@
                   <option value="2">Khu vực</option>
                 </select>
               </div>
-            </div>  
+            </div>
    			<div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Khu vực</label>
               <div class="col-md-9">
@@ -38,19 +38,19 @@
                   <option value="2">Quận 2</option>
                 </select>
               </div>
-            </div>     
+            </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Khoảng cách</label>
               <div class="col-md-9">
                 <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Khoảng cách">
               </div>
-            </div> 
+            </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input">Chi phí</label>
               <div class="col-md-9">
                 <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Chi phí">
               </div>
-            </div> 
+            </div>
    			<div class="form-group row">
               <label class="col-md-3 form-control-label" for="select">Trạng thái hoạt động</label>
               <div class="col-md-9">
@@ -60,7 +60,7 @@
                   <option value="2">Không hoạt động</option>
                 </select>
               </div>
-            </div>                
+            </div>
           </form>
         </div>
         <div class="card-footer">
@@ -71,4 +71,127 @@
     </div>
     <!--/.col-->
   </div>
-</div>	
+</div>
+
+
+
+<div class="animated fadeIn">
+  <div class="container">
+
+    <!-- regular accordion -->
+    <accordion>
+      <accordion-group heading="About me">
+        Its all about me.
+      </accordion-group>
+      <accordion-group heading="Contacts">
+        This is content of the contacts
+      </accordion-group>
+      <accordion-group heading="Map">
+        Content of the Map
+      </accordion-group>
+      <accordion-group>
+        <accordion-heading>
+          Custom heading
+        </accordion-heading>
+        Its all about me.
+      </accordion-group>
+    </accordion>
+
+    <!-- regular accordion with first opened group -->
+    <accordion>
+      <accordion-group heading="About me" [isOpened]="true">
+        Its all about me.
+      </accordion-group>
+      <accordion-group heading="Contacts">
+        This is content of the contacts
+      </accordion-group>
+      <accordion-group heading="Map">
+        Content of the Map
+      </accordion-group>
+      <accordion-group>
+        <accordion-heading>
+          <b>Custom</b> <i style="color: deeppink">heading</i>
+        </accordion-heading>
+        Its all about me.
+      </accordion-group>
+    </accordion>
+
+    <!-- accordion with arrows -->
+    <accordion [showArrows]="true">
+      <accordion-group heading="About me">
+        Its all about me.
+      </accordion-group>
+      <accordion-group heading="Contacts">
+        This is content of the contacts
+      </accordion-group>
+      <accordion-group heading="Map">
+        Content of the Map
+      </accordion-group>
+      <accordion-group>
+        <accordion-heading>
+          Custom heading
+        </accordion-heading>
+        Its all about me.
+      </accordion-group>
+    </accordion>
+
+    <!-- accordion where you can close multiple groups -->
+    <accordion [closeOthers]="false">
+      <accordion-group heading="About me">
+        Its all about me.
+      </accordion-group>
+      <accordion-group heading="Contacts">
+        This is content of the contacts
+      </accordion-group>
+      <accordion-group heading="Map">
+        Content of the Map
+      </accordion-group>
+      <accordion-group>
+        <accordion-heading>
+          Custom heading
+        </accordion-heading>
+        Its all about me.
+      </accordion-group>
+    </accordion>
+
+    <!-- accordion where all items are expanded by default -->
+    <accordion [expandAll]="true">
+      <accordion-group heading="About me">
+        Its all about me.
+      </accordion-group>
+      <accordion-group heading="Contacts">
+        This is content of the contacts
+      </accordion-group>
+      <accordion-group heading="Map">
+        Content of the Map
+      </accordion-group>
+      <accordion-group>
+        <accordion-heading>
+          Custom heading
+        </accordion-heading>
+        Its all about me.
+      </accordion-group>
+    </accordion>
+
+    <!-- accordion with custom "clickable zone" -->
+    <accordion>
+      <accordion-group heading="About me">
+        Its all about me.
+      </accordion-group>
+      <accordion-group heading="Contacts">
+        This is content of the contacts
+      </accordion-group>
+      <accordion-group heading="Map">
+        Content of the Map
+      </accordion-group>
+      <accordion-group>
+        <accordion-heading>
+          <input type="checkbox">
+          <accordion-toggle>Custom clickable heading</accordion-toggle>
+        </accordion-heading>
+        Its all about me.
+      </accordion-group>
+    </accordion>
+
+  </div>
+</div>

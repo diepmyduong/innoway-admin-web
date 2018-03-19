@@ -19,6 +19,7 @@ import { Behavior } from 'ng2-select';
 import { UpdatePaidHistoryDialog } from "../../../modal/update-paid-history/update-paid-history.component";
 import { UpdateBillDataDialog } from "app/modal/update-bill-data/update-bill-data.component";
 import { NotificationsService } from "angular2-notifications";
+// import { MapsAPILoader } from "@agm/core";
 declare let swal: any;
 
 @Component({
@@ -62,13 +63,36 @@ export class BillsComponent implements OnInit {
   selectedEmployee: any;
   selectedArea: number = 0;
   selectedCustomer: any;
-  selectedBill: any;
+  selectedBill: string;
   selectedCustomerName: any;
   currentDataFromFCM: any;
 
   employeeData: any;
   branch: any;
   brand: any;
+
+  globalQuery: any;
+  startTime: string;
+  endTime: string;
+
+  billFields: any = ["$all"]
+  customerFields: any = ["$all"]
+  activityFields: any = ["$all"]
+  employeeFields: any = ["$all"]
+  billShipDetailFields: any = ["$all"]
+  paidHistoryFields: any = ["$all"]
+  subFeeFields: any = ["$all"]
+  billItemsFields: any = ["$all", {
+    product: ["name"]
+  }]
+  billOrder: any = [["updated_at", "desc"]]
+  customerFilter: any = null
+  actitivyFilter: any = null
+  billShipDetailFilter: any = null
+  billFilter: any = null
+
+  isShowSort: boolean = false
+  numberOfResult: number = 0
 
   get billFilterInfo(): any {
     return this.sharedDataService.billFilterInfo;
@@ -85,6 +109,7 @@ export class BillsComponent implements OnInit {
     public innowayApi: InnowayApiService,
     private ref: ChangeDetectorRef,
     public zone: NgZone,
+    // private mapsAPILoader: MapsAPILoader,
     public dialog: MatDialog,
     public sharedDataService: SharedDataService,
     private _notificationsService: NotificationsService
@@ -93,13 +118,15 @@ export class BillsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.loadBillData();
-    this.loadBranchByEmployeeData(this.employeeData.branch_id);
-    this.loadBrandByEmployeeData(this.employeeData.brand_id);
-    this.loadEmployeeData();
-    // //this.subscribeTopicByFCM();
+    moment.locale('vi')
 
-    moment.locale('vi');
+    // this.loadBillData()
+    this.customizeFilter()
+    this.loadBranchByEmployeeData(this.employeeData.branch_id)
+    this.loadBrandByEmployeeData(this.employeeData.brand_id)
+    this.loadEmployeeData()
+    this.subscribeTopicByFCM()
+    this.subscribeDashboardParent()
   }
 
   async loadBrandByEmployeeData(brandId: string) {
@@ -133,49 +160,235 @@ export class BillsComponent implements OnInit {
     this.dashboardService.selectedAction.subscribe(
       data => {
         this.selectedAction = data;
-        if (this.selectedAction != null && this.selectedAction != '') {
-          this.filter(this.selectedAction);
+        if (data) {
+          this.actitivyFilter = {
+            $filter: {
+              action: {
+                $eq: data
+              }
+            }
+          }
+        } else {
+          this.actitivyFilter = null
         }
+        this.customizeFilter()
       });
 
     this.dashboardService.selectedEmployee.subscribe(
       data => {
         this.selectedEmployee = data;
-        if (this.selectedEmployee.id != null) {
+        if (data) {
+          this.actitivyFilter = {
+            $filter: {
+              employee_id: {
+                $eq: data
+              }
+            }
+          }
+        } else {
+          this.actitivyFilter = null
         }
+        this.customizeFilter()
       });
 
     this.dashboardService.selectedArea.subscribe(
       data => {
-        this.selectedArea = data;
+        // this.selectedArea = data;
+        // if (this.selectedArea != null) {
+        //   this.customizeFilter()
+        // }
       });
 
     this.dashboardService.selectedCustomer.subscribe(
       data => {
         this.selectedCustomer = data;
-        if (this.selectedCustomer != null) {
-
+        if (data) {
+          this.customerFilter = {
+            $filter: {
+              phone: {
+                $like: `%${data}%`
+              }
+            }
+          }
+        } else {
+          this.customerFilter = null
         }
+        this.customizeFilter()
       });
 
     this.dashboardService.selectedCustomerName.subscribe(
       data => {
         this.selectedCustomerName = data;
-        if (this.selectedCustomerName != null) {
-
+        if (data) {
+          this.customerFilter = {
+            $filter: {
+              fullname: {
+                $iLike: `%${data}%`
+              }
+            }
+          }
+        } else {
+          this.customerFilter = null
         }
+        this.customizeFilter()
       });
 
     this.dashboardService.selectedBill.subscribe(
       data => {
         this.selectedBill = data;
+        if (data) {
+          this.billFilter = {
+            code: {
+              $eq: Number.parseInt(data)
+            },
+            created_at: {
+              $gt: moment(Date.now()).format("YYYY-MM-DD"),
+              $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+            }
+          }
+        } else {
+          this.billFilter = {
+            created_at: {
+              $gt: moment(Date.now()).format("YYYY-MM-DD"),
+              $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+            }
+          }
+        }
+        this.customizeFilter()
       });
+  }
+
+  async advanceFilter(type: string, input: any) {
+    let codeNumber = Number.parseInt(input.content)
+    let query: any;
+    switch (type) {
+      case "bill": {
+        query = {
+          fields: ["$all", {
+            activities: ["$all", {
+              employee: ["$all"]
+            }],
+            customer: ["$all"],
+            activity: ["$all"],
+            bill_ship_detail: ["$all"],
+            paid_history: ["$all"],
+            sub_fees: ['$all'],
+          }],
+          filter: {
+            code: {
+              $eq: Number.parseInt(input.data)
+            },
+            created_at: {
+              $gt: moment(Date.now()).format("YYYY-MM-DD"),
+              $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+            }
+          },
+          order: [["updated_at", "desc"]]
+        }
+        break;
+      }
+      case "customer-phone": {
+        query = {
+          fields: ["$all", {
+            activities: ["$all", {
+              employee: ["$all"]
+            }],
+            customer: ["$all", {
+              filter: {
+                phone: {
+                  $iLike: `%${input.data}%`
+                }
+              }
+            }],
+            activity: ["$all"],
+            bill_ship_detail: ["$all"],
+            paid_history: ["$all"],
+            sub_fees: ['$all'],
+          }],
+          filter: {
+            created_at: {
+              $gt: moment(Date.now()).format("YYYY-MM-DD"),
+              $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+            }
+          },
+          order: [["updated_at", "desc"]]
+        }
+        break;
+      }
+      case "customer-name": {
+        query = {
+          fields: ["$all", {
+            activities: ["$all", {
+              employee: ["$all"]
+            }],
+            customer: ["$all", {
+              filter: {
+                name: {
+                  $iLike: `%${input.data}%`
+                }
+              }
+            }],
+            activity: ["$all"],
+            bill_ship_detail: ["$all"],
+            paid_history: ["$all"],
+            sub_fees: ['$all'],
+          }],
+          filter: {
+            created_at: {
+              $gt: moment(Date.now()).format("YYYY-MM-DD"),
+              $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+            }
+          },
+          order: [["updated_at", "desc"]]
+        }
+        break;
+      }
+      default: {
+        query = {
+          fields: ["$all", {
+            activities: ["$all", {
+              employee: ["$all"]
+            }],
+            customer: ["$all"],
+            activity: ["$all"],
+            bill_ship_detail: ["$all"],
+            paid_history: ["$all"],
+            sub_fees: ['$all'],
+          }],
+          filter: {
+            created_at: {
+              $gt: moment(Date.now()).format("YYYY-MM-DD"),
+              $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+            }
+          },
+          order: [["updated_at", "desc"]]
+        }
+      }
+    }
+
+    try {
+      console.log("changeOptions", JSON.stringify(query))
+      this.zone.run(async () => {
+        const bills = await this.innowayApi.bill.getList({
+          local: false,
+          query: query
+        })
+        console.log('bills', bills)
+        this.bills.next(bills)
+        console.log('local bill', this.bills.getValue())
+        console.log('filter', this.billFilterInfo)
+      })
+    }
+    catch (err) {
+      console.log("changeOptions", err)
+    }
   }
 
   async subscribeTopicByFCM() {
     this.dashboardService.updateTopicFromFCM.subscribe(
       data => {
         this.currentDataFromFCM = data;
+        console.log("subscribeTopicFromFCM", data)
         if (this.currentDataFromFCM != null) {
           this.loadBillData();
           this.onLoadDailySummary(true);
@@ -217,7 +430,6 @@ export class BillsComponent implements OnInit {
       }
     } catch (err) {
       this.alertItemNotFound()
-      // alert(err);
     }
   }
 
@@ -611,6 +823,11 @@ export class BillsComponent implements OnInit {
             activity: data.billActivity,
             employeeId: data.employee,
             note: data.noteBillActivity,
+            type: data.thirdparty,
+            weight: data.weight,
+            address: data.address,
+            longitude: data.longitude,
+            latitude: data.latitude
           })
           break;
         }
@@ -636,7 +853,121 @@ export class BillsComponent implements OnInit {
 
   async updateBillActivity(bill, data: any) {
     try {
-      let response = await this.innowayApi.bill.changeActivity(bill.id, data)
+      console.log("updateBillActivity", JSON.stringify(data))
+      let request = data;
+      switch (data.type) {
+        case 'UBER_DELIVER':
+          request = {
+            activity: data.activity,
+            employeeId: data.employeeId,
+            note: data.note,
+            type: data.type,
+            data: {
+              pick_address: {
+                longitude: Number.parseFloat(data.longitude),
+                latitude: Number.parseFloat(data.latitude)
+              },
+              receive_address: {
+                longitude: Number.parseFloat(bill.longitude),
+                latitude: Number.parseFloat(bill.latitude)
+              },
+              user: {
+                token: "KA.eyJ2ZXJzaW9uIjoyLCJpZCI6IjJPN3pOZXpaVDQrV1JObnY5VWRNSHc9PSIsImV4cGlyZXNfYXQiOjE1MjMxNjExNzksInBpcGVsaW5lX2tleV9pZCI6Ik1RPT0iLCJwaXBlbGluZV9pZCI6MX0.G49W4OGyOoxJC0iKcUHf1uoFw2G9kvEC2i509kdWKfM"
+              }
+            }
+          }
+          break
+        case 'GHN':
+          request = {
+            activity: data.activity,
+            employeeId: data.employeeId,
+            note: data.note,
+            type: data.type,
+            PaymentTypeID: 1,
+            FromDistrict: "Quận 1",
+            ToDistrict: "Quận 10",
+            Note: bill.note ? bill.note : "",
+            SealCode: "tem niêm phong",
+            ExternalCode: "",
+            ClientContactName: "Link Thai",
+            ClientContactPhone: "0942654141",
+            ClientAddress: "140 Lê Trọng Tấn",
+            CustomerName: "Nguyễn Văn A",
+            CustomerPhone: bill.customer.phone,
+            ShippingAddress: "137 Lê Quang Định",
+            CoDAmount: bill.total_price,
+            NoteCode: "CHOXEMHANGKHONGTHU",
+            InsuranceFee: 0,
+            ClientHubID: 298779,
+            ToLatitude: Number.parseFloat(bill.latitude),
+            ToLongitude: Number.parseFloat(bill.longitude),
+            IsSmsSent: false,
+            FromLat: Number.parseFloat(data.latitude),
+            FromLng: Number.parseFloat(data.longitude),
+            Content: data.note ? data.note : "",
+            CouponCode: "",
+            Weight: Number.parseInt(data.weight),
+            Length: 10,
+            Width: 10,
+            Height: 10,
+            CheckMainBankAccount: false,
+            ReturnContactName: "",
+            ReturnContactPhone: "",
+            ReturnAddress: "",
+            ReturnDistrictCode: "",
+            ExternalReturnCode: "",
+            IsCreditCreate: true,
+            FromWardCode: "21402",
+            ToWardCode: "21610",
+            AffiliateID: 176971,
+            ShippingOrderCosts: []
+          }
+          break
+        case 'GHTK':
+          request = {
+            activity: data.activity,
+            employeeId: data.employeeId,
+            note: data.note,
+            type: data.type,
+            products: [],
+            order: {
+              id: bill.uuid,
+              pick_name: "HCM-nội thành",
+              pick_address: "590 CMT8 P.11",
+              pick_province: "TP. Hồ Chí Minh",
+              pick_district: "Quận 3",
+              pick_tel: "0942654141",
+              tel: "0901403819",
+              name: "GHTK - HCM - Noi Thanh",
+              address: "123 nguyễn chí thanh",
+              province: "TP. Hồ Chí Minh",
+              district: "Quận 1",
+              pick_date: "2018-03-15",
+              pick_money: bill.total_price
+            }
+          }
+
+          bill.items.forEach(item => {
+            request.products.push({
+              name: item.product.name,
+              weight: 0.2
+            })
+          })
+          break
+        case 'MCOM':
+        default:
+          request = {
+            activity: data.activity,
+            employeeId: data.employeeId,
+            note: data.note,
+            type: 'MCOM',
+            end_latitude: bill.latitude,
+            end_longitude: bill.longitude
+          }
+          break;
+      }
+      console.log("updateBillActivity request", JSON.stringify(request))
+      let response = await this.innowayApi.bill.changeActivity(bill.id, request)
       console.log("updateBillActivity", JSON.stringify(response))
       this.alertUpdateSuccess();
       //this.loadBillData();
@@ -756,5 +1087,160 @@ export class BillsComponent implements OnInit {
         maxLength: 10
       }
     );
+  }
+
+  billType: number
+
+  async changeOptions(type: string) {
+    console.log("changeOptions", type)
+    this.billShipDetailFilter = null
+    let query: any;
+    switch (type) {
+      case "1": {
+        console.log("changeOptions - 1", type)
+        this.billFilter = {
+          created_at: {
+            $gt: moment(Date.now()).format("YYYY-MM-DD"),
+            $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+          }
+        }
+
+        this.billShipDetailFilter = null
+
+        break;
+      }
+      case "2": {
+        console.log("changeOptions - 2", type)
+        this.billFilter = {
+          created_at: {
+            $gt: moment(Date.now()).subtract(30, 'days').format("YYYY-MM-DD"),
+            $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+          }
+        }
+
+        this.billShipDetailFilter =
+          {
+            $filter: {
+              received_time: {
+                $gt: moment().format("YYYY-MM-DD"),
+                $lt: moment().add(1, 'days').format("YYYY-MM-DD")
+              }
+            }
+          }
+
+
+        break;
+      }
+      case "3": {
+        console.log("changeOptions - 3", type)
+        this.billFilter = {
+          created_at: {
+            $gt: moment(Date.now()).subtract(30, 'days').format("YYYY-MM-DD"),
+            $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+          }
+        }
+
+        this.billShipDetailFilter = null
+
+        break;
+      }
+      default: {
+
+        console.log("changeOptions - default", type)
+        this.billFilter = {
+          created_at: {
+            $gt: moment(Date.now()).format("YYYY-MM-DD"),
+            $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+          }
+        }
+
+        this.billShipDetailFilter = null
+
+        break;
+      }
+    }
+
+
+    try {
+      this.customizeFilter()
+    }
+    catch (err) {
+      console.log("changeOptions", err)
+    }
+  }
+
+  async customizeFilter() {
+
+    let billFields = this.billFields
+    let customerFields = this.customerFields
+    let activityFields = this.activityFields
+    let employeeFields = this.employeeFields
+    let billShipDetailFields = this.billShipDetailFields
+    let paidHistoryFields = this.paidHistoryFields
+    let subFeeFields = this.subFeeFields
+    let billItemsFields = this.billItemsFields
+    let billOrder = this.billOrder
+    let customerFilter = this.customerFilter
+    let actitivyFilter = this.actitivyFilter
+    let billShipDetailFilter = this.billShipDetailFilter
+    let billFilter = this.billFilter
+
+    if (!billFilter) {
+      billFilter = {
+        created_at: {
+          $gt: moment(Date.now()).format("YYYY-MM-DD"),
+          $lt: moment(Date.now()).add(1, 'days').format("YYYY-MM-DD")
+        }
+      }
+    }
+
+    customerFields = ["$all"]
+    if (customerFilter) {
+      customerFields.push(customerFilter)
+    }
+
+    activityFields = ["$all"]
+    if (actitivyFilter) {
+      activityFields.push(actitivyFilter)
+    }
+
+    billShipDetailFields = ["$all"]
+    if (billShipDetailFilter) {
+      billShipDetailFields.push(billShipDetailFilter)
+    };
+
+    let query = {
+      fields: ["$all", {
+        customer: customerFields,
+        activity: activityFields,
+        items: billItemsFields,
+        bill_ship_detail: billShipDetailFields,
+        paid_history: paidHistoryFields,
+        sub_fees: subFeeFields,
+      }],
+      filter: billFilter,
+      order: billOrder,
+      limit: 0
+    }
+
+    try {
+      this.bills.next(await this.innowayApi.bill.getList({
+        local: false,
+        query: query
+      }))
+      if (this.bills.getValue()) {
+        this.numberOfResult = this.bills.getValue().length
+      } else {
+        this.numberOfResult = 0
+      }
+      this.ref.detectChanges()
+    }
+    catch (err) {
+      console.log("customizeFilter", err)
+    }
+  }
+
+  showOrHideSort() {
+    this.isShowSort = !this.isShowSort
   }
 }

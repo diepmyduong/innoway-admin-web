@@ -44,11 +44,6 @@ export class Summary extends CrudAPI<iSummary> {
     return rows;
   }
 
-  // "start_time": "2017-10-12",
-  // 	"end_time": "2017-12-26",
-  // 	"is_show_activity": false,
-  // 	"is_show_feedback": true
-
   async summaryEmployee(id: string, params: {
     start_time: string,
     end_time: string,

@@ -58,6 +58,10 @@ export class AddComponent implements OnInit, AddPageInterface {
   @ViewChild("fileImportUploader")
   fileImportUploader: ElementRef;
 
+  isUploadImage: boolean = false;
+  closeImage: string = "https://d30y9cdsu7xlg0.cloudfront.net/png/55049-200.png";
+  errorImage: string = "http://saveabandonedbabies.org/wp-content/uploads/2015/08/default.png";
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
@@ -146,6 +150,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.code = null;
     this.description = "";
     this.shortDescription = "";
+    this.previewImage = null
     this.image = "";
     this.isMustUseScanningCode = false;
     this.promotionType = this.promotionTypes[0].code;
@@ -165,7 +170,8 @@ export class AddComponent implements OnInit, AddPageInterface {
       description: this.description,
       shortDescription: this.shortDescription,
       isMustUseScanningCode: this.isMustUseScanningCode,
-      image: this.image
+      image: this.image,
+      previewImage: this.previewImage
     }
   }
 
@@ -390,33 +396,6 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.isMustUseScanningCode = event;
   }
 
-  async onChangeImageFile(event) {
-    // var files: Array<File> = <Array<File>> event.target.files;
-
-    let files = this.fileUploader.nativeElement.files
-    let file = files[0];
-    console.log("onChangeImageFile", files);
-    try {
-
-      let fileList: FileList = event.target.files;
-      if (fileList.length > 0) {
-        let file: File = fileList[0];
-        let img: any = document.querySelector("#preview-image");
-        img.src = file;
-
-        var reader = new FileReader();
-        reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-        reader.readAsDataURL(file);
-      }
-
-      // let response = await this.innowayApi.upload.uploadImage(file)
-      // this.upload(files)
-      // console.log("onChangeImageFile", response);
-    } catch (err) {
-      console.log("onChangeImageFile", err);
-    }
-  }
-
   async onChangeImportFile(event) {
     let files = this.fileImportUploader.nativeElement.files
     let file = files[0];
@@ -463,23 +442,6 @@ export class AddComponent implements OnInit, AddPageInterface {
     }, (error) => {
       console.error("upload", error);
     });
-
-    // var data = files;
-    //
-    // var xhr = new XMLHttpRequest();
-    // xhr.withCredentials = true;
-    //
-    // xhr.addEventListener("readystatechange", function() {
-    //   if (this.readyState === 4) {
-    //     console.log(this.responseText);
-    //   }
-    // });
-    //
-    // xhr.open("POST", "https://api.imgur.com/3/image");
-    // xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-    // xhr.setRequestHeader("authorization", "Client-ID d4de8224fa0042f");
-    //
-    // xhr.send(data);
   }
 
   makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
@@ -592,17 +554,41 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
-  public pieChartData: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>([]);
-  public pieChartLabels: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
-  public pieChartType: string = 'pie';
+  // public pieChartData: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>([]);
+  // public pieChartLabels: BehaviorSubject<Array<any>> = new BehaviorSubject<Array<any>>([]);
+  // public pieChartType: string = 'pie';
+  //
+  // // events
+  // public chartClicked(e: any): void {
+  //   console.log(e);
+  // }
+  //
+  // public chartHovered(e: any): void {
+  //   console.log(e);
+  // }
 
-  // events
-  public chartClicked(e: any): void {
-    console.log(e);
+  async onChangeImageFile(event) {
+    // this.startLoading()
+    let files = this.fileUploader.nativeElement.files
+    let file = files[0]
+    try {
+      let response = await this.innowayApi.upload.uploadImage(file)
+      this.previewImage = response.link
+    } catch (err) {
+      console.log("upload image", err)
+    }
   }
 
-  public chartHovered(e: any): void {
-    console.log(e);
+  onImageError(event) {
+    this.previewImage = this.errorImage;
+  }
+
+  onImageChangeData(event) {
+    this.previewImage = event;
+  }
+
+  removeImage() {
+    this.previewImage = undefined;
   }
 
 }

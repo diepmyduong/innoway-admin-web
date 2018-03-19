@@ -1,22 +1,7 @@
-<!-- <mat-toolbar color="primary">
-  <div class="row" style="width:100%;">
-    <div class="col-md-12">
-      <mat-form-field floatPlaceholder="never">
-        <input matInput placeholder="Tìm kiếm..." [matAutocomplete]="reactiveAuto" [formControl]="productState">
-        <mat-autocomplete #reactiveAuto="matAutocomplete" [displayWith]="displaySearchProduct">
-          <mat-option (onSelectionChange)="onChangeAutocompleteProduct($event, product)" *ngFor="let product of autocompleteProduct | async" [value]="product.name">
-            <span class="header-text">{{ product.name }}</span>
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-    </div>
-  </div>
-</mat-toolbar> -->
 <mat-sidenav-container class="pos-container">
   <mat-sidenav class="pos-right-side" mode="side" opened="true" align="end">
     <header class="app-header navbar top-right-toolbar">
       <ul class="nav navbar-nav toolbar-list">
-        <!-- USER AVATAR AND NAME -->
         <li class="nav-item dropdown" dropdown placement="bottom" id="accountDropdownMenu">
           <button class="nav-link nav-pill avatar dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
             <div *ngIf="!employee.avatar" >{{employee.fullname[0]}}</div>
@@ -32,9 +17,9 @@
             <li class="dropdown-item" (click)="logout()"><a><i class="fa fa-lock"></i> Đăng xuất</a></li>
           </ul>
         </li>
-    
+
         <div class="name-separator"></div>
-        
+
         <li class="nav-item dropdown" dropdown placement="bottom right" (onToggle)="toggled($event)">
           <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
                   <i class="fa fa-bell-o" aria-hidden="true"></i><span class="badge badge-pill badge-danger">5</span>
@@ -45,19 +30,19 @@
             <li class="dropdown-item"><i class="fa fa-shield"></i> Đơn hàng báo huỷ</li>
           </ul>
         </li>
-        
+
         <li class="nav-item dropdown" dropdown placement="bottom right" (onToggle)="toggled($event)">
           <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
                   <i class="fa fa-commenting-o"></i>
               </a>
         </li>
-        
+
         <li class="nav-item dropdown" dropdown placement="bottom right" (onToggle)="toggled($event)">
           <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
                   <i class="icon-settings"></i>
               </a>
         </li>
-        
+
         <li class="nav-item dropdown" dropdown placement="bottom right" (onToggle)="toggled($event)">
           <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
                   <i class="fa fa-power-off"></i>
@@ -96,7 +81,7 @@
             <label class="col-md-4 header-text form-control input-control-label" for="text-input">Tên khách hàng</label>
             <div class="col-md-8">
               <div class="phone-spinner" *ngIf="isDetectingNameFromPhone"><i class="fa fa-refresh fa-spin"></i></div>
-              <input type="text" [disabled]="isDetectingNameFromPhone" #customerNameAtStoreControl="ngModel" [(ngModel)]="customerNameAtStore" 
+              <input type="text" [disabled]="isDetectingNameFromPhone" #customerNameAtStoreControl="ngModel" [(ngModel)]="customerNameAtStore"
               name="customerNameAtStore" [readonly]="this.customer?.fullname" class="input-control form-control" [placeholder]="customerNamePlaceholder"/>
             </div>
           </div>
@@ -199,7 +184,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="col-md-12 tab-content" [hidden]="methodModel != 'online'">
             <div class="form-group row">
               <label class="col-md-4 header-text form-control input-control-label" layout-fill layout-align="center center" for="text-input">Nhân viên</label>
@@ -218,14 +203,14 @@
               <div class="col-md-8">
                 <div class="phone-header">+84</div>
                 <div class="phone-spinner" *ngIf="isDetectingNameFromPhone"><i class="fa fa-refresh fa-spin"></i></div>
-                <input type="text" #customerPhoneOnlineControl="ngModel" [(ngModel)]="customerPhoneAtStore" (ngModelChange)="detectCustomerByPhone($event)" 
+                <input type="text" #customerPhoneOnlineControl="ngModel" [(ngModel)]="customerPhoneAtStore" (ngModelChange)="detectCustomerByPhone($event)"
                 name="customerPhoneOnline" class="input-control form-control phone-control" placeholder="Nhập SĐT">
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-4 header-text form-control input-control-label" for="text-input">Tên khách hàng</label>
               <div class="col-md-8">
-                <input type="text" [disabled]="isDetectingNameFromPhone" #customerNameOnlineControl="ngModel" [(ngModel)]="customerNameAtStore" name="customerNameOnline" 
+                <input type="text" [disabled]="isDetectingNameFromPhone" #customerNameOnlineControl="ngModel" [(ngModel)]="customerNameAtStore" name="customerNameOnline"
                 [readonly]="this.customer?.fullname" class="input-control form-control" [placeholder]="customerNamePlaceholder"/>
               </div>
             </div>
@@ -253,8 +238,8 @@
             <div class="form-group row">
               <label class="col-md-4 header-text form-control input-control-label" for="text-input">Địa chỉ</label>
               <div class="col-md-8">
-                <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control 
-                input-control" [placeholder]="'Nhập địa chỉ'" required autocorrect="off" autocapitalize="off" spellcheck="off" 
+                <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control
+                input-control" [placeholder]="'Nhập địa chỉ'" required autocorrect="off" autocapitalize="off" spellcheck="off"
                 #addressInput [readonly]="isPickAtStore">
               </div>
             </div>
@@ -441,14 +426,14 @@
             <div class="item-name" *ngIf="item.selectedToppings?.length">
               <span class="item-topping" *ngFor="let topping of item.selectedToppings">{{topping.option.name}}
                 <span *ngIf="topping.option.price != 0">- {{topping.option.price | accounting}}</span>
-              </span>              
+              </span>
           </div>
           </template>
         </data-table-column>
         <data-table-column header="Số lượng" width="100px">
           <template #dataTableCell let-item="item" let-row="row">
             <div class="cell-input">
-              <input type="number" class="form-control input-control" [value]="item?.amount" #amount 
+              <input type="number" class="form-control input-control" [value]="item?.amount" #amount
               (keyup.enter)="updateAmount(item, amount.value, row.index)" (change)="updateAmount(item, amount.value, row.index)"/>
             </div>
           </template>
@@ -491,8 +476,8 @@
         </div>
         <div class="col-6 filter-col">
           <pagination [boundaryLinks]="true" [totalItems]="totalItems" [rotate]="true"
-          [(ngModel)]="currentPage" (ngModelChange)="onFilterChange()" [maxSize]="maxSize" previousText="<i class='fa fa-angle-left'></i>" 
-          nextText="<i class='fa fa-angle-right'></i>" firstText="<i class='fa fa-angle-double-left'></i>" 
+          [(ngModel)]="currentPage" (ngModelChange)="onFilterChange()" [maxSize]="maxSize" previousText="<i class='fa fa-angle-left'></i>"
+          nextText="<i class='fa fa-angle-right'></i>" firstText="<i class='fa fa-angle-double-left'></i>"
           lastText="<i class='fa fa-angle-double-right'></i>" class="paginator"></pagination>
         </div>
       </div>

@@ -51,7 +51,7 @@ export class DashboardLayoutComponent implements OnInit {
   }
 
   async showBillContent(bill) {
-    this.zone.run(()=>{
+    this.zone.run(() => {
       let toast = this.toasterService.pop('success', 'Đơn hàng: ' + bill.id, "Đơn hàng " + this.globals.detectNameCurrentActivityOnBill(bill.activity.action));
     })
   }
@@ -81,7 +81,13 @@ export class DashboardLayoutComponent implements OnInit {
     {
       type: 'single',
       name: 'Trang điều hướng',
-      link: "./dashboard",
+      link: "./dashboard/bills",
+      icon: 'fa fa-home',
+    },
+    {
+      type: 'single',
+      name: 'Trang tổng quan',
+      link: "./dashboard/overview",
       icon: 'fa fa-home',
     }
   ];

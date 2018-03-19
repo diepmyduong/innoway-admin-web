@@ -1,13 +1,36 @@
-<div class="toolbar">
+<!-- <div class="toolbar">
   <div class="branch-info">
     <div>Chi nhánh: {{branch?.address}}</div>
     <div>Nhân viên phụ trách: {{employeeData?.fullname}} | Hotline: {{branch?.phone}}</div>
   </div>
+</div> -->
+
+<div style="padding: 0.5rem;">
   <button class="btn btn-ladda btn-primary ml-auto" (click)="createBill()"><i class="fa fa-plus"></i> Tạo đơn hàng</button>
+  <button class="btn btn-ladda btn-primary ml-auto" (click)="showOrHideSort()"><i class="fa fa-plus"></i> Nâng cao</button>
+  <div *ngIf="isShowSort">
+    <input name="options" #option1 ng-control="options" type="radio" [value]="1" (change)="changeOptions(option1.value)"><span class="sort-title">Đơn trong ngày</span>
+    <input name="options" #option2 ng-control="options" type="radio" [value]="2" (change)="changeOptions(option2.value)"><span class="sort-title">Đơn cần xử lý trong ngày</span>
+    <input name="options" #option3 ng-control="options" type="radio" [value]="3" (change)="changeOptions(option3.value)"><span class="sort-title">Đơn chưa xử lý</span>
+  </div>
+  <p class="text-center" *ngIf="numberOfResult"> {{numberOfResult}} kết quả</p>
 </div>
 
 <div class="content">
   <ul class="list-group">
+    <!-- <div class="branch-info" style="padding: 1rem;">
+      <div>Chi nhánh: {{branch?.address}}</div>
+      <div>Nhân viên phụ trách: {{employeeData?.fullname}} | Hotline: {{branch?.phone}}</div>
+      <button class="btn btn-ladda btn-primary ml-auto" (click)="createBill()"><i class="fa fa-plus"></i> Tạo đơn hàng</button>
+      <button class="btn btn-ladda btn-primary ml-auto" (click)="showOrHideSort()"><i class="fa fa-plus"></i> Nâng cao</button>
+      <div *ngIf="isShowSort">
+        <input name="options" #option1 ng-control="options" type="radio" [value]="1" (change)="changeOptions(option1.value)"><span class="sort-title">Đơn trong ngày</span>
+        <input name="options" #option2 ng-control="options" type="radio" [value]="2" (change)="changeOptions(option2.value)"><span class="sort-title">Đơn cần xử lý trong ngày</span>
+        <input name="options" #option3 ng-control="options" type="radio" [value]="3" (change)="changeOptions(option3.value)"><span class="sort-title">Đơn chưa xử lý</span>
+      </div>
+      <p class="text-center" *ngIf="numberOfResult"> {{numberOfResult}} kết quả</p>
+    </div> -->
+
     <li href="#" class="list-group-item" *ngFor="let bill of bills | async | billFilter: billFilterInfo; let i = index">
 
       <div class="bill-avatar">

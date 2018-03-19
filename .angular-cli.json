@@ -29,7 +29,8 @@
         "../node_modules/chart.js/dist/Chart.min.js",
         "../node_modules/popper.js/dist/umd/popper.min.js",
         "../node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.min.js",
-        "../node_modules/froala-editor/js/froala_editor.pkgd.min.js"
+        "../node_modules/froala-editor/js/froala_editor.pkgd.min.js",
+        "assets/js/video_call.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

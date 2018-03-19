@@ -2,24 +2,46 @@
 <tabset class="tabset-control">
   <tab>
     <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Cập nhật trạng thái</ng-template>
-    <div class="row">
+    <div class="form-group row">
       <p class="col-4 header-text">Trạng thái đơn hàng hiện tại</p>
       <div class="col-8">
         <span><strong>{{globals.detectBillActivityByCode(currentActivity)}}</strong></span>
       </div>
     </div>
-    <div class="row">
-      <p class="col-4 header-text" *ngIf="this.billActivity">Trạng thái đơn hàng</p>
+    <div class="form-group row">
+      <p class="col-4 header-text" *ngIf="billActivity">Trạng thái đơn hàng</p>
       <div class="col-8">
-        <select [(ngModel)]="billActivity" class="select-control form-control">
+        <select #billActivityControl [(ngModel)]="billActivity" class="select-control form-control" (ngModelChange)="changeBillActivity($event)">
     <option *ngFor="let e of billActivities" [value]="e.code">
       {{ e.name }}
     </option>
   </select>
       </div>
     </div>
-    <div class="row">
-      <p class="col-4 header-text" *ngIf="this.billActivity">Nhân viên phụ trách</p>
+    <div class="form-group row" *ngIf="isShowThirdparty">
+      <p class="col-4 header-text">Đối tác giao nhận</p>
+      <div class="col-8">
+        <select [(ngModel)]="thirdparty" class="select-control form-control" (ngModelChange)="changeThirdpartyActivity($event)">
+    <option *ngFor="let e of thirdparties" [value]="e.code">
+      {{ e.name }}
+    </option>
+  </select>
+      </div>
+    </div>
+    <div class="form-group row" *ngIf="isShowThirdparty && isShowAddress">
+      <label class="col-md-4 header-text" for="text-input">Địa chỉ</label>
+      <div class="col-md-8">
+        <input type="text" #addressControl="ngModel" [(ngModel)]="address" name="address" class="form-control input-control" [placeholder]="'Nhập địa chỉ'" required autocorrect="off" autocapitalize="off" spellcheck="off" #addressInput>
+      </div>
+    </div>
+    <div class="form-group row" *ngIf="isShowThirdparty && isShowWeight">
+      <p class="col-4 header-text">Khối lượng</p>
+      <div class="col-8">
+        <input type="text" [(ngModel)]="weightBillActivity" class="input-control form-control" placeholder="Nhập khối lượng">
+      </div>
+    </div>
+    <div class="form-group row">
+      <p class="col-4 header-text" *ngIf="billActivity">Nhân viên phụ trách</p>
       <div class="col-8">
         <select [(ngModel)]="employee" class="select-control form-control">
     <option *ngFor="let e of employees" [value]="e.id">
@@ -28,10 +50,10 @@
   </select>
       </div>
     </div>
-    <div class="row">
-      <p class="col-4 header-text">Ghi chú thay đổi</p>
+    <div class="form-group row">
+      <p class="col-4 header-text">Ghi chú</p>
       <div class="col-8">
-        <input type="text" [(ngModel)]="noteBillActivity" class="input-control form-control" placeholder="Nhập ghi chú thay đổi">
+        <input type="text" [(ngModel)]="noteBillActivity" class="input-control form-control" placeholder="Nhập ghi chú">
       </div>
     </div>
     <div style="padding-bottom:20px;text-align:center;" *ngIf="error!=null">
@@ -46,13 +68,13 @@
   </tab>
   <tab *ngIf="isShowEditInfo">
     <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Cập nhật phụ thu</ng-template>
-    <div class="row" *ngIf="isShowEditInfo">
+    <div class="form-group row" *ngIf="isShowEditInfo">
       <p class="col-4 header-text">Phụ thu</p>
       <div class="col-8">
         <input type="text" [textMask]="{mask: numberMask}" [(ngModel)]="subFee" class="input-control form-control">
       </div>
     </div>
-    <div class="row" *ngIf="isShowEditInfo">
+    <div class="form-group row" *ngIf="isShowEditInfo">
       <p class="col-4 header-text">Nội dung phụ thu</p>
       <div class="col-8">
         <input type="text" [(ngModel)]="subFeeNote" class="input-control form-control" placeholder="Nhập ghi chú phụ thu">
@@ -65,7 +87,7 @@
   </tab>
   <tab *ngIf="isShowEditInfo">
     <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Cập nhật ghi chú</ng-template>
-    <div class="row" *ngIf="isShowEditInfo">
+    <div class="form-group row" *ngIf="isShowEditInfo">
       <p class="col-4 header-text">Ghi chú</p>
       <div class="col-8">
         <input type="text" [(ngModel)]="note" class="input-control form-control" placeholder="Nhập ghi chú">

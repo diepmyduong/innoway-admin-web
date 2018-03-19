@@ -220,11 +220,11 @@ export class ProductsComponent implements OnInit {
     let file = files[0];
     console.log("onChangeImportFile", file);
     try {
-      // let response = await this.innowayApi.product.import(file, {
-      //   mode: "overwrite"
-      // })
-      // // this.upload(files)
-      // console.log("onChangeImportFile", response);
+      let response = await this.innowayApi.product.import(file, {
+        mode: "overwrite"
+      })
+      // this.upload(files)
+      console.log("onChangeImportFile", response);
     } catch (err) {
       console.log("onChangeImportFile", err);
     }

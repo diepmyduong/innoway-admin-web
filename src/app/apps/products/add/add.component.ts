@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm, NgModel } from '@angular/forms';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
@@ -66,6 +66,15 @@ export class AddComponent implements OnInit {
     spaceBetween: 10
   };
   subscriptions: Subscription[] = []
+
+  @ViewChild("fileUploader")
+  fileUploader: ElementRef;
+
+  isUploadImage: boolean = false;
+  fileUpload: File;
+  previewImage: string;
+  closeImage: string = "https://d30y9cdsu7xlg0.cloudfront.net/png/55049-200.png";
+  errorImage: string = "http://saveabandonedbabies.org/wp-content/uploads/2015/08/default.png";
 
   constructor(
     private route: ActivatedRoute,
@@ -717,5 +726,29 @@ export class AddComponent implements OnInit {
     } catch (err) {
 
     }
+  }
+
+  async onChangeImageFile(event) {
+    // this.startLoading()
+    let files = this.fileUploader.nativeElement.files
+    let file = files[0]
+    try {
+      let response = await this.innowayApi.upload.uploadImage(file)
+      this.previewImage = response.link
+    } catch (err) {
+      console.log("upload image", err)
+    }
+  }
+
+  onImageError(event) {
+    this.previewImage = this.errorImage;
+  }
+
+  onImageChangeData(event) {
+    this.previewImage = event;
+  }
+
+  removePreviewImage() {
+    this.previewImage = undefined;
   }
 }

@@ -12,6 +12,11 @@ import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 
 import { TextMaskModule } from 'angular2-text-mask';
 
+import { Component } from "@angular/core";
+
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { TabsModule } from "ngx-bootstrap/tabs";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -21,8 +26,14 @@ import { TextMaskModule } from 'angular2-text-mask';
     ReactiveFormsModule,
     LaddaModule,
     DataTableModule,
-    TextMaskModule
+    TextMaskModule,
+
+    TabsModule.forRoot(),
+    AccordionModule.forRoot()
   ],
-  declarations: [ShipComponent, AddComponent, DetailComponent]
+  declarations: [ShipComponent, AddComponent, DetailComponent],
+  bootstrap: [
+    ShipComponent, AddComponent, DetailComponent
+  ]
 })
 export class ShipModule { }

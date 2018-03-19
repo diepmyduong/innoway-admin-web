@@ -281,7 +281,9 @@ export class CustomerComponent implements OnInit, ListPageInterface {
 
   async getStories() {
     try {
-      let response = await this.innowayApi.thirdpartyChatbot.getStories();
+      let response = await this.innowayApi.thirdpartyChatbot.getStories({
+        thirdparty_chatbot_id: null
+      });
       this.stories = response.rows;
       this.story = this.stories[0]._id;
       console.log("getStories", response);
@@ -293,7 +295,10 @@ export class CustomerComponent implements OnInit, ListPageInterface {
   async sendStory(storyId: string) {
     try {
       let response = await this.innowayApi.thirdpartyChatbot.sendStory({
-        story_id: storyId
+        story_id: storyId,
+        thirdparty_chatbot_id: null,
+        send_by: "all",
+        send_to: []
       });
       console.log("send message", JSON.stringify(response))
       alert(true)

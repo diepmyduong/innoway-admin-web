@@ -1,5 +1,5 @@
 <div class="animated fadeIn">
-  <div class="row">
+  <div class="row" *ngIf="false">
     <div class="col-md-6 text-center">
       <div style="display: block">
         <canvas baseChart [data]="pieChartData | async" [colors]="pieChartColors" [labels]="pieChartLabels | async" [chartType]="pieChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
@@ -17,7 +17,7 @@
           <th>{{label}}</th>
           <th><div style="height:20px; width:20px;" [style.background-color]="pieChartColors[0].backgroundColor[i]"></div></th>
           <th>{{pieChartData.getValue()[i]}} %</th>
-        </tr>      
+        </tr>
       </table>
     </div>
   </div>
@@ -39,7 +39,7 @@
                 </small>
               </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
               <div class="col-md-12">
                 <input type="radio" [(ngModel)]="model.method" name="method" value="url">Url<br>
                 <input type="radio" [(ngModel)]="model.method" name="method" value="upload">Upload Image
@@ -81,7 +81,7 @@
               </div>
             </div>
 
-            <button (click)="export()" [hidden]="true">Export</button>
+            <button (click)="export()" [hidden]="true">Export</button> -->
 
             <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Mô tả ngắn</label>
@@ -191,30 +191,27 @@
                 </select>
               </div>
             </div>
-            <div class="form-group row" [hidden]="true">
-              <div class="col-md-12">
-                <div class="row">
-                  <label class="col-md-3 form-control-label" for="text-input">Hình ảnh</label>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
+              <div class="col-md-10">
+                <div class="input-group">
+                  <input type="file" name="file-input" #fileUploader (change)="onChangeImageFile($event)" [style.display]="'none'">
+                  <input type="text" #imageControl="ngModel" [(ngModel)]="image" (input)="onImageChangeData($event.target.value)" name="image" url class="form-control input-control" [placeholder]="image?'':'Nhập url'" />
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-ladda ladda-button btn-primary" (click)="fileUploader.click()"
+                    data-style="contract-overlay" style="z-index: 10;">
+                      <span class="ladda-label">Đăng ảnh</span>
+                      <span class="ladda-spinner"></span>
+                      <div class="ladda-progress" style="width: 0px;"></div>
+                    </button>
+                  </span>
                 </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                </div>
-                <div class="form-group row mt-1">
-                  <div class="col-md-12">
-                    <input type="file" id="file-multiple-input" name="file-multiple-input" multiple>
-                  </div>
-                </div>
+              </div>
+              <div class="offset-md-2 col-md-10" *ngIf="previewImage">
+                <span class="image-wrapper" *ngIf="previewImage">
+                  <img class="close-btn" [attr.src]="closeImage" (click)="removeImage()" />
+                  <img id="preview-image" *ngIf="fileUploader.value || imageControl.value" [src]="previewImage" (error)="this.previewImage = this.errorImage" />
+                </span>
               </div>
             </div>
           </form>

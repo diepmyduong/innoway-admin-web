@@ -56,9 +56,7 @@ export class DashboardComponent implements OnInit {
     timeout: 5000
   });
 
-  top_right_infos = [];
-
-  sub_header_infos = [];
+  options: any;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -109,7 +107,6 @@ export class DashboardComponent implements OnInit {
     this.loadEmployeeDataByBranchData();
     this.loadBranchByEmployeeData(this.employeeData.branch_id);
     // this.getSummaryInformation();
-    this.loadDailySummary();
     this.subscribeLoadDailySummary();
     this.subscribeTopicByFCM();
   }
@@ -122,20 +119,25 @@ export class DashboardComponent implements OnInit {
     this.billChangeObservable = await this.innowayApi.bill.subscribe()
     this.subscriptions.push(this.billChangeObservable.subscribe(message => {
       try {
-        console.log("subscribeTopicByFCM", JSON.stringify(message))
-        let title;
-        let content;
-        switch (message.topic) {
-          case 'order_at_store':
-          case 'order_online_by_employee':
-          case 'order_online_by_customer':
-          case 'update_subfee':
-          case 'update_paid_history':
-          case 'cancel_bill':
-          case 'change_bill_activity':
-            this.dashboardService.getTopicFromFCM(message);
-            this.showInformationAboutBillFromFCM(message)
-            break;
+        if (message && message.topic) {
+          console.log("subscribeTopicByFCM", JSON.stringify(message))
+          let title;
+          let content;
+          let topic: string = message.topic;
+          console.log("subscribeTopicByFCM1", JSON.stringify(message))
+          console.log("subscribeTopicByFCM2", JSON.stringify(message.topic))
+          switch (topic) {
+            case 'order_at_store':
+            case 'order_online_by_employee':
+            case 'order_online_by_customer':
+            case 'update_subfee':
+            case 'update_paid_history':
+            case 'cancel_bill':
+            case 'change_bill_activity':
+              this.dashboardService.getTopicFromFCM(message);
+              this.showInformationAboutBillFromFCM(message)
+              break;
+          }
         }
       }
       catch (err) {
@@ -230,6 +232,7 @@ export class DashboardComponent implements OnInit {
       this.employees.next(await this.innowayApi.employee.getList({
         query: { fields: ["$all"] }
       }))
+      console.log("loadEmployeeDataByBranchData", JSON.stringify(this.employees.getValue()))
     } catch (err) {
       // try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -736,12 +739,12 @@ export class DashboardComponent implements OnInit {
         this.callLoadDailySummary = data;
         if (this.callLoadDailySummary != null && this.callLoadDailySummary == true) {
           console.log("subscribeLoadDailySummary", "loadDailySummary");
-          this.loadDailySummary();
         }
       });
   }
 
   onChangeEmployee(value) {
+    console.log("onChangeEmployee",JSON.stringify(value))
     this.dashboardService.updateEmployee(value);
   }
 
@@ -750,6 +753,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onChangeBill(value) {
+    console.log("onChangeBill", value)
     this.dashboardService.updateBill(value);
   }
 
@@ -889,179 +893,5 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  refreshFilterValue() {
 
-  }
-
-  async getSummaryInformation() {
-    try {
-      let data = await this.innowayApi.bill.summaryBill({
-        startTime: moment(Date.now()).format("YYYY-MM-DD"),
-        endTime: moment(Date.now()).add(1, 'days').format('YYYY-MM-DD')
-      })
-
-      console.log("summary", JSON.stringify(data));
-      this.summary = data;
-
-      this.top_right_infos.push({
-        number: data.total_of_pay_amount,
-        text: "Tiền đã thu"
-      });
-
-      this.top_right_infos.push({
-        number: data.total_of_remain_amount,
-        text: "Tiền còn thiếu"
-      });
-
-      this.sub_header_infos.push({
-        number: data.number_of_bill_sent_successfully,
-        text: 'THÀNH CÔNG',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_bill_processing,
-        text: 'ĐANG XỬ LÝ',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_bill_prepared,
-        text: 'ĐÃ CHUẨN BỊ',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_bill_delivering,
-        text: 'ĐANG GIAO',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_bill_paid,
-        text: 'THÀNH CÔNG',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_bill_cancel,
-        text: 'ĐÃ HỦY',
-      })
-
-      // this.top_right_infos.push({
-      //
-      // });
-      // alert(JSON.stringify(data));
-    } catch (err) {
-
-    }
-  }
-
-  async loadDailySummary() {
-    try {
-      let response: any = await this.innowayApi.dailySummary.getList({
-        query: {
-          fields: ["$all"],
-          filter: {
-            date: { $eq: moment(Date.now()).format("DD-MM-YYYY") }
-          }
-        }
-      })
-
-      console.log("daily summary", JSON.stringify(response));
-      let data = response[0] ? response[0] : {};
-      this.summary = data;
-      this.top_right_infos = [];
-      this.sub_header_infos = [];
-
-      this.top_right_infos.push({
-        number: data.pay_amount ? data.pay_amount : 0,
-        text: "Tiền đã thu"
-      });
-
-      this.top_right_infos.push({
-        number: data.remain_amount ? data.remain_amount : 0,
-        text: "Tiền còn thiếu"
-      });
-
-      this.top_right_infos.push({
-        number: data.number_of_customer ? data.number_of_customer : 0,
-        text: "Số khách hàng"
-      });
-
-      this.top_right_infos.push({
-        number: data.number_of_customer_using_promotion ? data.number_of_customer_using_promotion : 0,
-        text: "Số khuyến mãi được dùng"
-      });
-
-      this.top_right_infos.push({
-        number: data.number_of_bill ? data.number_of_bill : 0,
-        text: "Số đơn hàng"
-      });
-
-      this.sub_header_infos.push({
-        number: data.number_of_sent_successfully_status ? data.number_of_sent_successfully_status : 0,
-        text: 'THÀNH CÔNG',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_distributed_status ? data.number_of_distributed_status : 0,
-        text: 'ĐÃ ĐIỀU PHỐI',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_waiting_for_confirmation_status ? data.number_of_waiting_for_confirmation_status : 0,
-        text: 'ĐANG CHỜ XÁC NHẬN',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_bill_confirmed_status ? data.number_of_bill_confirmed_status : 0,
-        text: 'ĐÃ XÁC NHẬN',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_picking_up_status ? data.number_of_picking_up_status : 0,
-        text: 'ĐANG LẤY HÀNG',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_received_status ? data.number_of_received_status : 0,
-        text: 'ĐÃ NHẬN HÀNG',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_processing_status ? data.number_of_processing_status : 0,
-        text: 'ĐANG XỬ LÝ',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_prepared_status ? data.number_of_prepared_status : 0,
-        text: 'ĐÃ CHUẨN BỊ',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_sent_shipper_status ? data.number_of_sent_shipper_status : 0,
-        text: 'ĐÃ GỬI GIAO HÀNG',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_delivering_status ? data.number_of_delivering_status : 0,
-        text: 'ĐANG GIAO',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_paid_status ? data.number_of_paid_status : 0,
-        text: 'ĐÃ THANH TOÁN',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_collected_money_status ? data.number_of_collected_money_status : 0,
-        text: 'ĐÃ NHẬN TIỀN',
-      })
-
-      this.sub_header_infos.push({
-        number: data.number_of_cancelled_status ? data.number_of_cancelled_status : 0,
-        text: 'ĐÃ HỦY',
-      })
-
-      this.ref.detectChanges();
-    } catch (err) {
-      console.log("bi-summary", err)
-    }
-  }
 }

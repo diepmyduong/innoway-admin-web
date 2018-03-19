@@ -22,8 +22,6 @@
       </data-table-column>
       <data-table-column property="name" header="Tên" [sortable]="true">
       </data-table-column>
-      <!-- <data-table-column property="description" header="Mô tả" [visible]="false" [resizable]="true">
-      </data-table-column> -->
       <data-table-column property="status" header="Trạng thái" [sortable]="true">
         <template #dataTableCell let-item="item">
               <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>

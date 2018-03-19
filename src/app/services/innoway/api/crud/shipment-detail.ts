@@ -7,9 +7,9 @@ export interface iShipmentDetail extends iCrud {
 }
 
 export class ShipmentDetail extends CrudAPI<iShipmentDetail> {
-    constructor(
-        public api: InnowayApiService
-    ) {
-        super(api, 'shipment_detail')
-    }
+  constructor(
+    public api: InnowayApiService
+  ) {
+    super(api, 'shipment_detail')
+  }
 }

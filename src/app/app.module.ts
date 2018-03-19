@@ -47,6 +47,8 @@ import { GuideCustomerDialog } from "./modal/guide-customer/guide-customer.compo
 import { TextMaskModule } from 'angular2-text-mask';
 
 import Raven = require('raven-js');
+import { AgmCoreModule } from "@agm/core";
+import { AccordionModule } from "ngx-bootstrap/accordion";
 
 Raven
   .config('https://997c474fe1004e2da0f34f05c79c540e@sentry.io/278600')
@@ -65,6 +67,7 @@ export class RavenErrorHandler implements ErrorHandler {
     BrowserAnimationsModule,
     AppRoutingModule,
     TabsModule.forRoot(),
+    AccordionModule.forRoot(),
     // Ng2ModalModule.forRoot(),
     ChartsModule,
     SimpleNotificationsModule.forRoot(),
@@ -82,6 +85,11 @@ export class RavenErrorHandler implements ErrorHandler {
     FroalaViewModule.forRoot(),
     // BsDropdownModule.forRoot(),
     ColorPickerModule,
+
+    AgmCoreModule.forRoot({
+      apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
+      libraries: ["places,drawing"]
+    }),
   ],
   declarations: [
     AppComponent,

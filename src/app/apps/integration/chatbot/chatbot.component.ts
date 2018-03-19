@@ -18,6 +18,8 @@ export class ChatbotComponent implements OnInit {
   stories: any[];
   bill: any;
   employee: any;
+  botApps: any[];
+  botAppId: string;
 
   constructor(public innowayApi: InnowayApiService,
     private globals: Globals,
@@ -38,14 +40,16 @@ export class ChatbotComponent implements OnInit {
       let data = await this.innowayApi.brand.getItem(brandId, {
         query: {
           fields: ['$all', {
-            thirdparty_chatbot: ["$all"]
+            thirdparty_chatbots: ["$all"]
           }]
         }
       })
-      if (data.thirdparty_chatbot) {
-        this.appId = data.thirdparty_chatbot.app_id
-        this.appSecret = data.thirdparty_chatbot.app_secret
-        this.appToken = data.thirdparty_chatbot.access_token
+      console.log("bot apps", JSON.stringify(data))
+      if (data.thirdparty_chatbots[1]) {
+        this.botAppId=data.thirdparty_chatbots[1].id
+        this.appId = data.thirdparty_chatbots[1].app_id
+        this.appSecret = data.thirdparty_chatbots[1].app_secret
+        this.appToken = data.thirdparty_chatbots[1].access_token
         this.getStories();
       } else {
 
@@ -75,11 +79,10 @@ export class ChatbotComponent implements OnInit {
     try {
       let data: any = await this.innowayApi.thirdpartyChatbot.disconnect({
         app_id: this.appId,
-        app_secret: this.appSecret
+        app_secret: this.appSecret,
+        thirdparty_chatbot_id: this.botAppId
       })
       this.getStories();
-      // this.accessToken = data.access_token;
-      // console.log("integrateToChatbotSystem", data);
     } catch (err) {
 
     }
@@ -87,7 +90,9 @@ export class ChatbotComponent implements OnInit {
 
   async getStories() {
     try {
-      let response = await this.innowayApi.thirdpartyChatbot.getStories();
+      let response = await this.innowayApi.thirdpartyChatbot.getStories({
+        thirdparty_chatbot_id: this.botAppId
+      });
       this.stories = response.rows;
       this.story = this.stories[0]._id;
       console.log("getStories", response);
@@ -133,65 +138,16 @@ export class ChatbotComponent implements OnInit {
     try {
       console.log("send story", JSON.stringify(this.story))
       let response = await this.innowayApi.thirdpartyChatbot.sendStory({
-        story_id: this.story
+        story_id: this.story,
+        thirdparty_chatbot_id: this.botAppId,
+        send_by: "all",
+        send_to: []
       });
       console.log("send message", JSON.stringify(response))
-      // let response = await this.innowayApi.thirdpartyChatbot.sendSampleStory();
-      // console.log("getStories", response);
     } catch (err) {
       console.log("send message", err)
     }
   }
-
-  // async sendReceiptTemplate() {
-  //   try {
-  //     let request = {
-  //       contentGreeting: {
-  //         text: "Hello {{first_name}} {{last_name}} :D"
-  //       },
-  //       contentReceipt: {
-  //         total_price: this.bill.total_price,
-  //         vat_fee: this.bill.total_price,
-  //         amount_of_sub_fee: this.bill.amount_of_sub_fee,
-  //         amount_of_promotion: this.bill.amount_of_promotion,
-  //         ship_fee: this.bill.bill_ship_detail.fee,
-  //         ship_method: "a",
-  //         created_at: "a",
-  //         code: this.formatBillCode(this.bill.code),
-  //         brand: {
-  //           name: "a"
-  //         },
-  //         branch: {
-  //           name: "a"
-  //         },
-  //         address: this.bill.address,
-  //         customer_fullname: "a",
-  //         product: []
-  //       }
-  //     }
-  //
-  //     let products = [];
-  //     this.bill.items.forEach(item => {
-  //       let data = {
-  //         title: item.product.name,
-  //         subtitle: item.product.name.short_description ? item.product.name.short_description : "không có",
-  //         quantity: item.amount,
-  //         price: item.total_price,
-  //         currency: "VND",
-  //         image_url: item.product.thumb
-  //       }
-  //
-  //       products.push(data)
-  //     })
-  //
-  //     request.contentReceipt.product = products;
-  //     console.log("request", JSON.stringify(request))
-  //     let response = await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(request);
-  //     console.log("response", JSON.stringify(response))
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
 
   formatBillCode(code): string {
     let output = "DH";

@@ -236,17 +236,6 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     }
   }
 
-  // async loadBrandByEmployeeData(brandId: string) {
-  //   try {
-  //     this.brand = await this.innowayApi.brand.getItem(brandId, {
-  //       query: { fields: ["$all"] }
-  //     })
-  //     this.ref.detectChanges();
-  //   } catch (err) {
-  //
-  //   }
-  // }
-
   async setData() {
     try {
 
@@ -329,19 +318,11 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         this.bill.related_people.payer_note ?
           this.bill.related_people.payer_note : "không có";
 
-      // if (this.brand.thirdparty_chatbot) {
-      // if (this.bill.channel == "chatbot") {
       if (this.bill.customer.chatbot_subscriber_id) {
         this.isOrderFromChatbot = true
       } else {
         this.isOrderFromChatbot = false
       }
-      // } else {
-      //   this.isOrderFromChatbot = false
-      // }
-      // } else {
-      //   this.isOrderFromChatbot = false
-      // }
 
       console.log("setData", JSON.stringify(this.bill));
       this.ref.detectChanges();
@@ -488,9 +469,6 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     try {
       let response = await this.innowayApi.bill.changeActivity(bill.id, data)
       console.log("updateBillActivity", JSON.stringify(response))
-      // if (response && this.brand.thirdparty_chatbot) {
-      //   this.sendInvoiceToCustomer(bill);
-      // }
       let subscribers: any[] = []
       subscribers.push(bill.customer.chatbot_subscriber_id)
 
@@ -878,7 +856,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         customer_fullname: bill.customer.fullname,
         greeting: "Chào {{first_name}} {{last_name}}, đơn hàng " + bill.code + " của quý khách đã được xác nhận thành công",
         send_by: "subscriber",
-        subscribers: subscribers
+        subscribers: subscribers,
+        thirdparty_chatbot_id: bill.thirdparty_chatbot_id,
+        subscriber_id: bill.subscriber_id
       }
       console.log(JSON.stringify(params))
       let response = await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(params)
@@ -932,7 +912,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         note: input.note,
         chatbot: input.chatbot,
         send_by: input.sendBy,
-        send_to: input.sendTo
+        send_to: input.sendTo,
+        thirdparty_chatbot_id: null,
+        subscriber_id: null
       })
       console.log("sendInformationAboutBillToCustomer", JSON.stringify(response))
     } catch (err) {
@@ -982,7 +964,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
           app_token: input.app.app_token
         },
         send_by: "subscriber",
-        send_to: subscribers
+        send_to: subscribers,
+        thirdparty_chatbot_id: null,
+        subscriber_id: null
       }
       console.log("response", JSON.stringify(request))
       let data = await this.innowayApi.thirdpartyChatbot.sendMessageToCustomer(request);
@@ -1017,7 +1001,9 @@ export class DetailComponent implements OnInit, DetailPageInterface {
 
   async getStories() {
     try {
-      let response = await this.innowayApi.thirdpartyChatbot.getStories();
+      let response = await this.innowayApi.thirdpartyChatbot.getStories({
+        thirdparty_chatbot_id: null
+      });
       this.stories = response.rows;
       this.story = this.stories[0]._id;
       console.log("getStories", response);
@@ -1029,7 +1015,10 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   async sendStory(storyId: string) {
     try {
       let response = await this.innowayApi.thirdpartyChatbot.sendStory({
-        story_id: storyId
+        story_id: storyId,
+        thirdparty_chatbot_id: null,
+        send_by: "all",
+        send_to: []
       });
       console.log("send message", JSON.stringify(response))
       alert(true)
@@ -1040,13 +1029,13 @@ export class DetailComponent implements OnInit, DetailPageInterface {
   }
 
   detectShowCancelButton(bill): boolean {
-    if (bill.activity.action) {
+    if (bill.activity && bill.activity.action) {
       if (bill.activity.action.indexOf("CANCEL") >= 0
         || bill.activity.action.indexOf("DISTRIBUTED") >= 0
         || bill.activity.action.indexOf("PAID") >= 0
         || bill.activity.action.indexOf("COLLECTED_MONEY") >= 0) {
         return true
-      }else{
+      } else {
         return false
       }
     }

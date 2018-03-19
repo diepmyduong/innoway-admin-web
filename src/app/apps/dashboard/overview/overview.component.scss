@@ -1,4 +1,4 @@
-@import "../../../scss/bootstrap-variables";
+@import "../../../../scss/bootstrap-variables";
 
 .heading-figures {
   padding: 0;
@@ -79,13 +79,10 @@
   }
 }
 
-.breadcrumb {
-    display: none !important;
-}
-
 .wide-bg {
   background-color: $grey-lightest;
   background-clip: border-box;
+  margin-top: 15px;
   margin-left: -30px;
   margin-right: -30px;
   border-top: 30px solid transparent;

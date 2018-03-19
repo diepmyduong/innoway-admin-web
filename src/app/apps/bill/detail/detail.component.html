@@ -103,7 +103,7 @@
                   <tbody>
                     <tr *ngFor="let v of bill.items; let i=index">
                       <td class="center">{{i+1}}</td>
-                      <td class="left"><img src="{{v.product.thumb?.url?v.product.thumb:thumbDefault}}" height="50px" /></td>
+                      <td class="left"><img src="{{v.product.thumb?v.product.thumb:thumbDefault}}" height="50px" /></td>
                       <td class="left">{{v.product.name}}</td>
                       <td class="center">{{v.amount}}</td>
                       <td class="right">{{v.product.price | accounting}}</td>

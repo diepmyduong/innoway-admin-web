@@ -207,15 +207,15 @@ export class AddComponent implements OnInit {
   }
 
   async onChangeImageFile(event) {
-    this.startLoading()
+    // this.startLoading()
     let files = this.fileUploader.nativeElement.files
     let file = files[0]
     try {
       let response = await this.innowayApi.upload.uploadImage(file)
       this.previewImage = response.link
-      this.endLoading()
+      // this.endLoading()
     } catch (err) {
-      this.endLoading()
+      // this.endLoading()
     }
   }
 

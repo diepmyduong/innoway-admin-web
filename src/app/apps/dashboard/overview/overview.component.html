@@ -1,0 +1,24 @@
+<div class="animated fadeIn">
+  <div class="heading-figures row">
+    <div class="profit col-md-6">
+      <span class="current-profit">{{(summary.total_amount?summary.total_amount:"0")|accounting}}</span>
+      <span class="profit-text">DOANH THU</span>
+    </div>
+    <div class="right-figures col-md-6">
+      <div class="figure-group" *ngFor="let top_right_info of top_right_infos">
+        <div class="right-figure-number">{{top_right_info.number | number}}</div>
+        <div class="right-figure-text">{{top_right_info.text}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-group row row-eq-height">
+    <div class="col-md-2 col-sm-4 col-4 box" *ngFor="let sub_header_info of sub_header_infos">
+      <div class="card">
+        <div class="card-body text-center">
+          <div class="box-number">{{ sub_header_info.number }}</div>
+          <div class="box-text">{{ sub_header_info.text }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
