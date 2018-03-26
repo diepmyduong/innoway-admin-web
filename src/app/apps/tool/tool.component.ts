@@ -73,13 +73,14 @@ export class ToolComponent implements OnInit {
         link: "/pos",
         hint: "hỗ trợ bán hàng",
         id: "pos-id"
-      },{
-        title: "Thống kê",
-        icon: "https://farm5.staticflickr.com/4528/24866458148_a12c9693af_o.png",
-        link: "/summary-layout",
-        hint: "thống kê quy trình kinh doanh",
-        id: "summary-id"
-      }
+      },
+      // {
+      //   title: "Thống kê",
+      //   icon: "https://farm5.staticflickr.com/4528/24866458148_a12c9693af_o.png",
+      //   link: "/summary-layout",
+      //   hint: "thống kê quy trình kinh doanh",
+      //   id: "summary-id"
+      // }
       // , {
       //   title: "Phản hồi",
       //   icon: "https://farm5.staticflickr.com/4558/38018892994_1ef6928909_o.png",

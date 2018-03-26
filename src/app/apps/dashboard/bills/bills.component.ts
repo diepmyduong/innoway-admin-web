@@ -294,7 +294,7 @@ export class BillsComponent implements OnInit {
               employee: ["$all"]
             }],
             customer: ["$all", {
-              filter: {
+              $filter: {
                 phone: {
                   $iLike: `%${input.data}%`
                 }
@@ -322,7 +322,7 @@ export class BillsComponent implements OnInit {
               employee: ["$all"]
             }],
             customer: ["$all", {
-              filter: {
+              $filter: {
                 name: {
                   $iLike: `%${input.data}%`
                 }
@@ -801,6 +801,7 @@ export class BillsComponent implements OnInit {
       employee: employee,
       employees: employees,
       activity: bill.activity ? bill.activity.action : null,
+      branch: this.branch
     };
 
     let dialogRef = this.dialog.open(UpdateBillDataDialog, {
@@ -824,10 +825,11 @@ export class BillsComponent implements OnInit {
             employeeId: data.employee,
             note: data.noteBillActivity,
             type: data.thirdparty,
-            weight: data.weight,
+            total_weight: data.weight,
             address: data.address,
             longitude: data.longitude,
-            latitude: data.latitude
+            latitude: data.latitude,
+            note_code: data.notCode
           })
           break;
         }
@@ -853,7 +855,6 @@ export class BillsComponent implements OnInit {
 
   async updateBillActivity(bill, data: any) {
     try {
-      console.log("updateBillActivity", JSON.stringify(data))
       let request = data;
       switch (data.type) {
         case 'UBER_DELIVER':
@@ -883,44 +884,18 @@ export class BillsComponent implements OnInit {
             employeeId: data.employeeId,
             note: data.note,
             type: data.type,
-            PaymentTypeID: 1,
-            FromDistrict: "Quận 1",
-            ToDistrict: "Quận 10",
-            Note: bill.note ? bill.note : "",
-            SealCode: "tem niêm phong",
-            ExternalCode: "",
-            ClientContactName: "Link Thai",
-            ClientContactPhone: "0942654141",
-            ClientAddress: "140 Lê Trọng Tấn",
-            CustomerName: "Nguyễn Văn A",
-            CustomerPhone: bill.customer.phone,
-            ShippingAddress: "137 Lê Quang Định",
-            CoDAmount: bill.total_price,
-            NoteCode: "CHOXEMHANGKHONGTHU",
-            InsuranceFee: 0,
-            ClientHubID: 298779,
-            ToLatitude: Number.parseFloat(bill.latitude),
-            ToLongitude: Number.parseFloat(bill.longitude),
-            IsSmsSent: false,
-            FromLat: Number.parseFloat(data.latitude),
-            FromLng: Number.parseFloat(data.longitude),
-            Content: data.note ? data.note : "",
-            CouponCode: "",
-            Weight: Number.parseInt(data.weight),
-            Length: 10,
-            Width: 10,
-            Height: 10,
-            CheckMainBankAccount: false,
-            ReturnContactName: "",
-            ReturnContactPhone: "",
-            ReturnAddress: "",
-            ReturnDistrictCode: "",
-            ExternalReturnCode: "",
-            IsCreditCreate: true,
-            FromWardCode: "21402",
-            ToWardCode: "21610",
-            AffiliateID: 176971,
-            ShippingOrderCosts: []
+            data: {
+              pick_address: {
+                longitude: Number.parseFloat(data.longitude),
+                latitude: Number.parseFloat(data.latitude)
+              },
+              receive_address: {
+                longitude: Number.parseFloat(bill.longitude),
+                latitude: Number.parseFloat(bill.latitude)
+              }
+            },
+            total_weight: data.total_weight,
+            note_code: data.note_code
           }
           break
         case 'GHTK':
@@ -966,11 +941,9 @@ export class BillsComponent implements OnInit {
           }
           break;
       }
-      console.log("updateBillActivity request", JSON.stringify(request))
       let response = await this.innowayApi.bill.changeActivity(bill.id, request)
-      console.log("updateBillActivity", JSON.stringify(response))
       this.alertUpdateSuccess();
-      //this.loadBillData();
+      this.refreshBill();
     } catch (err) {
       console.log("updateBillActivity", err);
       this.alertUpdateFailed();
@@ -1242,5 +1215,13 @@ export class BillsComponent implements OnInit {
 
   showOrHideSort() {
     this.isShowSort = !this.isShowSort
+  }
+
+  refreshBill() {
+    this.customizeFilter()
+  }
+
+  convertTime(date){
+    return moment(date).format("HH:mm")
   }
 }

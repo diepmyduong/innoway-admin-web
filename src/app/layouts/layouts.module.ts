@@ -27,13 +27,16 @@ import { FeedbackLayoutComponent } from './feedback-layout/feedback-layout.compo
 import { BrandLayoutComponent } from './brand-layout/brand-layout.component';
 import { LicenseLayoutComponent } from './license-layout/license-layout.component';
 
+import { MatTooltipModule } from '@angular/material';
+
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     SharedModule,
     //BsDropdownModule,
-    ToasterModule
+    ToasterModule,
+    MatTooltipModule
   ],
   declarations: [SimpleLayoutComponent, FullLayoutComponent, LauncherLayoutComponent, ProductLayoutComponent, EmployeeLayoutComponent, CustomerLayoutComponent, BillLayoutComponent, SettingLayoutComponent, PromotionLayoutComponent, BranchLayoutComponent, IntegrationComponent, DashboardLayoutComponent, IntegrateChatbotLayoutComponent, IntegrateKiotvietLayoutComponent, SummaryLayoutComponent, ReportLayoutComponent, FeedbackLayoutComponent, BrandLayoutComponent, LicenseLayoutComponent]
 })

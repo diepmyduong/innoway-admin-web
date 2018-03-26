@@ -1,3 +1,192 @@
-<p>
-  brand-layout works!
-</p>
+<header class="app-header navbar">
+  <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button"><i class="material-icons">keyboard_arrow_left</i></button>
+  <a class="navbar-brand" [routerLink]="['/launcher/tool']">
+    <div class="logo-wrapper"><img id="logo" src="../../assets/img/logo-white.svg"/></div>
+  </a>
+  <ul class="nav navbar-nav mr-auto">
+
+    <li class="nav-item dropdown" dropdown placement="bottom" id="accountDropdownMenu">
+      <button class="nav-link nav-pill avatar dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+        <div *ngIf="!employee.avatar" >{{employee.fullname[0]}}</div>
+        <img src="{{employee.avatar?employee.avatar:''}}" class="img-avatar" *ngIf="employee.avatar" onerror="this.style.display = 'none'">
+      </button>
+      <div class="user-name hidden-md-down"  data-toggle="dropdown">
+        {{employee.fullname}}<i class="material-icons">keyboard_arrow_down</i>
+      </div>
+      <ul class="dropdown-menu" aria-labelledby="accountDropdownMenu">
+        <li class="dropdown-item"><a><i class="fa fa-user"></i> Thông tin tài khoản</a></li>
+        <li class="dropdown-item"><a><i class="fa fa-wrench"></i> Cài đặt</a></li>
+        <li class="dropdown-item"><a><i class="fa fa-shield"></i> Khoá tài khoản</a></li>
+        <li class="dropdown-item" (click)="logout()"><a><i class="fa fa-lock"></i> Đăng xuất</a></li>
+      </ul>
+    </li>
+
+    <div class="name-separator hidden-md-down"></div>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-cog" matTooltip="Thiết lập" matTooltipPosition="above" (click)="goToSettingLayout()"></i>
+          </a>
+    </li>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-dashboard" matTooltip="Trang điều phối" matTooltipPosition="above" (click)="goToDashboardLayout()"></i>
+          </a>
+    </li>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-dropbox" matTooltip="Sản phẩm" matTooltipPosition="above" (click)="goToProductLayout()"></i>
+          </a>
+    </li>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-gift" matTooltip="Khuyến mãi" matTooltipPosition="above" (click)="goToPromotionLayout()"></i>
+          </a>
+    </li>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-dollar" matTooltip="Đơn hàng" matTooltipPosition="above" (click)="goToBillLayout()"></i>
+          </a>
+    </li>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-product-hunt" matTooltip="POS" matTooltipPosition="above" (click)="goToPOSLayout()"></i>
+          </a>
+    </li>
+  </ul>
+
+  <li class="right-dropdown nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)" style="margin-right:2rem !important;">
+    <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+            <i class="fa fa-server" aria-hidden="true" matTooltip="Dịch vụ công nghệ khác" matTooltipPosition="above"></i><span class="badge badge-pill badge-danger">5</span>
+        </a>
+    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownMenu">
+      <li class="thirdparty-dropdown-item" *ngFor="let item of thirdparty">
+        <a class="nav-link" href="javascript:;"><img src="{{item.url}}"/>{{item.name}}</a>
+      </li>
+    </ul>
+  </li>
+</header>
+
+<div class="app-body">
+
+<div class="sidebar">
+    <nav class="sidebar-nav">
+      <ul class="nav">
+
+        <div *ngFor="let nav of navigations">
+          <li class="nav-item" *ngIf="nav.type=='single'">
+              <a class="nav-link" routerLinkActive="active" [routerLink]="nav.link"><i [ngClass]="nav.icon"></i> {{nav.name}} </a>
+            </li>
+
+          <li class="nav-title text-center" *ngIf="nav.type=='title'">
+            <span>{{nav.name}}</span>
+          </li>
+
+        <li class="nav-item nav-dropdown" routerLinkActive="open" *ngIf="nav.type=='parent'">
+            <a class="nav-link nav-dropdown-toggle" href="javascript:;"><i [ngClass]="nav.icon"></i>{{nav.name}}</a>
+            <ul class="nav-dropdown-items">
+              <li class="nav-item" *ngFor="let c of nav.children">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="c.link"><i [ngClass]="c.icon"></i>{{c.name}}</a>
+              </li>
+            </ul>
+          </li>
+        </div>
+
+      </ul>
+    </nav>
+  </div>
+
+  <main class="main">
+    <ol class="breadcrumb">
+      <breadcrumbs></breadcrumbs>
+    </ol>
+
+    <div class="container-fluid">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <aside class="aside-menu" [hidden]="true">
+    <tabset>
+      <tab>
+        <ng-template tabHeading><i class="icon-list"></i></ng-template>
+        <div class="callout m-0 py-h text-muted text-center bg-faded text-uppercase">
+          <small><b>Shipper</b></small>
+        </div>
+        <hr class="transparent mx-1 my-0">
+        <div class="callout callout-default m-0 py-1">
+          <div class="avatar float-right">
+            <img src="{{employee?.avatar?.url?employee.avatar:'https://s11.favim.com/mini/160421/snowball-movie-the-secret-life-of-pets-cute-Favim.com-4234326.jpeg'}}" class="img-avatar" alt="admin@bootstrapmaster.com">
+          </div>
+          <div>Meeting with <strong>Lucas</strong></div>
+          <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 1 - 3pm</small>
+          <small class="text-muted"><i class="icon-location-pin"></i>&nbsp; Palo Alto, CA </small>
+        </div>
+        <hr class="mx-1 my-0">
+        <div class="callout callout-success m-0 py-1">
+          <div class="avatar float-right">
+            <img src="assets/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+          </div>
+          <div>Skype with <strong>Megan</strong></div>
+          <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 4 - 5pm</small>
+          <small class="text-muted"><i class="icon-social-skype"></i>&nbsp; On-line </small>
+        </div>
+        <hr class="transparent mx-1 my-0">
+        <div class="callout m-0 py-h text-muted text-center bg-faded text-uppercase">
+          <small><b>Chi nhánh</b></small>
+        </div>
+        <hr class="transparent mx-1 my-0">
+        <div class="callout callout-danger m-0 py-1">
+          <div>Chi Nhánh A - <strong>5 Shipper</strong></div>
+          <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 10 - 11pm</small>
+          <div class="avatars-stack mt-h">
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+        </div>
+        <hr class="mx-1 my-0">
+      </tab>
+      <tab>
+        <ng-template tabHeading><i class="icon-speech"></i></ng-template>
+        <div class="callout m-0 py-h text-muted text-center bg-faded text-uppercase">
+          <small><b>Trung tâm thông báo</b></small>
+        </div>
+        <div class="callout callout-default m-0 py-1">
+          <div>Đơn hàng <strong>100001</strong></div>
+          <div class="notify-description">
+            Đang chở xác thực
+          </div>
+          <small class="mr-1"><i class="icon-calendar"></i>&nbsp; 1 - 3pm</small>
+          <small class="mr-1"><i class="icon-location-pin"></i>&nbsp; Palo Alto, CA </small>
+        </div>
+        <hr class="mx-1 my-0">
+      </tab>
+    </tabset>
+  </aside>
+</div>
+
+<footer class="app-footer" (click)="showSuccess()">
+  <a href="#">MCOM</a> &copy; 2018
+  <span class="float-right">Powered by <a href="#">MCOM</a>
+  </span>
+</footer>
+
+<toaster-container [toasterconfig]="toasterconfig"></toaster-container>

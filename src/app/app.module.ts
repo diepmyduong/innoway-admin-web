@@ -49,6 +49,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 import Raven = require('raven-js');
 import { AgmCoreModule } from "@agm/core";
 import { AccordionModule } from "ngx-bootstrap/accordion";
+import { environment } from "environments";
 
 Raven
   .config('https://997c474fe1004e2da0f34f05c79c540e@sentry.io/278600')
@@ -57,7 +58,9 @@ Raven
 export class RavenErrorHandler implements ErrorHandler {
   handleError(err: any): void {
     Raven.captureException(err.originalError || err);
-    console.error(err)
+    // if (!environment.production) {
+    //   console.error(err)
+    // }
   }
 }
 

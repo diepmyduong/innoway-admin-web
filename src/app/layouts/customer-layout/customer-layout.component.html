@@ -4,12 +4,7 @@
     <div class="logo-wrapper"><img id="logo" src="../../assets/img/logo-white.svg"/></div>
   </a>
   <ul class="nav navbar-nav mr-auto">
-    <!-- <li class="nav-item hidden-md-down">
-      <a class="nav-link navbar-toggler sidebar-toggler" href="javascript:;"><i class="material-icons">keyboard_arrow_left</i></a>
-    </li> -->
 
-
-    <!-- USER AVATAR AND NAME -->
     <li class="nav-item dropdown" dropdown placement="bottom" id="accountDropdownMenu">
       <button class="nav-link nav-pill avatar dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
         <div *ngIf="!employee.avatar" >{{employee.fullname[0]}}</div>
@@ -30,38 +25,63 @@
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-bell-o" aria-hidden="true"></i><span class="badge badge-pill badge-danger">5</span>
-          </a>
-      <ul class="dropdown-menu" aria-labelledby="accountDropdownMenu">
-        <li class="dropdown-item"><i class="fa fa-user"></i> Đơn hàng chờ duyệt</li>
-        <li class="dropdown-item"><i class="fa fa-wrench"></i> Đơn hàng chờ thu phí</li>
-        <li class="dropdown-item"><i class="fa fa-shield"></i> Đơn hàng báo huỷ</li>
-      </ul>
-    </li>
-
-    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
-      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-commenting-o"></i>
+              <i class="fa fa-cog" matTooltip="Thiết lập" matTooltipPosition="above" (click)="goToSettingLayout()"></i>
           </a>
     </li>
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="icon-settings"></i>
+              <i class="fa fa-dashboard" matTooltip="Trang điều phối" matTooltipPosition="above" (click)="goToDashboardLayout()"></i>
           </a>
     </li>
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-power-off"></i>
+              <i class="fa fa-user-secret" matTooltip="Trang nhân viên" matTooltipPosition="above" (click)="goToEmployeeLayout()"></i>
+          </a>
+    </li>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-users" matTooltip="Trang người dùng" matTooltipPosition="above" (click)="goToCustomerLayout()"></i>
+          </a>
+    </li>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-dropbox" matTooltip="Sản phẩm" matTooltipPosition="above" (click)="goToProductLayout()"></i>
+          </a>
+    </li>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-gift" matTooltip="Khuyến mãi" matTooltipPosition="above" (click)="goToPromotionLayout()"></i>
+          </a>
+    </li>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-dollar" matTooltip="Đơn hàng" matTooltipPosition="above" (click)="goToBillLayout()"></i>
+          </a>
+    </li>
+
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+      <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+              <i class="fa fa-product-hunt" matTooltip="POS" matTooltipPosition="above" (click)="goToPOSLayout()"></i>
           </a>
     </li>
   </ul>
-  <ul class="nav navbar-nav ml-auto hidden-md-down">
-        <li class="nav-item">
-          <a class="nav-link navbar-toggler aside-menu-toggler" href="javascript:;"><i class="material-icons">menu</i></a>
-        </li>
-  </ul>
+
+  <li class="right-dropdown nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)" style="margin-right:2rem !important;">
+    <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+            <i class="fa fa-server" aria-hidden="true" matTooltip="Dịch vụ công nghệ khác" matTooltipPosition="above"></i><span class="badge badge-pill badge-danger">5</span>
+        </a>
+    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownMenu">
+      <li class="thirdparty-dropdown-item" *ngFor="let item of thirdparty">
+        <a class="nav-link" href="javascript:;"><img src="{{item.url}}"/>{{item.name}}</a>
+      </li>
+    </ul>
+  </li>
 </header>
 
 <div class="app-body">
@@ -93,10 +113,7 @@
     </nav>
   </div>
 
-  <!-- Main content -->
   <main class="main">
-
-    <!-- Breadcrumb -->
     <ol class="breadcrumb">
       <breadcrumbs></breadcrumbs>
     </ol>
@@ -104,12 +121,9 @@
     <div class="container-fluid">
       <router-outlet></router-outlet>
     </div>
-    <!-- /.conainer-fluid -->
-
-
   </main>
 
-  <aside class="aside-menu">
+  <aside class="aside-menu" [hidden]="true">
     <tabset>
       <tab>
         <ng-template tabHeading><i class="icon-list"></i></ng-template>
@@ -182,8 +196,8 @@
 </div>
 
 <footer class="app-footer" (click)="showSuccess()">
-  <a href="#">Innoway</a> &copy; 2017
-  <span class="float-right">Powered by <a href="#">Innoway</a>
+  <a href="#">MCOM</a> &copy; 2018
+  <span class="float-right">Powered by <a href="#">MCOM</a>
   </span>
 </footer>
 

@@ -149,10 +149,12 @@ export class Globals {
     {
       code: "MCOM",
       name: "Nhân viên giao hàng"
-    }, {
-      code: "UBER_DELIVER",
-      name: "UBER Deliver"
-    }, {
+    }
+    //, {
+    //   code: "UBER_DELIVER",
+    //   name: "UBER Deliver"
+    // }
+    , {
       code: "GHN",
       name: "Giao hàng nhanh",
     }, {

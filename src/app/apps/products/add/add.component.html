@@ -67,27 +67,6 @@
               </div>
             </div>
           </div>
-          <div class="col-md-12" [hidden]="true">
-            <div class="card n-mb-card">
-              <div class="card-header">
-                Mã sản phẩm
-              </div>
-              <div class="card-block">
-                <div class="form-group row">
-                  <label class="col-md-2 header-text" for="text-input">SKU</label>
-                  <div class="col-md-10">
-                    <input type="text" name="text-input" class="form-control input-control" placeholder="SKU">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label class="col-md-2 header-text" for="text-input">Barcode</label>
-                  <div class="col-md-10">
-                    <input type="text" name="text-input" class="form-control input-control" placeholder="Barcode">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <div class="col-md-12">
             <div class="card n-mb-card">
@@ -165,6 +144,29 @@
                 Hình ảnh
                 <button type="submit" class="btn btn-sm btn-primary float-right" (click)="addImage()"> Thêm</button>
               </div>
+              <div class="card-block" *ngIf="falseococo">
+                <div class="form-group row">
+                  <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
+                  <div class="col-md-10">
+                    <div class="input-group">
+                      <input type="file" name="file-input" #fileUploader (change)="onChangeImageFile($event)" [style.display]="'none'">
+                      <input type="text" #imageControl="ngModel" [(ngModel)]="image" (input)="onImageChangeData($event.target.value)" name="image" url class="form-control input-control" [placeholder]="image?'':'Nhập url'" />
+                      <span class="input-group-append">
+                        <button type="button" class="btn btn-ladda ladda-button btn-primary" (click)="fileUploader.click()"
+                        data-style="contract-overlay" style="z-index: 10;">
+                          <span class="ladda-label">Đăng ảnh</span>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="offset-md-2 col-md-10" *ngIf="previewImage">
+                    <span class="image-wrapper" *ngIf="previewImage">
+                      <img class="close-btn" [attr.src]="closeImage" (click)="removeImage()" />
+                      <img id="preview-image" *ngIf="fileUploader.value || imageControl.value" [src]="previewImage" (error)="this.previewImage = this.errorImage" />
+                    </span>
+                  </div>
+                </div>
+              </div>
               <div class="card-block">
                 <small *ngIf="list_image == null || list_image.length == 0" class="text-muted danger">
                   Chưa có hình ảnh
@@ -225,19 +227,6 @@
                     <app-topping-detail [topping]="getTopping(item.id)" [price]="price" *ngFor="let item of toppingSelecter.active"></app-topping-detail>
                   </div>
                 </div>
-                <!-- <div class="form-group row remove-pb" *ngFor="let item of toppingSelecter.active" [hidden]="toppings!=null?false:true">
-                  <pre>{{item | json}}</pre>
-                  <label class="col-md-2 sub-header-text">{{item.src.name}}<span *ngIf="item.src.description" class="color-primary"> ({{item.src.description}})</span></label>
-                    <div class="col-md-12" *ngIf="item.src.values">
-                      <div class="row remove-pb">
-                        <div class="col-md-2" *ngFor="let value of item.src.values">
-                          <label class="checkbox-inline" for="inline-checkbox1">
-                            <i class="icon-check icons mr-h"></i> {{value.name}} <span class="color-dark">(+{{value.price | accounting}}) -> {{showPrice(value.price) | accounting}}</span>
-                        </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
               </div>
             </div>
           </div>

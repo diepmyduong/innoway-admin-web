@@ -3,7 +3,7 @@
   <tab>
     <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Cập nhật trạng thái</ng-template>
     <div class="form-group row">
-      <p class="col-4 header-text">Trạng thái đơn hàng hiện tại</p>
+      <p class="col-4 header-text">Trạng thái đơn hàng</p>
       <div class="col-8">
         <span><strong>{{globals.detectBillActivityByCode(currentActivity)}}</strong></span>
       </div>
@@ -12,20 +12,30 @@
       <p class="col-4 header-text" *ngIf="billActivity">Trạng thái đơn hàng</p>
       <div class="col-8">
         <select #billActivityControl [(ngModel)]="billActivity" class="select-control form-control" (ngModelChange)="changeBillActivity($event)">
-    <option *ngFor="let e of billActivities" [value]="e.code">
-      {{ e.name }}
-    </option>
-  </select>
+          <option *ngFor="let e of billActivities" [value]="e.code">
+            {{ e.name }}
+        </option>
+      </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <p class="col-4 header-text" *ngIf="billActivity">Nhân viên phụ trách</p>
+      <div class="col-8">
+        <select [(ngModel)]="employee" class="select-control form-control">
+          <option *ngFor="let e of employees" [value]="e.id">
+            {{ e.fullname }}
+          </option>
+        </select>
       </div>
     </div>
     <div class="form-group row" *ngIf="isShowThirdparty">
       <p class="col-4 header-text">Đối tác giao nhận</p>
       <div class="col-8">
         <select [(ngModel)]="thirdparty" class="select-control form-control" (ngModelChange)="changeThirdpartyActivity($event)">
-    <option *ngFor="let e of thirdparties" [value]="e.code">
-      {{ e.name }}
-    </option>
-  </select>
+          <option *ngFor="let e of thirdparties" [value]="e.code">
+            {{ e.name }}
+          </option>
+        </select>
       </div>
     </div>
     <div class="form-group row" *ngIf="isShowThirdparty && isShowAddress">
@@ -35,19 +45,19 @@
       </div>
     </div>
     <div class="form-group row" *ngIf="isShowThirdparty && isShowWeight">
-      <p class="col-4 header-text">Khối lượng</p>
+      <p class="col-4 header-text">Khối lượng (gram)</p>
       <div class="col-8">
         <input type="text" [(ngModel)]="weightBillActivity" class="input-control form-control" placeholder="Nhập khối lượng">
       </div>
     </div>
-    <div class="form-group row">
-      <p class="col-4 header-text" *ngIf="billActivity">Nhân viên phụ trách</p>
+    <div class="form-group row" *ngIf="isShowThirdparty && isShowWeight">
+      <p class="col-4 header-text">Ghi chú giao hàng:</p>
       <div class="col-8">
-        <select [(ngModel)]="employee" class="select-control form-control">
-    <option *ngFor="let e of employees" [value]="e.id">
-      {{ e.fullname }}
-    </option>
-  </select>
+        <select [(ngModel)]="noteCode" class="select-control form-control">
+          <option *ngFor="let noteCode of noteCodes" [value]="noteCode.code">
+            {{ noteCode.name }}
+          </option>
+        </select>
       </div>
     </div>
     <div class="form-group row">
@@ -58,8 +68,8 @@
     </div>
     <div style="padding-bottom:20px;text-align:center;" *ngIf="error!=null">
       <small class="text-muted danger">
-    {{error}}
-  </small>
+        {{error}}
+      </small>
     </div>
     <div class="bottom-btn-group">
       <button class="btn-confirm btn btn-md" [disabled]="!isValid" [mat-dialog-close]="info" (click)="confirmBillStatus()">{{data.button_yes}}</button>

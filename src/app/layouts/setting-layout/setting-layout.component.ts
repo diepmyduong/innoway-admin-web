@@ -161,4 +161,75 @@ export class SettingLayoutComponent implements OnInit {
     },
   ];
 
+
+  thirdparty = [
+    {
+      name: "Giao hàng tiết kiệm",
+      code: "GHTK",
+      type: "ship",
+      url: "https://i.imgur.com/7VvbMLT.png",
+      link: ""
+    },
+    {
+      name: "Giao hàng nhanh",
+      code: "GHN",
+      type: "ship",
+      url: "https://i.imgur.com/Pj6j4PM.png",
+      link: ""
+    },
+    {
+      name: "KiotViet",
+      code: "KIOTVIET",
+      type: "data",
+      url: "https://i.imgur.com/TwRwpNh.png",
+      link: ""
+    },
+    {
+      name: "Haravan",
+      code: "HARAVAN",
+      type: "data",
+      url: "https://i.imgur.com/yMSgiNK.png",
+      link: ""
+    },
+    {
+      name: "MCOM Bot",
+      code: "MCOM",
+      type: "bot",
+      url: "https://i.imgur.com/7JRFS05.png",
+      link: ""
+    }
+  ]
+
+  goToDashboardLayout() {
+    this.router.navigate(['/dashboard-layout'], { relativeTo: this.route });
+  }
+
+  goToCustomerLayout() {
+    this.router.navigate(['/customer-layout'], { relativeTo: this.route });
+  }
+
+  goToEmployeeLayout() {
+    this.router.navigate(['/employee-layout'], { relativeTo: this.route });
+  }
+
+  goToProductLayout() {
+    this.router.navigate(['/product-layout'], { relativeTo: this.route });
+  }
+
+  goToPromotionLayout() {
+    this.router.navigate(['/promotion-layout'], { relativeTo: this.route });
+  }
+
+  goToBillLayout() {
+    this.router.navigate(['/bill-layout'], { relativeTo: this.route });
+  }
+
+  goToSettingLayout() {
+    this.router.navigate(['/setting-layout'], { relativeTo: this.route });
+  }
+
+  goToPOSLayout() {
+    this.router.navigate(['/pos'], { relativeTo: this.route });
+  }
+
 }

@@ -161,44 +161,18 @@ export class Bill extends CrudAPI<iBill> {
               employee_id: params.employeeId,
               note: params.note,
               type: "GHN",
-              PaymentTypeID: params.PaymentTypeID,
-              FromDistrict: params.FromDistrict,
-              ToDistrict: params.ToDistrict,
-              Note: params.Note,
-              SealCode: params.SealCode,
-              ExternalCode: params.ExternalCode,
-              ClientContactName: params.ClientContactName,
-              ClientContactPhone: params.ClientContactPhone,
-              ClientAddress: params.ClientAddress,
-              CustomerName: params.CustomerName,
-              CustomerPhone: params.CustomerPhone,
-              ShippingAddress: params.ShippingAddress,
-              CoDAmount: params.CoDAmount,
-              NoteCode: params.NoteCode,
-              InsuranceFee: params.InsuranceFee,
-              ClientHubID: params.ClientHubID,
-              ToLatitude: params.ToLatitude,
-              ToLongitude: params.ToLongitude,
-              IsSmsSent: params.IsSmsSent,
-              FromLat: params.FromLat,
-              FromLng: params.FromLng,
-              Content: params.Content,
-              CouponCode: params.CouponCode,
-              Weight: params.Weight,
-              Length: params.Length,
-              Width: params.Width,
-              Height: params.Height,
-              CheckMainBankAccount: params.CheckMainBankAccount,
-              ReturnContactName: params.ReturnContactName,
-              ReturnContactPhone: params.ReturnContactPhone,
-              ReturnAddress: params.ReturnAddress,
-              ReturnDistrictCode: params.ReturnDistrictCode,
-              ExternalReturnCode: params.ExternalReturnCode,
-              IsCreditCreate: params.IsCreditCreate,
-              FromWardCode: params.FromWardCode,
-              ToWardCode: params.ToWardCode,
-              AffiliateID: params.AffiliateID,
-              ShippingOrderCosts: params.ShippingOrderCosts
+              data: {
+                pick_address: {
+                  longitude: params.data.pick_address.longitude,
+                  latitude: params.data.pick_address.latitude
+                },
+                receive_address: {
+                  longitude: params.data.receive_address.longitude,
+                  latitude: params.data.receive_address.latitude
+                },
+                total_weight: params.data.total_weight,
+                note_code: params.data.note_code
+              }
             }
             break;
           }
@@ -207,21 +181,17 @@ export class Bill extends CrudAPI<iBill> {
               employee_id: params.employeeId,
               note: params.note,
               type: "GHTK",
-              products: params.products,
-              order: {
-                id: billId,
-                pick_name: params.pick_name,
-                pick_address: params.pick_address,
-                pick_province: params.pick_province,
-                pick_district: params.pick_district,
-                pick_tel: params.pick_tel,
-                tel: params.tel,
-                name: params.name,
-                address: params.address,
-                province: params.province,
-                district: params.district,
-                pick_date: params.pick_date, //yyyy-mm-dd
-                pick_money: params.pick_money
+              data:{
+                pick_address: {
+                  longitude: params.data.pick_address.longitude,
+                  latitude: params.data.pick_address.latitude
+                },
+                receive_address: {
+                  longitude: params.data.receive_address.longitude,
+                  latitude: params.data.receive_address.latitude
+                },
+                total_weight: params.data.total_weight,
+                note_code: params.data.note_code
               }
             }
             break;
@@ -231,11 +201,6 @@ export class Bill extends CrudAPI<iBill> {
               employee_id: params.employeeId,
               note: params.note,
               type: "UBER_DELIVER",
-              // start_latitude: params.start_latitude,
-              // start_longitude: params.start_longitude,
-              // end_latitude: params.end_latitude,
-              // end_longitude: params.end_longitude,
-              // user_token: params.user_token
               data: {
                 pick_address: {
                   longitude: params.data.pick_address.longitude,

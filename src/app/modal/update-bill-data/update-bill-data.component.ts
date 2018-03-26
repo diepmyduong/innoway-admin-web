@@ -53,8 +53,23 @@ export class UpdateBillDataDialog implements OnInit {
   isShowEmployee: boolean = true
   isShowThirdparty: boolean = false
 
+  noteCode: string
+
   @ViewChild("addressInput")
   searchElementRef: ElementRef;
+  noteCodes = [
+    {
+      name: "Cho xem hàng, không thử",
+      code: "CHOXEMHANGKHONGTHU"
+    },
+    {
+      name: "Cho thử hàng",
+      code: "CHOTHUHANG"
+    }, {
+      name: "Không cho xem hàng",
+      code: "KHONGCHOXEMHANG"
+    }
+  ]
 
   constructor(
     public dialogRef: MatDialogRef<UpdateBillDataDialog>,
@@ -67,7 +82,6 @@ export class UpdateBillDataDialog implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.data);
 
     this.subFee = this.data.subFee;
     this.subFeeNote = this.data.subFeeNote;
@@ -76,6 +90,12 @@ export class UpdateBillDataDialog implements OnInit {
     this.currentActivity = this.data.activity ? this.data.activity : this.globals.BILL_ACTIVITIES[0].code;
     this.billActivities = [];
     this.note = this.data.note;
+
+    if (this.data.branch) {
+      this.address = this.data.branch.address
+      this.longitude = this.data.branch.longitude
+      this.latitude = this.data.branch.latitude
+    }
 
     let options = this.globals.avaibleBillActivityOption(this.currentActivity);
 
@@ -87,6 +107,8 @@ export class UpdateBillDataDialog implements OnInit {
 
     this.thirdparties = this.globals.SHIPMENT_THIRD_PARTIES
     this.thirdparty = "MCOM"
+
+    this.noteCode = this.noteCodes[0].code
 
     this.validateInputData();
     this.changeBillActivity(this.billActivity);
@@ -190,11 +212,12 @@ export class UpdateBillDataDialog implements OnInit {
     this.info["billActivity"] = this.billActivity;
     this.info["employee"] = this.employee;
     this.info["noteBillActivity"] = this.noteBillActivity;
-    this.info["weight"] = this.weightBillActivity;
+    this.info["total_weight"] = this.weightBillActivity;
     this.info["thirdparty"] = this.thirdparty;
     this.info["longitude"] = this.longitude
     this.info["latitude"] = this.latitude
     this.info["address"] = this.address
+    this.info["note_code"] = this.noteCode
   }
 
   confirmSubFee() {

@@ -8,7 +8,7 @@
       <div class="card-block">
         <div class="row">
           <div class="col-md-2 item" *ngFor="let item of data.feature; let i = index" id="{{item.id}}" [routerLink]="item.link" style="cursor: pointer">
-            <img src="{{item.icon}}" matTooltip="{{item.hint}}" matTooltipPosition="above" />
+            <img src="{{item.icon}}" matTooltip="{{item.hint}}" matTooltipPosition="above"/>
             <label class="header-text">{{item.title}}</label>
           </div>
         </div>
