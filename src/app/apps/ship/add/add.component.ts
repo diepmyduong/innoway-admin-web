@@ -487,4 +487,46 @@ export class AddComponent implements OnInit, AddPageInterface {
     console.log('enableVideo result: ' + success);
   }
 
+  haravanAPIKey: string
+  haravanPassword: string
+  haravanSharedSecret: string
+  haravanAddress: string
+
+  kiotVietClientId: string
+  kiotVietClientSecret: string
+  kiotVietRetailer: string
+
+  async connectHaravan() {
+    try {
+      let response = await this.innowayApi.thirdpartyHaravan.connect({
+        api_key: this.haravanAPIKey,
+        password: this.haravanPassword,
+        shared_secret: this.haravanSharedSecret,
+        address: this.haravanAddress
+      })
+    } catch (err) {
+      console.log("connectHaravan", err)
+    }
+  }
+
+  async disconnectHaravan(){
+    try {
+      let response = await this.innowayApi.thirdpartyHaravan.disconnect()
+    } catch (err) {
+      console.log("disconnectHaravan", err)
+    }
+  }
+
+  async connectKiotViet() {
+    try {
+      let response = await this.innowayApi.thirdpartyKiotViet.connect({
+        client_id: this.kiotVietClientId,
+        client_secret: this.kiotVietClientSecret,
+        retailer: this.kiotVietRetailer,
+      })
+    } catch (err) {
+      console.log("connectKiotViet", err)
+    }
+  }
+
 }

@@ -61,30 +61,30 @@
         <label class="col-md-2 header-text" for="select">Lấy hàng tại cửa hàng</label>
         <div class="col-md-10">
           <select #pickAtStoreControl="ngModel" [(ngModel)]="allow_pick_at_store" name="allow_pick_at_store" class="form-control input-control">
-                      <option *ngFor="let v of [true,false]" [value]="v">
-                        {{ v===true?"Kích hoạt":"Không kích hoạt"}}
-                      </option>
-                    </select>
+            <option *ngFor="let vtrue,false]" [value]="v">
+              {{ v===true?"Kích hoạt":"Không kích hoạt"}}
+            </option>
+          </select>
         </div>
       </div>
       <div class="form-group row">
         <label class="col-md-2 header-text" for="text-input">Giao hàng</label>
         <div class="col-md-10">
           <select #shipControl="ngModel" [(ngModel)]="allow_ship" name="allow_ship" class="form-control input-control">
-                      <option *ngFor="let v of [true,false]" [value]="v">
-                        {{ v===true?"Kích hoạt":"Không kích hoạt"}}
-                      </option>
-                    </select>
+            <option *ngFor="let v of [true,false]" [value]="v">
+              {{ v===true?"Kích hoạt":"Không kích hoạt"}}
+            </option>
+          </select>
         </div>
       </div>
       <div class="form-group row">
         <label class="col-md-2 header-text" for="text-input">Hình thức giao hàng</label>
         <div class="col-md-10">
           <select #shipMethodControl="ngModel" [(ngModel)]="ship_method" name="ship_method" class="form-control input-control">
-                      <option *ngFor="let v of ship_methods" [value]="v.code">
-                        {{ v.name }}
-                      </option>
-                    </select>
+            <option *ngFor="let v of ship_methods" [value]="v.code">
+              {{ v.name }}
+            </option>
+          </select>
         </div>
       </div>
       <div class="form-group row">
@@ -94,13 +94,75 @@
         </div>
       </div>
       <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'>
-                Cập nhật và thoát
-              </button>
+        Cập nhật và thoát
+      </button>
     </accordion-group>
     <accordion-group heading="UBER DELIVER">
       <button (click)="connectUber()" *ngIf="isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'>
       Kết nối Uber
       </button>
+    </accordion-group>
+    <accordion-group heading="HARAVAN">
+      <tabset #staticTabs>
+        <!-- api_key, password, shared_secret, address  -->
+        <tab heading="Đăng nhập">
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">API Key:</label>
+            <div class="col-md-10">
+              <input type="text" #haravanAPIKeyControl="ngModel" [(ngModel)]="haravanAPIKey" name="haravanAPIKey" class="form-control input-control" [placeholder]="'API Key'" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Password:</label>
+            <div class="col-md-10">
+              <input type="text" #haravanPasswordControl="ngModel" [(ngModel)]="haravanPassword" name="haravanPassword" class="form-control input-control" [placeholder]="'Password'" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Share Secret:</label>
+            <div class="col-md-10">
+              <input type="text" #haravanShareSecretControl="ngModel" [(ngModel)]="haravanShareSecret" name="haravanShareSecret" class="form-control input-control" [placeholder]="'Share Secret'" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Address:</label>
+            <div class="col-md-10">
+              <input type="text" #haravanAddressControl="ngModel" [(ngModel)]="haravanAddress" name="haravanAddress" class="form-control input-control" [placeholder]="'Address'" />
+            </div>
+          </div>
+          <button (click)="connectHaravan()" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'>
+          Đăng nhập
+          </button>
+        </tab>
+      </tabset>
+    </accordion-group>
+    <accordion-group heading="KiotViet">
+      <tabset #staticTabs>
+        <!-- client_id, client_secret, retailer  -->
+        <tab heading="Đăng nhập">
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Client Id:</label>
+            <div class="col-md-10">
+              <input type="text" #kiotVietClientIdControl="ngModel" [(ngModel)]="kiotVietClientId" name="kiotVietClientId" class="form-control input-control" [placeholder]="'Client Id'" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Client Secret:</label>
+            <div class="col-md-10">
+              <input type="text" #kiotVietClientSecretControl="ngModel" [(ngModel)]="kiotVietClientSecret" name="kiotVietClientSecret" class="form-control input-control" [placeholder]="'Client Secret'" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Retailer:</label>
+            <div class="col-md-10">
+              <input type="text" #kiotVietRetailerControl="ngModel" [(ngModel)]="kiotVietRetailer" name="kiotVietRetailer" class="form-control input-control" [placeholder]="'Retailer'" />
+            </div>
+          </div>
+          <button (click)="connectKiotViet()" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'>
+          Đăng nhập
+          </button>
+        </tab>
+      </tabset>
     </accordion-group>
     <accordion-group heading="GIAO HÀNG NHANH">
       <tabset #staticTabs>
@@ -202,7 +264,7 @@
         </tab>
       </tabset>
     </accordion-group>
-    <accordion-group>
+    <accordion-group heading="Stringee">
       <div>
         <input id="callTo" type="text" name="toUsername" style="width: 200px;" placeholder="Call username" value="uyminh">
 

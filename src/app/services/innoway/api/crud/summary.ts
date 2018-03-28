@@ -13,14 +13,6 @@ export class Summary extends CrudAPI<iSummary> {
     super(api, 'summary')
   }
 
-  // {
-  // "start_time": "2017-10-12",
-  // "end_time": "2018-12-24",
-  // "product_type_id": "b134ee80-e6fd-11e7-8421-6f061557e745",
-  // "category_id": "64fcfa90-c910-11e7-bef9-95083867c1ab",
-  // "is_show_branch": true
-  // }
-
   async summaryProduct(params: {
     start_time: string,
     end_time: string,

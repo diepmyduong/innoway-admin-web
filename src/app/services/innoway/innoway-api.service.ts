@@ -52,6 +52,7 @@ import { ThirdpartyKiotViet } from "./api/crud/thirdparty-kiotviet";
 import { ThirdpartyShipper } from "./api/crud/thirdparty-shipper";
 import { McomManager } from "./api/crud/mcom-manager";
 import { McomManagerType } from "./api/crud/mcom-manager-type";
+import { ThirdpartyHaravan } from "app/services/innoway/api/crud/thirdparty-haravan";
 
 @Injectable()
 export class InnowayApiService {
@@ -104,18 +105,19 @@ export class InnowayApiService {
   ticketType = new TicketType(this)
   ticketComment = new TicketComment(this)
 
-  shipment=new Shipment(this)
-  shipmentDetail=new ShipmentDetail(this)
-  shipmentArea=new ShipmentArea(this)
+  shipment = new Shipment(this)
+  shipmentDetail = new ShipmentDetail(this)
+  shipmentArea = new ShipmentArea(this)
 
-  thirdpartyGHNHub=new ThirdpartyGHNHub(this)
-  thirdpartyGHNOrder=new ThirdpartyGHNOrder(this)
-  thirdpartyGHNService=new ThirdpartyGHNService(this)
+  thirdpartyGHNHub = new ThirdpartyGHNHub(this)
+  thirdpartyGHNOrder = new ThirdpartyGHNOrder(this)
+  thirdpartyGHNService = new ThirdpartyGHNService(this)
 
-  thirdpartyKiotViet =new ThirdpartyKiotViet(this)
+  thirdpartyKiotViet = new ThirdpartyKiotViet(this)
+  thirdpartyHaravan = new ThirdpartyHaravan(this)
 
-  thirdpartyShipper=new ThirdpartyShipper(this)
+  thirdpartyShipper = new ThirdpartyShipper(this)
 
-  mcomManager=new McomManager(this)
-  mComManagerType=new McomManagerType(this)
+  mcomManager = new McomManager(this)
+  mComManagerType = new McomManagerType(this)
 }
