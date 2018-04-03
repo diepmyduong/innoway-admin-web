@@ -104,6 +104,7 @@ export class AddComponent implements OnInit {
     if (this.isEdit) {
       this.setData();
     }
+
   }
 
   ngOnDestroy() {

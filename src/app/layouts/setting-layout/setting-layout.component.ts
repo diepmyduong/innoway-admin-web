@@ -102,23 +102,6 @@ export class SettingLayoutComponent implements OnInit {
       link: "./settings/theme",
       icon: 'fa fa-adjust',
     },
-    // {
-    //   type: 'parent',
-    //   name: 'Thời gian làm việc',
-    //   icon: 'fa fa-clock-o',
-    //   children: [
-    //     {
-    //       name: 'Thêm',
-    //       link: "./schedule/add",
-    //       icon: 'fa fa-plus'
-    //     },
-    //     {
-    //       name: 'Danh sách',
-    //       link: "./schedule/list",
-    //       icon: 'fa fa-list-ul'
-    //     }
-    //   ]
-    // },
     {
       type: 'parent',
       name: 'Khu vực',
@@ -158,6 +141,33 @@ export class SettingLayoutComponent implements OnInit {
       name: 'Kết nối chatbot',
       link: "./integration/chatbot",
       icon: 'fa fa-dot-circle-o',
+    },
+    {
+      type: 'parent',
+      name: 'Kết nối thirdparty',
+      icon: 'fa fa-usd',
+      children: [
+        {
+          name: 'Haravan',
+          link: "./integration/haravan",
+          icon: 'fa fa-edit'
+        },
+        {
+          name: 'KiotViet',
+          link: "./integration/kiotviet",
+          icon: 'fa fa-edit'
+        },
+        {
+          name: 'Giao hàng nhanh',
+          link: "./integration/giaohanhnhanh",
+          icon: 'fa fa-edit'
+        },
+        {
+          name: 'Giao hàng tiết kiệm',
+          link: "./integration/ghtk",
+          icon: 'fa fa-edit'
+        },
+      ]
     },
   ];
 
