@@ -25,6 +25,7 @@ import { AgmCoreModule } from "@agm/core";
 
 import { FroalaComponent } from "app/editor/froala.component";
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { MessageSettingComponent } from "app/apps/settings/message-setting/message-setting.component";
 
 @NgModule({
   imports: [
@@ -48,6 +49,6 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
       libraries: ["places,drawing"]
     }),
   ],
-  declarations: [SettingsComponent, AreaComponent, ScheduleComponent, ChatbotComponent, SellComponent, ConfigComponent, ThemeComponent],
+  declarations: [SettingsComponent, AreaComponent, ScheduleComponent, ChatbotComponent, SellComponent, ConfigComponent, ThemeComponent, MessageSettingComponent],
 })
 export class SettingsModule { }

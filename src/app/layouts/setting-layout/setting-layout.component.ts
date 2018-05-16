@@ -103,6 +103,12 @@ export class SettingLayoutComponent implements OnInit {
       icon: 'fa fa-adjust',
     },
     {
+      type: 'single',
+      name: 'Trạng thái',
+      link: "./settings/message",
+      icon: 'fa fa-calendar',
+    },
+    {
       type: 'parent',
       name: 'Khu vực',
       icon: 'fa fa-location-arrow',
@@ -159,7 +165,7 @@ export class SettingLayoutComponent implements OnInit {
         },
         {
           name: 'Giao hàng nhanh',
-          link: "./integration/giaohanhnhanh",
+          link: "./integration/ghn",
           icon: 'fa fa-edit'
         },
         {

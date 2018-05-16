@@ -242,11 +242,6 @@ export class AddComponent implements OnInit {
         local: false, reload: true, query: {
           fields: ["$all", {
             toppings: ["id", "topping_id"]
-            // {
-            //   topping: ["id", "description", "name", {
-            //     values: ["$all"]
-            //   }]
-            // }]
           }]
         }
       })

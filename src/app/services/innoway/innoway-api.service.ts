@@ -53,6 +53,10 @@ import { ThirdpartyShipper } from "./api/crud/thirdparty-shipper";
 import { McomManager } from "./api/crud/mcom-manager";
 import { McomManagerType } from "./api/crud/mcom-manager-type";
 import { ThirdpartyHaravan } from "app/services/innoway/api/crud/thirdparty-haravan";
+import { AutoBillStatusSetting } from "app/services/innoway/api/crud/auto-bill-status-setting";
+import { VNPay } from "app/services/innoway/api/crud/vnpay";
+import { Blog } from "app/services/innoway/api/crud/blog";
+import { BlogType } from "app/services/innoway/api/crud/blog-type";
 
 @Injectable()
 export class InnowayApiService {
@@ -120,4 +124,11 @@ export class InnowayApiService {
 
   mcomManager = new McomManager(this)
   mComManagerType = new McomManagerType(this)
+
+  autoBillStatusSetting = new AutoBillStatusSetting(this)
+
+  vnpay = new VNPay(this)
+
+  blog = new Blog(this)
+  blogType = new BlogType(this)
 }

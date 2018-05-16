@@ -14,7 +14,7 @@ const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Blog'
+      title: 'tin tức'
     },
     children:[
       {
@@ -22,6 +22,13 @@ const routes: Routes = [
         component: AddComponent,
         data: {
           title: "Thêm"
+        }
+      },
+      {
+        path: 'add/:id',
+        component: AddComponent,
+        data: {
+          title: "Chỉnh sửa"
         }
       },
       {

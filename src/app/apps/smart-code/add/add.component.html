@@ -39,6 +39,17 @@
               </div>
             </div>
             <div class="form-group row">
+              <label class="col-md-2 header-text" for="select">Bot App</label>
+              <div class="col-md-10">
+                <select #promotionControl="ngModel" [(ngModel)]="botApp" name="botApp" class="form-control input-control">
+                    <option value="null" disabled="true" [selected]="true">Chọn loại bot app</option>
+                    <option *ngFor="let v of botApps | async" [value]="v.id">
+                      {{v.facebook_name}}
+                    </option>
+                  </select>
+              </div>
+            </div>
+            <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Thời gian bắt đầu</label>
               <div class="col-md-10">
                 <input type="text" #startTimeControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="startTime" name="startTime" class="form-control input-control" [placeholder]="'Nhập ngày bắt đầu'" [readonly]="isSelectedPromotion" required>

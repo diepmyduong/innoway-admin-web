@@ -36,11 +36,11 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
   }
 
   async disconnect(params: {
-    app_id: string,
-    app_secret: string,
+    // app_id: string,
+    // app_secret: string,
     thirdparty_chatbot_id: string
   }) {
-    let { app_id, app_secret, thirdparty_chatbot_id } = params;
+    let { thirdparty_chatbot_id } = params;//app_id, app_secret,
     let setting = {
       method: 'POST',
       uri: this.apiUrl(`disconnect_chatbot`),
@@ -49,7 +49,7 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
         'access_token': this.api.innowayAuth.adminToken
       },
       json: true,
-      body: { app_id, app_secret, thirdparty_chatbot_id }
+      body: { thirdparty_chatbot_id }//app_id, app_secret,
     }
     var res: any = await this.exec(setting);
     var row = res.results.object;
@@ -134,6 +134,91 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
       },
       json: true,
       body: { story_id, thirdparty_chatbot_id, send_by, send_to }
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
+
+  // {
+  //   "send_by": "all",
+  //   "send_to": [
+  //
+  //       "5a55a0eeff3f8cf2823b9b4f"
+  //     ],
+  //     "thirdparty_chatbot_id": "a5e08710-4940-11e8-bb1d-cb51287711c8",
+  //   "type": "new_story",
+  //   "stories": [
+  //       {
+  //         "type": "generic",
+  //         "option": {
+  //           "attachment": {
+  //             "type": "template",
+  //             "payload": {
+  //               "template_type": "button",
+  //               "text": "Bạn có thể thực hiện thanh toán online thông qua nút 'Thanh toán online' bên dưới hoặc đóng tiền tại bệnh viện khi đến khám bệnh. Cám ơn.",
+  //               "buttons": [
+  //                 {
+  //                   "type": "web_url",
+  //                   "url": "https://pay.vnpay.vn/vpcpay.html?vnp_Amount=1000000&vnp_BankCode=VISA&vnp_Command=pay&vnp_CreateDate=20180426110435&vnp_CurrCode=VND&vnp_IpAddr=58.186.6.44%2C%20172.31.94.172&vnp_Locale=vn&vnp_OrderInfo=%7B%22brand_id%22%3A%22c5258180-483b-11e8-8dd2-1d30777df6d2%22%2C%22bill_id%22%3A%22e5f23330-4940-11e8-bb1d-cb51287711c8%22%2C%22type%22%3A%22bill%22%7D&vnp_OrderType=topup&vnp_ReturnUrl=http%3A%2F%2Fmiorder.vn%2Fapi%2Fv1%2Fvnpay%2Freturn&vnp_TmnCode=MITEK004&vnp_TxnRef=dda9afcd-de7b-2f2b-6734-ecdf9c658bf8&vnp_Version=2&vnp_SecureHashType=MD5&vnp_SecureHash=d1f706f1217fce126fef43f40e7fee24",
+  //                   "title": "Thanh toán online",
+  //                   "webview_height_ratio": "full",
+  //                   "messenger_extensions": true,
+  //                   "webview_share_button": "hide"
+  //                 }
+  //               ]
+  //             }
+  //           }
+  //         }
+  //       }
+  //   ]
+  // }
+
+  async sendButtonForPayment(params: {
+    thirdparty_chatbot_id: string,
+    subscribers: string[],
+    payment_url: string
+  }) {
+    let { thirdparty_chatbot_id, subscribers, payment_url } = params;
+    let setting = {
+      method: 'POST',
+      uri: this.apiUrl(`send`),
+      headers: {
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body:
+      {
+        "send_by": "subscriber",
+        "send_to": subscribers,
+        "thirdparty_chatbot_id": thirdparty_chatbot_id,
+        "type": "new_story",
+        "stories": [
+          {
+            "type": "generic",
+            "option": {
+              "attachment": {
+                "type": "template",
+                "payload": {
+                  "template_type": "button",
+                  "text": "Bạn có thể thực hiện thanh toán online thông qua nút 'Thanh toán online' bên dưới hoặc đóng tiền tại bệnh viện khi đến khám bệnh. Cám ơn.",
+                  "buttons": [
+                    {
+                      "type": "web_url",
+                      "url": payment_url,
+                      "title": "Thanh toán online",
+                      "webview_height_ratio": "full",
+                      "messenger_extensions": true,
+                      "webview_share_button": "hide"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
     }
     var res: any = await this.exec(setting);
     var row = res.results.object;
@@ -474,10 +559,6 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
     var res: any = await this.exec(setting);
     var row = res;
     return row;
-  }
-
-  async sendPromotionToCustomer() {
-
   }
 
   async sendBillActivityToCustomer(params: {

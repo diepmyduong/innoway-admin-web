@@ -173,6 +173,14 @@ export const FullLayoutRouting = {
       path: 'smart-code',
       loadChildren: 'app/apps/smart-code/smart-code.module#SmartCodeModule'
     },
+    {
+      path: 'blog',
+      loadChildren: 'app/apps/blog/blog.module#BlogModule'
+    },
+    {
+      path: 'blog-type',
+      loadChildren: 'app/apps/blog-type/blog-type.module#BlogTypeModule'
+    },
   ],
 
 }

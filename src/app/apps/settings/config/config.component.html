@@ -13,10 +13,10 @@
                 <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Nhập tên công ty'">
               </div>
             </div>
-            <!-- <div class="form-group row">
+            <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Logo</label>
               <div class="col-md-10">
-                <input type="text" #logoControl="ngModel" [(ngModel)]="logo" name="logo" class="form-control input-control" [placeholder]="image?'':'Nhập logo'" url required/>
+                <input type="text" #logoControl="ngModel" [(ngModel)]="logo" name="logo" class="form-control input-control" [placeholder]="logo?'':'Nhập logo'" url required/>
                 <small *ngIf="logoControl.errors?.url" class="text-muted danger">
                     (Link không hợp lệ)
                   </small>
@@ -25,13 +25,12 @@
                     </small>
                 <img *ngIf="logoControl.value && logoControl.valid" style="width:auto;height:80px;margin-top:0.25rem;" [src]="logoControl.value" />
               </div>
-            </div> -->
+            </div>
             <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Màu chủ đạo</label>
               <div class="col-md-10">
                 <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <input [(colorPicker)]="pickerColor" [style.background]="pickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event);pickerColor=$event" />
-                <!-- <input [colorPicker]="color" (colorPickerChange)="color=$event" [style.background]="color" /> -->
+                <input [(colorPicker)]="color" [style.background]="color" (colorPickerChange)="rgbaText=onChangeColorHex8($event);color=$event" />
               </div>
             </div>
             <div class="form-group row">
@@ -46,7 +45,7 @@
             <div class="form-group row">
               <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
               <div class="col-md-10">
-                <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
+                <textarea type="text" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Mô tả'" rows="5"></textarea>
               </div>
             </div>
             <div class="form-group row">
@@ -122,6 +121,12 @@
               </div>
             </div> -->
             <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Thanh toán online</label>
+              <div class="col-md-10">
+                <input type="checkbox" (change)="checkOnlinePayment($event,isOnlinePayment)" [checked]="isOnlinePayment">
+              </div>
+            </div>
+            <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Xuất hóa đơn đỏ</label>
               <div class="col-md-10">
                 <input type="text" #vatValueControl="ngModel" [(ngModel)]="vatValue" name="vatValue" class="form-control input-control" [placeholder]="'Nhập chi phí'" required>
@@ -161,8 +166,6 @@
         </div>
 
       </div>
-      <!-- /.col -->
     </div>
   </div>
-  <!--/.col-->
 </div>

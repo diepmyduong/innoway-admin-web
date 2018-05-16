@@ -4,7 +4,7 @@
       <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin đơn hàng</ng-template>
       <div class="row">
         <div class="col-md-12">
-          <span *ngIf="isOrderFromChatbot" class="float-right send-bill mr-h" (click)="sendMessageChatbot(bill)"><i class="fa fa-send-o mr-h"></i>Gửi tin nhắn</span>
+          <span *ngIf="isOrderFromChatbot" class="float-right send-bill mr-h" (click)="sendButtonPayment(bill)"><i class="fa fa-send-o mr-h"></i>Gửi tin nhắn</span>
           <span *ngIf="isOrderFromChatbot" class="float-right send-bill mr-h" (click)="sendInvoiceToCustomer(bill)"><i class="fa fa-send mr-h"></i>Gửi hóa đơn</span>
           <span *ngIf="!detectShowCancelButton(bill)" class="float-right cancel-bill mr-h" (click)="showCancelBillDialog(bill)"><i class="fa fa-remove mr-h"></i>Hủy đơn hàng</span>
           <span *ngIf="isCancel" class="float-right cancel-bill mr-h">Đơn hàng đã hủy</span>
@@ -15,7 +15,7 @@
               <div class="float-left">
                 <div>Đơn hàng: <strong>{{formatBillCode(bill.code?bill.code:"")}}</strong></div>
               </div>
-              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right" (click)="showSendStoryDialog(bill)"><i class="fa fa-print"></i> Gửi tin nhắn</a>
+              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right" (click)="sendButtonPayment(bill)"><i class="fa fa-print"></i> Gửi tin nhắn</a>
               <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right" (click)="print(bill)"><i class="fa fa-print"></i> In hóa đơn</a>
               <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right mr-h" (click)="showEditInfoDialog(bill, employee, employees)"><i class="fa fa-flag"></i> Cập nhật trạng thái</a>
               <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right mr-h" (click)="showUpdatePaidHistoryDialog(bill)"><i class="fa fa-edit"></i> Cập nhật chi phí</a>
@@ -221,7 +221,7 @@
                     <th class="text-center">Tổng tiền</th>
                     <th class="text-center">Tiền còn thiếu</th>
                     <th class="text-center">Tiền đã trả</th>
-                    <th class="text-center">Tổng tiền đã trả</th>
+                    <!-- <th class="text-center">Tổng tiền đã trả</th> -->
                     <th class="text-center">Nội dung</th>
                     <th class="text-center">Nhân viên xử lý</th>
                     <th class="text-center">Thời gian</th>
@@ -232,8 +232,8 @@
                     <td class="text-center">{{v.total_amount | accounting}}</td>
                     <td class="text-center">{{v.remain_amount | accounting}}</td>
                     <td class="text-center">{{v.pay_amount | accounting}}</td>
-                    <td class="text-center">{{v.total_remain | accounting}}</td>
-                    <td class="text-center">{{v.description?v.description:"không có"}}</td>
+                    <!-- <td class="text-center">{{v.total_remain | accounting}}</td> -->
+                    <td class="text-center">{{v.note?v.note:"không có"}}</td>
                     <td class="text-center">{{v.employee?v.employee.fullname:'không có'}}</td>
                     <td class="text-center">{{v.created_at | date:'dd/MM/yyyy HH:mm'}}</td>
                   </tr>

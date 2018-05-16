@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ChatbotComponent } from "./chatbot/chatbot.component";
 import { KiotvietComponent } from "app/apps/integration/kiotviet/kiotviet.component";
 import { HaravanComponent } from "app/apps/integration/haravan/haravan.component";
-import { GiaohangnhanhComponent } from "app/apps/integration/giaohangnhanh/giaohangnhanh.component";
+import { GiaoHangNhanhComponent } from "app/apps/integration/giaohangnhanh/giaohangnhanh.component";
 import { GhtkComponent } from "app/apps/integration/ghtk/ghtk.component";
 
 const routes: Routes = [
@@ -41,7 +41,7 @@ const routes: Routes = [
       },
       {
         path: 'ghn',
-        component: GiaohangnhanhComponent,
+        component: GiaoHangNhanhComponent,
         data: {
           title: "Giao hàng nhanh"
         }

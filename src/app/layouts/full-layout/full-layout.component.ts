@@ -405,6 +405,40 @@ export class FullLayoutComponent implements OnInit {
         }
       ]
     },
+    {
+      type: 'parent',
+      name: 'Loại tin tức',
+      icon: 'fa fa-users',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./blog-type/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./blog-type/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Tin tức',
+      icon: 'fa fa-users',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./blog/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./blog/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
     // {
     //   type: 'parent',
     //   name: 'Loại nhân viên',

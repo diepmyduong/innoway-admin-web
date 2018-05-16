@@ -8,7 +8,7 @@ export const SettingLayoutRouting = {
   children: [
     {
       path: '',
-      redirectTo: 'ship',
+      redirectTo: 'settings',
       pathMatch: 'full',
     },
     {

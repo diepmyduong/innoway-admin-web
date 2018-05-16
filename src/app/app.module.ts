@@ -57,7 +57,8 @@ Raven
 
 export class RavenErrorHandler implements ErrorHandler {
   handleError(err: any): void {
-    Raven.captureException(err.originalError || err);
+    console.error(err)
+    // Raven.captureException(err.originalError || err);
     // if (!environment.production) {
     //   console.error(err)
     // }
@@ -84,8 +85,8 @@ export class RavenErrorHandler implements ErrorHandler {
     LayoutsModule,
     FormsModule,
     TextMaskModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot(),
+    // FroalaEditorModule.forRoot(),
+    // FroalaViewModule.forRoot(),
     // BsDropdownModule.forRoot(),
     ColorPickerModule,
 

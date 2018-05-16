@@ -31,6 +31,7 @@ export class ConfigComponent implements OnInit {
   closeHour: string;
   address: string;
   phone: string;
+  isOnlinePayment: boolean = false;
   public description;
 
   latitude: string;
@@ -187,6 +188,10 @@ export class ConfigComponent implements OnInit {
 
       this.name = data.name
       this.color = data.color
+      if (this.color) {
+        this.onChangeColorHex8(this.color)
+      }
+      this.isOnlinePayment = data.is_enable_online_payment
       this.logo = data.logo
       this.trialExpire = data.trail_expire
       this.status = data.status
@@ -197,9 +202,6 @@ export class ConfigComponent implements OnInit {
       this.closeHour = data.close_hour_online
       this.description = data.description
       this.brandCategory = data.brand_category_id ? data.brand_category_id : null
-      data.open_days_of_week.forEach(item => {
-        console.log(JSON.stringify(item));
-      })
 
       data.open_days_of_week.forEach(v => {
         let pos = -1;
@@ -278,10 +280,11 @@ export class ConfigComponent implements OnInit {
   async addItem(form: NgForm) {
     if (form.valid) {
 
-      let { name, color, logo, trialExpire, description, address, vatValue, openHour, closeHour, brandCategory, status } = this;
+      let { name, color, logo, trialExpire, description, address, vatValue, openHour, closeHour, brandCategory, status, isOnlinePayment } = this;
       let brand_category_id = brandCategory
       let trial_expire = trialExpire
       let vat_value = vatValue
+      let is_enable_online_payment = isOnlinePayment
       let open_hour_online = moment(openHour, "HH:mm").format("HH:mm");
       let close_hour_online = moment(closeHour, "HH:mm").format("HH:mm");
       let open_days_of_week: string[] = [];
@@ -292,7 +295,7 @@ export class ConfigComponent implements OnInit {
       });
       await this.innowayApi.brand.add({
         name, color, logo, trial_expire, description, address, vat_value,
-        open_hour_online, close_hour_online, open_days_of_week, brand_category_id, status
+        open_hour_online, close_hour_online, open_days_of_week, brand_category_id, status, is_enable_online_payment
       })
       this.alertAddSuccess();
       form.reset();
@@ -305,10 +308,11 @@ export class ConfigComponent implements OnInit {
   async updateItem(form: NgForm) {
     if (form.valid) {
       try {
-        let { name, color, logo, trialExpire, description, address, phone, vatValue, openHour, closeHour, brandCategory, status } = this;
+        let { name, color, logo, trialExpire, description, address, phone, vatValue, openHour, closeHour, brandCategory, status, isOnlinePayment } = this;
         let brand_category_id = brandCategory
         let trial_expire = trialExpire;
         let vat_value = vatValue
+        let is_enable_online_payment = isOnlinePayment
         let open_hour_online = moment(openHour, "HH:mm").format("HH:mm");
         let close_hour_online = moment(closeHour, "HH:mm").format("HH:mm");
         let open_days_of_week: string[] = [];
@@ -320,12 +324,12 @@ export class ConfigComponent implements OnInit {
 
         await this.innowayApi.brand.update(this.employee.brand_id, {
           name, color, logo, trial_expire, description, address, vat_value, phone,
-          open_hour_online, close_hour_online, open_days_of_week, brand_category_id, status
+          open_hour_online, close_hour_online, open_days_of_week, brand_category_id, status, is_enable_online_payment
         })
         this.alertUpdateSuccess();
         // form.reset();
       } catch (err) {
-        alert(err.toString())
+        // alert(err.toString())
       }
     } else {
       this.alertFormNotValid();
@@ -382,5 +386,9 @@ export class ConfigComponent implements OnInit {
       count++;
     })
     this.days[pos].status = this.days[pos].status ? false : true;
+  }
+
+  checkOnlinePayment(event, data) {
+    this.isOnlinePayment = !data
   }
 }

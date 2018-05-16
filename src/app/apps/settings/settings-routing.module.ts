@@ -8,6 +8,7 @@ import { ScheduleComponent } from './schedule/schedule.component';
 import { SellComponent } from './sell/sell.component';
 import { ConfigComponent } from "./config/config.component";
 import { ThemeComponent } from "./theme/theme.component";
+import { MessageSettingComponent } from "app/apps/settings/message-setting/message-setting.component";
 
 const routes: Routes = [
   {
@@ -61,6 +62,13 @@ const routes: Routes = [
         component: ThemeComponent,
         data: {
           title: "Thiết lập giao diện"
+        }
+      },
+      {
+        path: 'message',
+        component: MessageSettingComponent,
+        data: {
+          title: "Thiết lập trạng thái"
         }
       },
     ]

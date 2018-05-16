@@ -212,7 +212,7 @@ export class DetailComponent implements OnInit, DetailPageInterface {
         this.brand = await this.innowayApi.brand.getItem(this.employee.brand_id, {
           query: {
             fields: ["$all", {
-              thirdparty_chatbot: ["$all"]
+              // thirdparty_chatbot: ["$all"]
             }],
           }
         })
@@ -472,17 +472,17 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       let subscribers: any[] = []
       subscribers.push(bill.customer.chatbot_subscriber_id)
 
-      this.sendInformationAboutBillToCustomer({
-        content: "Dịch vụ chăm sóc khách hàng " + this.brand.name + " kính chào quý khách.",
-        bill: bill,
-        chatbot: {
-          app_id: this.brand.thirdparty_chatbot.app_id,
-          access_token: this.brand.thirdparty_chatbot.access_token
-        },
-        note: this.globals.detectBillActivityByCode(bill.activity.action),
-        sendBy: "subscriber",
-        sendTo: subscribers
-      })
+      // this.sendInformationAboutBillToCustomer({
+      //   content: "Dịch vụ chăm sóc khách hàng " + this.brand.name + " kính chào quý khách.",
+      //   bill: bill,
+      //   chatbot: {
+      //     app_id: this.brand.thirdparty_chatbot.app_id,
+      //     access_token: this.brand.thirdparty_chatbot.access_token
+      //   },
+      //   note: this.globals.detectBillActivityByCode(bill.activity.action),
+      //   sendBy: "subscriber",
+      //   sendTo: subscribers
+      // })
       this.alertUpdateSuccess();
       this.setData();
     } catch (err) {
@@ -839,37 +839,6 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     })
   }
 
-  async sendInvoiceToCustomer(bill: any) {
-    try {
-      let subscribers: string[] = [];
-      subscribers.push(bill.customer.chatbot_subscriber_id)
-      let params = {
-        total_price: bill.total_price,
-        vat_fee: bill.vat_fee,
-        amount_of_sub_fee: bill.amount_of_sub_fee,
-        amount_of_promotion: bill.amount_of_promotion,
-        ship_fee: bill.bill_ship_detail.ship_fee ? bill.bill_ship_detail.ship_fee : 0,
-        ship_method: 'distance',
-        created_at: bill.created_at,
-        code: bill.code.toString() ? bill.code.toString() : "004",
-        address: bill.address,
-        customer_fullname: bill.customer.fullname,
-        greeting: "Chào {{first_name}} {{last_name}}, đơn hàng " + bill.code + " của quý khách đã được xác nhận thành công",
-        send_by: "subscriber",
-        subscribers: subscribers,
-        thirdparty_chatbot_id: bill.thirdparty_chatbot_id,
-        subscriber_id: bill.subscriber_id
-      }
-      console.log(JSON.stringify(params))
-      let response = await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(params)
-      this.alertSendSuccess()
-      console.log(JSON.stringify(response))
-    } catch (err) {
-      this.alertSendFail()
-      console.log(err)
-    }
-  }
-
   showCancelBillDialog(bill: any) {
     swal({
       title: 'Bạn muốn hủy đơn hàng?',
@@ -904,130 +873,6 @@ export class DetailComponent implements OnInit, DetailPageInterface {
     }
   }
 
-  async sendInformationAboutBillToCustomer(input: any) {
-    try {
-      let response = await this.innowayApi.thirdpartyChatbot.sendBillActivityToCustomer({
-        content: input.content,
-        bill: input.bill,
-        note: input.note,
-        chatbot: input.chatbot,
-        send_by: input.sendBy,
-        send_to: input.sendTo,
-        thirdparty_chatbot_id: null,
-        subscriber_id: null
-      })
-      console.log("sendInformationAboutBillToCustomer", JSON.stringify(response))
-    } catch (err) {
-      console.log("sendInformationAboutBillToCustomer", err)
-    }
-  }
-
-  sendMessageChatbot(item) {
-    let data = {
-
-    };
-
-    let dialogRef = this.dialog.open(SendMessageDialog, {
-      width: '560px',
-      data: data
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log(result);
-        this.sendMessage({
-          content: result.contentInput,
-          media: {
-            type: result.mediaType,
-            link: result.mediaLinkInput
-          },
-          app: {
-            app_id: this.brand.thirdparty_chatbot.app_id,
-            app_token: this.brand.thirdparty_chatbot.access_token
-          }
-        })
-      }
-    })
-  }
-
-  async sendMessage(input: any) {
-    try {
-      let subscribers: string[] = [];
-      subscribers.push(this.bill.customer.chatbot_subscriber_id)
-      let request = {
-        content: input.content,
-        media: {
-          type: input.media.type,
-          link: input.media.link
-        },
-        app: {
-          app_id: input.app.app_id,
-          app_token: input.app.app_token
-        },
-        send_by: "subscriber",
-        send_to: subscribers,
-        thirdparty_chatbot_id: null,
-        subscriber_id: null
-      }
-      console.log("response", JSON.stringify(request))
-      let data = await this.innowayApi.thirdpartyChatbot.sendMessageToCustomer(request);
-      this.alertSendSuccess()
-      console.log("response", JSON.stringify(data))
-    } catch (err) {
-      this.alertSendFail()
-      console.log("response", err)
-    }
-  }
-
-  sendStoryChatbot(item) {
-
-    let data = {
-      stories: this.stories ? this.stories : [],
-      subscriberId: item.id
-    };
-
-    let dialogRef = this.dialog.open(SendStoryDialog, {
-      width: '560px',
-      data: data
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log(result);
-        if (result.result) {
-          this.sendStory(result.storyId)
-        }
-      }
-    })
-  }
-
-  async getStories() {
-    try {
-      let response = await this.innowayApi.thirdpartyChatbot.getStories({
-        thirdparty_chatbot_id: null
-      });
-      this.stories = response.rows;
-      this.story = this.stories[0]._id;
-      console.log("getStories", response);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async sendStory(storyId: string) {
-    try {
-      let response = await this.innowayApi.thirdpartyChatbot.sendStory({
-        story_id: storyId,
-        thirdparty_chatbot_id: null,
-        send_by: "all",
-        send_to: []
-      });
-      console.log("send message", JSON.stringify(response))
-      alert(true)
-    } catch (err) {
-      console.log("send message", err)
-      alert(false)
-    }
-  }
-
   detectShowCancelButton(bill): boolean {
     if (bill.activity && bill.activity.action) {
       if (bill.activity.action.indexOf("CANCEL") >= 0
@@ -1040,5 +885,65 @@ export class DetailComponent implements OnInit, DetailPageInterface {
       }
     }
     return false
+  }
+
+  async sendButtonPayment(bill: any) {
+    try {
+      let response = await this.innowayApi.vnpay.createPaymentBillUrl({
+        amount: bill.total_price,
+        bank_code: "VISA",
+        bill_id: bill.id
+      })
+
+      console.log("sendButtonPayment", JSON.stringify(response))
+
+      this.sendMessageButtonPayment(bill, response.data)
+    } catch (err) {
+      console.log("sendButtonPayment", err)
+    }
+  }
+
+  async sendMessageButtonPayment(bill: any, paymentUrl: string) {
+    try {
+      let subscribers: string[] = [];
+      subscribers.push(bill.subscriber_id)
+      let response = await this.innowayApi.thirdpartyChatbot.sendButtonForPayment({
+        thirdparty_chatbot_id: this.bill.thirdparty_chatbot_id,
+        subscribers: subscribers,
+        payment_url: paymentUrl
+      })
+
+      console.log("sendMessageButtonPayment", JSON.stringify(response))
+    } catch (err) {
+      console.log("sendMessageButtonPayment", err)
+    }
+  }
+
+  async createBuyButton() {
+    try {
+      let response = await this.innowayApi.vnpay.createBuyButton({
+        "subscriber_id": "5a538094ff3f8cf2821ff538",
+        "country": "VN",
+        "currency": "VND",
+        "products": [
+          {
+            "product_id": "5ef54984-4215-11e8-8047-ebb9b259837c",
+            "amount": 10,
+            "topping_value_ids": [
+              "9f337180-ada4-11e7-807e-554193e9a315"
+            ]
+          }
+        ],
+        "sub_fee": 10999,
+        "sub_fee_note": "note sub fee 01",
+        "shipping": false,
+        "latitude": 10.782620,
+        "longitude": 106.686703,
+        "address": "Hoàng Văn Thụ, Hoàng Mai, Hà Nội, Vietnam"
+      })
+      console.log("createBuyButton",JSON.stringify(response))
+    } catch (err) {
+      console.log("createBuyButton",JSON.stringify(err))
+    }
   }
 }

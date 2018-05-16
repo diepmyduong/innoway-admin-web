@@ -42,6 +42,10 @@
         <td style="width:160px">Kênh</td>
         <td>: {{detectChannelName(item.channel)}}</td>
       </tr>
+      <tr *ngIf="item.channel === 'chatbot'">
+        <td style="width:160px">Fanpage</td>
+        <td>: {{item.thirdparty_chatbot.facebook_name}}</td>
+      </tr>
     </tbody>
   </table>
   <h4>Sản phẩm</h4>

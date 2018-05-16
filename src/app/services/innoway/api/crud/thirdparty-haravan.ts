@@ -67,7 +67,7 @@ export class ThirdpartyHaravan extends CrudAPI<iThirdpartyHaravan> {
       body: { type }
     }
     let res: any = await this.exec(setting);
-    let rows = res.results.object;
+    let rows = res.results;
     return rows;
   }
 

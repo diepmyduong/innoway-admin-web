@@ -225,8 +225,9 @@ export class BillComponent implements OnInit, ListPageInterface {
     this.searchRef = setTimeout(() => {
       this.query.filter = {
         $or: {
-          name: { $iLike: `%${key}%` },
-          description: { $iLike: `%${key}%` },
+          // name: { $iLike: `%${key}%` },
+          // description: { $iLike: `%${key}%` },
+          code: { $iLike: `%${key}%` },
         }
       }
       this.getItems();

@@ -574,6 +574,7 @@ export class AddComponent implements OnInit, AddPageInterface {
     try {
       let response = await this.innowayApi.upload.uploadImage(file)
       this.previewImage = response.link
+      this.image = response.link
     } catch (err) {
       console.log("upload image", err)
     }

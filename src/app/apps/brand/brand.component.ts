@@ -157,7 +157,9 @@ export class BrandComponent implements OnInit, ListPageInterface {
     this.searchRef = setTimeout(() => {
       this.query.filter = {
         $or: {
+          code: { $iLike: `%${key}%` },
           name: { $iLike: `%${key}%` },
+          email: { $iLike: `%${key}%` },
         }
       }
       this.getItems();

@@ -34,11 +34,11 @@ export class SmartCodeComponent implements OnInit {
   ) {
   }
 
-  subscriptions:any = {}
+  subscriptions: any = {}
 
   ngOnInit() {
     this.subscriptions.onItemsChange = this.innowayApi.smartCode.items.subscribe(items => {
-      if(items)  this.itemsTable.reloadItems()
+      if (items) this.itemsTable.reloadItems()
     })
   }
 
@@ -58,6 +58,7 @@ export class SmartCodeComponent implements OnInit {
 
   async getItems() {
     let query = Object.assign({
+      local: false,
       fields: this.itemFields
     }, this.query);
     console.log("bibi: " + JSON.stringify(query));

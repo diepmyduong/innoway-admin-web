@@ -11,12 +11,14 @@
   font-size: 1.5rem;
 }
 
-.header-text { text-align:right;
+.header-text {
   color: $bluegrey-darker;
   font-size: 0.85rem;
   font-weight: bold;
   padding: 0;
+  padding-left: 4px;
   margin: 0;
+  text-align: right;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -155,4 +157,19 @@ button:hover {
 
 .card-footer{
 
+}
+
+.days-input{
+  padding: 0.25rem;
+  margin-right: 0.75rem;
+}
+
+.days-input input{
+  margin-right: 0.25rem;
+}
+
+
+agm-map {
+  height: 300px;
+  width: 100% !important;
 }

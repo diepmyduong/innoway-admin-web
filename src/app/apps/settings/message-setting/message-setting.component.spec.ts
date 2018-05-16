@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GiaoHangNhanhComponent } from './giaohangnhanh.component';
+import { MessageSettingComponent } from './message-setting.component';
 
-describe('GiaoHangNhanhComponent', () => {
-  let component: GiaoHangNhanhComponent;
-  let fixture: ComponentFixture<GiaoHangNhanhComponent>;
+describe('MessageSettingComponent', () => {
+  let component: MessageSettingComponent;
+  let fixture: ComponentFixture<MessageSettingComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GiaoHangNhanhComponent ]
+      declarations: [ MessageSettingComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GiaoHangNhanhComponent);
+    fixture = TestBed.createComponent(MessageSettingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

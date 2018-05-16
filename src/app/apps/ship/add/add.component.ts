@@ -56,9 +56,6 @@ export class AddComponent implements OnInit, AddPageInterface {
     if (this.isEdit) {
       this.setData();
     }
-
-    this.getAuthorizationCodeUBER();
-    this.detectConnectShipmentThirdparties();
   }
 
   setDefaultData() {
@@ -217,316 +214,316 @@ export class AddComponent implements OnInit, AddPageInterface {
     }
   }
 
-  log(event: boolean) {
-    console.log(`Accordion has been ${event ? 'opened' : 'closed'}`);
-  }
-
-  ghnEmail: string
-  ghnPassword: string
-
-  ghnEmailRegister: string
-  ghnPasswordRegister: string
-  ghnContactNameRegister: string
-  ghnContactPhoneRegister: string
-
-
-  ghtkEmail: string
-  ghtkPassword: string
-
-  ghtkNameRegister: string
-  ghtkEmailRegister: string
-  ghtkPasswordRegister: string
-  ghtkAddressRegister: string
-  ghtkProvinceRegister: string
-  ghtkDistrictRegister: string
-  ghtkPhoneRegister: string
-
-  isEnableMCOM: boolean = false
-  isEnableGHN: boolean = false
-  isEnableGHTK: boolean = false
-  isEnableUBER: boolean = false
-
-  mainShipmentUnit: string
-
-  async detectConnectShipmentThirdparties() {
-    try {
-      let response = await this.innowayApi.thirdpartyShipper.getList()
-      console.log("detectConnectShipmentThirdparties", JSON.stringify(response))
-      response.forEach(item => {
-        switch (item.type) {
-          case 'GHN': {
-            this.isEnableGHN = true
-            break
-          }
-          case 'GHTK': {
-            this.isEnableGHTK = true
-            break
-          }
-          case 'UBER_DELIVER': {
-            this.isEnableUBER = true
-            break
-          }
-          case 'MCOM': {
-            this.isEnableMCOM = true
-          }
-        }
-      })
-    } catch (err) {
-      console.log("detectConnectShipmentThirdparties", err)
-    }
-  }
-
-  async setMainShipmentUnit(brandId, unit) {
-    try {
-      let data: any = this.innowayApi.innowayAuth.innowayUser
-      let response = await this.innowayApi.brand.update(data.brand_id, {
-        default_delivery_unit: this.mainShipmentUnit
-      })
-    } catch (err) {
-
-    }
-  }
-
-  async connectUber() {
-    try {
-      window.open("https://login.uber.com/oauth/v2/authorize?client_id=gkxITQVeZ_7X_enw-pstzK4TIicEfpru&response_type=code&redirect_uri=https://crm.mcommerce.com.vn");
-      console.log("connectUber")
-    } catch (err) {
-      console.log("connectUber", err)
-    }
-  }
-
-  async getAuthorizationCodeUBER() {
-    try {
-      let response = await this.innowayApi.shipment.getAuthorizationCodeUBER();
-      console.log("getAuthorizationCodeUBER", JSON.stringify(response))
-    } catch (err) {
-      console.log("getAuthorizationCodeUBER", err)
-    }
-  }
-
-  async loginGHN() {
-    try {
-      let response = await this.innowayApi.shipment.loginGHN({
-        email: this.ghnEmail,
-        password: this.ghnPassword
-      })
-      console.log("loginGHN", JSON.stringify(response))
-    } catch (err) {
-      console.log("loginGHN", err)
-    }
-  }
-
-  async registerGHN() {
-    try {
-      let response = await this.innowayApi.shipment.registerGHN({
-        email: this.ghnEmailRegister,
-        password: this.ghnPasswordRegister,
-        contact_name: this.ghnContactNameRegister,
-        contact_phone: this.ghnContactPhoneRegister
-      })
-      console.log("registerGHN", JSON.stringify(response))
-    } catch (err) {
-      console.log("registerGHN", err)
-    }
-  }
-
-  async loginGHTK() {
-    try {
-      let response = await this.innowayApi.shipment.loginGHTK({
-        email: this.ghtkEmail,
-        password: this.ghtkPassword
-      })
-      console.log("loginGHTK", JSON.stringify(response))
-    } catch (err) {
-      console.log("loginGHTK", err)
-    }
-  }
-
-  async registerGHTK() {
-    try {
-      let response = await this.innowayApi.shipment.registerGHTK({
-        name: this.ghtkNameRegister,
-        first_address: this.ghtkAddressRegister,
-        province: this.ghtkProvinceRegister,
-        district: this.ghtkDistrictRegister,
-        tel: this.ghtkPhoneRegister,
-        email: this.ghtkEmailRegister
-      })
-      console.log("registerGHTK", JSON.stringify(response))
-    } catch (err) {
-      console.log("registerGHTK", err)
-    }
-
-  }
-
-  client: any;
-  fromNumber: string = '+84901403819';
-  call: any;
-  access_token: string = "eeyJjdHkiOiJzdHJpbmdlZS1hcGk7dj0xIiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJqdGkiOiJTS0FtUDBMdUl3R2xTMUtzVVc4NTRubFRhcXNXUnFKOXotMTUyMDMzMjc2MyIsImlzcyI6IlNLQW1QMEx1SXdHbFMxS3NVVzg1NG5sVGFxc1dScUo5eiIsImV4cCI6MTUyMjkyNDc2MywidXNlcklkIjoiaHV5ZG4ifQ.b7lALNjj9tgflTnCYW_0i9mIeOlORHcz2cxoltsMEHY"
-
-  initStringee() {
-    this.client = new StringeeClient();
-
-    this.client.connect(this.access_token);
-
-    this.client.on('connect', function() {
-      console.log('++++++++++++++ connected to StringeeServer');
-    });
-
-    this.client.on('authen', function(res) {
-      console.log('authen', res);
-      $('#loggedUserId').html(res.userId);
-    });
-
-    this.client.on('disconnect', function() {
-      console.log('++++++++++++++ disconnected: ' + this.test);
-    });
-
-    this.client.on('incomingcall', function(incomingcall) {
-      this.call = incomingcall;
-      this.settingCallEvent(incomingcall);
-
-      //			call.videoResolution = {width: 1280, height: 720};
-
-      var answer = confirm('Incoming call from: ' + incomingcall.fromNumber + ', do you want to answer?');
-
-      if (answer) {
-        this.call.answer(function(res) {
-          console.log('answer res', res);
-        });
-      } else {
-        this.call.reject(function(res) {
-          console.log('reject res', res);
-        });
-      }
-
-      console.log('++++++++++++++ incomingcall', incomingcall);
-    });
-  };
-
-  testMakeCall(videocall) {
-    console.log('make call, videocall: ' + videocall);
-    //				var videoCall = false;
-    this.call = new StringeeCall(this.client, this.fromNumber, $('#callTo').val(), videocall);
-
-    //	call.videoResolution = {width: 1280, height: 720};
-
-    this.settingCallEvent(this.call);
-
-    this.call.makeCall(function(res) {
-      console.log('make call callback: ' + JSON.stringify(res));
-    });
-  }
-
-  settingCallEvent(call1) {
-    call1.on('addremotestream', function(stream) {
-      // reset srcObject to work around minor bugs in Chrome and Edge.
-      this.remoteVideo.srcObject = null;
-      this.remoteVideo.srcObject = stream;
-    });
-
-    call1.on('addlocalstream', function(stream) {
-      // reset srcObject to work around minor bugs in Chrome and Edge.
-      this.localVideo.srcObject = null;
-      this.localVideo.srcObject = stream;
-    });
-
-    call1.on('state', function(state) {
-      console.log('state ', state);
-      var reason = state.reason;
-      $('#callStatus').html(reason);
-    });
-
-    call1.on('info', function(info) {
-      console.log('on info:' + JSON.stringify(info));
-    });
-  }
-
-  testHangupCall() {
-    $('#remoteVideo').srcObject = null;
-
-    this.call.hangup(function(res) {
-      console.log('hangup res', res);
-    });
-  }
-
-  upgradeToVideoCall() {
-    this.call.upgradeToVideoCall();
-  }
-
-
-  switchVoiceVideoCall() {
-    var info = { requestVideo: true };
-    //	var info = true;
-    this.call.sendInfo(info, function(res) {
-      console.log('switchVoiceVideoCall', res);
-    });
-  }
-
-
-
-  mute() {
-    var muted = !this.call.muted;
-    this.call.mute(muted);
-
-    if (muted) {
-      $('#muteBtn').html('Unmute');
-    } else {
-      $('#muteBtn').html('Mute');
-    }
-  }
-
-  enableVideo() {
-    var success;
-    if (this.call.localVideoEnabled) {
-      success = this.call.enableLocalVideo(false);
-    } else {
-      success = this.call.enableLocalVideo(true);
-    }
-    console.log('enableVideo result: ' + success);
-  }
-
-  haravanAPIKey: string
-  haravanPassword: string
-  haravanSharedSecret: string
-  haravanAddress: string
-
-  kiotVietClientId: string
-  kiotVietClientSecret: string
-  kiotVietRetailer: string
-
-  async connectHaravan() {
-    try {
-      let response = await this.innowayApi.thirdpartyHaravan.connect({
-        api_key: this.haravanAPIKey,
-        password: this.haravanPassword,
-        shared_secret: this.haravanSharedSecret,
-        address: this.haravanAddress
-      })
-    } catch (err) {
-      console.log("connectHaravan", err)
-    }
-  }
-
-  async disconnectHaravan(){
-    try {
-      let response = await this.innowayApi.thirdpartyHaravan.disconnect()
-    } catch (err) {
-      console.log("disconnectHaravan", err)
-    }
-  }
-
-  async connectKiotViet() {
-    try {
-      let response = await this.innowayApi.thirdpartyKiotViet.connect({
-        client_id: this.kiotVietClientId,
-        client_secret: this.kiotVietClientSecret,
-        retailer: this.kiotVietRetailer,
-      })
-    } catch (err) {
-      console.log("connectKiotViet", err)
-    }
-  }
+  // log(event: boolean) {
+  //   console.log(`Accordion has been ${event ? 'opened' : 'closed'}`);
+  // }
+  //
+  // ghnEmail: string
+  // ghnPassword: string
+  //
+  // ghnEmailRegister: string
+  // ghnPasswordRegister: string
+  // ghnContactNameRegister: string
+  // ghnContactPhoneRegister: string
+  //
+  //
+  // ghtkEmail: string
+  // ghtkPassword: string
+  //
+  // ghtkNameRegister: string
+  // ghtkEmailRegister: string
+  // ghtkPasswordRegister: string
+  // ghtkAddressRegister: string
+  // ghtkProvinceRegister: string
+  // ghtkDistrictRegister: string
+  // ghtkPhoneRegister: string
+  //
+  // isEnableMCOM: boolean = false
+  // isEnableGHN: boolean = false
+  // isEnableGHTK: boolean = false
+  // isEnableUBER: boolean = false
+  //
+  // mainShipmentUnit: string
+  //
+  // async detectConnectShipmentThirdparties() {
+  //   try {
+  //     let response = await this.innowayApi.thirdpartyShipper.getList()
+  //     console.log("detectConnectShipmentThirdparties", JSON.stringify(response))
+  //     response.forEach(item => {
+  //       switch (item.type) {
+  //         case 'GHN': {
+  //           this.isEnableGHN = true
+  //           break
+  //         }
+  //         case 'GHTK': {
+  //           this.isEnableGHTK = true
+  //           break
+  //         }
+  //         case 'UBER_DELIVER': {
+  //           this.isEnableUBER = true
+  //           break
+  //         }
+  //         case 'MCOM': {
+  //           this.isEnableMCOM = true
+  //         }
+  //       }
+  //     })
+  //   } catch (err) {
+  //     console.log("detectConnectShipmentThirdparties", err)
+  //   }
+  // }
+  //
+  // async setMainShipmentUnit(brandId, unit) {
+  //   try {
+  //     let data: any = this.innowayApi.innowayAuth.innowayUser
+  //     let response = await this.innowayApi.brand.update(data.brand_id, {
+  //       default_delivery_unit: this.mainShipmentUnit
+  //     })
+  //   } catch (err) {
+  //
+  //   }
+  // }
+  //
+  // async connectUber() {
+  //   try {
+  //     window.open("https://login.uber.com/oauth/v2/authorize?client_id=gkxITQVeZ_7X_enw-pstzK4TIicEfpru&response_type=code&redirect_uri=https://crm.mcommerce.com.vn");
+  //     console.log("connectUber")
+  //   } catch (err) {
+  //     console.log("connectUber", err)
+  //   }
+  // }
+  //
+  // async getAuthorizationCodeUBER() {
+  //   try {
+  //     let response = await this.innowayApi.shipment.getAuthorizationCodeUBER();
+  //     console.log("getAuthorizationCodeUBER", JSON.stringify(response))
+  //   } catch (err) {
+  //     console.log("getAuthorizationCodeUBER", err)
+  //   }
+  // }
+  //
+  // async loginGHN() {
+  //   try {
+  //     let response = await this.innowayApi.shipment.loginGHN({
+  //       email: this.ghnEmail,
+  //       password: this.ghnPassword
+  //     })
+  //     console.log("loginGHN", JSON.stringify(response))
+  //   } catch (err) {
+  //     console.log("loginGHN", err)
+  //   }
+  // }
+  //
+  // async registerGHN() {
+  //   try {
+  //     let response = await this.innowayApi.shipment.registerGHN({
+  //       email: this.ghnEmailRegister,
+  //       password: this.ghnPasswordRegister,
+  //       contact_name: this.ghnContactNameRegister,
+  //       contact_phone: this.ghnContactPhoneRegister
+  //     })
+  //     console.log("registerGHN", JSON.stringify(response))
+  //   } catch (err) {
+  //     console.log("registerGHN", err)
+  //   }
+  // }
+  //
+  // async loginGHTK() {
+  //   try {
+  //     let response = await this.innowayApi.shipment.loginGHTK({
+  //       email: this.ghtkEmail,
+  //       password: this.ghtkPassword
+  //     })
+  //     console.log("loginGHTK", JSON.stringify(response))
+  //   } catch (err) {
+  //     console.log("loginGHTK", err)
+  //   }
+  // }
+  //
+  // async registerGHTK() {
+  //   try {
+  //     let response = await this.innowayApi.shipment.registerGHTK({
+  //       name: this.ghtkNameRegister,
+  //       first_address: this.ghtkAddressRegister,
+  //       province: this.ghtkProvinceRegister,
+  //       district: this.ghtkDistrictRegister,
+  //       tel: this.ghtkPhoneRegister,
+  //       email: this.ghtkEmailRegister
+  //     })
+  //     console.log("registerGHTK", JSON.stringify(response))
+  //   } catch (err) {
+  //     console.log("registerGHTK", err)
+  //   }
+  //
+  // }
+  //
+  // client: any;
+  // fromNumber: string = '+84901403819';
+  // call: any;
+  // access_token: string = "eeyJjdHkiOiJzdHJpbmdlZS1hcGk7dj0xIiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJqdGkiOiJTS0FtUDBMdUl3R2xTMUtzVVc4NTRubFRhcXNXUnFKOXotMTUyMDMzMjc2MyIsImlzcyI6IlNLQW1QMEx1SXdHbFMxS3NVVzg1NG5sVGFxc1dScUo5eiIsImV4cCI6MTUyMjkyNDc2MywidXNlcklkIjoiaHV5ZG4ifQ.b7lALNjj9tgflTnCYW_0i9mIeOlORHcz2cxoltsMEHY"
+  //
+  // initStringee() {
+  //   this.client = new StringeeClient();
+  //
+  //   this.client.connect(this.access_token);
+  //
+  //   this.client.on('connect', function() {
+  //     console.log('++++++++++++++ connected to StringeeServer');
+  //   });
+  //
+  //   this.client.on('authen', function(res) {
+  //     console.log('authen', res);
+  //     $('#loggedUserId').html(res.userId);
+  //   });
+  //
+  //   this.client.on('disconnect', function() {
+  //     console.log('++++++++++++++ disconnected: ' + this.test);
+  //   });
+  //
+  //   this.client.on('incomingcall', function(incomingcall) {
+  //     this.call = incomingcall;
+  //     this.settingCallEvent(incomingcall);
+  //
+  //     //			call.videoResolution = {width: 1280, height: 720};
+  //
+  //     var answer = confirm('Incoming call from: ' + incomingcall.fromNumber + ', do you want to answer?');
+  //
+  //     if (answer) {
+  //       this.call.answer(function(res) {
+  //         console.log('answer res', res);
+  //       });
+  //     } else {
+  //       this.call.reject(function(res) {
+  //         console.log('reject res', res);
+  //       });
+  //     }
+  //
+  //     console.log('++++++++++++++ incomingcall', incomingcall);
+  //   });
+  // };
+  //
+  // testMakeCall(videocall) {
+  //   console.log('make call, videocall: ' + videocall);
+  //   //				var videoCall = false;
+  //   this.call = new StringeeCall(this.client, this.fromNumber, $('#callTo').val(), videocall);
+  //
+  //   //	call.videoResolution = {width: 1280, height: 720};
+  //
+  //   this.settingCallEvent(this.call);
+  //
+  //   this.call.makeCall(function(res) {
+  //     console.log('make call callback: ' + JSON.stringify(res));
+  //   });
+  // }
+  //
+  // settingCallEvent(call1) {
+  //   call1.on('addremotestream', function(stream) {
+  //     // reset srcObject to work around minor bugs in Chrome and Edge.
+  //     this.remoteVideo.srcObject = null;
+  //     this.remoteVideo.srcObject = stream;
+  //   });
+  //
+  //   call1.on('addlocalstream', function(stream) {
+  //     // reset srcObject to work around minor bugs in Chrome and Edge.
+  //     this.localVideo.srcObject = null;
+  //     this.localVideo.srcObject = stream;
+  //   });
+  //
+  //   call1.on('state', function(state) {
+  //     console.log('state ', state);
+  //     var reason = state.reason;
+  //     $('#callStatus').html(reason);
+  //   });
+  //
+  //   call1.on('info', function(info) {
+  //     console.log('on info:' + JSON.stringify(info));
+  //   });
+  // }
+  //
+  // testHangupCall() {
+  //   $('#remoteVideo').srcObject = null;
+  //
+  //   this.call.hangup(function(res) {
+  //     console.log('hangup res', res);
+  //   });
+  // }
+  //
+  // upgradeToVideoCall() {
+  //   this.call.upgradeToVideoCall();
+  // }
+  //
+  //
+  // switchVoiceVideoCall() {
+  //   var info = { requestVideo: true };
+  //   //	var info = true;
+  //   this.call.sendInfo(info, function(res) {
+  //     console.log('switchVoiceVideoCall', res);
+  //   });
+  // }
+  //
+  //
+  //
+  // mute() {
+  //   var muted = !this.call.muted;
+  //   this.call.mute(muted);
+  //
+  //   if (muted) {
+  //     $('#muteBtn').html('Unmute');
+  //   } else {
+  //     $('#muteBtn').html('Mute');
+  //   }
+  // }
+  //
+  // enableVideo() {
+  //   var success;
+  //   if (this.call.localVideoEnabled) {
+  //     success = this.call.enableLocalVideo(false);
+  //   } else {
+  //     success = this.call.enableLocalVideo(true);
+  //   }
+  //   console.log('enableVideo result: ' + success);
+  // }
+  //
+  // haravanAPIKey: string
+  // haravanPassword: string
+  // haravanSharedSecret: string
+  // haravanAddress: string
+  //
+  // async connectHaravan() {
+  //   try {
+  //     let response = await this.innowayApi.thirdpartyHaravan.connect({
+  //       api_key: this.haravanAPIKey,
+  //       password: this.haravanPassword,
+  //       shared_secret: this.haravanSharedSecret,
+  //       address: this.haravanAddress
+  //     })
+  //   } catch (err) {
+  //     console.log("connectHaravan", err)
+  //   }
+  // }
+  //
+  // async disconnectHaravan(){
+  //   try {
+  //     let response = await this.innowayApi.thirdpartyHaravan.disconnect()
+  //   } catch (err) {
+  //     console.log("disconnectHaravan", err)
+  //   }
+  // }
+  //
+  // kiotVietClientId: string
+  // kiotVietClientSecret: string
+  // kiotVietRetailer: string
+  //
+  // async connectKiotViet() {
+  //   try {
+  //     let response = await this.innowayApi.thirdpartyKiotViet.connect({
+  //       client_id: this.kiotVietClientId,
+  //       client_secret: this.kiotVietClientSecret,
+  //       retailer: this.kiotVietRetailer,
+  //     })
+  //   } catch (err) {
+  //     console.log("connectKiotViet", err)
+  //   }
+  // }
 
 }

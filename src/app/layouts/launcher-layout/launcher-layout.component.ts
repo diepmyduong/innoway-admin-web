@@ -118,5 +118,4 @@ export class LauncherLayoutComponent implements OnInit {
       }
     ];
 
-
 }
