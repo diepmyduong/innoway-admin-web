@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit {
             case 'update_paid_history':
             case 'cancel_bill':
             case 'change_bill_activity':
-              this.dashboardService.getTopicFromFCM(message);
+              // this.dashboardService.getTopicFromFCM(message);
               this.showInformationAboutBillFromFCM(message)
               break;
           }

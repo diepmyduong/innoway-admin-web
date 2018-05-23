@@ -99,6 +99,7 @@
     "zone.js": "0.8.5"
   },
   "devDependencies": {
+    "@angular-devkit/core": "^0.6.3",
     "@angular/cli": "1.6.3",
     "@angular/compiler-cli": "4.0.1",
     "@types/core-js": "0.9.43",
