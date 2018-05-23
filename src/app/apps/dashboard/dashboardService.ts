@@ -24,8 +24,8 @@ export class DashboardService {
   private loadDailySummarySource = new BehaviorSubject<boolean>(false);
   loadDailySummary = this.loadDailySummarySource.asObservable();
 
-  private updateTopicFromFCMSource = new BehaviorSubject<any>({});
-  updateTopicFromFCM = this.updateTopicFromFCMSource.asObservable();
+  // private updateTopicFromFCMSource = new BehaviorSubject<any>({});
+  // updateTopicFromFCM = this.updateTopicFromFCMSource.asObservable();
 
   private filterBillSource = new BehaviorSubject<boolean>(false);
   filterBill = this.filterBillSource.asObservable();
@@ -34,9 +34,9 @@ export class DashboardService {
     this.filterBillSource.next(update);
   }
 
-  getTopicFromFCM(update: any) {
-    this.updateTopicFromFCMSource.next(update);
-  }
+  // getTopicFromFCM(update: any) {
+  //   // this.updateTopicFromFCMSource.next(update);
+  // }
 
   updateAction(update: any) {
     this.actionSource.next(update);
