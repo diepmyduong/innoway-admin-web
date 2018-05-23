@@ -65,4 +65,35 @@ export class VNPay extends CrudAPI<iVNPay> {
     var row = res.results.object;
     return row;
   }
+
+  async createPaymentOrderUrlWebsite(params: any
+  //   {
+  //   subscriber_id: string,
+  //   country: 'VN',
+  //   currency: 'VND',
+  //   products: any[],
+  //   sub_fee: number,
+  //   sub_fee_note: string,
+  //   shipping: boolean,
+  //   latitude: number,
+  //   longitude: number,
+  //   address: string,
+  //   promotion_id: string,
+  //   website: string
+  // }
+) {
+    let setting = {
+      method: 'POST',
+      uri: this.apiUrl(`create_payment_order_url_website`),
+      headers: {
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body: params
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
 }

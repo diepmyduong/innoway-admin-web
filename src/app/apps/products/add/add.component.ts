@@ -47,6 +47,8 @@ export class AddComponent implements OnInit {
   attributes = new BehaviorSubject<any[]>([]);
   productTypes = new BehaviorSubject<any[]>([]);
 
+  isGift: boolean = false
+
   numberMask = createNumberMask({
     prefix: '',
     suffix: ' đ'
@@ -138,6 +140,7 @@ export class AddComponent implements OnInit {
     this.thumb = null;
     this.unit = null;
     this.product_type = null;
+    this.isGift = false;
 
     return {
       status: this.status,
@@ -150,7 +153,8 @@ export class AddComponent implements OnInit {
       list_image: this.list_image,
       thumb: this.thumb,
       unit: this.unit,
-      product_type: this.product_type
+      product_type: this.product_type,
+      isGift: this.isGift
     }
   }
 
@@ -247,6 +251,7 @@ export class AddComponent implements OnInit {
       })
 
       console.log("setdata", product)
+      this.isGift = product.is_gift
       this.name = product.name
       this.thumb = product.thumb
       this.description = product.description
@@ -386,13 +391,14 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       if (form.valid) {
-        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status } = this;
+        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift } = this;
 
+        let is_gift = isGift
         let category_id = this.category ? this.category : undefined;
         let short_description = this.shortDescription;
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
-        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image })
+        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image, is_gift })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -416,12 +422,14 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       if (form.valid) {
-        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status } = this;
+        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift } = this;
+
+        let is_gift = isGift
         let category_id = this.category ? this.category : undefined;
         let short_description = this.shortDescription;
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
-        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image })
+        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image, isGift })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -746,5 +754,9 @@ export class AddComponent implements OnInit {
 
   removePreviewImage() {
     this.previewImage = undefined;
+  }
+
+  checkGift(event) {
+    this.isGift = event;
   }
 }

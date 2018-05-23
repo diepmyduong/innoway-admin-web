@@ -8,6 +8,7 @@ import { AddComponent } from './add/add.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { MatAutocompleteModule } from "@angular/material";
 
 @NgModule({
   imports: [
@@ -17,7 +18,9 @@ import { DataTableModule } from 'angular-2-data-table-bootstrap4';
     FormsModule,
     ReactiveFormsModule,
     LaddaModule,
-    DataTableModule
+    DataTableModule,
+
+    MatAutocompleteModule,
   ],
   declarations: [TicketComponent, AddComponent]
 })

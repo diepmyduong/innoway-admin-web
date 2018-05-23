@@ -127,6 +127,100 @@ export class BillsComponent implements OnInit {
     this.loadEmployeeData()
     this.subscribeTopicByFCM()
     this.subscribeDashboardParent()
+    this.loadAuthCustomer()
+  }
+
+  async loadAuthCustomer() {
+    try {
+      let response = await this.innowayApi.authCustomer.getCustomerTokenByPhone({
+        phone: "+84901403819"
+      })
+
+      console.log("loadAuthCustomer", JSON.stringify(response))
+
+      // this.addAccountPrudential()
+      this.getCustomerFromPrudential()
+
+    } catch (err) {
+
+    }
+  }
+
+  async addAccountPrudential() {
+    try {
+      let response = await this.innowayApi.customer.createAccount({
+        username: "minhuy",
+        password: "12345678",
+        type: "GAD"
+      })
+
+      console.log("addAccountPrudential", JSON.stringify(response))
+
+    } catch (err) {
+
+    }
+  }
+
+  async getCustomerFromPrudential() {
+    try {
+      let response = await this.innowayApi.customer.getList({
+        query: {
+          fields: ["$all"],
+          filter: {
+            $or: [
+              {
+                account_type: {
+                  $eq: 'GAD'
+                }
+              },
+              {
+                account_type: {
+                  $eq: 'AGENT'
+                }
+              },
+              {
+                account_type: {
+                  $eq: 'DEPARTMENT'
+                }
+              },
+            ]
+          }
+        }
+      })
+
+      console.log("getCustomerFromPrudential", JSON.stringify(response))
+
+      this.loginCustomerFromPrudential("minhuy", "12345678")
+
+    } catch (err) {
+
+    }
+  }
+
+  async loginCustomerFromPrudential(username: string, password: string) {
+    try {
+      let response = await this.innowayApi.authCustomer.customerPrudLogin({
+        username: username,
+        password: password
+      })
+
+      console.log("loginCustomerFromPrudential", JSON.stringify(response))
+      this.getPaymentMethod(response.access_token)
+
+    } catch (err) {
+
+    }
+  }
+
+  async getPaymentMethod(accessToken: string) {
+    try {
+      let response = await this.innowayApi.customer.getPaymentMethodOfCustomer(accessToken)
+
+      console.log("getPaymentMethod", JSON.stringify(response))
+
+    } catch (err) {
+
+    }
   }
 
   async loadBrandByEmployeeData(brandId: string) {
@@ -825,11 +919,11 @@ export class BillsComponent implements OnInit {
             employeeId: data.employee,
             note: data.noteBillActivity,
             type: data.thirdparty,
-            total_weight: data.weight,
+            total_weight: data.total_weight,
             address: data.address,
             longitude: data.longitude,
             latitude: data.latitude,
-            note_code: data.notCode
+            note_code: data.note_code
           })
           break;
         }
@@ -892,10 +986,10 @@ export class BillsComponent implements OnInit {
               receive_address: {
                 longitude: Number.parseFloat(bill.longitude),
                 latitude: Number.parseFloat(bill.latitude)
-              }
+              },
+              total_weight: Number.parseFloat(data.total_weight),
+              note_code: data.note_code
             },
-            total_weight: data.total_weight,
-            note_code: data.note_code
           }
           break
         case 'GHTK':
@@ -941,7 +1035,12 @@ export class BillsComponent implements OnInit {
           }
           break;
       }
+      console.log("Info request", JSON.stringify(request))
+
       let response = await this.innowayApi.bill.changeActivity(bill.id, request)
+
+      console.log("Info response", JSON.stringify(response))
+
       this.alertUpdateSuccess();
       this.refreshBill();
     } catch (err) {
@@ -1221,7 +1320,7 @@ export class BillsComponent implements OnInit {
     this.customizeFilter()
   }
 
-  convertTime(date){
+  convertTime(date) {
     return moment(date).format("HH:mm")
   }
 }

@@ -36,7 +36,7 @@ export class TicketComponent implements OnInit {
   subscriptions:any = {}
 
   ngOnInit() {
-    this.subscriptions.onItemsChange = this.innowayApi.license.items.subscribe(items => {
+    this.subscriptions.onItemsChange = this.innowayApi.ticket.items.subscribe(items => {
       if(items)  this.itemsTable.reloadItems()
     })
   }
@@ -59,8 +59,8 @@ export class TicketComponent implements OnInit {
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
-    this.items.next(await this.innowayApi.license.getList({ query }))
-    this.itemCount = this.innowayApi.license.pagination.totalItems
+    this.items.next(await this.innowayApi.ticket.getList({ query }))
+    this.itemCount = this.innowayApi.ticket.pagination.totalItems
     this.ref.detectChanges();
     return this.items;
   }
@@ -118,7 +118,7 @@ export class TicketComponent implements OnInit {
     item.deleting = true;
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.innowayApi.license.delete(item.id)
+      await this.innowayApi.ticket.delete(item.id)
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();
     } catch (err) {
@@ -137,7 +137,7 @@ export class TicketComponent implements OnInit {
     });
     try {
       try { await this.confirmDelete() } catch (err) { return };
-      await this.innowayApi.license.deleteAll(ids)
+      await this.innowayApi.ticket.deleteAll(ids)
       this.itemsTable.selectAllCheckbox = false;
       this.itemsTable.reloadItems();
       this.alertDeleteSuccess();

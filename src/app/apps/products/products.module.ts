@@ -34,6 +34,7 @@ import { SwiperModule } from 'angular2-useful-swiper';
 import { FroalaComponent } from "app/editor/froala.component";
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { ToppingDetailComponent } from './topping-detail/topping-detail.component';
+import { MatCheckboxModule } from "@angular/material";
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import { ToppingDetailComponent } from './topping-detail/topping-detail.componen
     SwiperModule,
     FroalaEditorModule,
     FroalaViewModule,
+    MatCheckboxModule,
     // UploadImageByUrlComponent
   ],
   declarations: [ProductsComponent, AddComponent, DetailComponent, ToppingDetailComponent],  //UploadImageByUrlComponent

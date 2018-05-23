@@ -17,7 +17,7 @@
       [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
       <data-table-column property="address" header="Địa điểm" [sortable]="true" [visible]="false">
       </data-table-column>
-      <data-table-column property="code" header="Mã đơn hàng">
+      <data-table-column property="code" header="Mã đơn hàng" [sortable]="true">
       </data-table-column>
       <data-table-column property="customer.phone" header="Khách hàng" [resizable]="true" [sortable]="true">
         <template #dataTableCell let-item="item">

@@ -23,6 +23,18 @@ export interface iProduct extends iCrud {
   rate?: number,
 
   toppings?: iProductTopping[]
+
+  // sku?: string,
+  // product_duration: number,
+  // tag?: JSON,
+  // point_id?: string,
+  // point_value?: number,
+  // units_in_stock?: number,
+  // is_gift?: boolean,
+  // exp_date?: Date,
+  // mfg_date?: Date,
+  // pao_time?: number,
+  // meta_data?: JSON
 }
 
 export class Product extends CrudAPI<iProduct> {

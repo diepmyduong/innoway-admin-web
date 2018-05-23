@@ -50,7 +50,7 @@ export class CustomerComponent implements OnInit, ListPageInterface {
   subscriptions:any = {}
 
   ngOnInit() {
-    this.subscriptions.onItemsChange = this.innowayApi.smartCode.items.subscribe(items => {
+    this.subscriptions.onItemsChange = this.innowayApi.customer.items.subscribe(items => {
       if(items)  this.itemsTable.reloadItems()
     })
   }
@@ -74,6 +74,7 @@ export class CustomerComponent implements OnInit, ListPageInterface {
       let brandId = this.innowayApi.innowayAuth.innowayUser.brand_id
       let data = await this.innowayApi.brand.getItem(brandId, {
         query: {
+          local: false,
           fields: ["$all", {
             thirdparty_chatbot: ["$all"]
           }]
@@ -89,6 +90,7 @@ export class CustomerComponent implements OnInit, ListPageInterface {
 
   async getItems() {
     let query = Object.assign({
+      local: false,
       fields: this.itemFields
     }, this.query);
     console.log("bibi: " + JSON.stringify(query));

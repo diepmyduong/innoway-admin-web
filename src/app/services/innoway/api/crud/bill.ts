@@ -181,7 +181,7 @@ export class Bill extends CrudAPI<iBill> {
               employee_id: params.employeeId,
               note: params.note,
               type: "GHTK",
-              data:{
+              data: {
                 pick_address: {
                   longitude: params.data.pick_address.longitude,
                   latitude: params.data.pick_address.latitude
@@ -376,5 +376,54 @@ export class Bill extends CrudAPI<iBill> {
     return row;
   }
 
+  async getPrudentialEmployeeBill(params: {
+    customer_type: string
+  }) {
+    let setting = {
+      method: 'POST',
+      uri: this.apiUrl(`get_prudential_employee_bill`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body: params
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
+
+  async getPrudentialPaidHistory(params: any) {
+    let setting = {
+      method: 'POST',
+      uri: this.apiUrl(`get_prudential_paid_history`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body: params
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
+
+  async orderOnlineByCustomer(accessToken: string, params: any) {
+    let setting = {
+      method: 'POST',
+      uri: this.apiUrl(`order_online_by_customer`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': accessToken
+      },
+      json: true,
+      body: params
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
 
 }

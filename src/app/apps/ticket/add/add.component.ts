@@ -30,6 +30,13 @@ export class AddComponent implements OnInit {
   attachedFiles: string
   status: number
 
+  // ticket_type_id
+  // product_id
+  // topping_value_id
+  // bill_id
+  // customer_report_id
+  // attached_files
+
   @ViewChild("fileUploader")
   fileUploader: ElementRef;
 

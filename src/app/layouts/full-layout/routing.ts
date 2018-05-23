@@ -181,6 +181,26 @@ export const FullLayoutRouting = {
       path: 'blog-type',
       loadChildren: 'app/apps/blog-type/blog-type.module#BlogTypeModule'
     },
+    {
+      path: 'store',
+      loadChildren: 'app/apps/store/store.module#StoreModule'
+    },
+    {
+      path: 'supplier',
+      loadChildren: 'app/apps/supplier/supplier.module#SupplierModule'
+    },
+    {
+      path: 'supplier-category',
+      loadChildren: 'app/apps/supplier-category/supplier-category.module#SupplierCategoryModule'
+    },
+    {
+      path: 'export-history',
+      loadChildren: 'app/apps/export-history/export-history.module#ExportHistoryModule'
+    },
+    {
+      path: 'import-history',
+      loadChildren: 'app/apps/import-history/import-history.module#ImportHistoryModule'
+    },
   ],
 
 }

@@ -20,7 +20,6 @@ declare let StringeeCall: any
 })
 export class GiaoHangNhanhComponent implements OnInit {
   id: any;
-  brand_ship_id: string;
   isEdit: boolean = false;
   submitting: boolean = false;
 
@@ -31,6 +30,10 @@ export class GiaoHangNhanhComponent implements OnInit {
   ghnPasswordRegister: string
   ghnContactNameRegister: string
   ghnContactPhoneRegister: string
+
+  thirdparty: any
+
+  isGHN: boolean = false
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -52,6 +55,7 @@ export class GiaoHangNhanhComponent implements OnInit {
       this.setData();
     }
 
+    this.checkThirdParty(this.id)
   }
 
   setData() {
@@ -85,6 +89,33 @@ export class GiaoHangNhanhComponent implements OnInit {
       console.log("registerGHN", JSON.stringify(response))
     } catch (err) {
       console.log("registerGHN", err)
+    }
+  }
+
+  async checkThirdParty(brandId: string) {
+    try {
+      let response = await this.innowayApi.brand.getItem(brandId, {
+        query: {
+          local: false,
+          fields: ["name", {
+            thirdpary_shippers: ["$all"]
+          }]
+        }
+      })
+
+      response.thirdpary_shippers.forEach(thirdparty => {
+        if (thirdparty.type === "GHN") {
+          this.isGHN = true
+          this.thirdparty = thirdparty
+          console.log("GHN", this.isGHN)
+          this.ref.detectChanges()
+          return;
+        }
+      })
+
+      console.log("checkThirdParty", JSON.stringify(response))
+    } catch (err) {
+
     }
   }
 

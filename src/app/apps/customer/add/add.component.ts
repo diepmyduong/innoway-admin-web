@@ -35,6 +35,38 @@ export class AddComponent implements OnInit, AddPageInterface {
   isValidPhone: boolean = false;
   currentPhone: string;
 
+  username: string
+
+  company: string = null
+  companies: any[] = [
+    {
+      code: "MCOM",
+      name: "MCOM"
+    },
+    {
+      code: "UGIFT",
+      name: "Ugift"
+    },
+    {
+      code: "PRUDENTIAL",
+      name: "Prudential"
+    }
+  ]
+
+  prudCustomerType: string = null
+  prudCustomerTypes: any[] = [
+    {
+      code: "AGENT",
+      name: "Tư vấn viên"
+    }, {
+      code: "GAD",
+      name: "Đại lý"
+    }, {
+      code: "DEPARTMENT",
+      name: "Phòng ban"
+    },
+  ]
+
   dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
   constructor(private route: ActivatedRoute,
@@ -82,16 +114,131 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.email = data.email
       this.fullname = data.fullname
       this.password = data.password
-      this.phone = data.phone
+      this.phone = data.phone.toString()
+      if (this.phone) {
+        this.getTokenCustomer(this.phone)
+      }
       this.currentPhone = data.phone
       this.sex = data.sex ? data.sex.toString() : null
       this.status = data.status
       this.trustPoint = data.trust_point ? data.trust_point : 3
       this.isValidPhone = true
+
+      this.prudCustomerType = data.account_type
+      this.username = data.username
+      this.password = data.password
+      this.company = data.account_type ? "PRUDENTIAL" : "UGIFT"
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
       this.backToList()
+    }
+  }
+
+  async getTokenCustomer(phone: string) {
+    try {
+      let response = await this.innowayApi.authCustomer.getCustomerTokenByPhone({
+        phone: phone
+      })
+      console.log("getTokenCustomer", JSON.stringify(response))
+
+      this.getPaymentMethod(response.results.object.access_token)
+    } catch (err) {
+
+    }
+  }
+
+  async getPaymentMethod(token: string) {
+    try {
+      let response = await this.innowayApi.customer.getPaymentMethodOfCustomer(token)
+      console.log("getPaymentMethod", JSON.stringify(response))
+
+      // this.orderByCustomer(token)
+      this.getPrudentialEmployeeBill()
+    } catch (err) {
+
+    }
+  }
+
+  async getPrudentialEmployeeBill() {
+    try {
+      let response = await this.innowayApi.bill.getPrudentialEmployeeBill({
+        customer_type: "DEPARTMENT"
+      })
+      console.log("getPrudentialEmployeeBill", JSON.stringify(response))
+
+      this.getPrudentialPaidHistory()
+      this.createPaymentOrderUrlWebsite()
+    } catch (err) {
+
+    }
+  }
+
+  async createPaymentOrderUrlWebsite(){
+    try{
+      let response = await this.innowayApi.vnpay.createPaymentOrderUrlWebsite({
+        subscriber_id: "5b0134d9ff3f8cf282e80a59",
+        country: 'VN',
+        currency: 'VND',
+        products: [
+          {
+            "product_id": "8e0b1211-5c1c-11e8-bd70-63b68d378e7f",
+            "amount": 3,
+            "topping_value_ids": []
+          }
+        ],
+        sub_fee: 0,
+        // sub_fee_note: null,
+        shipping: true,
+        latitude: 10.782620,
+        longitude: 106.686703,
+        address: "Hoàng Văn Thụ, Phường 4, Tân Bình, Hồ Chí Minh, Vietnam",
+        website: "https://prudential-gift.firebaseapp.com/"
+      })
+
+      console.log("createPaymentOrderUrlWebsite", JSON.stringify(response))
+    }catch(err){
+
+    }
+  }
+
+  async getPrudentialPaidHistory() {
+    try {
+      let response = await this.innowayApi.bill.getPrudentialPaidHistory({
+        customer_type: "DEPARTMENT",
+        // customer_ids: []
+      })
+      console.log("getPrudentialEmployeeBill", JSON.stringify(response))
+    } catch (err) {
+
+    }
+  }
+
+  async orderByCustomer(accessToken: string) {
+    try {
+      let response = await this.innowayApi.bill.orderOnlineByCustomer(accessToken, {
+        "address": "Hoàng Văn Thụ, Phường 4, Tân Bình, Hồ Chí Minh, Vietnam",
+        "sub_fee": 0,
+        "channel": "chatbot",
+        "ship_method": "area",
+        "is_vat": true,
+        "latitude": 10.782620,
+        "longitude": 106.686703,
+
+        "subscriber_id": "5b0134d9ff3f8cf282e80a59",
+        "payment_method": "SALARY",
+        "products": [
+          {
+            "product_id": "8e0b1211-5c1c-11e8-bd70-63b68d378e7f",
+            "amount": 3,
+            "topping_value_ids": []
+          }
+        ]
+      })
+
+      console.log("orderByCustomer", JSON.stringify(response))
+    } catch (err) {
+
     }
   }
 
@@ -152,22 +299,35 @@ export class AddComponent implements OnInit, AddPageInterface {
   }
 
   async addItem(form: NgForm) {
-    if (form.valid && !this.isExisted && this.isValidPhone) {
-      let { name, avatar, email, fullname, phone, sex, status } = this;
-      let trust_point = this.trustPoint;
-      let birthday = this.birthday ? new Date(this.birthday) : null;
-      sex = sex == null || sex == "null" ? null : sex;
-      await this.innowayApi.customer.add({ name, avatar, birthday, email, fullname, phone, sex: sex as any, status, trust_point })
-      this.alertAddSuccess();
-      form.reset();
-      form.resetForm(this.setDefaultData());
+    if (form.valid && !this.isExisted) { //&& this.isValidPhone
+      if (this.company === "PRUDENTIAL") {
+        let { username, password, prudCustomerType } = this;
+        let type: string = prudCustomerType
+        await this.innowayApi.customer.createAccount({
+          username,
+          password,
+          type
+        })
+        this.alertAddSuccess();
+        form.reset();
+        form.resetForm(this.setDefaultData());
+      } else {
+        let { name, avatar, email, fullname, phone, sex, status } = this;
+        let trust_point = this.trustPoint;
+        let birthday = this.birthday ? new Date(this.birthday) : null;
+        sex = sex == null || sex == "null" ? null : sex;
+        await this.innowayApi.customer.add({ name, avatar, birthday, email, fullname, phone, sex: sex as any, status, trust_point })
+        this.alertAddSuccess();
+        form.reset();
+        form.resetForm(this.setDefaultData());
+      }
     } else {
       this.alertFormNotValid();
     }
   }
 
   async updateItem(form: NgForm) {
-    if (form.valid && !this.isExisted && this.isValidPhone) {
+    if (form.valid && !this.isExisted) { //&& this.isValidPhone
       let { name, avatar, email, fullname, phone, sex, status } = this;
       let trust_point = this.trustPoint;
       let birthday = this.birthday ? new Date(this.birthday) : null;

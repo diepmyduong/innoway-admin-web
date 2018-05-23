@@ -553,6 +553,91 @@ export class FullLayoutComponent implements OnInit {
         }
       ]
     },
+    {
+      type: 'parent',
+      name: 'Kho',
+      icon: 'fa fa-gift',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./store/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./store/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Loại nhà cung ứng',
+      icon: 'fa fa-gift',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./supplier-category/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./supplier-category/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Nhà cung ứng',
+      icon: 'fa fa-gift',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./supplier/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./supplier/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Nhập kho',
+      icon: 'fa fa-gift',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./import-history/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./import-history/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Xuất kho',
+      icon: 'fa fa-gift',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./export-history/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./export-history/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
     // {
     //   type: 'parent',
     //   name: 'Thông báo',

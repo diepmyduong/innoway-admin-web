@@ -52,11 +52,19 @@ import { ThirdpartyKiotViet } from "./api/crud/thirdparty-kiotviet";
 import { ThirdpartyShipper } from "./api/crud/thirdparty-shipper";
 import { McomManager } from "./api/crud/mcom-manager";
 import { McomManagerType } from "./api/crud/mcom-manager-type";
-import { ThirdpartyHaravan } from "app/services/innoway/api/crud/thirdparty-haravan";
-import { AutoBillStatusSetting } from "app/services/innoway/api/crud/auto-bill-status-setting";
-import { VNPay } from "app/services/innoway/api/crud/vnpay";
-import { Blog } from "app/services/innoway/api/crud/blog";
-import { BlogType } from "app/services/innoway/api/crud/blog-type";
+import { ThirdpartyHaravan } from "./api/crud/thirdparty-haravan";
+import { AutoBillStatusSetting } from "./api/crud/auto-bill-status-setting";
+import { VNPay } from "./api/crud/vnpay";
+import { Blog } from "./api/crud/blog";
+import { BlogType } from "./api/crud/blog-type";
+import { TicketResult } from "./api/crud/ticket-result";
+import { ExportHistory } from "./api/crud/export-history";
+import { ImportHistory } from "./api/crud/import-history";
+import { Store } from "./api/crud/store";
+import { Supplier } from "./api/crud/supplier";
+import { SupplierCategory } from "./api/crud/supplier_category";
+import { Inventory } from "./api/crud/inventory";
+import { AuthCustomer } from "./api/crud/auth-customer";
 
 @Injectable()
 export class InnowayApiService {
@@ -105,9 +113,11 @@ export class InnowayApiService {
   room = new Room(this)
   device = new Device(this)
   scene = new Scene(this)
+
   ticket = new Ticket(this)
   ticketType = new TicketType(this)
   ticketComment = new TicketComment(this)
+  ticketResult = new TicketResult(this)
 
   shipment = new Shipment(this)
   shipmentDetail = new ShipmentDetail(this)
@@ -131,4 +141,14 @@ export class InnowayApiService {
 
   blog = new Blog(this)
   blogType = new BlogType(this)
+
+  inventory = new Inventory(this)
+  exportHistory = new ExportHistory(this)
+  importHistory = new ImportHistory(this)
+
+  store = new Store(this)
+  supplier = new Supplier(this)
+  supplierCategory = new SupplierCategory(this)
+
+  authCustomer = new AuthCustomer(this)
 }
