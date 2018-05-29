@@ -344,3 +344,8 @@ footer {
 .enjoyhint {
     z-index: 3000;
 }
+
+.dropdown-menu {
+    min-width: 200px;
+    transform-origin: top left;
+}

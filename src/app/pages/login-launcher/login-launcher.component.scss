@@ -28,7 +28,7 @@
 
 .absolute-center {
   position: absolute;
-  height: 90%;
+  height: 80vh;
   width: 30%;
   min-width: 22rem;
   max-width: 35rem;
@@ -76,7 +76,6 @@
 }
 
 input {
-  font-family: 'Helvetica Neue';
   font-size: 1.2rem;
   border: none;
   outline: none;
@@ -85,14 +84,6 @@ input {
   text-align: center;
   display: inline-block;
   width: 84%;
-}
-
-.input-icon {
-  display: inline-block;
-  width: 8%;
-  color: white;
-  vertical-align: middle;
-  text-align: center;
 }
 
 ::-webkit-input-placeholder {
@@ -267,7 +258,7 @@ textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus {
 
 .login-form {
     position: relative;
-    height: 90%;
+    height: 80vh;
     width: 30%;
     min-width: 22rem;
     max-width: 35rem;

@@ -6,25 +6,25 @@
     <img id="logo" src="../../assets/img/logo-white.svg" />
     <h1 id="login-title">ĐĂNG NHẬP</h1>
     <div class="input-row">
-      <i class="input-icon material-icons md-36">store</i>
+      <i class="fas fa-store"></i>
       <input #brandCodeControl="ngModel" placeholder="Mã cửa hàng" [(ngModel)]="brandCode" name="brandCode" maxlength="70" tabindex="1" required>
     </div>
     <div class="input-row">
-      <i class="input-icon material-icons md-36">perm_identity</i>
+      <i class="fas fa-at"></i>
       <input #emailControl="ngModel" placeholder="Email" [(ngModel)]="email" placeholder="Email" name="email" maxlength="70" tabindex="2" email required>
     </div>
     <div class="input-row">
-      <i class="input-icon material-icons md-36">lock</i>
+      <i class="fas fa-lock"></i>
       <input #passwordControl="ngModel" placeholder="Password" [(ngModel)]="password" name="password" maxlength="70" type="password" required>
     </div>
     <div class="input-row" style="text-align: center;border: none;">
       <button type="button" class="btn btn-login" (click)="signIn(loginForm)">
-      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner"
+      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fas fa-circle-notch fa-spin loading-spinner"
         style="font-size:24px"></i>
       <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng nhập</span>
     </button>
       <button type="button" class="btn btn-login" (click)="register()">
-      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner"
+      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fas fa-circle-notch fa-spin loading-spinner"
         style="font-size:24px"></i>
       <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng ký</span>
     </button>

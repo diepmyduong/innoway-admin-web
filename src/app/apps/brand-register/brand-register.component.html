@@ -8,7 +8,7 @@
     <!-- <h1 id="login-title">ĐĂNG KÝ</h1> -->
     <tabset class="tabset-control">
       <tab>
-        <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin doanh nghiệp</ng-template>
+        <ng-template tabHeading class="tab-header"><i class="fas fa-asterisk"></i> Thông tin doanh nghiệp</ng-template>
         <div class="input-row">
           <i class="input-icon material-icons md-36">store</i>
           <input type="text" #brandNameControl="ngModel" [(ngModel)]="brandName" name="brandName" placeholder="Tên doanh nghiệp" maxlength="70" tabindex="1" required>
@@ -66,7 +66,7 @@
         </small>
       </tab>
       <tab>
-        <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Tài khoản quản trị</ng-template>
+        <ng-template tabHeading class="tab-header"><i class="fas fa-asterisk"></i> Tài khoản quản trị</ng-template>
         <div class="input-row">
           <i class="input-icon material-icons md-36">account_circle</i>
           <input type="text" #adminFullnameControl="ngModel" [(ngModel)]="adminFullname" name="adminFullname" placeholder="Tên quản trị" maxlength="70" tabindex="1" required>
@@ -119,16 +119,16 @@
     </tabset>
     <div class="input-row" style="text-align: center;border: none;">
       <button type="button" class="btn btn-login" (click)="registerNewBrand(registerForm)">
-      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner"
+      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fas fa-circle-notch fa-spin loading-spinner"
         style="font-size:24px"></i>
       <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng ký</span>
     </button>
       <button type="button" class="btn btn-login" (click)="login()">
-      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner"
+      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fas fa-circle-notch fa-spin loading-spinner"
         style="font-size:24px"></i>
       <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng nhập</span>
     </button>
     </div>
-    <!-- <button type="submit" class="btn btn-sm btn-primary" (click)="registerNewBrand()"><i class="fa fa-dot-circle-o"></i> Đăng ký</button> -->
+    <!-- <button type="submit" class="btn btn-sm btn-primary" (click)="registerNewBrand()"><i class="far fa-dot-circle"></i> Đăng ký</button> -->
   </form>
 </div>
