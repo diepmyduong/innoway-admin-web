@@ -1,8 +1,9 @@
-<div id="fundo" class="absolute-center-container">
+<div [hidden]="!loginChecked" id="fundo" class="absolute-center-container">
   <div class="circle-outline"></div>
   <div class="circle-outline"></div>
   <div class="circle-outline"></div>
-  <form #loginForm="ngForm" class="login-form" (keyup)="keyDownFunction($event,loginForm)" id="login">
+  <form #loginForm="ngForm" class="login-form" (keyup)="keyDownFunction($event,loginForm)" id="login" 
+  [hidden]="mode != 'login'">
     <img id="logo" src="../../assets/img/logo-white.svg" />
     <h1 id="login-title">ĐĂNG NHẬP</h1>
     <div class="input-row">
@@ -10,24 +11,162 @@
       <input #brandCodeControl="ngModel" placeholder="Mã cửa hàng" [(ngModel)]="brandCode" name="brandCode" maxlength="70" tabindex="1" required>
     </div>
     <div class="input-row">
-      <i class="fas fa-at"></i>
+      <i class="fas fa-envelope"></i>
       <input #emailControl="ngModel" placeholder="Email" [(ngModel)]="email" placeholder="Email" name="email" maxlength="70" tabindex="2" email required>
     </div>
     <div class="input-row">
       <i class="fas fa-lock"></i>
-      <input #passwordControl="ngModel" placeholder="Password" [(ngModel)]="password" name="password" maxlength="70" type="password" required>
+      <input #passwordControl="ngModel" placeholder="Password" [(ngModel)]="password" name="password" maxlength="70" type="password" required tabindex="3">
     </div>
-    <div class="input-row" style="text-align: center;border: none;">
-      <button type="button" class="btn btn-login" (click)="signIn(loginForm)">
-      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fas fa-circle-notch fa-spin loading-spinner"
-        style="font-size:24px"></i>
-      <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng nhập</span>
-    </button>
-      <button type="button" class="btn btn-login" (click)="register()">
-      <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fas fa-circle-notch fa-spin loading-spinner"
-        style="font-size:24px"></i>
-      <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng ký</span>
-    </button>
+    <button type="submit" type="button" class="btn btn-login" (click)="signIn(loginForm)">
+    <i [hidden]='!submitting' class="fas fa-circle-notch fa-spin loading-spinner"
+      style="font-size:24px"></i>
+    <span  [hidden]='submitting'>Đăng nhập</span>
+  </button>
+    <div class="register-row">
+      <span>Chưa có tài khoản? <button type="button" class="btn" (click)="mode = 'register'">Đăng ký</button> ngay</span>
     </div>
+    <!-- <button type="button" class="btn btn-login" (click)="register()">
+    <i [hidden]='!submitting' class="fas fa-circle-notch fa-spin loading-spinner"
+      style="font-size:24px"></i>
+    <span [hidden]='submitting'>Đăng ký</span>
+  </button> -->
+  </form>
+
+  <form #registerForm="ngForm"  class="register-form" [hidden]="mode != 'register'">
+    <div class="mid-title">
+      <img class="logo-blue" src="../../assets/img/logo.svg"/>  
+      <h1>Đăng ký</h1>
+    </div>
+    <div class="tab-header">
+      <div class="tab" [ngClass]="tab == 'business'?'active':''" (click)="tab = 'business'">
+        Thông tin doanh nghiệp
+      </div>
+      <div class="divider"></div>
+      <div class="tab" [ngClass]="tab == 'admin'?'active':''" (click)="tab = 'admin'">
+        Tài khoản quản trị
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="first-section" [ngClass]="tab == 'business'?'active':''">
+        <div class="input-row">
+          <div class="input-title"><i class="fas fa-id-badge"></i>Tên doanh nghiệp
+              <small *ngIf="brandNameControl.invalid && brandNameControl.dirty
+              && brandNameControl.errors?.required" class="text-muted danger">
+                Bắt buộc
+              </small>
+            </div>
+          <input [(ngModel)]="brandName" name="brandName" placeholder="Tên đầy đủ doanh nghiệp" 
+          maxlength="70" tabindex="4" required #brandNameControl="ngModel">
+        </div>
+        <div class="input-row">
+          <div class="input-title"><i class="fas fa-code"></i>Mã doanh nghiệp
+            <small *ngIf="brandCodeControl.invalid && brandCodeControl.dirty" class="text-muted danger">
+              <span *ngIf="brandCodeControl.hasError('required')">Bắt buộc</span>
+              <span *ngIf="!brandCodeControl.hasError('required') && brandPhoneControl.hasError('pattern')">Yêu cầu ký tự a-z và số.</span>
+              <span *ngIf="!brandCodeControl.hasError('required') && !brandCodeControl.hasError('pattern')
+              && brandCodeControl.hasError('minlength')">Từ 5 đến 12 ký tự</span>
+            </small>
+          </div>
+          <input [(ngModel)]="brandResCode" name="brandResCode" placeholder="Từ 5-12 ký tự gồm chữ và số" 
+          pattern="[a-z0-9]*" minlength="5" maxlength="12" tabindex="5" required #brandCodeControl="ngModel">
+        </div>
+        <div class="input-row">
+          <div class="input-title"><i class="fas fa-phone"></i>Số điện thoại
+            <small *ngIf="brandPhoneControl.invalid && brandPhoneControl.dirty" class="text-muted danger">
+              <span *ngIf="brandPhoneControl.hasError('required')">Bắt buộc</span>
+              <span *ngIf="!brandPhoneControl.hasError('required') && brandPhoneControl.hasError('pattern')">Yêu cầu chỉ nhập số</span>
+            </small>
+          </div>
+          <input [(ngModel)]="brandPhone" name="brandPhone" placeholder="Yêu cầu nhập số 0 - 9" pattern="[0-9]*" 
+          maxlength="12" tabindex="6" required (keypress)="keyPressPhone($event)" #brandPhoneControl="ngModel">
+        </div>
+        <div class="input-row">
+          <div class="input-title"><i class="fas fa-building"></i>Địa chỉ
+            <small *ngIf="brandAddressControl.invalid && brandAddressControl.dirty" class="text-muted danger">
+              <span *ngIf="brandAddressControl.hasError('required')">Bắt buộc</span>
+            </small></div>
+          <input #addressInput [(ngModel)]="brandAddress" name="brandAddress" placeholder="Nhập địa chỉ" tabindex="7"
+          required autocorrect="off" autocapitalize="off" spellcheck="off" #brandAddressControl="ngModel">
+        </div>
+        <div class="input-row">
+          <div class="input-title"><i class="fas fa-briefcase"></i>Loại hình doanh nghiệp</div>
+          <select [(ngModel)]="brandCategory" name="brandCategory" tabindex="8">
+            <option *ngFor="let cat of brandCategories" [value]="cat.id">
+              {{cat.name}}
+            </option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-next" (click)="tab = 'admin'">
+          <span>Tiếp tục</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="second-section" [ngClass]="tab == 'admin'?'active':''">
+        <div class="input-row">
+          <div class="input-title"><i class="fas fa-user-circle"></i>Tên quản trị
+            <small *ngIf="adminFullnameControl.invalid && adminFullnameControl.dirty" class="text-muted danger">
+              <span *ngIf="adminFullnameControl.hasError('required')">Bắt buộc</span>
+            </small>
+          </div>
+          <input [(ngModel)]="adminFullname" name="adminFullname" placeholder="Họ tên" (focus)="tab = 'admin'"
+          maxlength="70" tabindex="1" required #adminFullnameControl="ngModel" tabindex="9">
+        </div>
+        <div class="input-row">
+          <div class="input-title"><i class="fas fa-mobile-alt"></i>Số điện thoại
+            <small *ngIf="adminPhoneControl.invalid && adminPhoneControl.dirty" class="text-muted danger">
+              <span *ngIf="adminPhoneControl.hasError('required')">Bắt buộc</span>
+              <span *ngIf="!adminPhoneControl.hasError('required') && adminPhoneControl.hasError('pattern')">Yêu cầu chỉ nhập số</span>
+            </small>
+          </div>
+          <input [(ngModel)]="adminPhone" name="adminPhone" placeholder="Yêu cầu nhập từ 0 - 9" #adminPhoneControl="ngModel"
+          pattern="[0-9]*" maxlength="12" tabindex="10" required (keypress)="keyPressPhone($event)">
+        </div>
+        <div class="input-row">
+          <div class="input-title"><i class="fas fa-envelope"></i>Email
+            <small *ngIf="adminEmailControl.invalid && adminEmailControl.dirty" class="text-muted danger">
+              <span *ngIf="adminEmailControl.hasError('required')">Bắt buộc</span>
+              <span *ngIf="!adminEmailControl.hasError('required') && adminEmailControl.hasError('pattern')">Yêu cầu đúng định dạng email</span>
+            </small>
+          </div>
+          <input type="email" [(ngModel)]="adminEmail" name="adminEmail" placeholder="example@example.com" 
+          maxlength="70" tabindex="11" required #adminEmailControl="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+        </div>
+        <div class="input-row">
+          <div class="input-title"><i class="fas fa-user-lock"></i>Mật khẩu
+            <small *ngIf="adminPasswordControl.invalid && adminPasswordControl.dirty" class="text-muted danger">
+              <span *ngIf="adminPasswordControl.hasError('required')">Bắt buộc</span>
+              <span *ngIf="!adminPasswordControl.hasError('required') && adminPasswordControl.hasError('minlength')">Yêu cầu nhập 8 - 22 ký tự</span>
+            </small>
+          </div>
+          <input type="password" [(ngModel)]="adminPassword" name="adminPassword" placeholder="8 - 12 ký tự" 
+          minlength="8" maxlength="12" tabindex="1" required #adminPasswordControl="ngModel">
+        </div>
+        <div class="input-row">
+          <div class="input-title"><i class="fas fa-lock"></i>Nhập lại mật khẩu
+            <small *ngIf="adminRepasswordControl.dirty" class="text-muted danger">
+              <span *ngIf="adminRepasswordControl.value != adminPasswordControl.value">Xác nhận sai</span>
+            </small>
+          </div>
+          <input type="password" [(ngModel)]="adminRepassword" name="adminRepassword" placeholder="Xác nhận mật khẩu" 
+          maxlength="70" tabindex="13" required #adminRepasswordControl="ngModel">
+        </div>
+        <div class="button-row">
+          <button type="button" class="btn btn-prev" (click)="tab = 'business'">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <button [disabled]="submitting" type="button" class="btn btn-register" (click)="register(registerForm)" tabindex="14">
+            <i *ngIf='submitting' class="fas fa-circle-notch fa-spin loading-spinner"></i>
+            <span *ngIf='!submitting'>Đăng ký</span>
+          </button>
+        </div>
+      </div>      
+    </div>
+    
+    <button class="btn btn-back-login" (click)="mode = 'login'">
+      <i class="fas fa-sign-in-alt"></i>Trở lại đăng nhập
+    </button>
   </form>
 </div>
