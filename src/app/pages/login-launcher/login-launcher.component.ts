@@ -61,16 +61,17 @@ export class LoginLauncherComponent implements OnInit {
   get log() { return Console(`[Login Page]`).log }
 
   async ngOnInit() {
+      
+      this.loadBrandCategories()
+      this.setDefaultMap();
+      this.setAutocompleteMap();
+      
     if (await this.innowayApi.innowayAuth.authenticated) {
       this.log('already login success', 'firebase token', this.innowayApi.innowayAuth.firebaseToken)
       this.toDashboard()
     } else {
       this.log('user not login')
       this.loginChecked = true
-      
-      this.loadBrandCategories()
-      this.setDefaultMap();
-      this.setAutocompleteMap();
     }
   }
 
