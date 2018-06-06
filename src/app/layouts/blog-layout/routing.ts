@@ -16,7 +16,7 @@ export const BlogLayoutRouting = {
       loadChildren: 'app/apps/blog/blog.module#BlogModule'
     },
     {
-      path: 'blog-category',
+      path: 'blog-type',
       loadChildren: 'app/apps/blog-type/blog-type.module#BlogTypeModule'
     }
   ],
