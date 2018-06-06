@@ -20,12 +20,12 @@ export class AddComponent implements OnInit {
 
   title: string;
   public description;
+  public content;
   shortDescription: string;
   image: string;
   status: number;
   blogType: string = null;
   blogTypes: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  content: string;
   authorId: string;
 
   @ViewChild("fileUploader")
