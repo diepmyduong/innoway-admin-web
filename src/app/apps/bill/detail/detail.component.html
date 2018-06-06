@@ -1,12 +1,12 @@
 <div class="animated fadeIn">
   <tabset class="tabset-control">
     <tab>
-      <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin đơn hàng</ng-template>
+      <ng-template tabHeading class="tab-header"><i class="fas fa-asterisk"></i> Thông tin đơn hàng</ng-template>
       <div class="row">
         <div class="col-md-12">
-          <span *ngIf="isOrderFromChatbot" class="float-right send-bill mr-h" (click)="sendButtonPayment(bill)"><i class="fa fa-send-o mr-h"></i>Gửi tin nhắn</span>
-          <span *ngIf="isOrderFromChatbot" class="float-right send-bill mr-h" (click)="sendInvoiceToCustomer(bill)"><i class="fa fa-send mr-h"></i>Gửi hóa đơn</span>
-          <span *ngIf="!detectShowCancelButton(bill)" class="float-right cancel-bill mr-h" (click)="showCancelBillDialog(bill)"><i class="fa fa-remove mr-h"></i>Hủy đơn hàng</span>
+          <span *ngIf="isOrderFromChatbot" class="float-right send-bill mr-h" (click)="sendButtonPayment(bill)"><i class="far fa-paper-plane mr-h"></i>Gửi tin nhắn</span>
+          <span *ngIf="isOrderFromChatbot" class="float-right send-bill mr-h" (click)="sendInvoiceToCustomer(bill)"><i class="fas fa-paper-plane mr-h"></i>Gửi hóa đơn</span>
+          <span *ngIf="!detectShowCancelButton(bill)" class="float-right cancel-bill mr-h" (click)="showCancelBillDialog(bill)"><i class="fas fa-times mr-h"></i>Hủy đơn hàng</span>
           <span *ngIf="isCancel" class="float-right cancel-bill mr-h">Đơn hàng đã hủy</span>
         </div>
         <div class="col-md-12">
@@ -15,16 +15,16 @@
               <div class="float-left">
                 <div>Đơn hàng: <strong>{{formatBillCode(bill.code?bill.code:"")}}</strong></div>
               </div>
-              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right" (click)="sendButtonPayment(bill)"><i class="fa fa-print"></i> Gửi tin nhắn</a>
-              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right" (click)="print(bill)"><i class="fa fa-print"></i> In hóa đơn</a>
-              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right mr-h" (click)="showEditInfoDialog(bill, employee, employees)"><i class="fa fa-flag"></i> Cập nhật trạng thái</a>
-              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right mr-h" (click)="showUpdatePaidHistoryDialog(bill)"><i class="fa fa-edit"></i> Cập nhật chi phí</a>
+              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right" (click)="sendButtonPayment(bill)"><i class="fas fa-print"></i> Gửi tin nhắn</a>
+              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right" (click)="print(bill)"><i class="fas fa-print"></i> In hóa đơn</a>
+              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right mr-h" (click)="showEditInfoDialog(bill, employee, employees)"><i class="fas fa-flag"></i> Cập nhật trạng thái</a>
+              <a *ngIf="!isCancel" class="btn btn-sm btn-gray-info float-right mr-h" (click)="showUpdatePaidHistoryDialog(bill)"><i class="fas fa-edit"></i> Cập nhật chi phí</a>
             </div>
             <div class="card-block" style="padding: 1.5rem 1rem 1rem;">
               <div class="row mb-2">
 
                 <div class="col-sm-4 info-column">
-                  <h6><i class="fa fa-file-text-o"></i> Thông tin đơn hàng</h6>
+                  <h6><i class="far file-alt"></i> Thông tin đơn hàng</h6>
                   <div>Ngày nhận: {{changeDateFormat(bill.created_at, 'DD-MM-YYYY HH:mm')}}</div>
                   <div> Tổng tiền đơn hàng: {{bill.total_price | accounting}}</div>
                   <div> Tổng tiền đã thanh toán: {{payAmount | accounting}}</div>
@@ -34,7 +34,7 @@
                 <!--/.col-->
 
                 <div class="col-sm-4 info-column">
-                  <h6><i class="fa fa-truck"></i> Thông tin xử lý</h6>
+                  <h6><i class="fas fa-truck"></i> Thông tin xử lý</h6>
                   <div>Thời gian giao hàng: {{changeDateFormat(bill.bill_ship_detail?.received_time, 'DD-MM-YYYY HH:mm')}}</div>
                   <div>Nhân viên đang xử lý: <strong>{{bill.activity?.employee?.fullname?bill.activity.employee.fullname:"không có"}}</strong></div>
                   <div>Tình trạng đơn hàng: <strong>{{globals.detectBillActivityByCode(bill.activity?bill.activity.action:"không có")}}</strong></div>
@@ -44,7 +44,7 @@
                 <!--/.col-->
 
                 <div class="col-sm-4 info-column">
-                  <h6><i class="fa fa-address-card-o"></i> Khách hàng</h6>
+                  <h6><i class="far fa-address-card"></i> Khách hàng</h6>
                   <div>Họ và tên: <strong>{{bill.customer?.fullname}}</strong>
                     <i class='muted' *ngIf="!bill.customer?.fullname">Không có</i></div>
                   <div>Địa chỉ: {{bill.address}}</div>
@@ -61,8 +61,8 @@
               <div class="row mb-2" *ngIf="bill.related_people">
 
                 <div class="col-sm-4 info-column">
-                  <h6><i class="fa fa-user"></i> Thông tin người nhận
-                  <i class="fa fa-pencil editor" *ngIf="load_done.getValue() && !isCancel" (click)="openUpdateReceiverInfoDialog()"></i></h6>
+                  <h6><i class="fas fa-user"></i> Thông tin người nhận
+                  <i class="fas fa-pencil-alt editor" *ngIf="load_done.getValue() && !isCancel" (click)="openUpdateReceiverInfoDialog()"></i></h6>
                   <div>Họ tên: {{bill.related_people.receiver_name?bill.related_people.receiver_name:"không có"}}</div>
                   <div>Số điện thoại: {{bill.related_people.receiver_phone?bill.related_people.receiver_phone:"không có"}}</div>
                   <div>Địa chỉ: {{bill.related_people.receiver_address?bill.related_people.receiver_address:"không có"}}</div>
@@ -75,8 +75,8 @@
                 <!--/.col-->
 
                 <div class="col-sm-4 info-column">
-                  <h6><i class="fa fa-user"></i> Thông tin người trả
-                  <i class="fa fa-pencil editor" *ngIf="load_done.getValue() && !isCancel" (click)="openUpdatePayerInfoDialog()"></i></h6>
+                  <h6><i class="fas fa-user"></i> Thông tin người trả
+                  <i class="fas fa-pencil-alt editor" *ngIf="load_done.getValue() && !isCancel" (click)="openUpdatePayerInfoDialog()"></i></h6>
                   <div>Họ tên: {{bill.related_people.payer_name?bill.related_people.receiver_name:"không có"}}</div>
                   <div>Số điện thoại: {{bill.related_people.payer_phone?bill.related_people.payer_phone:"không có"}}</div>
                   <div>Địa chỉ: {{bill.related_people.payer_address?bill.related_people.payer_address:"không có"}}</div>
@@ -118,17 +118,17 @@
                 <div class="col-lg-4 col-sm-5">
                   <!-- <div class="row">
                         <button class="btn btn-sm btn-edit">
-                          <i class="fa fa-thermometer-three-quarters"></i> Thay đổi trạng thái
+                          <i class="fas fa-thermometer-three-quarters"></i> Thay đổi trạng thái
                         </button>
                     </div>
                     <div class="row">
                         <button class="btn btn-sm btn-edit">
-                          <i class="fa fa-file-text"></i> Chỉnh sửa hóa đơn
+                          <i class="fas fa-file-alt"></i> Chỉnh sửa hóa đơn
                         </button>
                     </div>
                     <div class="row">
                       <button class="btn btn-sm btn-edit" (click)="onClick()">
-                        <i class="fa fa-money"></i> Điều chỉnh giá tiền
+                        <i class="fas fa-money-bill"></i> Điều chỉnh giá tiền
                       </button>
                   </div> -->
                 </div>
@@ -175,7 +175,7 @@
       </div>
     </tab>
     <tab>
-      <ng-template tabHeading class="tab-header"><i class="fa fa-history"></i> Lịch sử hoạt động</ng-template>
+      <ng-template tabHeading class="tab-header"><i class="fas fa-history"></i> Lịch sử hoạt động</ng-template>
       <div class="row">
         <div class="col-lg-12">
           <div class="card">
@@ -210,7 +210,7 @@
       </div>
     </tab>
     <tab>
-      <ng-template tabHeading class="tab-header"><i class="fa fa-money"></i> Lịch sử thanh toán</ng-template>
+      <ng-template tabHeading class="tab-header"><i class="fas fa-money-bill"></i> Lịch sử thanh toán</ng-template>
       <div class="row">
         <div class="col-lg-12">
           <div class="card">

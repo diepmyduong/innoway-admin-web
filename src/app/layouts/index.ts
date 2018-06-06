@@ -12,6 +12,9 @@ import { PromotionLayoutRouting } from "./promotion-layout/routing";
 import { SettingLayoutRouting } from "./setting-layout/routing";
 import { BranchLayoutRouting } from "./branch-layout/routing";
 import { DashboardLayoutRouting } from "./dashboard-layout/routing";
+import { InventoryLayoutRouting } from "./inventory-layout/routing";
+import { TicketLayoutRouting } from "./ticket-layout/routing";
+import { BlogLayoutRouting } from "./blog-layout/routing";
 
 export {
     FullLayoutComponent,
@@ -31,4 +34,8 @@ export {
     SettingLayoutRouting,
     BranchLayoutRouting,
     DashboardLayoutRouting,
+
+    InventoryLayoutRouting,
+    TicketLayoutRouting,
+    BlogLayoutRouting
 }

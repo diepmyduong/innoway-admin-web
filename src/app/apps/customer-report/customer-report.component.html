@@ -1,0 +1,30 @@
+<div class="animated fadeIn">
+
+  <div class="row">
+    <h3 class="col-6">Danh sách yêu cầu khách hàng</h3>
+    <div class="col-6">
+      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm yêu cầu khách hàng</button>
+      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa yêu cầu khách hàng</button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="search-bar">
+      <p>Tìm kiếm</p>
+      <input type="text" class="input-control form-control" (keyup)="onSearch($event)">
+    </div>
+    <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true" [substituteRows]="false"
+      [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
+      <data-table-column property="id" header="ID" [sortable]="true">
+        <template #dataTableCell let-item="item">
+            {{ item.id }}
+          </template>
+      </data-table-column>
+      <data-table-column property="status" header="Trạng thái" [sortable]="true">
+        <template #dataTableCell let-item="item">
+              <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>
+            </template>
+      </data-table-column>
+    </data-table>
+  </div>
+</div>

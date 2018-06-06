@@ -30,6 +30,9 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     TextMaskModule,
 
     PipesModule,
+
+    FroalaEditorModule,
+    FroalaViewModule,
   ],
   declarations: [BlogComponent, DetailComponent, AddComponent]
 })

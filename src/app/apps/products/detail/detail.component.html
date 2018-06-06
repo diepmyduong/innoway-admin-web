@@ -53,7 +53,7 @@
                         </select>
                   </div>
                   <div class="col-md-10 offset-md-2">
-                    <span class="add-title" (click)="showDialogAddNewEntity('category')"><i class="fa fa-plus"></i> Thêm loại sản phẩm mới</span>
+                    <span class="add-title" (click)="showDialogAddNewEntity('category')"><i class="fas fa-plus"></i> Thêm loại sản phẩm mới</span>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -111,7 +111,7 @@
                         </select>
                   </div>
                   <div class="col-md-10 offset-md-2">
-                    <span class="add-title" (click)="showDialogAddNewEntity('product-type')"><i class="fa fa-plus"></i> Thêm trạng thái sản phẩm mới</span>
+                    <span class="add-title" (click)="showDialogAddNewEntity('product-type')"><i class="fas fa-plus"></i> Thêm trạng thái sản phẩm mới</span>
                   </div>
                 </div>
               </div>
@@ -134,7 +134,7 @@
                         </select>
                   </div>
                   <div class="col-md-10 offset-md-2">
-                    <span class="add-title" (click)="showDialogAddNewEntity('unit')"><i class="fa fa-plus"></i> Thêm đơn vị mới</span>
+                    <span class="add-title" (click)="showDialogAddNewEntity('unit')"><i class="fas fa-plus"></i> Thêm đơn vị mới</span>
                   </div>
                 </div>
               </div>
@@ -180,8 +180,8 @@
                         <div class="card-block p-0">
                           <div class="product-swiper-image" [style.background-image]="'url('+image+')'">
                             <div class="btn-group pull-right" *ngIf="image_on_hover == i">
-                              <button (click)="setThumbnail(i)" class="btn btn-primary btn-sm"><i class="fa fa-star"></i></button>
-                              <button (click)="removeImage(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                              <button (click)="setThumbnail(i)" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button>
+                              <button (click)="removeImage(i)" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                             </div>
                           </div>
                         </div>
@@ -218,8 +218,8 @@
                 <div class="form-group row remove-pb">
                   <label class="col-md-2 header-text">Topping:</label>
                   <div class="col-md-12 mt-1 mb-1">
-                    <span class="add-title" (click)="showDialogAddNewEntity('topping-type')"><i class="fa fa-plus"></i> Thêm topping mới</span><br>
-                    <span class="add-title" (click)="showDialogAddNewEntity('topping')"><i class="fa fa-plus"></i> Thêm trạng thái sản phẩm mới</span>
+                    <span class="add-title" (click)="showDialogAddNewEntity('topping-type')"><i class="fas fa-plus"></i> Thêm topping mới</span><br>
+                    <span class="add-title" (click)="showDialogAddNewEntity('topping')"><i class="fas fa-plus"></i> Thêm trạng thái sản phẩm mới</span>
                   </div>
                   <div class="col-md-12">
                     <ng-select class="form-group input-control" [multiple]="true" #toppingSelecter [allowClear]="true" [items]="topping_items | async" (selected)="toppingSelected($event)" (removed)="toppingRemoved($event)" placeholder="Chọn loại topping">
@@ -237,7 +237,7 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    Lịch sử nhập sản phẩm
+                    Số lượng trong kho hiện tại
                   </div>
                   <div class="card-block">
                     <div class="form-group row">

@@ -14,10 +14,10 @@
         {{employee.fullname}}<i class="material-icons">keyboard_arrow_down</i>
       </div>
       <ul class="dropdown-menu" aria-labelledby="accountDropdownMenu">
-        <li class="dropdown-item"><a><i class="fa fa-user"></i> Thông tin tài khoản</a></li>
-        <li class="dropdown-item"><a><i class="fa fa-wrench"></i> Cài đặt</a></li>
-        <li class="dropdown-item"><a><i class="fa fa-shield"></i> Khoá tài khoản</a></li>
-        <li class="dropdown-item" (click)="logout()"><a><i class="fa fa-lock"></i> Đăng xuất</a></li>
+        <li class="dropdown-item"><a><i class="fas fa-user"></i> Thông tin tài khoản</a></li>
+        <li class="dropdown-item"><a><i class="fas fa-wrench"></i> Cài đặt</a></li>
+        <li class="dropdown-item"><a><i class="fas fa-shield-alt"></i> Khoá tài khoản</a></li>
+        <li class="dropdown-item" (click)="logout()"><a><i class="fas fa-lock"></i> Đăng xuất</a></li>
       </ul>
     </li>
 
@@ -25,56 +25,56 @@
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-cog" matTooltip="Thiết lập" matTooltipPosition="above" (click)="goToSettingLayout()"></i>
+              <i class="fas fa-cog" matTooltip="Thiết lập" matTooltipPosition="above" (click)="goToSettingLayout()"></i>
           </a>
     </li>
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-dashboard" matTooltip="Trang điều phối" matTooltipPosition="above" (click)="goToDashboardLayout()"></i>
+              <i class="fas fa-tachometer-alt" matTooltip="Trang điều phối" matTooltipPosition="above" (click)="goToDashboardLayout()"></i>
           </a>
     </li>
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-user-secret" matTooltip="Trang nhân viên" matTooltipPosition="above" (click)="goToEmployeeLayout()"></i>
+              <i class="fas fa-user-secret" matTooltip="Trang nhân viên" matTooltipPosition="above" (click)="goToEmployeeLayout()"></i>
           </a>
     </li>
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-users" matTooltip="Trang người dùng" matTooltipPosition="above" (click)="goToCustomerLayout()"></i>
+              <i class="fas fa-users" matTooltip="Trang người dùng" matTooltipPosition="above" (click)="goToCustomerLayout()"></i>
           </a>
     </li>
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-dropbox" matTooltip="Sản phẩm" matTooltipPosition="above" (click)="goToProductLayout()"></i>
+              <i class="fas fa-box-open" matTooltip="Sản phẩm" matTooltipPosition="above" (click)="goToProductLayout()"></i>
           </a>
     </li>
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-gift" matTooltip="Khuyến mãi" matTooltipPosition="above" (click)="goToPromotionLayout()"></i>
+              <i class="fas fa-gift" matTooltip="Khuyến mãi" matTooltipPosition="above" (click)="goToPromotionLayout()"></i>
           </a>
     </li>
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-dollar" matTooltip="Đơn hàng" matTooltipPosition="above" (click)="goToBillLayout()"></i>
+              <i class="fas fa-dollar-sign" matTooltip="Đơn hàng" matTooltipPosition="above" (click)="goToBillLayout()"></i>
           </a>
     </li>
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-product-hunt" matTooltip="POS" matTooltipPosition="above" (click)="goToPOSLayout()"></i>
+              <i class="fab fa-product-hunt" matTooltip="POS" matTooltipPosition="above" (click)="goToPOSLayout()"></i>
           </a>
     </li>
   </ul>
 
   <li class="right-dropdown nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)" style="margin-right:2rem !important;">
     <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-            <i class="fa fa-server" aria-hidden="true" matTooltip="Dịch vụ công nghệ khác" matTooltipPosition="above"></i><span class="badge badge-pill badge-danger">5</span>
+            <i class="fas fa-server" aria-hidden="true" matTooltip="Dịch vụ công nghệ khác" matTooltipPosition="above"></i><span class="badge badge-pill badge-danger">5</span>
         </a>
     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownMenu">
       <li class="thirdparty-dropdown-item" *ngFor="let item of thirdparty">

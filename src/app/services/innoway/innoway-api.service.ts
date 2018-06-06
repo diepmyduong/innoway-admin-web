@@ -65,6 +65,8 @@ import { Supplier } from "./api/crud/supplier";
 import { SupplierCategory } from "./api/crud/supplier_category";
 import { Inventory } from "./api/crud/inventory";
 import { AuthCustomer } from "./api/crud/auth-customer";
+import { CustomerReport } from "./api/crud/customer-report";
+import { BrandInvoice } from "app/services/innoway/api/crud/brand-invoice";
 
 @Injectable()
 export class InnowayApiService {
@@ -151,4 +153,7 @@ export class InnowayApiService {
   supplierCategory = new SupplierCategory(this)
 
   authCustomer = new AuthCustomer(this)
+  customerReport = new CustomerReport(this)
+
+  brandInvoice = new BrandInvoice(this)
 }

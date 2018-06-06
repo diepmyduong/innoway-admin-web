@@ -638,6 +638,69 @@ export class FullLayoutComponent implements OnInit {
         }
       ]
     },
+    {
+      type: 'title',
+      name: 'Report',
+    },
+    {
+      type: 'parent',
+      name: 'Report',
+      icon: 'fa fa-usd',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./customer-report/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./customer-report/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'title',
+      name: 'Ticket',
+    },
+    {
+      type: 'parent',
+      name: 'Ticket',
+      icon: 'fa fa-usd',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./ticket/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./ticket/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'title',
+      name: 'Kết quả ticket',
+    },
+    {
+      type: 'parent',
+      name: 'Kết quả ticket',
+      icon: 'fa fa-usd',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./ticket-result/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./ticket-result/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
     // {
     //   type: 'parent',
     //   name: 'Thông báo',

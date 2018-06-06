@@ -3,9 +3,9 @@
   <div class="row">
     <h3 class="col-6">Danh sách loại khách hàng</h3>
     <div class="col-6">
-      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm loại khách hàng</button>
+      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fas fa-plus"></i>Thêm loại khách hàng</button>
       <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()"
-      [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa loại khách hàng</button>
+      [disabled]="!itemsTable.selectedRows.length"><i class="fas fa-trash"></i>Xóa loại khách hàng</button>
     </div>
   </div>
 
@@ -56,7 +56,7 @@
                         type="button" class="btn btn-sm btn-danger btn-ladda"
                         data-style="expand-right" [ladda]='item.deleting?true:false'><i class="icon-trash icons font-xl p-q d-block"></i></button>
                 </span> -->
-                <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
+                <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fas fa-edit"></i></button>
             </template>
       </data-table-column>
     </data-table>

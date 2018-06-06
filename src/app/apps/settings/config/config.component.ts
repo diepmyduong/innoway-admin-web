@@ -391,4 +391,16 @@ export class ConfigComponent implements OnInit {
   checkOnlinePayment(event, data) {
     this.isOnlinePayment = !data
   }
+
+  async connectEInvoice() {
+    try {
+      let response = await this.innowayApi.brandInvoice.connect({
+        tax_num: "0312671405",
+        app_secret: "ncn2mg988npmm8pll45c05ohfg280dg24o54i03c2n6i7836d",
+        sending_method: "AUTO"
+      })
+    } catch (err) {
+
+    }
+  }
 }

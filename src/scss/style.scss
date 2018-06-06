@@ -165,8 +165,17 @@
     font-style: italic;
 }
 
+body {
+    font-family:  "Helvetica Neue","HelveticaNeue-Light", "Helvetica Neue Light", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 300;
+}
+
 footer {
     display: none;
+}
+
+button:focus {
+    outline: none;
 }
 
 #loader-wrapper {
@@ -317,8 +326,10 @@ footer {
     }
 
     .text-muted.danger {
-        color: red !important;
+        color: #ff4444 !important;
         display: block;
+        font-style: italic;
+        font-weight: bold;
     }
 #product-swiper{
     .product-swiper-image {
@@ -343,4 +354,14 @@ footer {
 
 .enjoyhint {
     z-index: 3000;
+}
+
+.dropdown-menu {
+    min-width: 200px;
+    transform-origin: top left;
+}
+
+@keyframes slide-up {
+    from { transform: translateY(8px); opacity: 0 }
+    to { transform: translateY(0); opacity: 1 }
 }

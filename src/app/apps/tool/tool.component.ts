@@ -68,28 +68,33 @@ export class ToolComponent implements OnInit {
         hint: "thiết lập chiến dịch khuyến mãi",
         id: "promotion-id"
       }, {
+        title: "Tin tức",
+        icon: "https://farm2.staticflickr.com/1753/42527320712_c60d481d49_o.png",
+        link: "/blog-layout",
+        hint: "quản lý tin tức",
+        id: "blog-id"
+      },
+      {
+        title: "Kho",
+        icon: "https://farm1.staticflickr.com/898/41727344714_a9b49c7516_m.jpg",
+        link: "/inventory-layout",
+        hint: "quản lý kho",
+        id: "inventory-id"
+      },
+      // {
+      //   title: "Ticket",
+      //   icon: "https://farm2.staticflickr.com/1726/40642416000_7bb0c3a25c_m.jpg",
+      //   link: "/ticket-layout",
+      //   hint: "xử lý yêu cầu",
+      //   id: "ticket-id"
+      // }
+      {
         title: "POS",
         icon: "https://farm5.staticflickr.com/4528/24866458148_a12c9693af_o.png",
         link: "/pos",
         hint: "hỗ trợ bán hàng",
         id: "pos-id"
-      },
-      // {
-      //   title: "Thống kê",
-      //   icon: "https://farm5.staticflickr.com/4528/24866458148_a12c9693af_o.png",
-      //   link: "/summary-layout",
-      //   hint: "thống kê quy trình kinh doanh",
-      //   id: "summary-id"
-      // }
-      // , {
-      //   title: "Phản hồi",
-      //   icon: "https://farm5.staticflickr.com/4558/38018892994_1ef6928909_o.png",
-      //   link: "/feedback-layout",
-      // }, {
-      //   title: "Ticket",
-      //   icon: "https://farm5.staticflickr.com/4586/37848509095_91f1c6899d_o.png",
-      //   link: "/ticket-layout",
-      // }
+      }
     ],
     addon: [
       {

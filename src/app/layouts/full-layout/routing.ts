@@ -201,6 +201,22 @@ export const FullLayoutRouting = {
       path: 'import-history',
       loadChildren: 'app/apps/import-history/import-history.module#ImportHistoryModule'
     },
+    {
+      path: 'ticket',
+      loadChildren: 'app/apps/ticket/ticket.module#TicketModule'
+    },
+    {
+      path: 'ticket-type',
+      loadChildren: 'app/apps/ticket-type/ticket-type.module#TicketTypeModule'
+    },
+    {
+      path: 'ticket-result',
+      loadChildren: 'app/apps/ticket-result/ticket-result.module#TicketResultModule'
+    },
+    {
+      path: 'customer-report',
+      loadChildren: 'app/apps/customer-report/customer-report.module#CustomerReportModule'
+    },
   ],
 
 }

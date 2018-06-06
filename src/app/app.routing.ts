@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 //Layouts
 import * as layout from './layouts'
@@ -23,6 +23,10 @@ export const routes: Routes = [
   layout.PromotionLayoutRouting,
   layout.BillLayoutRouting,
   layout.BranchLayoutRouting,
+  layout.InventoryLayoutRouting,
+  layout.TicketLayoutRouting,
+  layout.BillLayoutRouting,
+  layout.BlogLayoutRouting,
   layout.DashboardLayoutRouting,
   {
     path: '**',
@@ -31,7 +35,7 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
+  imports: [ RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules}) ],
   exports: [ RouterModule ]
 })
 export class AppRoutingModule {}

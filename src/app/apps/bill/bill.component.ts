@@ -414,4 +414,14 @@ export class BillComponent implements OnInit, ListPageInterface {
     }
     return false
   }
+
+  async loadPruBill(){
+    try{
+      this.items.next(await this.innowayApi.bill.getPrudentialEmployeeBill({}))
+      this.ref.detectChanges()
+    }catch(err){
+
+    }
+  }
+
 }

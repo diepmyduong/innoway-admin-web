@@ -28,6 +28,9 @@ import { BrandLayoutComponent } from './brand-layout/brand-layout.component';
 import { LicenseLayoutComponent } from './license-layout/license-layout.component';
 
 import { MatTooltipModule } from '@angular/material';
+import { InventoryLayoutComponent } from "./inventory-layout/inventory-layout.component";
+import { TicketLayoutComponent } from "./ticket-layout/ticket-layout.component";
+import { BlogLayoutComponent } from "./blog-layout/blog-layout.component";
 
 @NgModule({
   imports: [
@@ -38,6 +41,6 @@ import { MatTooltipModule } from '@angular/material';
     ToasterModule,
     MatTooltipModule
   ],
-  declarations: [SimpleLayoutComponent, FullLayoutComponent, LauncherLayoutComponent, ProductLayoutComponent, EmployeeLayoutComponent, CustomerLayoutComponent, BillLayoutComponent, SettingLayoutComponent, PromotionLayoutComponent, BranchLayoutComponent, IntegrationComponent, DashboardLayoutComponent, IntegrateChatbotLayoutComponent, IntegrateKiotvietLayoutComponent, SummaryLayoutComponent, ReportLayoutComponent, FeedbackLayoutComponent, BrandLayoutComponent, LicenseLayoutComponent]
+  declarations: [SimpleLayoutComponent, FullLayoutComponent, LauncherLayoutComponent, ProductLayoutComponent, EmployeeLayoutComponent, CustomerLayoutComponent, BillLayoutComponent, SettingLayoutComponent, PromotionLayoutComponent, BranchLayoutComponent, IntegrationComponent, DashboardLayoutComponent, IntegrateChatbotLayoutComponent, IntegrateKiotvietLayoutComponent, SummaryLayoutComponent, ReportLayoutComponent, FeedbackLayoutComponent, BrandLayoutComponent, LicenseLayoutComponent, InventoryLayoutComponent, TicketLayoutComponent, BlogLayoutComponent]
 })
 export class LayoutsModule { }

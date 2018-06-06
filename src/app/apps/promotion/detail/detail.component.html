@@ -6,7 +6,7 @@
         <div class="card-block" style="padding: 1.5rem 1rem 1rem;">
           <div class="row mb-2">
             <div class="col-sm-4 info-column">
-              <h6><i class="fa fa-file-text-o"></i> Thông tin chi tiết khuyến mãi</h6>
+              <h6><i class="far file-alt"></i> Thông tin chi tiết khuyến mãi</h6>
               <div>Tổng số lượng sử dụng: {{information.number_of_used_time?(information.number_of_used_time | number):0}}</div>
               <div>Tổng số lượng người dùng sử dụng: {{information.number_of_used_customer?(information.number_of_used_customer | number):0}}</div>
               <div>Tổng tiền khuyến mãi: {{information.number_of_purchase?(information.number_of_purchase | accounting):'0 đ'}}</div>
@@ -19,7 +19,7 @@
 
   <tabset class="tabset-control">
     <tab>
-      <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin đơn hàng</ng-template>
+      <ng-template tabHeading class="tab-header"><i class="fas fa-asterisk"></i> Thông tin đơn hàng</ng-template>
       <div class="table-wrapper">
         <h5 class="col-6">Danh sách đơn hàng sử dụng khuyến mãi</h5>
 
@@ -43,15 +43,15 @@
           </data-table-column>
           <data-table-column header="Actions">
             <template #dataTableCell let-item="item">
-              <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
-                <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-eye"></i></button>
+              <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fas fa-edit"></i></button>
+                <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fas fa-eye"></i></button>
             </template>
           </data-table-column>
         </data-table>
       </div>
     </tab>
     <tab>
-      <ng-template tabHeading class="tab-header"><i class="fa fa-asterisk"></i> Thông tin khách hàng</ng-template>
+      <ng-template tabHeading class="tab-header"><i class="fas fa-asterisk"></i> Thông tin khách hàng</ng-template>
       <div class="table-wrapper">
         <h5 class="col-6">Danh sách đơn hàng sử dụng khuyến mãi</h5>
 
@@ -70,8 +70,8 @@
           </data-table-column>
           <data-table-column header="Actions">
             <template #dataTableCell let-item="item">
-              <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
-                <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-eye"></i></button>
+              <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fas fa-edit"></i></button>
+                <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fas fa-eye"></i></button>
             </template>
           </data-table-column>
         </data-table>
