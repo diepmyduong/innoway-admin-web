@@ -41,7 +41,7 @@
           <div class="form-group row">
             <label class="col-md-2 header-text" for="textarea-input">Nội dung</label>
             <div class="col-md-10">
-              <textarea id="textarea-input" #contentControl="ngModel" rows="8" [(ngModel)]="content" name="content" class="form-control input-control" [placeholder]="'Nhập nội dung'"></textarea>
+                <textarea [froalaEditor] name="content" class="form-control input-control" [placeholder]="'Nhập nội dung'"></textarea>
             </div>
           </div>
           <div class="form-group row">
