@@ -3,8 +3,9 @@
   <div class="row">
     <h3 class="col-6">Danh sách đơn hàng</h3>
     <div class="col-6">
-      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fas fa-plus"></i>Thêm đơn hàng</button>
-      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length" [hidden]="true"><i class="fas fa-trash"></i>Xóa đơn hàng</button>
+      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm đơn hàng</button>
+      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length" [hidden]="true"><i class="fa fa-trash"></i>Xóa đơn hàng</button>
+      <button class="btn btn-md button-default-danger ml-auto" (click)="loadPruBill()" [disabled]="!itemsTable.selectedRows.length" [hidden]="true"><i class="fa fa-trash"></i>Prudential</button>
     </div>
   </div>
 

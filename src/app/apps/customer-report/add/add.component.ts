@@ -2,10 +2,10 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@an
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { InnowayApiService } from 'app/services/innoway';
-import * as moment from 'moment';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 declare let swal: any
+
 
 @Component({
   selector: 'app-add',
@@ -13,73 +13,47 @@ declare let swal: any
   styleUrls: ['./add.component.scss']
 })
 export class AddComponent implements OnInit {
-
   id: any;
   isEdit: boolean = false;
 
   submitting: boolean = false;
 
-  employeeId: string = null
-  parentId: string = null
-  assigneeId: string
-  title: string
-  content: string
-  actionStatus: string = null//normal, high, urgent
-  actionStatuses: any[] = [
-    {
-      name: "Normal",
-      code: "normal"
-    },
-    {
-      name: "High",
-      code: "high"
-    },
-    {
-      name: "Urgent",
-      code: "urgent"
-    }
-  ]
-  activityStatus: string = null//to_do, in_progress, reopen, resolved, closed
-  activityStatuses: any[] = [
-    {
-      name: "To do",
-      code: "to_do"
-    },
-    {
-      name: "In Progress",
-      code: "in_progress"
-    },
-    {
-      name: "Reopen",
-      code: "reopen"
-    },
-    {
-      name: "Resolved",
-      code: "resolved"
-    },
-    {
-      name: "Closed",
-      code: "closed"
-    },
-  ]
-  ticketTypeId: string = null
-  ticketTypes: any[] = [
+  customerId: string = "82d4b8c0-5c9d-11e8-bd70-63b68d378e7f"
+  billId: string = null
+  productId: string = null
+  toppingValueId: string = null
+
+  type: string = null
+  types: any[] = [
     {
       code: "return_product",
       name: "Return Product"
     }
   ]
+  title: string
+  content: string
   attachedFiles: string
-  status: number
+  reportStatus: string = null
+  reportStatuses: any[] = [
+    {
+      code: "to_do",
+      name: "To do"
+    },
+    {
+      code: "in_progress",
+      name: "In Progress"
+    },
+    {
+      code: "done",
+      name: "Done"
+    },
+    {
+      code: "not handle",
+      name: "Not Handle"
+    }
+  ]
 
-  productId: string = null
-  products:  BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  toppingValueId: string = null
-  toppingValues:  BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  billId: string = null
-  bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  customerReportId: string = null
-  customerReports:  BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  status: number = 1
 
   @ViewChild("fileUploader")
   fileUploader: ElementRef;
@@ -98,6 +72,7 @@ export class AddComponent implements OnInit {
     private ref: ChangeDetectorRef,
     public innowayApi: InnowayApiService
   ) {
+
   }
 
   ngOnInit() {
@@ -112,48 +87,41 @@ export class AddComponent implements OnInit {
     if (this.isEdit) {
       this.setData();
     }
+
   }
 
   setDefaultData() {
-    this.employeeId = null
-    this.parentId = null
-    this.assigneeId = null
+
     this.title = null
     this.content = null
-    this.actionStatus = null
-    this.activityStatus = null
-    this.ticketTypeId = null
+    this.type = null
     this.attachedFiles = null
+    this.reportStatus = null
     this.status = 1
+
     return {
-      employeeId: this.employeeId,
-      parentId: this.parentId,
-      assigneeId: this.assigneeId,
       title: this.title,
       content: this.content,
-      actionStatus: this.actionStatus,
-      activityStatus: this.activityStatus,
-      ticketTypeId: this.ticketTypeId,
+      type: this.type,
       attachedFiles: this.attachedFiles,
+      reportStatus: this.reportStatus,
       status: this.status
     }
   }
 
   async setData() {
     try {
-      let data = await this.innowayApi.contract.getItem(this.id, {
+      let data = await this.innowayApi.exportHistory.getItem(this.id, {
         query: { fields: ["$all"] }
       })
-      this.employeeId = data.employee_id
-      this.parentId = data.parent_id
-      this.assigneeId = data.assignee_id
+
       this.title = data.title
       this.content = data.content
-      this.actionStatus = data.action_status
-      this.activityStatus = data.activity_status
-      this.ticketTypeId = data.ticket_type_id
+      this.type = data.title
       this.attachedFiles = data.attached_files
+      this.reportStatus = data.report_status
       this.status = data.status
+
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       this.backToList()
@@ -218,18 +186,25 @@ export class AddComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { employeeId, parentId, assigneeId, title,
-        content, actionStatus, activityStatus, ticketTypeId, attachedFiles, status } = this;
-      let employee_id = employeeId
-      let parent_id = parentId
-      let assignee_id = assigneeId
-      let action_status = actionStatus
-      let activity_status = activityStatus
-      let ticket_type_id = ticketTypeId
+      let {
+        title,
+        content,
+        type,
+        attachedFiles,
+        reportStatus,
+        status
+      } = this;
+
       let attached_files = attachedFiles
-      await this.innowayApi.contract.add({
-        employee_id, parent_id, assignee_id, title,
-        content, action_status, activity_status, ticket_type_id, attached_files, status
+      let report_status = reportStatus
+
+      await this.innowayApi.customerReport.add({
+        title,
+        content,
+        type,
+        attached_files,
+        report_status,
+        status
       })
       this.alertAddSuccess();
       form.reset();
@@ -241,21 +216,29 @@ export class AddComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { employeeId, parentId, assigneeId, title,
-        content, actionStatus, activityStatus, ticketTypeId, attachedFiles, status } = this;
-      let employee_id = employeeId
-      let parent_id = parentId
-      let assignee_id = assigneeId
-      let action_status = actionStatus
-      let activity_status = activityStatus
-      let ticket_type_id = ticketTypeId
+      let {
+        title,
+        content,
+        type,
+        attachedFiles,
+        reportStatus,
+        status
+      } = this;
+
       let attached_files = attachedFiles
-      await this.innowayApi.contract.update(this.id, {
-        employee_id, parent_id, assignee_id, title,
-        content, action_status, activity_status, ticket_type_id, attached_files, status
+      let report_status = reportStatus
+
+      await this.innowayApi.customerReport.update(this.id, {
+        title,
+        content,
+        type,
+        attached_files,
+        report_status,
+        status
       })
-      this.alertUpdateSuccess();
+      this.alertAddSuccess();
       form.reset();
+      form.resetForm(this.setDefaultData());
     } else {
       this.alertFormNotValid();
     }
@@ -296,8 +279,45 @@ export class AddComponent implements OnInit {
     }
   }
 
-  // bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  // products: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  async onChangeImageFile(event) {
+    let files = this.fileUploader.nativeElement.files
+    let file = files[0]
+    try {
+      let response = await this.innowayApi.upload.uploadImage(file)
+      this.previewImage = response.link
+    } catch (err) {
+    }
+  }
+
+  onImageError(event) {
+    this.previewImage = this.errorImage;
+  }
+
+  onImageChangeData(event) {
+    this.previewImage = event;
+  }
+
+  removeImage() {
+    this.previewImage = undefined;
+  }
+
+  startLoading() {
+    this.progress = 0;
+    setTimeout(() => {
+      this.progress = 0.5;
+    }, 30000);
+  }
+
+  endLoading() {
+    this.progress = 1;
+
+    setTimeout(() => {
+      this.progress = false;
+    }, 200);
+  }
+
+  bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  products: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   async billOfCustomer(customerId: string) {
     try {
@@ -315,7 +335,7 @@ export class AddComponent implements OnInit {
     }
   }
 
-  async productInBill(billId: string) {
+  async productInBill(billId: string){
     try {
       let data = await this.innowayApi.bill.getItem(billId, {
         query: {
@@ -330,5 +350,4 @@ export class AddComponent implements OnInit {
 
     }
   }
-
 }

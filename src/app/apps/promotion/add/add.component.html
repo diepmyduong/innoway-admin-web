@@ -38,51 +38,7 @@
                   (Không được bỏ trống)
                 </small>
               </div>
-            </div>
-            <!-- <div class="form-group row">
-              <div class="col-md-12">
-                <input type="radio" [(ngModel)]="model.method" name="method" value="url">Url<br>
-                <input type="radio" [(ngModel)]="model.method" name="method" value="upload">Upload Image
-              </div>
-              <div>Selected Radio: {{model.method}}</div>
-
-              <div class="col-md-12">
-                <div *ngIf="model.method=='url'" class="form-group row">
-                  <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
-                  <div class="col-md-10">
-                    <input type="text" #imageControl="ngModel" [(ngModel)]="image" name="image" class="form-control input-control" [placeholder]="image?'':'Nhập url'" url required/>
-                    <small *ngIf="imageControl.errors?.required" class="text-muted danger">
-                      (Không được bỏ trống)
-                    </small>
-                    <small *ngIf="imageControl.errors?.url" class="text-muted danger">
-                      (Link không hợp lệ)
-                    </small>
-                    <img *ngIf="imageControl.value && imageControl.valid" style="width:auto;height:80px;margin-top:0.2rem;" [src]="imageControl.value" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-12">
-                <div *ngIf="model.method=='upload'" class="form-group row">
-                  <label class="col-md-2 header-text" for="file-input">Hình ảnh</label>
-                  <div class="col-md-9">
-                    <input type="file" name="file-input" #fileUploader (change)="onChangeImageFile($event)">
-                    <img id="preview-image" *ngIf="fileUploader.value" style="width:auto;height:80px;margin-top:0.2rem;" [src]="fileUploader.value" />
-                    <p>{{fileUploader.value}}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group row" [hidden]="true">
-              <label class="col-md-3 col-form-label" for="file-input">File import</label>
-              <div class="col-md-9">
-                <input type="file" name="file-input" #fileImportUploader (change)="onChangeImportFile($event)">
-              </div>
-            </div>
-
-            <button (click)="export()" [hidden]="true">Export</button> -->
-
+            </div>        
             <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Mô tả ngắn</label>
               <div class="col-md-10">

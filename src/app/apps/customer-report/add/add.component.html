@@ -1,0 +1,116 @@
+<div class="animated fadeIn">
+  <form class="row" #itemFrm="ngForm">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>{{isEdit?"Cập nhật":"Thêm"}} yêu cầu khách hàng</strong>
+        </div>
+        <div class="card-block">
+
+          <!-- type: string = null
+          types: any[] = [
+            {
+              code: "return_product",
+              name: "Return Product"
+            }
+          ]
+          title: string
+          content: string
+          attachedFiles: string
+          reportStatus: string = null
+          reportStatuses: any[] = [ -->
+
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="text-input">Tiêu đề</label>
+            <div class="col-md-10">
+              <input type="text" #titleControl="ngModel" [(ngModel)]="title" name="title" class="form-control input-control" [placeholder]="'Nhập tiêu đề'" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="text-input">Nội dung</label>
+            <div class="col-md-10">
+              <textarea type="text" #contentControl="ngModel" [(ngModel)]="content" name="content" class="form-control input-control" [placeholder]="'Nhập nội dung'" ></textarea>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Chọn loại yêu cầu</label>
+            <div class="col-md-10">
+              <select id="select" #typeControl="ngModel" [(ngModel)]="type" name="type" class="form-control input-control">
+                  <option [value]="null" selected=true disabled=true>Chọn loại yêu cầu</option>
+                  <option *ngFor="let v of types" [value]="v.code">
+                    {{v.name}}
+                  </option>
+                </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Chọn trạng thái xử lý</label>
+            <div class="col-md-10">
+              <select id="select" #reportStatusControl="ngModel" [(ngModel)]="reportStatus" name="reportStatus" class="form-control input-control">
+                  <option [value]="null" selected=true disabled=true>Chọn trạng thái xử lý</option>
+                  <option *ngFor="let v of reportStatuses" [value]="v.code">
+                    {{v.name}}
+                  </option>
+                </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Chọn đơn hàng</label>
+            <div class="col-md-10">
+              <select id="select" #billIdControl="ngModel" [(ngModel)]="billId" name="billId" class="form-control input-control">
+                  <option [value]="null" selected=true disabled=true>Chọn đơn hàng</option>
+                  <option *ngFor="let v of bills | async" [value]="v.id">
+                    {{v.code}}
+                  </option>
+                </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Sản phẩm</label>
+            <div class="col-md-10">
+              <select id="select" #productIdControl="ngModel" [(ngModel)]="productId" name="productId" class="form-control input-control">
+                  <option [value]="null" selected=true disabled=true>Chọn sản phẩm</option>
+                  <option *ngFor="let v of products | async" [value]="v.id">
+                    {{v.name}}
+                  </option>
+                </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Loại topping</label>
+            <div class="col-md-10">
+              <select id="select" #toppingValueIdControl="ngModel" [(ngModel)]="toppingValueId" name="toppingValueId" class="form-control input-control">
+                  <option [value]="null" selected=true disabled=true>Chọn topping</option>
+                  <option *ngFor="let v of toppingValues | async" [value]="v.id">
+                    {{v.name}}
+                  </option>
+                </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
+            <div class="col-md-10">
+              <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">
+                  <option *ngFor="let v of [0,1]" [value]="v">
+                    {{ v===1?"Hoạt động":"Không hoạt động"}}
+                  </option>
+                </select>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

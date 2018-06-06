@@ -127,7 +127,7 @@ export class BillsComponent implements OnInit {
     this.loadEmployeeData()
     this.subscribeTopicByFCM()
     this.subscribeDashboardParent()
-    this.loadAuthCustomer()
+    // this.loadAuthCustomer()
   }
 
   async loadAuthCustomer() {
