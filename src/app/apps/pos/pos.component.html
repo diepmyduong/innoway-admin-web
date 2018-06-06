@@ -11,10 +11,10 @@
             {{employee.fullname}}<i class="material-icons">keyboard_arrow_down</i>
           </div>
           <ul class="dropdown-menu" aria-labelledby="accountDropdownMenu">
-            <li class="dropdown-item"><a><i class="fa fa-user"></i> Thông tin tài khoản</a></li>
-            <li class="dropdown-item"><a><i class="fa fa-wrench"></i> Cài đặt</a></li>
-            <li class="dropdown-item"><a><i class="fa fa-shield"></i> Khoá tài khoản</a></li>
-            <li class="dropdown-item" (click)="logout()"><a><i class="fa fa-lock"></i> Đăng xuất</a></li>
+            <li class="dropdown-item"><a><i class="fas fa-user"></i> Thông tin tài khoản</a></li>
+            <li class="dropdown-item"><a><i class="fas fa-wrench"></i> Cài đặt</a></li>
+            <li class="dropdown-item"><a><i class="fas fa-shield-alt"></i> Khoá tài khoản</a></li>
+            <li class="dropdown-item" (click)="logout()"><a><i class="fas fa-lock"></i> Đăng xuất</a></li>
           </ul>
         </li>
 
@@ -22,18 +22,18 @@
 
         <li class="nav-item dropdown" dropdown placement="bottom right" (onToggle)="toggled($event)">
           <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-                  <i class="fa fa-bell-o" aria-hidden="true"></i><span class="badge badge-pill badge-danger">5</span>
+                  <i class="far fa-bell" aria-hidden="true"></i><span class="badge badge-pill badge-danger">5</span>
               </a>
           <ul class="dropdown-menu" aria-labelledby="accountDropdownMenu">
-            <li class="dropdown-item"><i class="fa fa-user"></i> Đơn hàng chờ duyệt</li>
-            <li class="dropdown-item"><i class="fa fa-wrench"></i> Đơn hàng chờ thu phí</li>
-            <li class="dropdown-item"><i class="fa fa-shield"></i> Đơn hàng báo huỷ</li>
+            <li class="dropdown-item"><i class="fas fa-user"></i> Đơn hàng chờ duyệt</li>
+            <li class="dropdown-item"><i class="fas fa-wrench"></i> Đơn hàng chờ thu phí</li>
+            <li class="dropdown-item"><i class="fas fa-shield-alt"></i> Đơn hàng báo huỷ</li>
           </ul>
         </li>
 
         <li class="nav-item dropdown" dropdown placement="bottom right" (onToggle)="toggled($event)">
           <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-                  <i class="fa fa-commenting-o"></i>
+                  <i class="far fa-comment-dots"></i>
               </a>
         </li>
 
@@ -45,7 +45,7 @@
 
         <li class="nav-item dropdown" dropdown placement="bottom right" (onToggle)="toggled($event)">
           <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-                  <i class="fa fa-power-off"></i>
+                  <i class="fas fa-power-off"></i>
               </a>
         </li>
       </ul>
@@ -80,7 +80,7 @@
           <div class="form-group row">
             <label class="col-md-4 header-text form-control input-control-label" for="text-input">Tên khách hàng</label>
             <div class="col-md-8">
-              <div class="phone-spinner" *ngIf="isDetectingNameFromPhone"><i class="fa fa-refresh fa-spin"></i></div>
+              <div class="phone-spinner" *ngIf="isDetectingNameFromPhone"><i class="fas fa-sync-alt fa-spin"></i></div>
               <input type="text" [disabled]="isDetectingNameFromPhone" #customerNameAtStoreControl="ngModel" [(ngModel)]="customerNameAtStore"
               name="customerNameAtStore" [readonly]="this.customer?.fullname" class="input-control form-control" [placeholder]="customerNamePlaceholder"/>
             </div>
@@ -202,7 +202,7 @@
               <label class="col-md-4 header-text form-control input-control-label" for="text-input">Số điện thoại</label>
               <div class="col-md-8">
                 <div class="phone-header">+84</div>
-                <div class="phone-spinner" *ngIf="isDetectingNameFromPhone"><i class="fa fa-refresh fa-spin"></i></div>
+                <div class="phone-spinner" *ngIf="isDetectingNameFromPhone"><i class="fas fa-sync-alt fa-spin"></i></div>
                 <input type="text" #customerPhoneOnlineControl="ngModel" [(ngModel)]="customerPhoneAtStore" (ngModelChange)="detectCustomerByPhone($event)"
                 name="customerPhoneOnline" class="input-control form-control phone-control" placeholder="Nhập SĐT">
               </div>
@@ -246,7 +246,7 @@
             <div class="form-group row">
               <label class="col-md-4 header-text form-control input-control-label" for="text-input">Phí giao hàng</label>
               <div class="col-md-8">
-                <div class="phone-spinner" *ngIf="isCalculatingShipFee"><i class="fa fa-refresh fa-spin"></i></div>
+                <div class="phone-spinner" *ngIf="isCalculatingShipFee"><i class="fas fa-sync-alt fa-spin"></i></div>
                 <div class="phone-spinner ship-danger" *ngIf="!isCalculatingShipFee && !addressValidated"><i>Không hỗ trợ</i></div>
                 <input type="text" #shipFeeControl="ngModel" [textMask]="{mask: numberMask}" [(ngModel)]="shipFee" name="shipFee" class="form-control input-control" readonly/>
               </div>
@@ -307,8 +307,8 @@
               <label class="col-md-4 header-text form-control input-control-label" for="text-input">Thông tin người nhận</label>
               <div class="col-md-8">
                 <button (click)="openUpdateReceiverInfoDialog()" type="button" class="btn btn-client-info">
-                  <i class="fa fa-plus" *ngIf="!receiverName && !receiverPhone && !receiverNote && !receiverAddress"></i>
-                  <span class="added-text" *ngIf="receiverName || receiverPhone || receiverNote || receiverAddress">Đã thêm<i class="fa fa-check"></i></span>
+                  <i class="fas fa-plus" *ngIf="!receiverName && !receiverPhone && !receiverNote && !receiverAddress"></i>
+                  <span class="added-text" *ngIf="receiverName || receiverPhone || receiverNote || receiverAddress">Đã thêm<i class="fas fa-check"></i></span>
                 </button>
               </div>
             </div>
@@ -316,8 +316,8 @@
               <label class="col-md-4 header-text form-control input-control-label" for="text-input">Thông tin người trả tiền</label>
               <div class="col-md-8">
                 <button (click)="openUpdatePayerInfoDialog()" type="button" class="btn btn-client-info">
-                  <i class="fa fa-plus" *ngIf="!payerName && !payerPhone && !payerNote && !payerAddress"></i>
-                  <span class="added-text" *ngIf="payerName || payerPhone || payerNote || payerAddress">Đã thêm<i class="fa fa-check"></i></span>
+                  <i class="fas fa-plus" *ngIf="!payerName && !payerPhone && !payerNote && !payerAddress"></i>
+                  <span class="added-text" *ngIf="payerName || payerPhone || payerNote || payerAddress">Đã thêm<i class="fas fa-check"></i></span>
                 </button>
               </div>
             </div>
@@ -404,8 +404,8 @@
           </div>
         </div>
         <button class="btn btn-primary" (click)="addOrder()" [disabled]="isCreatingOrder">
-          <i *ngIf="isCreatingOrder" class="fa fa-circle-o-notch fa-spin"></i>
-          <span *ngIf="!isCreatingOrder"><i class="fa fa-plus"></i> Tạo đơn hàng</span>
+          <i *ngIf="isCreatingOrder" class="fas fa-circle-notch fa-spin"></i>
+          <span *ngIf="!isCreatingOrder"><i class="fas fa-plus"></i> Tạo đơn hàng</span>
         </button>
       </div>
     </form>
@@ -452,9 +452,9 @@
           <template #dataTableCell let-item="item" let-row="row">
             <span>
               <button (click)="getToppings(item, row.index)"
-                  type="button" class="btn btn-item btn-green"><i class="fa fa-plus-circle"></i></button>
+                  type="button" class="btn btn-item btn-green"><i class="fas fa-plus-circle"></i></button>
               <button (click)="removeProduct(item, row.index)"
-                  type="button" class="btn btn-item btn-red"><i class="fa fa-trash"></i></button>
+                  type="button" class="btn btn-item btn-red"><i class="fas fa-trash"></i></button>
             </span>
           </template>
         </data-table-column>
@@ -484,7 +484,7 @@
       <div class="menu-wrapper">
         <div class="menu-no-item" *ngIf="!isQueryingProduct && productData.getValue()?.length == 0">Không có kết quả</div>
         <div class="menu-loading" *ngIf="isQueryingProduct">
-          <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+          <i class="fas fa-sync-alt fa-spin" aria-hidden="true"></i>
         </div>
         <div class="menu-item" *ngFor="let v of productData | async" (click)="addProduct(v)" [hidden]="isQueryingProduct">
             <div class="product-thumb"><img src={{v.thumb}}/></div>

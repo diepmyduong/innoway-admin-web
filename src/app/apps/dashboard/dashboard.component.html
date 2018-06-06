@@ -4,11 +4,11 @@
       <nav>
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" [ngClass]="billFilterInfo.code?.length?'blue-primary':''"><i class="fa fa-map-signs"></i> Mã đơn hàng</a>
+            <a class="nav-link" [ngClass]="billFilterInfo.code?.length?'blue-primary':''"><i class="fas fa-map-signs"></i> Mã đơn hàng</a>
             <input type="text" #billContent [(ngModel)]="billFilterInfo.code" class="input-control form-control" (keyup)="onChangeBill(billContent.value)" placeholder="Tìm kiếm đơn hàng">
           </li>
           <li class="nav-item">
-            <a class="nav-link" [ngClass]="billFilterInfo.billAction?'blue-primary':''"><i class="fa fa-info-circle"></i> Trạng thái</a>
+            <a class="nav-link" [ngClass]="billFilterInfo.billAction?'blue-primary':''"><i class="fas fa-info-circle"></i> Trạng thái</a>
             <select #action [(ngModel)]="billFilterInfo.billAction" (ngModelChange)="onChangeAction($event)" class="select-control form-control">
               <option [ngValue]="all" selected>
                   Tất cả
@@ -19,15 +19,15 @@
             </select>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [ngClass]="billFilterInfo.billPhone?.length?'blue-primary':''"><i class="fa fa-phone"></i> Số điện thoại</a>
+            <a class="nav-link" [ngClass]="billFilterInfo.billPhone?.length?'blue-primary':''"><i class="fas fa-phone"></i> Số điện thoại</a>
             <input #billPhone [(ngModel)]="billFilterInfo.billPhone" class="input-control form-control" (keyup)="onChangeCustomer(billPhone.value)" type="text" placeholder="+84 hoặc 0">
           </li>
           <li class="nav-item">
-            <a class="nav-link" [ngClass]="billFilterInfo.billCustomer?.length?'blue-primary':''"><i class="fa fa-user"></i> Họ và tên</a>
+            <a class="nav-link" [ngClass]="billFilterInfo.billCustomer?.length?'blue-primary':''"><i class="fas fa-user"></i> Họ và tên</a>
             <input #billCustomer [(ngModel)]="billFilterInfo.billCustomer" class="input-control form-control" (keyup)="onChangeCustomerName(billCustomer.value)" type="text" placeholder="Tên khách hàng">
           </li>
           <li class="nav-item">
-            <a class="nav-link" [ngClass]="billFilterInfo.billEmployee?'blue-primary':''"><i class="fa fa-bicycle"></i> Nhân viên</a>
+            <a class="nav-link" [ngClass]="billFilterInfo.billEmployee?'blue-primary':''"><i class="fas fa-bicycle"></i> Nhân viên</a>
             <select #billEmployee [(ngModel)]="billFilterInfo.billEmployee" (ngModelChange)="onChangeEmployee($event)" class="select-control form-control">
               <option [ngValue]="all" selected>
                   Tất cả
@@ -38,7 +38,7 @@
             </select>
           </li>
           <li class="nav-item" *ngIf="false">
-            <a class="nav-link" [ngClass]="billFilterInfo.billArea?'blue-primary':''"><i class="fa fa-map"></i> Khu vực</a>
+            <a class="nav-link" [ngClass]="billFilterInfo.billArea?'blue-primary':''"><i class="fas fa-map"></i> Khu vực</a>
             <select [(ngModel)]="billFilterInfo.billArea" class="select-control form-control">
               <option [ngValue]="all" selected>
                   Tất cả

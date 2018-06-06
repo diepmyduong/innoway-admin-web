@@ -1,8 +1,8 @@
 <div class="toolbar">
   <span class="btn-group">
-  <button type="button" class="btn btn-secondary"><span class="fa fa-reply" (click)="backToList()"></span></button>
-  <!-- <button type="button" class="btn btn-secondary" (click)="viewLocationBillDetail()"><span class="fa fa-map-marker"></span></button> -->
-  <button type="button" class="btn btn-secondary"><span class="fa fa-phone"></span></button>
+  <button type="button" class="btn btn-secondary"><span class="fas fa-reply" (click)="backToList()"></span></button>
+  <!-- <button type="button" class="btn btn-secondary" (click)="viewLocationBillDetail()"><span class="fas fa-map-marker-alt"></span></button> -->
+  <button type="button" class="btn btn-secondary"><span class="fas fa-phone"></span></button>
   </span>
   <span class="btn-group pull-right">
       <button (click)="print(item)" class="btn btn-sm btn-primary btn-ladda mr-h">In đơn hàng</button>
@@ -15,7 +15,7 @@
 </div>
 <div class="content animated fadeIn">
   <h4>Thông tin đơn hàng</h4>
-  <span *ngIf="!isCancel" class="cancel-bill" (click)="showCancelBillDialog(item)"><i class="fa fa-remove mr-h"></i>Hủy đơn hàng</span>
+  <span *ngIf="!isCancel" class="cancel-bill" (click)="showCancelBillDialog(item)"><i class="fas fa-times mr-h"></i>Hủy đơn hàng</span>
   <table class="table">
     <tbody>
       <tr>

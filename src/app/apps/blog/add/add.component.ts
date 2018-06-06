@@ -19,7 +19,7 @@ export class AddComponent implements OnInit {
   submitting: boolean = false;
 
   title: string;
-  description: string;
+  public description;
   shortDescription: string;
   image: string;
   status: number;

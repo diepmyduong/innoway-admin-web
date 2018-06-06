@@ -3,53 +3,81 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <strong>{{isEdit?"Cập nhật":"Thêm"}} loại sản phẩm</strong>
+          <strong>{{isEdit?"Cập nhật":"Thêm"}} ticket</strong>
         </div>
         <div class="card-block">
           <div class="form-group row">
-            <label class="col-md-2 header-text" for="text-input">Loại sản phẩm</label>
+            <label class="col-md-2 header-text" for="text-input">Tiêu đề</label>
             <div class="col-md-10">
-              <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Nhập tên category'" required/>
-              <small *ngIf="nameControl.errors?.required" class="text-muted danger">
+              <input type="text" #titleControl="ngModel" [(ngModel)]="title" name="title" class="form-control input-control" [placeholder]="'Nhập tiêu đề'" required/>
+              <small *ngIf="titleControl.errors?.required" class="text-muted danger">
                   (Không được bỏ trống)
                 </small>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-2 header-text" for="text-input">Mô tả ngắn</label>
+            <label class="col-md-2 header-text" for="textarea-input">Nội dung</label>
             <div class="col-md-10">
-              <input type="text" #shortDescriptionControl="ngModel" [(ngModel)]="shortDescription" name="shortDescription" class="form-control input-control" [placeholder]="'Mô tả ngắn'" />
+              <textarea id="textarea-input" #contentControl="ngModel" rows="5" [(ngModel)]="content" name="content" class="form-control input-control" [placeholder]="'Nhập nội dung'"></textarea>
             </div>
           </div>
+
+          <!-- employeeId: string = null
+          parentId: string = null
+          assigneeId: string
+          title: string
+          content: string
+          actionStatus: string = null//normal, high, urgent
+          actionStatuses: any[] = []
+          activityStatus: string  = null//to_do, in_progress, reopen, resolved, closed
+          activityStatuses: any[] = []
+          ticketTypeId: string = null
+          ticketTypes: any[]
+          attachedFiles: string
+          status: number
+
+          productId: string = null
+          products: any[]
+          toppingValueId: string = null
+          toppingValues: any[]
+          billId: string = null
+          bills: any[]
+          customerReportId: string = null
+          customerReports: any[] -->
+
           <div class="form-group row">
-            <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
+            <label class="col-md-2 header-text" for="select">Loại ticket</label>
             <div class="col-md-10">
-              <textarea id="textarea-input" #descriptionControl="ngModel" rows="5" [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
+              <select id="select" #ticketTypeIdControl="ngModel" [(ngModel)]="ticketTypeId" name="ticketTypeId" class="form-control input-control">
+                  <option *ngFor="let v of ticketTypes" [value]="v.code">
+                    {{v.name}}
+                  </option>
+                </select>
             </div>
           </div>
+
           <div class="form-group row">
-            <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
+            <label class="col-md-2 header-text" for="select">Mức độ xử lý</label>
             <div class="col-md-10">
-              <div class="input-group">
-                <input type="file" name="file-input" #fileUploader (change)="onChangeImageFile($event)" [style.display]="'none'">
-                <input type="text" #imageControl="ngModel" [(ngModel)]="image" (input)="onImageChangeData($event.target.value)" name="image" url class="form-control input-control" [placeholder]="image?'':'Nhập url'" />
-                <span class="input-group-append">
-                  <button type="button" class="btn btn-ladda ladda-button btn-primary" [ladda]="progress" (click)="fileUploader.click()"
-                  data-style="contract-overlay" style="z-index: 10;">
-                    <span class="ladda-label">Tải ảnh</span>
-                    <span class="ladda-spinner"></span>
-                    <div class="ladda-progress" style="width: 0px;"></div>
-                  </button>
-                </span>
-              </div>
-            </div>
-            <div class="offset-md-2 col-md-10" *ngIf="previewImage">
-              <span class="image-wrapper" *ngIf="previewImage">
-                <img class="close-btn" [attr.src]="closeImage" (click)="removeImage()" />
-                <img id="preview-image" *ngIf="fileUploader.value || imageControl.value" [src]="previewImage" (error)="this.previewImage = this.errorImage" />
-              </span>
+              <select id="select" #actionStatusControl="ngModel" [(ngModel)]="actionStatus" name="actionStatus" class="form-control input-control">
+                  <option *ngFor="let v of actionStatuses" [value]="v.code">
+                    {{ v.name}}
+                  </option>
+                </select>
             </div>
           </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Trạng thái xử lý</label>
+            <div class="col-md-10">
+              <select id="select" #activityStatusControl="ngModel" [(ngModel)]="activityStatus" name="activityStatus" class="form-control input-control">
+                  <option *ngFor="let v of activityStatuses" [value]="v.code">
+                    {{v.name}}
+                  </option>
+                </select>
+            </div>
+          </div>
+
           <div class="form-group row">
             <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
             <div class="col-md-10">
@@ -62,9 +90,9 @@
           </div>
         </div>
         <div class="card-footer">
-          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
-          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
-          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và tạo mới</button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và thoát</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-edit"></i> Sửa và thoát</button>
         </div>
       </div>
     </div>

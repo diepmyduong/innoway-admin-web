@@ -3,9 +3,9 @@
   <div class="row">
     <h3 class="col-6">Danh sách smart code</h3>
     <div class="col-6">
-      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm smart code</button>
+      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fas fa-plus"></i>Thêm smart code</button>
       <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()"
-      [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa smart code</button>
+      [disabled]="!itemsTable.selectedRows.length"><i class="fas fa-trash"></i>Xóa smart code</button>
     </div>
   </div>
 
@@ -32,8 +32,8 @@
       </data-table-column>
       <data-table-column header="Actions">
         <template #dataTableCell let-item="item">
-              <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
-                <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-eye"></i></button>
+              <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fas fa-edit"></i></button>
+                <button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fas fa-eye"></i></button>
             </template>
       </data-table-column>
     </data-table>

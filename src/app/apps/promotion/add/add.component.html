@@ -38,51 +38,7 @@
                   (Không được bỏ trống)
                 </small>
               </div>
-            </div>
-            <!-- <div class="form-group row">
-              <div class="col-md-12">
-                <input type="radio" [(ngModel)]="model.method" name="method" value="url">Url<br>
-                <input type="radio" [(ngModel)]="model.method" name="method" value="upload">Upload Image
-              </div>
-              <div>Selected Radio: {{model.method}}</div>
-
-              <div class="col-md-12">
-                <div *ngIf="model.method=='url'" class="form-group row">
-                  <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
-                  <div class="col-md-10">
-                    <input type="text" #imageControl="ngModel" [(ngModel)]="image" name="image" class="form-control input-control" [placeholder]="image?'':'Nhập url'" url required/>
-                    <small *ngIf="imageControl.errors?.required" class="text-muted danger">
-                      (Không được bỏ trống)
-                    </small>
-                    <small *ngIf="imageControl.errors?.url" class="text-muted danger">
-                      (Link không hợp lệ)
-                    </small>
-                    <img *ngIf="imageControl.value && imageControl.valid" style="width:auto;height:80px;margin-top:0.2rem;" [src]="imageControl.value" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-12">
-                <div *ngIf="model.method=='upload'" class="form-group row">
-                  <label class="col-md-2 header-text" for="file-input">Hình ảnh</label>
-                  <div class="col-md-9">
-                    <input type="file" name="file-input" #fileUploader (change)="onChangeImageFile($event)">
-                    <img id="preview-image" *ngIf="fileUploader.value" style="width:auto;height:80px;margin-top:0.2rem;" [src]="fileUploader.value" />
-                    <p>{{fileUploader.value}}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group row" [hidden]="true">
-              <label class="col-md-3 col-form-label" for="file-input">File import</label>
-              <div class="col-md-9">
-                <input type="file" name="file-input" #fileImportUploader (change)="onChangeImportFile($event)">
-              </div>
-            </div>
-
-            <button (click)="export()" [hidden]="true">Export</button> -->
-
+            </div>        
             <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Mô tả ngắn</label>
               <div class="col-md-10">
@@ -218,9 +174,9 @@
           </form>
         </div>
         <div class="card-footer">
-          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
-          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
-          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và tạo mới</button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và thoát</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-edit"></i> Sửa và thoát</button>
           <!-- <button (click)="send()" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda">
             Send
           </button> -->

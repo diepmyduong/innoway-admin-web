@@ -10,13 +10,20 @@ import { RegisterComponent } from './register.component';
 
 import { PagesRoutingModule } from './pages-routing.module';
 import { LoginLauncherComponent } from './login-launcher/login-launcher.component';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   imports: [ 
     CommonModule,
     PagesRoutingModule,
     FormsModule,
-    CustomFormsModule
+    CustomFormsModule,
+
+    AgmCoreModule.forRoot({
+      apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
+      libraries: ["places"],
+      language: 'vi'
+    }),
   ],
   declarations: [
     p404Component,

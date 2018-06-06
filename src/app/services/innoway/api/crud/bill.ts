@@ -376,9 +376,11 @@ export class Bill extends CrudAPI<iBill> {
     return row;
   }
 
-  async getPrudentialEmployeeBill(params: {
-    customer_type: string
-  }) {
+  async getPrudentialEmployeeBill(params: any
+    // {
+    //   customer_type: string
+    // }
+  ) {
     let setting = {
       method: 'POST',
       uri: this.apiUrl(`get_prudential_employee_bill`),

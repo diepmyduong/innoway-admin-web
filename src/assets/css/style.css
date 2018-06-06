@@ -12774,8 +12774,11 @@ hr.transparent {
     color: #374767;
     background: transparent; }
   .breadcrumb-menu .dropdown-menu {
-    min-width: 180px;
     line-height: 1.5; }
+
+    .dropdown-menu {
+      min-width: 200px !important;
+    }
 
 .img-avatar {
   border-radius: 50em; }

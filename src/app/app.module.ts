@@ -29,7 +29,7 @@ import { SharedModule } from './shared/shared.module'
 import { LayoutsModule } from './layouts/layouts.module';
 
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BsDropdownModule } from 'ngx-bootstrap';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { UiComponentComponent } from './apps/ui-component/ui-component.component';
 import { UpdateBillStatusComponentComponent } from './apps/ui-component/update-bill-status-component/update-bill-status-component.component';
@@ -46,7 +46,7 @@ import { SendStoryDialog } from "./modal/send-story/send-story.component";
 import { GuideCustomerDialog } from "./modal/guide-customer/guide-customer.component";
 import { TextMaskModule } from 'angular2-text-mask';
 
-import Raven = require('raven-js');
+import * as Raven from 'raven-js';
 import { AgmCoreModule } from "@agm/core";
 import { AccordionModule } from "ngx-bootstrap/accordion";
 import { environment } from "environments";
@@ -85,8 +85,8 @@ export class RavenErrorHandler implements ErrorHandler {
     LayoutsModule,
     FormsModule,
     TextMaskModule,
-    // FroalaEditorModule.forRoot(),
-    // FroalaViewModule.forRoot(),
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot(),
     // BsDropdownModule.forRoot(),
     ColorPickerModule,
 
