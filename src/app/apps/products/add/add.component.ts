@@ -10,6 +10,7 @@ import { InnowayApiService, iTopping } from 'app/services/innoway'
 import { Globals } from './../../../globals';
 import { MatDialog } from '@angular/material';
 import { EditInfoDialog } from "../../../modal/edit-info/edit-info.component";
+import { JsonEditorComponent, JsonEditorOptions } from "angular4-jsoneditor/jsoneditor/jsoneditor.component";
 
 declare var swal, _: any;
 
@@ -25,7 +26,12 @@ export class AddComponent implements OnInit {
   submitting: boolean = false;
 
   name: string;
-  public description;
+  public description = '';
+
+  public editorOptions: JsonEditorOptions;
+  public data: any = {};
+  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
+
   shortDescription: string;
   category: string;
   product_type: string = null;
@@ -86,6 +92,8 @@ export class AddComponent implements OnInit {
     public globals: Globals,
     public dialog: MatDialog,
   ) {
+    this.editorOptions = new JsonEditorOptions()
+    this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
   }
 
   async ngOnInit() {
@@ -121,6 +129,17 @@ export class AddComponent implements OnInit {
     this.base_price = '0';
     this.description = '';
     this.shortDescription = '';
+    let dataDefault: any = {
+      "lang": {
+        "en": {
+          "name": "",
+          "short_description": "",
+          "description": ""
+        }
+      }
+    }
+    this.editor.set(dataDefault)
+
     if (this.categories.getValue()[0]) {
       this.category = this.categories.getValue()[0].id;
     }
@@ -154,7 +173,8 @@ export class AddComponent implements OnInit {
       thumb: this.thumb,
       unit: this.unit,
       product_type: this.product_type,
-      isGift: this.isGift
+      isGift: this.isGift,
+      metaData: this.data
     }
   }
 
@@ -263,6 +283,18 @@ export class AddComponent implements OnInit {
       this.category = product.category_id ? product.category_id : null
       this.list_image = product.list_image
       this.product_type = product.product_type_id ? product.product_type_id : null
+      let dataDefault = {
+        "lang": {
+          "en": {
+            "name": "",
+            "short_description": "",
+            "description": ""
+          }
+        }
+      }
+      this.data = JSON.stringify(product.meta_data) != "{}" ? product.meta_data : dataDefault
+      this.editor.set(this.data)
+
       let toppings = this.toppings.getValue()
       this.toppingSelecter.active = product.toppings.map(product_topping => {
         const topping = toppings.find(t => t.id === product_topping.topping_id)
@@ -391,14 +423,18 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       if (form.valid) {
-        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift } = this;
+        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift, data } = this;
 
         let is_gift = isGift
         let category_id = this.category ? this.category : undefined;
         let short_description = this.shortDescription;
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
-        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image, is_gift })
+        let meta_data = this.editor.get()
+        let product = await this.innowayApi.product.add({
+          name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
+          status, category_id, unit_id, product_type_id, list_image, is_gift, meta_data
+        })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -422,14 +458,18 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       if (form.valid) {
-        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift } = this;
+        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift, data } = this;
 
         let is_gift = isGift
         let category_id = this.category ? this.category : undefined;
         let short_description = this.shortDescription;
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
-        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image, isGift })
+        let meta_data = this.editor.get()
+        let product = await this.innowayApi.product.add({
+          name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
+          status, category_id, unit_id, product_type_id, list_image, isGift, meta_data
+        })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -453,12 +493,17 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       if (form.valid) {
-        let { name, description, list_image, thumb, price, base_price, unit, status, shortDescription } = this;
+        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift, data } = this;
+        let is_gift = isGift
         let category_id = this.category ? this.category : undefined;
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
         let short_description = this.shortDescription;
-        let product = await this.innowayApi.product.update(this.id, { name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image })
+        let meta_data = this.editor.get()
+        let product = await this.innowayApi.product.update(this.id, {
+          name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
+          status, category_id, unit_id, product_type_id, list_image, meta_data
+        })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id ? item.id : undefined
         })

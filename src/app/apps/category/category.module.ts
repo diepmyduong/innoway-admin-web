@@ -9,6 +9,7 @@ import { DetailComponent } from './detail/detail.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { DataTableModule } from 'angular-2-data-table-bootstrap4';
+import { Ng4JsonEditorModule } from "angular4-jsoneditor";
 
 @NgModule({
   imports: [
@@ -18,7 +19,9 @@ import { DataTableModule } from 'angular-2-data-table-bootstrap4';
     FormsModule,
     ReactiveFormsModule,
     LaddaModule,
-    DataTableModule
+    DataTableModule,
+
+    Ng4JsonEditorModule
   ],
   declarations: [CategoryComponent, AddComponent, DetailComponent]
 })
