@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 import { InnowayApiService } from 'app/services/innoway';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
+import { JsonEditorComponent, JsonEditorOptions } from 'angular4-jsoneditor/jsoneditor/jsoneditor.component';
+
 declare let swal: any
 
 @Component({
@@ -19,8 +21,8 @@ export class AddComponent implements OnInit {
   submitting: boolean = false;
 
   title: string;
-  public description;
-  public content;
+  description: string;
+  public content = '';
   shortDescription: string;
   image: string;
   status: number;
@@ -39,12 +41,18 @@ export class AddComponent implements OnInit {
   closeImage: string = "https://d30y9cdsu7xlg0.cloudfront.net/png/55049-200.png";
   errorImage: string = "http://saveabandonedbabies.org/wp-content/uploads/2015/08/default.png";
 
+  public editorOptions: JsonEditorOptions;
+  public metaData: any;
+  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
     public innowayApi: InnowayApiService
   ) {
+    this.editorOptions = new JsonEditorOptions()
+    this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
   }
 
   ngOnInit() {
@@ -85,9 +93,18 @@ export class AddComponent implements OnInit {
     this.shortDescription = null
     this.description = null
     this.previewImage = null
-    this.authorId = null
     this.content = null
     this.blogType = null
+
+    this.metaData = {
+      "lang": {
+        "en": {
+          "name": "",
+          "short_description": "",
+          "description": ""
+        }
+      }
+    }
 
     if (this.blogTypes.getValue()[0]) {
       this.blogType = this.blogTypes.getValue()[0].id;
@@ -99,16 +116,18 @@ export class AddComponent implements OnInit {
       shortDescription: this.shortDescription,
       description: this.description,
       previewImage: this.previewImage,
-      authorId: this.authorId,
       content: this.content,
-      blogType: this.blogType
+      blogType: this.blogType,
+      metaData: this.metaData
     }
   }
 
   async setData() {
     try {
       let data = await this.innowayApi.blog.getItem(this.id, {
-        query: { fields: ["$all"] }
+        local: false, reload: true, query: {
+          fields: ["$all"]
+        }
       })
       this.title = data.title
       this.image = data.thumb
@@ -119,6 +138,18 @@ export class AddComponent implements OnInit {
       this.authorId = data.author_id
       this.content = data.content
       this.blogType = data.blog_category_id
+
+      let dataDefault: any = {
+        "lang": {
+          "en": {
+            "name": "",
+            "short_description": "",
+            "description": ""
+          }
+        }
+      }
+      this.metaData = JSON.stringify(data.meta_data) != "{}" ? data.meta_data : dataDefault
+      this.editor.set(this.metaData)
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       this.backToList()
@@ -183,12 +214,13 @@ export class AddComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { title, description, previewImage, status, shortDescription, blogType, authorId, content } = this;
+      let { title, description, previewImage, status, shortDescription, blogType, authorId, content, metaData } = this;
       let short_description = shortDescription;
       let author_id = authorId
       let thumb = previewImage
       let blog_category_id = blogType
-      await this.innowayApi.blog.add({ title, description, short_description, thumb, status, blog_category_id, author_id, content })
+      let meta_data = metaData
+      await this.innowayApi.blog.add({ title, description, short_description, thumb, status, blog_category_id, author_id, content, meta_data })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -199,12 +231,13 @@ export class AddComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { title, description, previewImage, status, shortDescription, blogType, authorId, content } = this;
+      let { title, description, previewImage, status, shortDescription, blogType, authorId, content, metaData } = this;
       let short_description = shortDescription;
       let author_id = authorId
-      let thumb = previewImage;
+      let thumb = previewImage
       let blog_category_id = blogType
-      await this.innowayApi.blog.update(this.id, { title, description, short_description, thumb, status, blog_category_id, author_id, content })
+      let meta_data = metaData
+      await this.innowayApi.blog.update(this.id, { title, description, short_description, thumb, status, blog_category_id, author_id, content, meta_data })
       this.alertUpdateSuccess();
       form.reset();
     } else {

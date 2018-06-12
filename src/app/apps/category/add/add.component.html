@@ -37,9 +37,9 @@
                   <button type="button" class="btn btn-ladda ladda-button btn-primary" [ladda]="progress" (click)="fileUploader.click()"
                   data-style="contract-overlay" style="z-index: 10;">
                     <span class="ladda-label">Đăng ảnh</span>
-                    <span class="ladda-spinner"></span>
-                    <div class="ladda-progress" style="width: 0px;"></div>
-                  </button>
+                <span class="ladda-spinner"></span>
+                <div class="ladda-progress" style="width: 0px;"></div>
+                </button>
                 </span>
               </div>
             </div>
@@ -48,6 +48,12 @@
                 <img class="close-btn" [attr.src]="closeImage" (click)="removeImage()" />
                 <img id="preview-image" *ngIf="fileUploader.value || imageControl.value" [src]="previewImage" (error)="this.previewImage = this.errorImage" />
               </span>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="textarea-input">Meta-data</label>
+            <div class="col-md-10">
+              <json-editor [options]="editorOptions" [data]="metaData"></json-editor>
             </div>
           </div>
           <div class="form-group row">
