@@ -181,7 +181,7 @@ export class AddComponent implements OnInit {
       let { name, description, previewImage, status, shortDescription, metaData } = this;
       let short_description = shortDescription;
       let image = previewImage
-      let meta_data = metaData
+      let meta_data: any = this.editor.get()
       await this.innowayApi.productCategory.add({ name, description, short_description, image, status, meta_data })
       this.alertAddSuccess();
       form.reset();
@@ -196,7 +196,7 @@ export class AddComponent implements OnInit {
       let { name, description, previewImage, status, shortDescription, metaData } = this;
       let short_description = shortDescription;
       let image = previewImage;
-      let meta_data = metaData;
+      let meta_data: any = this.editor.get()
       await this.innowayApi.productCategory.update(this.id, { name, description, short_description, image, status, meta_data })
       this.alertUpdateSuccess();
       form.reset();
