@@ -156,9 +156,12 @@
             <div class="card n-mb-card">
               <div class="card-header">
                 Hình ảnh
-                <button type="submit" class="btn btn-sm btn-primary float-right" (click)="addImage()"> Thêm</button>
+                <button type="submit" class="btn btn-sm btn-primary float-right ml-1" (click)="addImage()"><i class="fas fa-link"></i>Thêm URL</button>
+                <button type="submit" class="btn btn-sm btn-primary float-right" (click)="fileUploader.click()"><i class="fas fa-upload"></i>Upload ảnh</button>
+                <input [(ngModel)]="files" type="file" accept="image/*" #fileUploader (change)="onChangeImageFile($event)" 
+                [hidden]="true" [ngModelOptions]="{standalone: true}" multiple>
               </div>
-              <div class="card-block" *ngIf="falseococo">
+              <!-- <div class="card-block" *ngIf="falseococo">
                 <div class="form-group row">
                   <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
                   <div class="col-md-10">
@@ -180,12 +183,32 @@
                     </span>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="card-block">
-                <small *ngIf="list_image == null || list_image.length == 0" class="text-muted danger">
+                <small *ngIf="list_image == null || list_image.length == 0" class="not-found">
                   Chưa có hình ảnh
                 </small>
-                <swiper [config]="imageConfig" #imageSwiper id="product-swiper">
+                <div class="image-list-wrapper">
+                  <div class="image-container" *ngFor="let image of list_image; let i = index" (click)="openImage(image)">
+                    <div class="image-wrapper">
+                      <img src="{{image}}">
+                    </div>
+                    <div *ngIf="i == 0" class="rect" [matTooltip]="'Ảnh đại diện'" matTooltipPosition="before">
+                      <i class="fas fa-star"></i>
+                      <div class="triangle"></div>
+                    </div>
+                    <button class="btn btn-sort btn-left" (click)="moveLeft(i); $event.stopPropagation()" [hidden]="i == 0"><i class="fas fa-arrow-left"></i></button>
+                    <button class="btn btn-sort btn-right" (click)="moveRight(i); $event.stopPropagation()" [hidden]="i == list_image.length - 1"><i class="fas fa-arrow-right"></i></button>
+                    <button class="btn btn-sort btn-remove" (click)="removeImage(i); $event.stopPropagation()"><i class="fas fa-times"></i></button>
+                  </div>
+                  <div class="image-container" [hidden]="!isUploading">
+                    <div class="loading-wrapper">
+                      <div><i class="fas fa-circle-notch fa-spin m-auto"></i></div>
+                      <div>Đang tải ảnh...</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <swiper [config]="imageConfig" #imageSwiper id="product-swiper">
                   <div class="swiper-wrapper">
                     <div class="swiper-slide" *ngFor="let image of list_image; let i = index" (mouseenter)="image_on_hover = i" (mouseleave)="image_on_hover = -1">
                       <div class="card n-mb-card">
@@ -200,17 +223,17 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Add Pagination -->
+
                   <div class="swiper-pagination"></div>
-                  <!-- Add Arrows -->
+
                   <div class="swiper-button-next"></div>
                   <div class="swiper-button-prev"></div>
-                </swiper>
+                </swiper> -->
               </div>
             </div>
           </div>
 
-          <div class="col-md-12" *ngIf="thumb">
+          <!-- <div class="col-md-12" *ngIf="thumb">
             <div class="card n-mb-card">
               <div class="card-header">
                 Ảnh đại diện
@@ -219,7 +242,7 @@
                 <img style="width: 100px; height: 100px;" [src]="thumb" />
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="col-md-12 remove-pb">
             <div class="card n-mb-card remove-pb">
@@ -230,8 +253,8 @@
                 <div class="form-group row remove-pb">
                   <label class="col-md-2 header-text">Topping:</label>
                   <div class="col-md-12 mt-1 mb-1">
-                    <span class="add-title" (click)="showDialogAddNewEntity('topping-type')"><i class="fas fa-plus"></i> Thêm topping mới</span><br>
-                    <span class="add-title" (click)="showDialogAddNewEntity('topping')"><i class="fas fa-plus"></i> Thêm trạng thái sản phẩm mới</span>
+                    <span class="add-title" (click)="showDialogAddNewEntity('topping-type')"><i class="fas fa-plus"></i> Thêm loại topping mới</span><br>
+                    <span class="add-title" (click)="showDialogAddNewEntity('topping')"><i class="fas fa-plus"></i> Thêm topping mới</span>
                   </div>
                   <div class="col-md-12">
                     <ng-select class="form-group input-control" [multiple]="true" #toppingSelecter [allowClear]="true" [items]="topping_items | async" (selected)="toppingSelected($event)" (removed)="toppingRemoved($event)" placeholder="Chọn loại topping">

@@ -34,9 +34,10 @@ import { SwiperModule } from 'angular2-useful-swiper';
 import { FroalaComponent } from "app/editor/froala.component";
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { ToppingDetailComponent } from './topping-detail/topping-detail.component';
-import { MatCheckboxModule } from "@angular/material";
+import { MatCheckboxModule, MatTooltipModule } from "@angular/material";
 import { QuillEditorModule } from "ngx-quill-editor";
 import { Ng4JsonEditorModule } from "angular4-jsoneditor";
+import { TooltipModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
@@ -60,6 +61,8 @@ import { Ng4JsonEditorModule } from "angular4-jsoneditor";
     FroalaEditorModule,
     FroalaViewModule,
     MatCheckboxModule,
+    MatTooltipModule,
+    TooltipModule.forRoot(),
 
     QuillEditorModule,
     Ng4JsonEditorModule
