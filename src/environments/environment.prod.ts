@@ -6,7 +6,7 @@
 export const environment = {
   production: true,
   chatbot: {
-    host: "https://mfood-commerce-01.herokuapp.com",
+    host: "https://bot-server.mcommerce.com.vn",
     version: "v1"
   },
   innoway: {

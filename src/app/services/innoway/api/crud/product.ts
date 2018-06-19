@@ -21,6 +21,8 @@ export interface iProduct extends iCrud {
   code?: number,
   is_available?: boolean,
   rate?: number,
+  is_gift?:boolean,
+  meta_data?:JSON,
 
   toppings?: iProductTopping[]
 

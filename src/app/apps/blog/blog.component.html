@@ -17,13 +17,11 @@
       [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
       <data-table-column property="image" header="Hình ảnh">
         <template #dataTableCell let-item="item">
-                <img height="50px" [src]="item.image?item.image:thumbDefault">
+                <img height="50px" [src]="item.thumb?item.thumb:thumbDefault">
             </template>
       </data-table-column>
-      <data-table-column property="name" header="Bài viết" [sortable]="true">
+      <data-table-column property="title" header="Bài viết" [sortable]="true">
       </data-table-column>
-      <!-- <data-table-column property="name" header="Người đăng" [sortable]="true">
-      </data-table-column> -->
       <data-table-column property="status" header="Trạng thái" [sortable]="true">
         <template #dataTableCell let-item="item">
               <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>

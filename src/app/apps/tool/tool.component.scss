@@ -36,7 +36,7 @@
     }
     .header-text{
       color: $grey-dark;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: bold;
       margin-top: 4px;
     }
@@ -63,6 +63,10 @@
 
 .tools-wrapper {  
   height: calc(100vh - 100px);
+  >div {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
 .button-intro {

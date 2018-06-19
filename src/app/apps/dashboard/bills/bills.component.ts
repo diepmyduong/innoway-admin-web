@@ -125,9 +125,9 @@ export class BillsComponent implements OnInit {
     this.loadBranchByEmployeeData(this.employeeData.branch_id)
     this.loadBrandByEmployeeData(this.employeeData.brand_id)
     this.loadEmployeeData()
-    this.subscribeTopicByFCM()
+    // this.subscribeTopicByFCM()
     this.subscribeDashboardParent()
-    this.loadAuthCustomer()
+    // this.loadAuthCustomer()
   }
 
   async loadAuthCustomer() {
@@ -479,15 +479,15 @@ export class BillsComponent implements OnInit {
   }
 
   async subscribeTopicByFCM() {
-    this.dashboardService.updateTopicFromFCM.subscribe(
-      data => {
-        this.currentDataFromFCM = data;
-        console.log("subscribeTopicFromFCM", data)
-        if (this.currentDataFromFCM != null) {
-          this.loadBillData();
-          this.onLoadDailySummary(true);
-        }
-      });
+    // this.dashboardService.updateTopicFromFCM.subscribe(
+    //   data => {
+    //     this.currentDataFromFCM = data;
+    //     console.log("subscribeTopicFromFCM", data)
+    //     if (this.currentDataFromFCM != null) {
+    //       this.loadBillData();
+    //       this.onLoadDailySummary(true);
+    //     }
+    //   });
   }
 
   async ngOnDestroy() {

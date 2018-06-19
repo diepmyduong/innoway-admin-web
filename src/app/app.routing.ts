@@ -23,6 +23,10 @@ export const routes: Routes = [
   layout.PromotionLayoutRouting,
   layout.BillLayoutRouting,
   layout.BranchLayoutRouting,
+  layout.InventoryLayoutRouting,
+  layout.TicketLayoutRouting,
+  layout.BillLayoutRouting,
+  layout.BlogLayoutRouting,
   layout.DashboardLayoutRouting,
   {
     path: '**',

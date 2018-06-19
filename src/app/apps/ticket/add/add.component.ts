@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { InnowayApiService } from 'app/services/innoway';
 import * as moment from 'moment';
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 declare let swal: any
 
@@ -18,24 +19,67 @@ export class AddComponent implements OnInit {
 
   submitting: boolean = false;
 
-  brandId: string
-  employeeId: string
-  parentId: string
+  employeeId: string = null
+  parentId: string = null
   assigneeId: string
   title: string
   content: string
-  actionStatus: string //normal, high, urgent
-  activityStatus: string //to_do, in_progress, reopen, resolved, closed
-  ticketTypeId: string
+  actionStatus: string = null//normal, high, urgent
+  actionStatuses: any[] = [
+    {
+      name: "Normal",
+      code: "normal"
+    },
+    {
+      name: "High",
+      code: "high"
+    },
+    {
+      name: "Urgent",
+      code: "urgent"
+    }
+  ]
+  activityStatus: string = null//to_do, in_progress, reopen, resolved, closed
+  activityStatuses: any[] = [
+    {
+      name: "To do",
+      code: "to_do"
+    },
+    {
+      name: "In Progress",
+      code: "in_progress"
+    },
+    {
+      name: "Reopen",
+      code: "reopen"
+    },
+    {
+      name: "Resolved",
+      code: "resolved"
+    },
+    {
+      name: "Closed",
+      code: "closed"
+    },
+  ]
+  ticketTypeId: string = null
+  ticketTypes: any[] = [
+    {
+      code: "return_product",
+      name: "Return Product"
+    }
+  ]
   attachedFiles: string
   status: number
 
-  // ticket_type_id
-  // product_id
-  // topping_value_id
-  // bill_id
-  // customer_report_id
-  // attached_files
+  productId: string = null
+  products:  BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  toppingValueId: string = null
+  toppingValues:  BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  billId: string = null
+  bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  customerReportId: string = null
+  customerReports:  BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   @ViewChild("fileUploader")
   fileUploader: ElementRef;
@@ -71,7 +115,6 @@ export class AddComponent implements OnInit {
   }
 
   setDefaultData() {
-    this.brandId = null
     this.employeeId = null
     this.parentId = null
     this.assigneeId = null
@@ -83,7 +126,6 @@ export class AddComponent implements OnInit {
     this.attachedFiles = null
     this.status = 1
     return {
-      brandId: this.brandId,
       employeeId: this.employeeId,
       parentId: this.parentId,
       assigneeId: this.assigneeId,
@@ -102,7 +144,6 @@ export class AddComponent implements OnInit {
       let data = await this.innowayApi.contract.getItem(this.id, {
         query: { fields: ["$all"] }
       })
-      this.brandId = data.brand_id
       this.employeeId = data.employee_id
       this.parentId = data.parent_id
       this.assigneeId = data.assignee_id
@@ -174,22 +215,11 @@ export class AddComponent implements OnInit {
       timer: 2000,
     })
   }
-  // brandId: string
-  // employeeId: string
-  // parentId: string
-  // assigneeId: string
-  // title: string
-  // content: string
-  // actionStatus: string //normal, high, urgent
-  // activityStatus: string //to_do, in_progress, reopen, resolved, closed
-  // ticketTypeId: string
-  // attachedFiles: string
-  // status: number
+
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { brandId, employeeId, parentId, assigneeId, title,
+      let { employeeId, parentId, assigneeId, title,
         content, actionStatus, activityStatus, ticketTypeId, attachedFiles, status } = this;
-      let brand_id = brandId
       let employee_id = employeeId
       let parent_id = parentId
       let assignee_id = assigneeId
@@ -198,7 +228,7 @@ export class AddComponent implements OnInit {
       let ticket_type_id = ticketTypeId
       let attached_files = attachedFiles
       await this.innowayApi.contract.add({
-        brand_id, employee_id, parent_id, assignee_id, title,
+        employee_id, parent_id, assignee_id, title,
         content, action_status, activity_status, ticket_type_id, attached_files, status
       })
       this.alertAddSuccess();
@@ -211,9 +241,8 @@ export class AddComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { brandId, employeeId, parentId, assigneeId, title,
+      let { employeeId, parentId, assigneeId, title,
         content, actionStatus, activityStatus, ticketTypeId, attachedFiles, status } = this;
-      let brand_id = brandId
       let employee_id = employeeId
       let parent_id = parentId
       let assignee_id = assigneeId
@@ -222,7 +251,7 @@ export class AddComponent implements OnInit {
       let ticket_type_id = ticketTypeId
       let attached_files = attachedFiles
       await this.innowayApi.contract.update(this.id, {
-        brand_id, employee_id, parent_id, assignee_id, title,
+        employee_id, parent_id, assignee_id, title,
         content, action_status, activity_status, ticket_type_id, attached_files, status
       })
       this.alertUpdateSuccess();
@@ -264,6 +293,41 @@ export class AddComponent implements OnInit {
       this.alertUpdateFailed();
     } finally {
       this.submitting = false;
+    }
+  }
+
+  // bills: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  // products: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
+  async billOfCustomer(customerId: string) {
+    try {
+      let data = await this.innowayApi.customer.getItem(customerId, {
+        query: {
+          fields: ["$all", {
+            bills: ["$all"]
+          }]
+        }
+      })
+      console.log("BiMap", JSON.stringify(data))
+      this.bills.next(data.bills)
+    } catch (err) {
+
+    }
+  }
+
+  async productInBill(billId: string) {
+    try {
+      let data = await this.innowayApi.bill.getItem(billId, {
+        query: {
+          fields: ["$all", {
+            items: ["$all"]
+          }]
+        }
+      })
+      console.log("BiMap", JSON.stringify(data))
+      this.products.next(data.items)
+    } catch (err) {
+
     }
   }
 

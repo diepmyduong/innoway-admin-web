@@ -40,8 +40,8 @@
             </div>
           </div>
           <div class="bill-date-time">
-            <div>{{bill.updated_at | date:'dd/MM/yyyy'}}</div>
-            <div>{{bill.updated_at | date:'HH:mm'}}</div>
+            <div>{{bill.updated_at | date:'dd/MM/yyyy':'+0000'}}</div>
+            <div>{{bill.updated_at | date:'HH:mm':'+0000'}}</div>
             <!-- <div>{{bill.bill_ship_detail?.received_time | date:'dd/MM/yyyy HH:mm'}}</div> -->
             <div>{{timeFromNow(bill.bill_ship_detail?.received_time)}}</div>
             <span *ngIf="!detectShowCancelButton(bill)" class="cancel-bill" (click)="showCancelBillDialog(bill)"><i class="fas fa-times mr-h"></i>Hủy đơn hàng</span>
