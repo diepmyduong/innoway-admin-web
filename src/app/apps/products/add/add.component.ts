@@ -11,6 +11,7 @@ import { Globals } from './../../../globals';
 import { MatDialog } from '@angular/material';
 import { EditInfoDialog } from "../../../modal/edit-info/edit-info.component";
 import { JsonEditorComponent, JsonEditorOptions } from "angular4-jsoneditor/jsoneditor/jsoneditor.component";
+import { ImagePopupDialog } from '../../../modal/image-popup/image-popup.component';
 
 declare var swal, _: any;
 
@@ -54,6 +55,7 @@ export class AddComponent implements OnInit {
   productTypes = new BehaviorSubject<any[]>([]);
 
   isGift: boolean = false
+  files: any[]
 
   numberMask = createNumberMask({
     prefix: '',
@@ -78,6 +80,7 @@ export class AddComponent implements OnInit {
   @ViewChild("fileUploader")
   fileUploader: ElementRef;
 
+  isUploading: boolean = false
   isUploadImage: boolean = false;
   fileUpload: File;
   previewImage: string;
@@ -413,6 +416,8 @@ export class AddComponent implements OnInit {
   async removeImage(index) {
     _.pullAt(this.list_image, [index]);
     // this.imageSwiper.Swiper.onResize();
+    if (this.list_image.length > 0) this.thumb = this.list_image[0]
+    else this.thumb = null
   }
 
   async setThumbnail(index) {
@@ -431,6 +436,7 @@ export class AddComponent implements OnInit {
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
         let meta_data = this.editor.get()
+        if (!thumb && this.list_image.length > 0) thumb = this.list_image[0]
         let product = await this.innowayApi.product.add({
           name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
           status, category_id, unit_id, product_type_id, list_image, is_gift, meta_data
@@ -466,6 +472,7 @@ export class AddComponent implements OnInit {
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
         let meta_data = this.editor.get()
+        if (!thumb && this.list_image.length > 0) thumb = this.list_image[0]
         let product = await this.innowayApi.product.add({
           name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
           status, category_id, unit_id, product_type_id, list_image, isGift, meta_data
@@ -500,6 +507,7 @@ export class AddComponent implements OnInit {
         let product_type_id = this.product_type ? this.product_type : undefined;
         let short_description = this.shortDescription;
         let meta_data = this.editor.get()
+        if (!thumb && this.list_image.length > 0) thumb = this.list_image[0]
         let product = await this.innowayApi.product.update(this.id, {
           name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
           status, category_id, unit_id, product_type_id, list_image, meta_data
@@ -777,18 +785,6 @@ export class AddComponent implements OnInit {
     }
   }
 
-  async onChangeImageFile(event) {
-    // this.startLoading()
-    let files = this.fileUploader.nativeElement.files
-    let file = files[0]
-    try {
-      let response = await this.innowayApi.upload.uploadImage(file)
-      this.previewImage = response.link
-    } catch (err) {
-      console.log("upload image", err)
-    }
-  }
-
   onImageError(event) {
     this.previewImage = this.errorImage;
   }
@@ -803,5 +799,57 @@ export class AddComponent implements OnInit {
 
   checkGift(event) {
     this.isGift = event;
+  }
+  
+  async openImage(imageSrc) {
+    let data = {
+        image: imageSrc
+    };
+
+    let dialogRef = this.dialog.open(ImagePopupDialog, {
+        height: '60vh',
+        panelClass: 'image-popup',
+        data: data
+    });
+  }
+
+  moveLeft(i) {
+    if (i == 0) return;
+    let temp = this.list_image[i - 1];
+    this.list_image[i - 1] = this.list_image[i];
+    this.list_image[i] = temp;
+    if (this.list_image.length > 0) this.thumb = this.list_image[0]
+  }
+
+  moveRight(i) {
+    if (i == this.list_image.length - 1) return;
+    let temp = this.list_image[i + 1];
+    this.list_image[i + 1] = this.list_image[i];
+    this.list_image[i] = temp;
+    if (this.list_image.length > 0) this.thumb = this.list_image[0]
+  }  
+
+  async onChangeImageFile(event) {
+    // this.startLoading()
+    let files = this.fileUploader.nativeElement.files
+
+    if (files.length == 0) return
+
+    try {
+      this.isUploading = true;
+      
+      let tasks = []
+      for(let file of files) {
+        tasks.push(this.innowayApi.upload.uploadImage(file).then(result => {
+          this.list_image.push(result.link)
+        }))
+      }
+      await Promise.all(tasks)
+    } catch (err) {
+      console.log("upload image", err)
+    } finally {
+      this.isUploading = false;
+      if (this.list_image.length > 0) this.thumb = this.list_image[0]
+    }
   }
 }
