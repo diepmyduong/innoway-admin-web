@@ -28,7 +28,7 @@ import { ServicesModule } from './services';
 import { SharedModule } from './shared/shared.module'
 import { LayoutsModule } from './layouts/layouts.module';
 
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+// import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { UiComponentComponent } from './apps/ui-component/ui-component.component';
@@ -86,8 +86,8 @@ export class RavenErrorHandler implements ErrorHandler {
     LayoutsModule,
     FormsModule,
     TextMaskModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot(),
+    // FroalaEditorModule.forRoot(),
+    // FroalaViewModule.forRoot(),
     // BsDropdownModule.forRoot(),
     ColorPickerModule,
 

@@ -284,8 +284,8 @@ export class LoginLauncherComponent implements OnInit {
         }
         try {
           let data = await this.innowayApi.brand.registerNewBrand(request)
-          this.alertAddSuccess()
-          this.login();
+          await this.alertAddSuccess()
+          this.mode = 'login'
         } catch (err) {
           console.log(err)
           this.alertFormNotValid("Email hoặc Mã doanh nghiệp đã được tạo")
@@ -312,10 +312,6 @@ export class LoginLauncherComponent implements OnInit {
       title: 'Đăng ký không thành công',
       type: 'error',
     })
-  }
-
-  login() {
-    this.router.navigate(["login"])
   }
 
 

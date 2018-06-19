@@ -16,9 +16,13 @@
     "dev": "ng serve",
     "prod": "ng serve -e prod",
     "build": "ng build -e prod --prod --aot false && npm run firebase:sync",
+    "build:win": "ng build --prod --build-optimizer --aot && npm run firebase:sync:win",
     "firebase:sync": "sudo rsync -avh ./dist/ ./firebase/public/ --delete",
+    "firebase:sync:win": "xcopy .\\dist .\\firebase\\public /D /I /E /F /Y /H /R ",
     "firebase:serve": "cd ./firebase && sudo firebase serve",
-    "firebase:deploy": "cd ./firebase && sudo firebase deploy"
+    "firebase:deploy": "cd ./firebase && sudo firebase deploy",
+    "firebase:deploy:win": "cd ./firebase && firebase use default && firebase deploy",
+    "build:deploy:win": "npm run build:win && npm run firebase:deploy:win"
   },
   "private": true,
   "dependencies": {

@@ -16,7 +16,8 @@ export class NavbarComponent implements OnInit {
     constructor(
         public location: Location,
         public router: Router,
-        private element : ElementRef,
+        public route: ActivatedRoute,
+        private element: ElementRef,
         public innowayApi: InnowayApiService
     ) {
     }
@@ -25,4 +26,41 @@ export class NavbarComponent implements OnInit {
         this.employee = this.innowayApi.innowayAuth.innowayUser;
 
     }
+
+    logout() {
+        this.innowayApi.innowayAuth.logout();
+    }
+
+    goToDashboardLayout() {
+        this.router.navigate(['/dashboard-layout'], { relativeTo: this.route });
+    }
+
+    goToCustomerLayout() {
+        this.router.navigate(['/customer-layout'], { relativeTo: this.route });
+    }
+
+    goToEmployeeLayout() {
+        this.router.navigate(['/employee-layout'], { relativeTo: this.route });
+    }
+
+    goToProductLayout() {
+        this.router.navigate(['/product-layout'], { relativeTo: this.route });
+    }
+
+    goToPromotionLayout() {
+        this.router.navigate(['/promotion-layout'], { relativeTo: this.route });
+    }
+
+    goToBillLayout() {
+        this.router.navigate(['/bill-layout'], { relativeTo: this.route });
+    }
+
+    goToSettingLayout() {
+        this.router.navigate(['/setting-layout'], { relativeTo: this.route });
+    }
+
+    goToPOSLayout() {
+        this.router.navigate(['/pos'], { relativeTo: this.route });
+    }
+
 }
