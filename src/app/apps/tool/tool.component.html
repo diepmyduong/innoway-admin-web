@@ -1,20 +1,31 @@
-<div class="animated fadeIn">
-  <div class="row">
-    <div class="card something">
-      <div class="card-header">
-        <span class="title"><i class="fas fa-cog"></i> Tính năng</span>
-        <span class="title float-right" (click)="runIntro()"><i class="fas fa-info-circle"> </i> Hướng dẫn</span>
-      </div>
-      <div class="card-block">
-        <div class="row">
-          <div class="col-md-2 item" *ngFor="let item of data.feature; let i = index" id="{{item.id}}" [routerLink]="item.link" style="cursor: pointer">
-            <img src="{{item.icon}}" matTooltip="{{item.hint}}" matTooltipPosition="above"/>
-            <label class="header-text">{{item.title}}</label>
+<div class="animated fadeIn tools-wrapper">
+  <button class="button-intro d-none d-sm-block" (click)="runIntro()"><i class="fas fa-info-circle"> </i> Hướng dẫn</button>
+  <div class="row tool-wrapper">
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let item of data.feature; let i = index">
+        <a class="col-12 tool" id="{{item.id}}" [routerLink]="item.link" style="cursor: pointer">
+          <div class="image-wrapper">
+            <div class="image" [ngStyle]="item.style"
+            [style.-webkit-mask-image]="item.icon" [style.mask-image]="item.icon"></div>
           </div>
+          <div class="header-text d-none d-sm-block">{{item.title}}</div>
+          <div class="header-subtitle d-none d-md-block">{{item.hint}}</div>
+        </a>
+      </div>
+  </div>
+  <!-- <div class="card something">
+    <div class="card-header">
+      <span class="title"><i class="fas fa-cog"></i> Tính năng</span>
+      <span class="title float-right" (click)="runIntro()"><i class="fas fa-info-circle"> </i> Hướng dẫn</span>
+    </div>
+    <div class="card-block">
+      <div class="row">
+        <div class="col-md-2 item" *ngFor="let item of data.feature; let i = index" id="{{item.id}}" [routerLink]="item.link" style="cursor: pointer">
+          <img src="{{item.icon}}" matTooltip="{{item.hint}}" matTooltipPosition="above"/>
+          <label class="header-text">{{item.title}}</label>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 <!-- <div class="col-lg-12">
       <tabset>

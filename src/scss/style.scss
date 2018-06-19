@@ -361,6 +361,32 @@ button:focus {
     transform-origin: top left;
 }
 
+.image-wrapper {
+    box-sizing: border-box;
+    position: relative;
+    height: 0px;
+    width: 100%;
+    padding-bottom: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+    }
+}
+
+a {
+    cursor: pointer;
+    &:hover {        
+        text-decoration: none;
+    }
+}
+
 @keyframes slide-up {
     from { transform: translateY(8px); opacity: 0 }
     to { transform: translateY(0); opacity: 1 }

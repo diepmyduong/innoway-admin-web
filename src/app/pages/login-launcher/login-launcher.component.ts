@@ -61,19 +61,24 @@ export class LoginLauncherComponent implements OnInit {
   get log() { return Console(`[Login Page]`).log }
 
   async ngOnInit() {
+    this.innowayApi.innowayAuth.authenticated.then(result => {
+      if (result) {
+        this.log('already login success', 'firebase token', this.innowayApi.innowayAuth.firebaseToken)
+        this.toDashboard()
+      } else {
+        this.log('user not login')
+        this.loginChecked = true
+      }
+    })
       
-      this.loadBrandCategories()
-      this.setDefaultMap();
-      this.setAutocompleteMap();
-      
-    if (await this.innowayApi.innowayAuth.authenticated) {
-      this.log('already login success', 'firebase token', this.innowayApi.innowayAuth.firebaseToken)
-      this.toDashboard()
-    } else {
-      this.log('user not login')
-      this.loginChecked = true
-    }
+    this.loadBrandCategories()
+    this.setDefaultMap();
+    this.setAutocompleteMap();
   }
+
+  async ngAfterViewInit() {      
+  }
+  
 
   toDashboard() {
     this.router.navigate(["launcher"])
@@ -196,14 +201,14 @@ export class LoginLauncherComponent implements OnInit {
     })
   }
 
-  setDefaultMap() {
+  async setDefaultMap() {
     //set google maps defaults
     this.zoom = 8;
     this.latitudeMap = 39.8282;
     this.longitudeMap = -98.5795;
   }
 
-  setAutocompleteMap() {
+  async setAutocompleteMap() {
     //load Places Autocomplete
     this.mapsAPILoader.load().then(() => {
       let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {

@@ -8,6 +8,7 @@ import { BreadcrumbsComponent } from './breadcrumb.component'
 import { AsideToggleDirective } from './aside.directive'
 import { NAV_DROPDOWN_DIRECTIVES} from './nav-dropdown.directive'
 import { SIDEBAR_TOGGLE_DIRECTIVES} from './sidebar.directive'
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { SIDEBAR_TOGGLE_DIRECTIVES} from './sidebar.directive'
     BreadcrumbsComponent,
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
+    NavbarComponent
   ],
   exports: [
     NAV_DROPDOWN_DIRECTIVES,
@@ -30,6 +32,7 @@ import { SIDEBAR_TOGGLE_DIRECTIVES} from './sidebar.directive'
     TabsModule,
     RouterModule,
     Ng2DragDropModule,
+    NavbarComponent
   ]
 })
 export class SharedModule { }
