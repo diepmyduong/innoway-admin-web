@@ -33,7 +33,18 @@ export class CategoryComponent implements OnInit {
 
   @ViewChild('itemsTable') itemsTable: DataTable;
 
+  subscriptions:any = {}
+
   ngOnInit() {
+    this.subscriptions.onItemsChange = this.innowayApi.productCategory.items.subscribe(items => {
+      if(items)  this.itemsTable.reloadItems()
+    })
+  }
+
+  ngAfterViewDestroy() {
+    this.subscriptions.forEach(s => {
+      s.unsubscribe()
+    })
   }
 
   async reloadItems(params) {

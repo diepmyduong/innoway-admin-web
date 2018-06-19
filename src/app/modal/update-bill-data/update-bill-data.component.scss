@@ -67,3 +67,8 @@
   background: #e1e6ef;
   border-color: #e1e6ef;
 }
+
+/deep/ .tab-content{
+  max-height: 70vh;
+  overflow: auto;
+}

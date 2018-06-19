@@ -28,6 +28,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   employee_id: string;
   phone: string;
   type: number = 1;
+  description: string;
 
   latitudeMap: number;
   longitudeMap: number;
@@ -121,13 +122,15 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.address = null;
     this.phone = null;
     this.name = null;
+    this.description = null;
     return {
       status: this.status,
       longitude: this.longitude,
       latitude: this.latitude,
       address: this.address,
       phone: this.phone,
-      name: this.name
+      name: this.name,
+      description: this.description
     }
   }
 
@@ -143,7 +146,8 @@ export class AddComponent implements OnInit, AddPageInterface {
       this.employee_id = data.employee_id ? data.employee_id : undefined;
       this.phone = data.phone;
       this.type = data.type;
-      this.status = data.status
+      this.status = data.status;
+      this.description = data.description;
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       console.log("ERRRR", err);
@@ -209,9 +213,9 @@ export class AddComponent implements OnInit, AddPageInterface {
   async addItem(form: NgForm) {
     if (form.valid) {
       try {
-        let { name, address, longitude, latitude, phone, status } = this;
+        let { name, address, longitude, latitude, phone, status, description } = this;
         let data = await this.innowayApi.branch.add({
-          name, address, phone, status,
+          name, address, phone, status, description,
           longitude: _.toNumber(longitude),
           latitude: _.toNumber(latitude)
         })
@@ -229,9 +233,9 @@ export class AddComponent implements OnInit, AddPageInterface {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, address, longitude, latitude, phone, status } = this;
+      let { name, address, longitude, latitude, phone, status, description } = this;
       await this.innowayApi.branch.update(this.id, {
-        name, address, phone, status,
+        name, address, phone, status, description,
         longitude: _.toNumber(longitude),
         latitude: _.toNumber(latitude)
       })

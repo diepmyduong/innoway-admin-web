@@ -405,6 +405,40 @@ export class FullLayoutComponent implements OnInit {
         }
       ]
     },
+    {
+      type: 'parent',
+      name: 'Loại tin tức',
+      icon: 'fa fa-users',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./blog-type/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./blog-type/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Tin tức',
+      icon: 'fa fa-users',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./blog/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./blog/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
     // {
     //   type: 'parent',
     //   name: 'Loại nhân viên',
@@ -515,6 +549,154 @@ export class FullLayoutComponent implements OnInit {
         {
           name: 'Danh sách',
           link: "./promotion-type/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Kho',
+      icon: 'fa fa-gift',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./store/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./store/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Loại nhà cung ứng',
+      icon: 'fa fa-gift',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./supplier-category/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./supplier-category/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Nhà cung ứng',
+      icon: 'fa fa-gift',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./supplier/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./supplier/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Nhập kho',
+      icon: 'fa fa-gift',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./import-history/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./import-history/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'parent',
+      name: 'Xuất kho',
+      icon: 'fa fa-gift',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./export-history/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./export-history/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'title',
+      name: 'Report',
+    },
+    {
+      type: 'parent',
+      name: 'Report',
+      icon: 'fa fa-usd',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./customer-report/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./customer-report/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'title',
+      name: 'Ticket',
+    },
+    {
+      type: 'parent',
+      name: 'Ticket',
+      icon: 'fa fa-usd',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./ticket/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./ticket/list",
+          icon: 'fa fa-list-ul'
+        }
+      ]
+    },
+    {
+      type: 'title',
+      name: 'Kết quả ticket',
+    },
+    {
+      type: 'parent',
+      name: 'Kết quả ticket',
+      icon: 'fa fa-usd',
+      children: [
+        {
+          name: 'Thêm',
+          link: "./ticket-result/add",
+          icon: 'fa fa-plus'
+        },
+        {
+          name: 'Danh sách',
+          link: "./ticket-result/list",
           icon: 'fa fa-list-ul'
         }
       ]

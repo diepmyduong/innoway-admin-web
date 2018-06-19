@@ -36,10 +36,11 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
   }
 
   async disconnect(params: {
-    app_id: string,
-    app_secret: string
+    // app_id: string,
+    // app_secret: string,
+    thirdparty_chatbot_id: string
   }) {
-    let { app_id, app_secret } = params;
+    let { thirdparty_chatbot_id } = params;//app_id, app_secret,
     let setting = {
       method: 'POST',
       uri: this.apiUrl(`disconnect_chatbot`),
@@ -48,22 +49,26 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
         'access_token': this.api.innowayAuth.adminToken
       },
       json: true,
-      body: { app_id, app_secret }
+      body: { thirdparty_chatbot_id }//app_id, app_secret,
     }
     var res: any = await this.exec(setting);
     var row = res.results.object;
     return row;
   }
 
-  async getStories() {
+  async getStories(params: {
+    thirdparty_chatbot_id: string
+  }) {
+    let { thirdparty_chatbot_id } = params
     let setting = {
-      method: 'GET',
+      method: 'POST',
       uri: this.apiUrl(`get_stories`),
       headers: {
         'User-Agent': 'Request-Promise',
         'access_token': this.api.innowayAuth.adminToken
       },
-      json: true
+      json: true,
+      body: { thirdparty_chatbot_id },
     }
     var res: any = await this.exec(setting);
     var row = res.results.object;
@@ -71,9 +76,10 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
   }
 
   async requireCreateSmartCodeOnChatbot(params: {
+    thirdparty_chatbot_id: string,
     smart_code_id: string
   }) {
-    let { smart_code_id } = params;
+    let { smart_code_id, thirdparty_chatbot_id } = params;
     let setting = {
       method: 'POST',
       uri: this.apiUrl(`require_create_smart_code_on_chatbot`),
@@ -82,7 +88,7 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
         'access_token': this.api.innowayAuth.adminToken
       },
       json: true,
-      body: { smart_code_id }
+      body: { smart_code_id, thirdparty_chatbot_id }
     }
     var res: any = await this.exec(setting);
     var row = res.results.object;
@@ -93,9 +99,10 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
     code: string,
     messenger_code_image: string,
     qr_code_image: string,
-    link: string
+    link: string,
+    thirdparty_chatbot_id: string
   }) {
-    let { code, messenger_code_image, qr_code_image, link } = params;
+    let { code, messenger_code_image, qr_code_image, link, thirdparty_chatbot_id } = params;
     let setting = {
       method: 'POST',
       uri: this.apiUrl(`integrate_smart_code_to_chatbot`),
@@ -104,37 +111,20 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
         'access_token': this.api.innowayAuth.adminToken
       },
       json: true,
-      body: { code, messenger_code_image, qr_code_image, link }
+      body: { code, messenger_code_image, qr_code_image, link, thirdparty_chatbot_id }
     }
     var res: any = await this.exec(setting);
     var row = res.results.object;
     return row;
   }
 
-  // async handleSmartcodeFromChatbot(params: {
-  //   code: string,
-  //   subscriber_id: string,
-  // }) {
-  //   let { code, subscriber_id } = params;
-  //   let setting = {
-  //     method: 'PUT',
-  //     uri: this.apiUrl(`/handle_smart_code_from_chatbot`),
-  //     headers: { //headers
-  //       'User-Agent': 'Request-Promise',
-  //       'access_token': this.api.innowayAuth.adminToken
-  //     },
-  //     json: true,
-  //     body: { code, subscriber_id }
-  //   }
-  //   var res: any = await this.exec(setting);
-  //   var row = res.results.object;
-  //   return row;
-  // }
-
   async sendStory(params: {
-    story_id: string
+    story_id: string,
+    thirdparty_chatbot_id: string,
+    send_by: "all" | "phone" | "subcriber",
+    send_to: string[]
   }) {
-    let { story_id } = params;
+    let { story_id, thirdparty_chatbot_id, send_by, send_to } = params;
     let setting = {
       method: 'POST',
       uri: this.apiUrl(`send_stories`),
@@ -143,7 +133,92 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
         'access_token': this.api.innowayAuth.adminToken
       },
       json: true,
-      body: { story_id }
+      body: { story_id, thirdparty_chatbot_id, send_by, send_to }
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
+
+  // {
+  //   "send_by": "all",
+  //   "send_to": [
+  //
+  //       "5a55a0eeff3f8cf2823b9b4f"
+  //     ],
+  //     "thirdparty_chatbot_id": "a5e08710-4940-11e8-bb1d-cb51287711c8",
+  //   "type": "new_story",
+  //   "stories": [
+  //       {
+  //         "type": "generic",
+  //         "option": {
+  //           "attachment": {
+  //             "type": "template",
+  //             "payload": {
+  //               "template_type": "button",
+  //               "text": "Bạn có thể thực hiện thanh toán online thông qua nút 'Thanh toán online' bên dưới hoặc đóng tiền tại bệnh viện khi đến khám bệnh. Cám ơn.",
+  //               "buttons": [
+  //                 {
+  //                   "type": "web_url",
+  //                   "url": "https://pay.vnpay.vn/vpcpay.html?vnp_Amount=1000000&vnp_BankCode=VISA&vnp_Command=pay&vnp_CreateDate=20180426110435&vnp_CurrCode=VND&vnp_IpAddr=58.186.6.44%2C%20172.31.94.172&vnp_Locale=vn&vnp_OrderInfo=%7B%22brand_id%22%3A%22c5258180-483b-11e8-8dd2-1d30777df6d2%22%2C%22bill_id%22%3A%22e5f23330-4940-11e8-bb1d-cb51287711c8%22%2C%22type%22%3A%22bill%22%7D&vnp_OrderType=topup&vnp_ReturnUrl=http%3A%2F%2Fmiorder.vn%2Fapi%2Fv1%2Fvnpay%2Freturn&vnp_TmnCode=MITEK004&vnp_TxnRef=dda9afcd-de7b-2f2b-6734-ecdf9c658bf8&vnp_Version=2&vnp_SecureHashType=MD5&vnp_SecureHash=d1f706f1217fce126fef43f40e7fee24",
+  //                   "title": "Thanh toán online",
+  //                   "webview_height_ratio": "full",
+  //                   "messenger_extensions": true,
+  //                   "webview_share_button": "hide"
+  //                 }
+  //               ]
+  //             }
+  //           }
+  //         }
+  //       }
+  //   ]
+  // }
+
+  async sendButtonForPayment(params: {
+    thirdparty_chatbot_id: string,
+    subscribers: string[],
+    payment_url: string
+  }) {
+    let { thirdparty_chatbot_id, subscribers, payment_url } = params;
+    let setting = {
+      method: 'POST',
+      uri: this.apiUrl(`send`),
+      headers: {
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body:
+      {
+        "send_by": "subscriber",
+        "send_to": subscribers,
+        "thirdparty_chatbot_id": thirdparty_chatbot_id,
+        "type": "new_story",
+        "stories": [
+          {
+            "type": "generic",
+            "option": {
+              "attachment": {
+                "type": "template",
+                "payload": {
+                  "template_type": "button",
+                  "text": "Bạn có thể thực hiện thanh toán online thông qua nút 'Thanh toán online' bên dưới hoặc đóng tiền tại bệnh viện khi đến khám bệnh. Cám ơn.",
+                  "buttons": [
+                    {
+                      "type": "web_url",
+                      "url": payment_url,
+                      "title": "Thanh toán online",
+                      "webview_height_ratio": "full",
+                      "messenger_extensions": true,
+                      "webview_share_button": "hide"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
     }
     var res: any = await this.exec(setting);
     var row = res.results.object;
@@ -164,10 +239,12 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
     greeting: string,
     subscribers: string[],
     send_by: string,
+    thirdparty_chatbot_id: string,
+    subscriber_id: string
   }) {
     let { total_price, vat_fee, amount_of_sub_fee, amount_of_promotion,
       ship_fee, ship_method, created_at, code, address, customer_fullname, greeting,
-      subscribers, send_by } = params;
+      subscribers, send_by, thirdparty_chatbot_id, subscriber_id } = params;
     let setting = {
       method: 'POST',
       uri: this.apiUrl(`send_invoice_to_customer`),
@@ -179,7 +256,7 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
       body: {
         total_price, vat_fee, amount_of_sub_fee, amount_of_promotion,
         ship_fee, ship_method, created_at, code, address, customer_fullname, greeting,
-        subscribers, send_by
+        subscribers, send_by, thirdparty_chatbot_id, subscriber_id
       }
     }
     var res: any = await this.exec(setting);
@@ -433,9 +510,11 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
       app_token: string,
     },
     send_by: string,
-    send_to: string[]
+    send_to: string[],
+    thirdparty_chatbot_id: string,
+    subscriber_id: string
   }) {
-    let { content, media, app, send_by, send_to } = params;
+    let { content, media, app, send_by, send_to, thirdparty_chatbot_id, subscriber_id } = params;
     let setting = {
       url: "https://mfood-commerce-01.herokuapp.com/api/v1/send",
       method: "POST",
@@ -445,6 +524,8 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
       },
       json: true,
       body: {
+        thirdparty_chatbot_id: thirdparty_chatbot_id,
+        subscriber_id: subscriber_id,
         "type": "new_story",
         "story": [
           {
@@ -480,19 +561,17 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
     return row;
   }
 
-  async sendPromotionToCustomer() {
-
-  }
-
   async sendBillActivityToCustomer(params: {
     content: string,
     bill: any,
     chatbot: any,
     note: string
     send_by: string,
-    send_to: string[]
+    send_to: string[],
+    thirdparty_chatbot_id: string,
+    subscriber_id: string
   }) {
-    let { bill, content, chatbot, send_by, send_to, note } = params;
+    let { bill, content, chatbot, send_by, send_to, note, thirdparty_chatbot_id, subscriber_id } = params;
     let setting = {
       url: "https://mfood-commerce-01.herokuapp.com/api/v1/send",
       method: "POST",
@@ -502,17 +581,19 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
       },
       json: true,
       body: {
-        "type": "new_story",
-        "story": [
+        thirdparty_chatbot_id: thirdparty_chatbot_id,
+        subscriber_id: subscriber_id,
+        type: "new_story",
+        story: [
           {
-            "type": "text",
-            "option": {
-              "text": content // null or not null
+            type: "text",
+            option: {
+              text: content // null or not null
             }
           }
         ],
-        "sendBy": send_by, //subscriber or phone
-        "sendTo": send_to
+        sendBy: send_by, //subscriber or phone
+        sendTo: send_to
       }
     }
 
@@ -535,113 +616,6 @@ export class ThirdPartyChatbot extends CrudAPI<iThirdPartyChatbot> {
       }
       setting.body.story.push(contentBillActivity)
     }
-
-    // switch (bill.activity.action) {
-    //   case "CANCEL": { //if bill was cancel
-    //     contentBillActivity = {
-    //       "type": "text",
-    //       "option": {
-    //         "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn vừa bị hủy." // null or not null
-    //       }
-    //     }
-    //     setting.body.story.push(contentBillActivity)
-    //     break;
-    //   }
-    //   // case "UPDATED": { //if bill was updated
-    //   //   contentBillActivity = {
-    //   //     "type": "text",
-    //   //     "option": {
-    //   //       "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn vừa được cập nhật. {{first_name}} {{last_name}} có thể kiểm tra lại thông tin đơn hàng ở bên dưới." // null or not null
-    //   //     }
-    //   //   }
-    //   //   let contentReceipt: any = {
-    //   //     "type": "generic",
-    //   //     "option": {
-    //   //       "attachment": {
-    //   //         "type": "template",
-    //   //         "payload": {
-    //   //           "template_type": "receipt",
-    //   //           "recipient_name": bill.customer_fullname.toString(),
-    //   //           "order_number": bill.code.toString(),
-    //   //           "currency": "VND",
-    //   //           "payment_method": "Tiền mặt & giao hàng", //tiền mặt + giao hàng/nhận tại cửa hàng
-    //   //           "order_url": "http://petersapparel.parseapp.com/order?order_id=123456",
-    //   //           "timestamp": "1428444852", //timestamp
-    //   //           "address": {
-    //   //             "street_1": bill.address.toString(),
-    //   //             "street_2": "",
-    //   //             "city": "Hồ Chí Minh",
-    //   //             "postal_code": "70000",
-    //   //             "state": "Hồ Chí Minh",
-    //   //             "country": "VN"
-    //   //           },
-    //   //           "summary": {
-    //   //             "subtotal": bill.amount_of_sub_fee,
-    //   //             "shipping_cost": bill.ship_fee,
-    //   //             "total_tax": bill.vat_fee,
-    //   //             "total_cost": bill.total_price
-    //   //           },
-    //   //           "adjustments": [ //if amount_of_promotion is not equal 0 => add amount_of_promotion; because amount value must be not equal 0
-    //   //             {
-    //   //               "name": "Khuyến mãi",
-    //   //               "amount": bill.amount_of_promotion != 0 ? bill.amount_of_promotion : 1
-    //   //             }
-    //   //           ],
-    //   //           "elements": []
-    //   //         }
-    //   //       }
-    //   //     }
-    //   //   }
-    //   //   setting.body.story.push(contentBillActivity)
-    //   //   setting.body.story.push(contentReceipt)
-    //   //   break;
-    //   // }
-    //   // case "PROCESSING": {
-    //   //   contentBillActivity = {
-    //   //     "type": "text",
-    //   //     "option": {
-    //   //       "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn đang được xử lý", // null or not null
-    //   //     }
-    //   //   }
-    //   //   setting.body.story.push(contentBillActivity)
-    //   // }
-    //   // case "PROCESSING": {
-    //   //   contentBillActivity = {
-    //   //     "type": "text",
-    //   //     "option": {
-    //   //       "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn đang được xử lý", // null or not null
-    //   //     }
-    //   //   }
-    //   //   setting.body.story.push(contentBillActivity)
-    //   // }
-    //   // case "DELIVERY": {
-    //   //   contentBillActivity = {
-    //   //     "type": "text",
-    //   //     "option": {
-    //   //       "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn đang được giao bởi nhân viên " + bill.employee, // null or not null
-    //   //     }
-    //   //   }
-    //   //   setting.body.story.push(contentBillActivity)
-    //   // }
-    //   // case "PAID": {
-    //   //   contentBillActivity = {
-    //   //     "type": "text",
-    //   //     "option": {
-    //   //       "text": "Cám ơn {{first_name}} {{last_name}} đã sử dụng dịch vụ của " + bill.brand_name + ". Đơn hàng đã được thanh toán vào lúc " + bill.activity.created_at, // null or not null
-    //   //     }
-    //   //   }
-    //   //   setting.body.story.push(contentBillActivity)
-    //   // }
-    //   default: {
-    //     contentBillActivity = {
-    //       "type": "text",
-    //       "option": {
-    //         "text": "Chào {{first_name}} {{last_name}} đơn hàng bạn vừa chuyển sang trạng thái " + bill.action, // null or not null
-    //       }
-    //     }
-    //     setting.body.story.push(contentBillActivity)
-    //   }
-    // }
 
     console.log("request body", JSON.stringify(setting))
     var res: any = await this.exec(setting);

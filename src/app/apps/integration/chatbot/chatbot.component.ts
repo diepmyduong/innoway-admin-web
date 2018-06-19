@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { InnowayApiService } from "../../../services/innoway";
 import { Globals } from "../../../globals";
 import { MatDialog } from "@angular/material";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 @Component({
   selector: 'app-chatbot',
@@ -18,6 +19,11 @@ export class ChatbotComponent implements OnInit {
   stories: any[];
   bill: any;
   employee: any;
+  botAppId: string;
+  mainBotApp: string;
+
+  botApp: string = null
+  botApps: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   constructor(public innowayApi: InnowayApiService,
     private globals: Globals,
@@ -28,34 +34,35 @@ export class ChatbotComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // this.loadBillData();
-    this.detectIntegrationWithChatbot(this.employee.brand_id)
+    this.getAllConnectedBotApp();
   }
 
-  async detectIntegrationWithChatbot(brandId) {
-    try {
-      console.log(brandId)
-      let data = await this.innowayApi.brand.getItem(brandId, {
-        query: {
-          fields: ['$all', {
-            thirdparty_chatbot: ["$all"]
-          }]
-        }
-      })
-      if (data.thirdparty_chatbot) {
-        this.appId = data.thirdparty_chatbot.app_id
-        this.appSecret = data.thirdparty_chatbot.app_secret
-        this.appToken = data.thirdparty_chatbot.access_token
-        this.getStories();
-      } else {
-
-      }
-
-      console.log("chatbot", JSON.stringify(data))
-    } catch (err) {
-      console.log("chatbot", err)
-    }
-  }
+  // async detectIntegrationWithChatbot(brandId) {
+  //   try {
+  //     console.log(brandId)
+  //     let data = await this.innowayApi.brand.getItem(brandId, {
+  //       query: {
+  //         fields: ['$all', {
+  //           thirdparty_chatbots: ["$all"]
+  //         }]
+  //       }
+  //     })
+  //     console.log("bot apps", JSON.stringify(data))
+  //     if (data.thirdparty_chatbots[1]) {
+  //       this.botAppId = data.thirdparty_chatbots[1].id
+  //       this.appId = data.thirdparty_chatbots[1].app_id
+  //       this.appSecret = data.thirdparty_chatbots[1].app_secret
+  //       this.appToken = data.thirdparty_chatbots[1].access_token
+  //       this.getStories();
+  //     } else {
+  //
+  //     }
+  //
+  //     console.log("chatbot", JSON.stringify(data))
+  //   } catch (err) {
+  //     console.log("chatbot", err)
+  //   }
+  // }
 
   async integrateToChatbotSystem() {
     try {
@@ -63,31 +70,40 @@ export class ChatbotComponent implements OnInit {
         app_id: this.appId,
         app_secret: this.appSecret
       })
-      this.getStories();
-      // this.accessToken = data.access_token;
-      // console.log("integrateToChatbotSystem", data);
+      this.setDefaultData()
+      this.getAllConnectedBotApp();
     } catch (err) {
-
+      console.log("integrateToChatbotSystem", err);
     }
   }
 
-  async disconnectChatbotSystem() {
-    try {
-      let data: any = await this.innowayApi.thirdpartyChatbot.disconnect({
-        app_id: this.appId,
-        app_secret: this.appSecret
-      })
-      this.getStories();
-      // this.accessToken = data.access_token;
-      // console.log("integrateToChatbotSystem", data);
-    } catch (err) {
+  setDefaultData() {
+    this.appId = null
+    this.appSecret = null
+    return {
+      appId: this.appId,
+      appSecret: this.appSecret
+    }
+  }
 
+  async disconnectChatbotSystem(botApp: any) {
+    try {
+      console.log("disconnectChatbotSystem", JSON.stringify(botApp));
+      let data: any = await this.innowayApi.thirdpartyChatbot.disconnect({
+        thirdparty_chatbot_id: botApp.id
+      })
+      this.getAllConnectedBotApp();
+      console.log("disconnectChatbotSystem", JSON.stringify(data));
+    } catch (err) {
+      console.log("disconnectChatbotSystem", err);
     }
   }
 
   async getStories() {
     try {
-      let response = await this.innowayApi.thirdpartyChatbot.getStories();
+      let response = await this.innowayApi.thirdpartyChatbot.getStories({
+        thirdparty_chatbot_id: this.botAppId
+      });
       this.stories = response.rows;
       this.story = this.stories[0]._id;
       console.log("getStories", response);
@@ -133,65 +149,16 @@ export class ChatbotComponent implements OnInit {
     try {
       console.log("send story", JSON.stringify(this.story))
       let response = await this.innowayApi.thirdpartyChatbot.sendStory({
-        story_id: this.story
+        story_id: this.story,
+        thirdparty_chatbot_id: this.botAppId,
+        send_by: "all",
+        send_to: []
       });
       console.log("send message", JSON.stringify(response))
-      // let response = await this.innowayApi.thirdpartyChatbot.sendSampleStory();
-      // console.log("getStories", response);
     } catch (err) {
       console.log("send message", err)
     }
   }
-
-  // async sendReceiptTemplate() {
-  //   try {
-  //     let request = {
-  //       contentGreeting: {
-  //         text: "Hello {{first_name}} {{last_name}} :D"
-  //       },
-  //       contentReceipt: {
-  //         total_price: this.bill.total_price,
-  //         vat_fee: this.bill.total_price,
-  //         amount_of_sub_fee: this.bill.amount_of_sub_fee,
-  //         amount_of_promotion: this.bill.amount_of_promotion,
-  //         ship_fee: this.bill.bill_ship_detail.fee,
-  //         ship_method: "a",
-  //         created_at: "a",
-  //         code: this.formatBillCode(this.bill.code),
-  //         brand: {
-  //           name: "a"
-  //         },
-  //         branch: {
-  //           name: "a"
-  //         },
-  //         address: this.bill.address,
-  //         customer_fullname: "a",
-  //         product: []
-  //       }
-  //     }
-  //
-  //     let products = [];
-  //     this.bill.items.forEach(item => {
-  //       let data = {
-  //         title: item.product.name,
-  //         subtitle: item.product.name.short_description ? item.product.name.short_description : "không có",
-  //         quantity: item.amount,
-  //         price: item.total_price,
-  //         currency: "VND",
-  //         image_url: item.product.thumb
-  //       }
-  //
-  //       products.push(data)
-  //     })
-  //
-  //     request.contentReceipt.product = products;
-  //     console.log("request", JSON.stringify(request))
-  //     let response = await this.innowayApi.thirdpartyChatbot.sendInvoiceToCustomer(request);
-  //     console.log("response", JSON.stringify(response))
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
 
   formatBillCode(code): string {
     let output = "DH";
@@ -200,5 +167,65 @@ export class ChatbotComponent implements OnInit {
     }
     output += code
     return output;
+  }
+
+  async getAllConnectedBotApp() {
+    try {
+      this.botApps.next(await this.innowayApi.thirdpartyChatbot.getList({
+        query: {
+          local: false,
+          fields: ["$all"],
+          filter: {
+            brand_id: { $eq: this.employee.brand_id }
+          }
+        }
+      }))
+      this.botApp = null;
+      this.detectAndCheckDefaultConnectedBotApp();
+      this.ref.detectChanges();
+      console.log("brand-id ", this.employee.brand_id)
+      console.log("bot app", JSON.stringify(this.botApps.getValue()))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  async detectAndCheckDefaultConnectedBotApp() {
+    try {
+      let data = await this.innowayApi.brand.getItem(this.employee.brand_id, {
+        query: {
+          fields: ['$all', {
+            thirdparty_chatbots: ["$all"]
+          }]
+        }
+      })
+
+      if (!data.main_thirdparty_chatbot_id
+        && this.botApps.getValue().length >= 0) {
+        this.setDefaultConnectedBotApp(this.botApps.getValue()[0])
+      } else {
+        this.mainBotApp = data.main_thirdparty_chatbot_id;
+      }
+
+    } catch (err) {
+      console.log("detectAndCheckDefaultConnectedBotApp", err)
+    }
+  }
+
+  detectMainBotApp(botApp: string): boolean {
+    return botApp === this.mainBotApp ? true : false;
+  }
+
+  async setDefaultConnectedBotApp(botApp: string) {
+    try {
+      console.log("setDefaultConnectedBotApp id", botApp);
+      let response = await this.innowayApi.brand.update(this.employee.brand_id, {
+        main_thirdparty_chatbot_id: botApp
+      })
+      this.getAllConnectedBotApp();
+      console.log("setDefaultConnectedBotApp", JSON.stringify(response))
+    } catch (err) {
+      console.log("setDefaultConnectedBotApp", err)
+    }
   }
 }

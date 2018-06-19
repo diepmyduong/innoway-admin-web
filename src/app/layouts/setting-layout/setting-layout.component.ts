@@ -102,23 +102,12 @@ export class SettingLayoutComponent implements OnInit {
       link: "./settings/theme",
       icon: 'fa fa-adjust',
     },
-    // {
-    //   type: 'parent',
-    //   name: 'Thời gian làm việc',
-    //   icon: 'fa fa-clock-o',
-    //   children: [
-    //     {
-    //       name: 'Thêm',
-    //       link: "./schedule/add",
-    //       icon: 'fa fa-plus'
-    //     },
-    //     {
-    //       name: 'Danh sách',
-    //       link: "./schedule/list",
-    //       icon: 'fa fa-list-ul'
-    //     }
-    //   ]
-    // },
+    {
+      type: 'single',
+      name: 'Trạng thái',
+      link: "./settings/message",
+      icon: 'fa fa-calendar',
+    },
     {
       type: 'parent',
       name: 'Khu vực',
@@ -159,6 +148,104 @@ export class SettingLayoutComponent implements OnInit {
       link: "./integration/chatbot",
       icon: 'fa fa-dot-circle-o',
     },
+    {
+      type: 'parent',
+      name: 'Kết nối thirdparty',
+      icon: 'fa fa-usd',
+      children: [
+        {
+          name: 'Haravan',
+          link: "./integration/haravan",
+          icon: 'fa fa-edit'
+        },
+        {
+          name: 'KiotViet',
+          link: "./integration/kiotviet",
+          icon: 'fa fa-edit'
+        },
+        {
+          name: 'Giao hàng nhanh',
+          link: "./integration/ghn",
+          icon: 'fa fa-edit'
+        },
+        {
+          name: 'Giao hàng tiết kiệm',
+          link: "./integration/ghtk",
+          icon: 'fa fa-edit'
+        },
+      ]
+    },
   ];
+
+
+  thirdparty = [
+    {
+      name: "Giao hàng tiết kiệm",
+      code: "GHTK",
+      type: "ship",
+      url: "https://i.imgur.com/7VvbMLT.png",
+      link: ""
+    },
+    {
+      name: "Giao hàng nhanh",
+      code: "GHN",
+      type: "ship",
+      url: "https://i.imgur.com/Pj6j4PM.png",
+      link: ""
+    },
+    {
+      name: "KiotViet",
+      code: "KIOTVIET",
+      type: "data",
+      url: "https://i.imgur.com/TwRwpNh.png",
+      link: ""
+    },
+    {
+      name: "Haravan",
+      code: "HARAVAN",
+      type: "data",
+      url: "https://i.imgur.com/yMSgiNK.png",
+      link: ""
+    },
+    {
+      name: "MCOM Bot",
+      code: "MCOM",
+      type: "bot",
+      url: "https://i.imgur.com/7JRFS05.png",
+      link: ""
+    }
+  ]
+
+  goToDashboardLayout() {
+    this.router.navigate(['/dashboard-layout'], { relativeTo: this.route });
+  }
+
+  goToCustomerLayout() {
+    this.router.navigate(['/customer-layout'], { relativeTo: this.route });
+  }
+
+  goToEmployeeLayout() {
+    this.router.navigate(['/employee-layout'], { relativeTo: this.route });
+  }
+
+  goToProductLayout() {
+    this.router.navigate(['/product-layout'], { relativeTo: this.route });
+  }
+
+  goToPromotionLayout() {
+    this.router.navigate(['/promotion-layout'], { relativeTo: this.route });
+  }
+
+  goToBillLayout() {
+    this.router.navigate(['/bill-layout'], { relativeTo: this.route });
+  }
+
+  goToSettingLayout() {
+    this.router.navigate(['/setting-layout'], { relativeTo: this.route });
+  }
+
+  goToPOSLayout() {
+    this.router.navigate(['/pos'], { relativeTo: this.route });
+  }
 
 }

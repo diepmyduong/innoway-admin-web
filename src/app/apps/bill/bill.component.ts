@@ -38,7 +38,8 @@ export class BillComponent implements OnInit, ListPageInterface {
   brand: any;
 
   @ViewChild('itemsTable') itemsTable: DataTable;
-  subscriptions: Subscription[] = []
+  // subscriptions: Subscription[] = []
+  subscriptions: any = {}
 
   constructor(
     private globals: Globals,
@@ -55,6 +56,16 @@ export class BillComponent implements OnInit, ListPageInterface {
     this.loadBrandByEmployeeData(this.employeeData.brand_id);
 
     moment.locale('vi');
+
+    this.subscriptions.onItemsChange = this.innowayApi.smartCode.items.subscribe(items => {
+      if (items) this.itemsTable.reloadItems()
+    })
+  }
+
+  ngAfterViewDestroy() {
+    this.subscriptions.forEach(s => {
+      s.unsubscribe()
+    })
   }
 
   async loadBrandByEmployeeData(brandId: string) {
@@ -214,8 +225,9 @@ export class BillComponent implements OnInit, ListPageInterface {
     this.searchRef = setTimeout(() => {
       this.query.filter = {
         $or: {
-          name: { $iLike: `%${key}%` },
-          description: { $iLike: `%${key}%` },
+          // name: { $iLike: `%${key}%` },
+          // description: { $iLike: `%${key}%` },
+          code: { $iLike: `%${key}%` },
         }
       }
       this.getItems();
@@ -396,10 +408,20 @@ export class BillComponent implements OnInit, ListPageInterface {
   detectBillCancel(bill): boolean {
     if (bill.activity) {
       if (bill.activity.action.indexOf("CANCEL") >= 0
-    || bill.activity.action.indexOf("DISTRIBUTED") >= 0) {
+        || bill.activity.action.indexOf("DISTRIBUTED") >= 0) {
         return true
       }
     }
     return false
   }
+
+  async loadPruBill(){
+    try{
+      this.items.next(await this.innowayApi.bill.getPrudentialEmployeeBill({}))
+      this.ref.detectChanges()
+    }catch(err){
+
+    }
+  }
+
 }

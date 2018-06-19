@@ -36,7 +36,18 @@ export class ToppingTypeComponent implements OnInit, ListPageInterface {
   ) {
   }
 
+  subscriptions:any = {}
+
   ngOnInit() {
+    this.subscriptions.onItemsChange = this.innowayApi.smartCode.items.subscribe(items => {
+      if(items)  this.itemsTable.reloadItems()
+    })
+  }
+
+  ngAfterViewDestroy() {
+    this.subscriptions.forEach(s => {
+      s.unsubscribe()
+    })
   }
 
   async reloadItems(params) {

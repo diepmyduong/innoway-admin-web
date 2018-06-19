@@ -1,0 +1,282 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Thông tin</strong>
+        </div>
+        <div class="card-block">
+          <form #itemFrm="ngForm">
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="select">Chọn Bot App</label>
+              <div class="col-md-9">
+                <select #botAppControl="ngModel" [(ngModel)]="botApp" name="botApp" class="form-control input-control">
+                      <option value="null" disabled="true" [selected]="true">Chọn ứng dụng bot</option>
+                      <option *ngFor="let v of botApps | async" [value]="v.id">
+                        {{v.facebook_name}}
+                      </option>
+                    </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái thành công</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_sent_successfully_status($event,is_sent_successfully_status)" [checked]="is_sent_successfully_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái thành công - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #sent_successfully_contentControl="ngModel" [(ngModel)]="sent_successfully_content" name="sent_successfully_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái thành công - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_sent_successfully_content($event,is_auto_send_sent_successfully_content)" [checked]="is_auto_send_sent_successfully_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã phân phối</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_distributed_status($event,is_distributed_status)" [checked]="is_distributed_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã phân phối - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #distributed_contentControl="ngModel" [(ngModel)]="distributed_content_content" name="distributed_content_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã phân phối - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_distributed_content($event,is_auto_send_distributed_content)" [checked]="is_auto_send_distributed_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đợi xác nhận</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_waiting_for_confirmation_status($event,is_waiting_for_confirmation_status)" [checked]="is_waiting_for_confirmation_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đợi xác nhận - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #waiting_for_confirmation_contentControl="ngModel" [(ngModel)]="waiting_for_confirmation_content" name="waiting_for_confirmation_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đợi xác nhận - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_waiting_for_confirmation_content($event,is_auto_send_waiting_for_confirmation_content)" [checked]="is_auto_send_waiting_for_confirmation_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã xác nhận</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_confirmed_status($event,is_confirmed_status)" [checked]="is_confirmed_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã xác nhận - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #confirmed_contentControl="ngModel" [(ngModel)]="confirmed_content" name="confirmed_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã xác nhận - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_confirmed_content($event,is_auto_send_confirmed_content)" [checked]="is_auto_send_confirmed_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đang lấy hàng</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_picking_up_status($event,is_picking_up_status)" [checked]="is_picking_up_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đang lấy hàng - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #picking_up_contentControl="ngModel" [(ngModel)]="picking_up_content" name="picking_up_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đang lấy hàng - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_picking_up_content($event,is_auto_send_picking_up_content)" [checked]="is_auto_send_picking_up_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã nhận hàng</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_received_status($event,is_received_status)" [checked]="is_received_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã nhận hàng - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #received_contentControl="ngModel" [(ngModel)]="received_content" name="received_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã nhận hàng - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_received_content($event,is_auto_send_received_content)" [checked]="is_auto_send_received_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đang xử lý</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_processing_status($event,is_processing_status)" [checked]="is_processing_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đang xử lý - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #processing_contentControl="ngModel" [(ngModel)]="processing_content" name="processing_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đang xử lý - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_processing_content($event,is_auto_send_processing_content)" [checked]="is_auto_send_processing_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã xử lý</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_prepared_status($event,is_prepared_status)" [checked]="is_prepared_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã xử lý - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #prepared_contentControl="ngModel" [(ngModel)]="prepared_content" name="prepared_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã xử lý - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_prepared_content($event,is_auto_prepared_content)" [checked]="is_auto_prepared_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã gửi shipper</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_sent_shipper_status($event,is_sent_shipper_status)" [checked]="is_sent_shipper_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã gửi shipper - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #sent_shipper_contentControl="ngModel" [(ngModel)]="sent_shipper_content" name="sent_shipper_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã gửi shipper - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_sent_shipper_content($event,is_auto_send_sent_shipper_content)" [checked]="is_auto_send_sent_shipper_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đang giao hàng</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_delivering_status($event,is_delivering_status)" [checked]="is_delivering_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đang giao hàng - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #delivering_contentControl="ngModel" [(ngModel)]="delivering_content" name="delivering_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đang giao hàng - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_delivering_content($event,is_auto_send_delivering_content)" [checked]="is_auto_send_delivering_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã thanh toán</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_paid_status($event,is_paid_status)" [checked]="is_paid_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã thanh toán - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #paid_contentControl="ngModel" [(ngModel)]="paid_content" name="paid_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã thanh toán - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_paid_content($event,is_auto_send_paid_content)" [checked]="is_auto_send_paid_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã thu tiền</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_collected_money_status($event,is_collected_money_status)" [checked]="is_collected_money_status">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã thu tiền - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #collected_money_contentControl="ngModel" [(ngModel)]="collected_money_content" name="collected_money_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Trạng thái đã thu tiền - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_collected_money_content($event,is_auto_send_collected_money_content)" [checked]="is_auto_send_collected_money_content">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Gửi hóa đơn</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_is_auto_send_receipt($event,is_auto_send_receipt)" [checked]="is_auto_send_receipt">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Gửi hóa đơn - Nội dung</label>
+              <div class="col-md-9">
+                <input type="text" #send_receipt_contentControl="ngModel" [(ngModel)]="send_receipt_content" name="send_receipt_content" class="form-control input-control" [placeholder]="'Nhập nội dung'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Gửi hóa đơn - Tự động</label>
+              <div class="col-md-9">
+                <input type="checkbox" (change)="check_auto_send_receipt_activity($event,auto_send_receipt_activity)" [checked]="auto_send_receipt_activity">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 header-text" for="text-input">Meta-Data</label>
+              <div class="col-md-9">
+              <textarea type="text" #meta_dataControl="ngModel" [(ngModel)]="meta_data" name="meta_data" class="form-control input-control" [placeholder]="'Mô tả'" rows="5"></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button (click)="updateAndClose(itemFrm)" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-edit"></i> Cập nhật</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

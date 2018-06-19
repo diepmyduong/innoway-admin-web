@@ -104,7 +104,8 @@ export class DetailComponent implements OnInit {
   async requireCreateSmartCodeOnChatbot() {
     try {
       let request = {
-        smart_code_id: this.id
+        smart_code_id: this.id,
+        thirdparty_chatbot_id: null
       }
       let response = await this.innowayApi.thirdpartyChatbot.requireCreateSmartCodeOnChatbot(request);
       this.integrateSmartCodeToChatbot({

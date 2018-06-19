@@ -163,3 +163,28 @@
 		}
 	}
 }
+
+.thirdparty-dropdown-item img{
+  width: 35px;
+  height: 35px;
+  margin-right: 0.45rem;
+}
+
+.right-dropdown {
+  margin-right: 30px !important;
+}
+
+.thirdparty-dropdown-item{
+  min-width: 250px;
+  min-height: 0px;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+/deep/ .mat-tooltip {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -43,6 +43,9 @@ export class AddComponent implements OnInit {
   promotion: string = null
   promotions: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
+  botApp: string = null
+  botApps: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
@@ -68,6 +71,7 @@ export class AddComponent implements OnInit {
     }
 
     this.getPromotion();
+    this.getBotApp();
   }
 
   setDefaultData() {
@@ -80,8 +84,13 @@ export class AddComponent implements OnInit {
     this.limit = 0
     this.amount = 0
     this.status = 1
+
     if (this.promotions.getValue()[0]) {
       this.promotion = this.promotions.getValue()[0].id;
+    }
+
+    if (this.botApps.getValue()[0]) {
+      this.botApp = this.botApps.getValue()[0].id;
     }
     return {
       codeTypes: this.codeTypes,
@@ -93,7 +102,8 @@ export class AddComponent implements OnInit {
       limit: this.limit,
       amount: this.amount,
       status: this.status,
-      promotion: this.promotion
+      promotion: this.promotion,
+      botApp: this.botApp
     }
   }
 
@@ -101,6 +111,7 @@ export class AddComponent implements OnInit {
     try {
       let data = await this.innowayApi.smartCode.getItem(this.id, {
         query: {
+          local: false,
           fields: ["$all"]
         }
       })
@@ -112,6 +123,7 @@ export class AddComponent implements OnInit {
       this.content = data.content;
       this.limit = data.limit;
       this.amount = data.amount;
+      this.botApp = data.thirdparty_chatbot_id ? data.thirdparty_chatbot_id : null
       if (data.entity_id) {
         this.promotion = data.entity_id;
         this.isSelectedPromotion = true;
@@ -182,14 +194,17 @@ export class AddComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { codeType, code, startTime, endTime, content, limit, amount, status, promotion } = this;
+      let { codeType, code, startTime, endTime, content, limit, amount, status, promotion, botApp } = this;
       let start_time = moment(this.startTime, "MM/DD/YYYY HH:mm").format();
       let end_time = moment(this.endTime, "MM/DD/YYYY HH:mm").format();
       let code_type = codeType;
       let entity_id = promotion;
-      await this.innowayApi.smartCode.add({
-        code_type, code, start_time, end_time, content, limit, amount, status, entity_id
+      let thirdparty_chatbot_id = botApp;
+      let response = await this.innowayApi.smartCode.add({
+        code_type, code, start_time, end_time, content, limit, amount, status, entity_id, thirdparty_chatbot_id
       })
+
+      console.log("updateItem", JSON.stringify(response))
 
       this.alertAddSuccess();
       form.reset();
@@ -201,14 +216,17 @@ export class AddComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { codeType, code, startTime, endTime, content, limit, amount, status, promotion } = this;
+      let { codeType, code, startTime, endTime, content, limit, amount, status, promotion, botApp } = this;
       let start_time = moment(this.startTime, "MM/DD/YYYY HH:mm").format();
       let end_time = moment(this.endTime, "MM/DD/YYYY HH:mm").format();
       let code_type = codeType;
       let entity_id = promotion;
-      await this.innowayApi.smartCode.update(this.id, {
-        code_type, code, start_time, end_time, content, limit, amount, status, entity_id
+      let thirdparty_chatbot_id = botApp;
+      let response = await this.innowayApi.smartCode.update(this.id, {
+        code_type, code, start_time, end_time, content, limit, amount, status, entity_id, thirdparty_chatbot_id
       })
+
+      console.log("updateItem", JSON.stringify(response))
 
       this.alertUpdateSuccess();
       form.reset();
@@ -258,7 +276,8 @@ export class AddComponent implements OnInit {
   async requireCreateSmartCodeOnChatbot() {
     try {
       let request = {
-        smart_code_id: this.id
+        smart_code_id: this.id,
+        thirdparty_chatbot_id: null
       }
       let response = await this.innowayApi.thirdpartyChatbot.requireCreateSmartCodeOnChatbot(request);
       this.integrateSmartCodeToChatbot({
@@ -287,8 +306,22 @@ export class AddComponent implements OnInit {
           fields: ["$all"]
         }
       }))
-      this.promotion = null;//this.promotions.getValue()[0].id ? this.promotions.getValue()[0].id : null
-      console.log("promotion", JSON.stringify(this.promotions))
+      this.promotion = null;
+      console.log("promotion", JSON.stringify(this.promotions.getValue()))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  async getBotApp() {
+    try {
+      this.botApps.next(await this.innowayApi.thirdpartyChatbot.getList({
+        query: {
+          fields: ["$all"]
+        }
+      }))
+      this.botApp = null;
+      console.log("bot app", JSON.stringify(this.botApps.getValue()))
     } catch (err) {
       console.log(err)
     }

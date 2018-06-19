@@ -156,3 +156,26 @@ button:hover {
 .card-footer{
 
 }
+
+.close-btn {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  margin-top: 5px;
+  right: -20px;
+}
+
+#preview-image{
+  width:auto;
+  height:80px;
+  margin-top:0.25rem;
+}
+
+.image-wrapper{
+  position: relative;
+}
+
+.input-group-append button {
+  border-radius: 0;
+  margin-left: -1px;
+}

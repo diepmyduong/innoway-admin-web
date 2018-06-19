@@ -12,7 +12,7 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import * as Console from 'console-prefix'
 
 declare var swal, _: any;
-declare var $:any;
+declare var $: any;
 
 @Component({
   selector: 'app-detail',
@@ -41,13 +41,19 @@ export class DetailComponent implements OnInit {
   attribute: string;
   thumb: string;
   product_type: string;
+  product: any = {};
   topping_items = new BehaviorSubject<any[]>([]);
+
+  unitsInStock: string;
 
   toppingValues = new BehaviorSubject<any[]>([]);
   categories = new BehaviorSubject<any[]>([]);
   toppings = new BehaviorSubject<any[]>([]);
   units = new BehaviorSubject<any[]>([]);
   attributes = new BehaviorSubject<any[]>([]);
+
+  exportHistories = new BehaviorSubject<any[]>([]);
+  importHistories: any[];
 
   numberMask = createNumberMask({
     prefix: '',
@@ -88,12 +94,12 @@ export class DetailComponent implements OnInit {
     }
 
     $.FroalaEditor.froalaEditor({
-      htmlAllowedAttrs: ['readonly','title', 'href', 'alt', 'src', 'style']
+      htmlAllowedAttrs: ['readonly', 'title', 'href', 'alt', 'src', 'style']
     });
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach( subscription => {
+    this.subscriptions.forEach(subscription => {
       subscription.unsubscribe()
     })
   }
@@ -112,11 +118,24 @@ export class DetailComponent implements OnInit {
             }],
             unit: ["name"],
             category: ["name"],
-            product_type: ["name"]
+            product_type: ["name"],
+            export_histories: ["$all",{
+              supplier: ["$all"],
+              store: ["$all"],
+              employee: ["$all"]
+            }],
+            import_histories: ["$all",{
+              supplier: ["$all"],
+              store: ["$all"],
+              employee: ["$all"]
+            }]
           }]
         }
       })
 
+      console.log("productproduct",JSON.stringify(product))
+
+      this.product = product
       this.name = product.name
       this.thumb = product.thumb
       this.description = product.description
@@ -140,6 +159,7 @@ export class DetailComponent implements OnInit {
         })
         this.toppings.next(toppings);
       }
+      this.unitsInStock = product.units_in_stock
     } catch (err) {
       console.log('ERROR', err);
       try { await this.alertItemNotFound() } catch (err) { }

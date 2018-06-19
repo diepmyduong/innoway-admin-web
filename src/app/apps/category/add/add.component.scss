@@ -11,7 +11,8 @@
   font-size: 1.5rem;
 }
 
-.header-text { text-align:right;
+.header-text {
+  text-align: right;
   color: $bluegrey-darker;
   font-size: 0.85rem;
   font-weight: bold;
@@ -123,11 +124,11 @@ label.checkbox-inline {
   font-size: 0.85rem;
 }
 
-/deep/ ng-select .ui-select-choices li .active{
+/deep/ ng-select .ui-select-choices li .active {
   background-color: #428bca !important;
 }
 
-/deep/ ng-select .dropdown-item div{
+/deep/ ng-select .dropdown-item div {
   padding-top: 0.5rem !important;
 }
 
@@ -137,6 +138,7 @@ button {
   border: 1px solid $grey-mild;
   border-radius: 5px;
   text-transform: none !important;
+
   i {
     margin-right: 3px;
   }
@@ -149,10 +151,30 @@ button:hover {
   color: $grey-white;
 }
 
-.card-block{
-  padding-bottom: 0px;
+.card-block {
+  padding-bottom: 0;
 }
 
-.card-footer{
+.card-footer {}
 
+.input-group-append button {
+  border-radius: 0;
+}
+
+.close-btn {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  margin-top: 5px;
+  right: -20px;
+}
+
+#preview-image{
+  width:auto;
+  height:80px;
+  margin-top:0.25rem;
+}
+
+.image-wrapper{
+  position: relative;
 }

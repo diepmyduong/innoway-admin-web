@@ -154,3 +154,111 @@ button:hover {
   font-size: 0.75rem;
   font-weight: 500;
 }
+
+.image-list-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  .image-container {
+    width: 160px;
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    padding-left: 12px;
+    padding-right: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      .btn-sort {
+        opacity: 1;
+      }
+    }
+    .image-wrapper {
+      border-radius: 3px;
+      border: 1px solid $grey-mild;
+    }
+    .loading-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      border: 1px solid $grey-mild;
+      padding-bottom: 0px;
+      width: 150px;
+      height: 140px;
+      border-radius: 3px;
+    }
+    .btn-sort {
+      position: absolute;
+      bottom: 0px;
+      background: $brand-light;
+      border: none;
+      border-bottom: 2px solid $brand-primary;
+      color: $grey-white;
+      opacity: 0;
+      transition: 0.2s ease-in-out;
+      padding: 0px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      outline: none;
+      i {
+        margin: 0px;
+        margin-top: 3px;
+      }
+      &:hover {
+        color: white;
+        background: $brand-primary;
+      }
+      &.btn-remove {
+        left: auto;
+        right: auto;
+        border-radius: 4px;
+        background: tomato;
+        width: 28px;
+        height: 28px;
+        border-color: darken(tomato, 10%);
+        &:hover {
+          background: darken(tomato, 10%),
+        }
+      }
+      &.btn-left {
+        left: 0px;
+      }
+      &.btn-right {
+        right: 0px;
+      }
+    }
+    .rect {
+      position: absolute;
+      width: 40px;
+      height: 28px;
+      left: 0;
+      border-radius: 3px;
+      border-bottom-left-radius: 0px;
+      top: 20px;
+      background: $brand-light;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .triangle {
+        position: absolute;
+        left: 0;
+        bottom: -12px;
+        width: 0;
+        height: 0;
+        border-top: 12px solid $brand-primary;
+        border-left: 12px solid transparent;
+      }
+    }
+  }
+}

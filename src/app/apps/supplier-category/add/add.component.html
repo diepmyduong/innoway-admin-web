@@ -1,0 +1,43 @@
+<div class="animated fadeIn">
+  <form class="row" #itemFrm="ngForm">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>{{isEdit?"Cập nhật":"Thêm"}} loại cung ứng</strong>
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="text-input">Tên nhà cung ứng</label>
+            <div class="col-md-10">
+              <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Nhập loại cung ứng'" required/>
+              <small *ngIf="nameControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
+            <div class="col-md-10">
+              <textarea id="textarea-input" #descriptionControl="ngModel" rows="5" [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
+            <div class="col-md-10">
+              <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">
+                  <option *ngFor="let v of [0,1]" [value]="v">
+                    {{ v===1?"Hoạt động":"Không hoạt động"}}
+                  </option>
+                </select>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và tạo mới</button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và thoát</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-edit"></i> Sửa và thoát</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

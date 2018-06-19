@@ -10,7 +10,7 @@ export interface iProductCategory extends iCrud {
     name?: string,
     parent_id?: string,
     short_description?: string,
-
+    meta_data?: string,
     parent?: iProductCategory
 }
 

@@ -1,42 +1,72 @@
 <div class="animated fadeIn">
-  <div class="row">    
+  <form class="row" #itemFrm="ngForm">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <strong>Thông tin</strong>
+          <strong>{{isEdit?"Cập nhật":"Thêm"}} loại bài viết</strong>
         </div>
         <div class="card-block">
-          <form action="" method="post" enctype="multipart/form-data" class="form-horizontal ">
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="text-input">Loại bài viết</label>
-              <div class="col-md-8">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Loại bài viết">
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="text-input">Loại bài viết</label>
+            <div class="col-md-10">
+              <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Nhập tên loại bài viết'" required/>
+              <small *ngIf="nameControl.errors?.required" class="text-muted danger">
+                  (Không được bỏ trống)
+                </small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="text-input">Mô tả ngắn</label>
+            <div class="col-md-10">
+              <input type="text" #shortDescriptionControl="ngModel" [(ngModel)]="shortDescription" name="shortDescription" class="form-control input-control" [placeholder]="'Mô tả ngắn'" />
+            </div>
+          </div>
+          <!-- <div class="form-group row">
+            <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
+            <div class="col-md-10">
+              <textarea id="textarea-input" #descriptionControl="ngModel" rows="5" [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
+            </div>
+          </div> -->
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
+            <div class="col-md-10">
+              <div class="input-group">
+                <input type="file" name="file-input" #fileUploader (change)="onChangeImageFile($event)" [style.display]="'none'">
+                <input type="text" #imageControl="ngModel" [(ngModel)]="image" (input)="onImageChangeData($event.target.value)" name="image" url class="form-control input-control" [placeholder]="image?'':'Nhập url'" />
+                <span class="input-group-append">
+                  <button type="button" class="btn btn-ladda ladda-button btn-primary" [ladda]="progress" (click)="fileUploader.click()"
+                  data-style="contract-overlay" style="z-index: 10;">
+                    <span class="ladda-label">Đăng ảnh</span>
+                    <span class="ladda-spinner"></span>
+                    <div class="ladda-progress" style="width: 0px;"></div>
+                  </button>
+                </span>
               </div>
-            </div>           
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="textarea-input">Mô tả</label>
-              <div class="col-md-8">
-                <textarea id="textarea-input" name="textarea-input" rows="3" class="form-control" placeholder="Mô tả"></textarea>
-              </div>
-   			</div>
-            <div class="form-group row">
-              <label class="col-md-4 form-control-label" for="select">Trạng thái hoạt động</label>
-              <div class="col-md-8">
-                <select id="select" name="select" class="form-control" size="1">
-                  <option value="0">Chọn trạng thái</option>
-                  <option value="1">Hoạt động</option>
-                  <option value="2">Không hoạt động</option>
+            </div>
+            <div class="offset-md-2 col-md-10" *ngIf="previewImage">
+              <span class="image-wrapper" *ngIf="previewImage">
+                <img class="close-btn" [attr.src]="closeImage" (click)="removeImage()" />
+                <img id="preview-image" *ngIf="fileUploader.value || imageControl.value" [src]="previewImage" (error)="this.previewImage = this.errorImage" />
+              </span>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Trạng thái hoạt động</label>
+            <div class="col-md-10">
+              <select id="select" #statusControl="ngModel" [(ngModel)]="status" name="status" class="form-control input-control">
+                  <option *ngFor="let v of [0,1]" [value]="v">
+                    {{ v===1?"Hoạt động":"Không hoạt động"}}
+                  </option>
                 </select>
-              </div>
-            </div>         
-          </form>
+            </div>
+          </div>
         </div>
         <div class="card-footer">
-          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và tạo mới</button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và thoát</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-edit"></i> Sửa và thoát</button>
         </div>
       </div>
     </div>
-    <!--/.col-->
-  </div>
-</div>	
+  </form>
+</div>

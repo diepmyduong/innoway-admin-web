@@ -36,6 +36,7 @@ export class BillDetailComponent implements OnInit {
       product: ['$all', '$paranoid'],
       topping_values: ['$all', '$paranoid']
     }],
+    thirdparty_chatbot: ['$all'],
     customer: ['$all'],
     sub_fees: ['$all'],
     activity: ['$all', {

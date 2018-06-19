@@ -1,0 +1,50 @@
+<div class="animated fadeIn">
+
+  <div class="row">
+    <h3 class="col-6">Danh sách nhập kho</h3>
+    <div class="col-6">
+      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fas fa-plus"></i>Thêm nhập kho</button>
+      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i class="fas fa-trash"></i>Xóa lịch sử nhập kho</button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="search-bar">
+      <p>Tìm kiếm</p>
+      <input type="text" class="input-control form-control" (keyup)="onSearch($event)">
+    </div>
+    <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true" [substituteRows]="false"
+      [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
+      <data-table-column property="store" header="Kho" [sortable]="true">
+        <template #dataTableCell let-item="item">
+            {{ item.store?item.store.name:"Không có"}}
+          </template>
+      </data-table-column>
+      <data-table-column property="supplier" header="Nhà cung ứng" [sortable]="true">
+        <template #dataTableCell let-item="item">
+            {{ item.supplier?item.supplier.name:"Không có"}}
+          </template>
+      </data-table-column>
+      <data-table-column property="product" header="Sản phẩm" [sortable]="true">
+        <template #dataTableCell let-item="item">
+            {{ item.product?item.product.name:"Không có"}}
+          </template>
+      </data-table-column>
+      <data-table-column property="amount" header="Số lượng" [sortable]="true">
+        <template #dataTableCell let-item="item">
+            {{ item.amount | number}}
+          </template>
+      </data-table-column>
+      <data-table-column property="created_at" header="Ngày tạo" [resizable]="true" [sortable]="true">
+        <template #dataTableCell let-item="item">
+              {{ item.created_at | date:'yyyy-MM-dd hh:mm':'+0700'}}
+            </template>
+      </data-table-column>
+      <data-table-column property="status" header="Trạng thái" [sortable]="true">
+        <template #dataTableCell let-item="item">
+              <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>
+            </template>
+      </data-table-column>
+    </data-table>
+  </div>
+</div>

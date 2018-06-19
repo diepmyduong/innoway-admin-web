@@ -31,7 +31,18 @@ export class BrandComponent implements OnInit, ListPageInterface {
   ) {
   }
 
+  subscriptions:any = {}
+
   ngOnInit() {
+    this.subscriptions.onItemsChange = this.innowayApi.smartCode.items.subscribe(items => {
+      if(items)  this.itemsTable.reloadItems()
+    })
+  }
+
+  ngAfterViewDestroy() {
+    this.subscriptions.forEach(s => {
+      s.unsubscribe()
+    })
   }
 
   async reloadItems(params) {
@@ -146,7 +157,9 @@ export class BrandComponent implements OnInit, ListPageInterface {
     this.searchRef = setTimeout(() => {
       this.query.filter = {
         $or: {
+          code: { $iLike: `%${key}%` },
           name: { $iLike: `%${key}%` },
+          email: { $iLike: `%${key}%` },
         }
       }
       this.getItems();

@@ -1,40 +1,15 @@
-<div class="animated fadeIn">
-  <div class="heading-figures row">
-    <div class="profit col-md-6">
-      <span class="current-profit">{{(summary.total_amount?summary.total_amount:"0")|accounting}}</span>
-      <span class="profit-text">DOANH THU</span>
-    </div>
-    <div class="right-figures col-md-6">
-      <div class="figure-group" *ngFor="let top_right_info of top_right_infos">
-        <div class="right-figure-number">{{top_right_info.number | number}}</div>
-        <div class="right-figure-text">{{top_right_info.text}}</div>
-      </div>
-    </div>
-  </div>
-  <div class="card-group row row-eq-height">
-    <div class="col-md-2 col-sm-4 col-4 box" *ngFor="let sub_header_info of sub_header_infos">
-      <div class="card">
-        <div class="card-body text-center">
-          <div class="box-number">{{ sub_header_info.number }}</div>
-          <div class="box-text">{{ sub_header_info.text }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
 <div class="row wide-bg animated fadeIn">
   <div class="col-12 bill-container">
     <div class="card email-app">
       <nav>
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" [ngClass]="billFilterInfo.billId?.length?'blue-primary':''"><i class="fa fa-map-signs"></i> Mã đơn hàng</a>
-            <input type="text" [(ngModel)]="billFilterInfo.billId" class="input-control form-control" placeholder="Tìm kiếm đơn hàng">
+            <a class="nav-link" [ngClass]="billFilterInfo.code?.length?'blue-primary':''"><i class="fas fa-map-signs"></i> Mã đơn hàng</a>
+            <input type="text" #billContent [(ngModel)]="billFilterInfo.code" class="input-control form-control" (keyup)="onChangeBill(billContent.value)" placeholder="Tìm kiếm đơn hàng">
           </li>
           <li class="nav-item">
-            <a class="nav-link" [ngClass]="billFilterInfo.billAction?'blue-primary':''"><i class="fa fa-info-circle"></i> Trạng thái</a>
-            <select [(ngModel)]="billFilterInfo.billAction" class="select-control form-control">
+            <a class="nav-link" [ngClass]="billFilterInfo.billAction?'blue-primary':''"><i class="fas fa-info-circle"></i> Trạng thái</a>
+            <select #action [(ngModel)]="billFilterInfo.billAction" (ngModelChange)="onChangeAction($event)" class="select-control form-control">
               <option [ngValue]="all" selected>
                   Tất cả
               </option>
@@ -44,16 +19,16 @@
             </select>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [ngClass]="billFilterInfo.billPhone?.length?'blue-primary':''"><i class="fa fa-phone"></i> Số điện thoại</a>
-            <input [(ngModel)]="billFilterInfo.billPhone" class="input-control form-control" type="text" placeholder="+84 hoặc 0">
+            <a class="nav-link" [ngClass]="billFilterInfo.billPhone?.length?'blue-primary':''"><i class="fas fa-phone"></i> Số điện thoại</a>
+            <input #billPhone [(ngModel)]="billFilterInfo.billPhone" class="input-control form-control" (keyup)="onChangeCustomer(billPhone.value)" type="text" placeholder="+84 hoặc 0">
           </li>
           <li class="nav-item">
-            <a class="nav-link" [ngClass]="billFilterInfo.billCustomer?.length?'blue-primary':''"><i class="fa fa-user"></i> Họ và tên</a>
-            <input [(ngModel)]="billFilterInfo.billCustomer" class="input-control form-control" type="text" placeholder="Tên khách hàng">
+            <a class="nav-link" [ngClass]="billFilterInfo.billCustomer?.length?'blue-primary':''"><i class="fas fa-user"></i> Họ và tên</a>
+            <input #billCustomer [(ngModel)]="billFilterInfo.billCustomer" class="input-control form-control" (keyup)="onChangeCustomerName(billCustomer.value)" type="text" placeholder="Tên khách hàng">
           </li>
           <li class="nav-item">
-            <a class="nav-link" [ngClass]="billFilterInfo.billEmployee?'blue-primary':''"><i class="fa fa-bicycle"></i> Nhân viên</a>
-            <select [(ngModel)]="billFilterInfo.billEmployee" class="select-control form-control">
+            <a class="nav-link" [ngClass]="billFilterInfo.billEmployee?'blue-primary':''"><i class="fas fa-bicycle"></i> Nhân viên</a>
+            <select #billEmployee [(ngModel)]="billFilterInfo.billEmployee" (ngModelChange)="onChangeEmployee($event)" class="select-control form-control">
               <option [ngValue]="all" selected>
                   Tất cả
               </option>
@@ -62,8 +37,8 @@
               </option>
             </select>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" [ngClass]="billFilterInfo.billArea?'blue-primary':''"><i class="fa fa-map"></i> Khu vực</a>
+          <li class="nav-item" *ngIf="false">
+            <a class="nav-link" [ngClass]="billFilterInfo.billArea?'blue-primary':''"><i class="fas fa-map"></i> Khu vực</a>
             <select [(ngModel)]="billFilterInfo.billArea" class="select-control form-control">
               <option [ngValue]="all" selected>
                   Tất cả

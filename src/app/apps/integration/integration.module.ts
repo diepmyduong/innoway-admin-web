@@ -5,7 +5,7 @@ import { IntegrationRoutingModule } from './integration-routing.module';
 import { IntegrationComponent } from './integration.component';
 import { KiotvietComponent } from './kiotviet/kiotviet.component';
 import { ApiAiComponent } from './api-ai/api-ai.component';
-import { GiaohangnhanhComponent } from './giaohangnhanh/giaohangnhanh.component';
+import { GiaoHangNhanhComponent } from './giaohangnhanh/giaohangnhanh.component';
 import { AhamoveComponent } from './ahamove/ahamove.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { MitekComponent } from './mitek/mitek.component';
@@ -19,6 +19,11 @@ import { AgmCoreModule } from '@agm/core';
 
 import { MatTooltipModule } from '@angular/material';
 import { TooltipModule } from 'ngx-bootstrap';
+import { UberDeliverComponent } from './uber-deliver/uber-deliver.component';
+import { GhtkComponent } from './ghtk/ghtk.component';
+import { HaravanComponent } from './haravan/haravan.component';
+
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 @NgModule({
   imports: [
@@ -33,7 +38,8 @@ import { TooltipModule } from 'ngx-bootstrap';
     LaddaModule,
     MatTooltipModule,
     TooltipModule.forRoot(),
+    AccordionModule.forRoot()
   ],
-  declarations: [IntegrationComponent, KiotvietComponent, ApiAiComponent, GiaohangnhanhComponent, AhamoveComponent, ChatbotComponent, MitekComponent]
+  declarations: [IntegrationComponent, KiotvietComponent, ApiAiComponent, GiaoHangNhanhComponent, AhamoveComponent, ChatbotComponent, MitekComponent, UberDeliverComponent, GhtkComponent, HaravanComponent]
 })
 export class IntegrationModule { }

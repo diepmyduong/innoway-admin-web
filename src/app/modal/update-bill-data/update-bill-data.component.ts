@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectorRef, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Globals } from '../../globals'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+
+import { MapsAPILoader } from "@agm/core";
 
 @Component({
   selector: 'app-update-bill-data',
@@ -23,6 +25,7 @@ export class UpdateBillDataDialog implements OnInit {
   employees: any[];
   note: string;
   noteBillActivity: string;
+  weightBillActivity: string;
 
   isShowEditInfo: boolean;
 
@@ -33,14 +36,52 @@ export class UpdateBillDataDialog implements OnInit {
     suffix: ' đ'
   })
 
+  address: string
+
+  latitude: string;
+  longitude: string;
+
+  latitudeMap: number;
+  longitudeMap: number;
+  zoom: number;
+
+  thirdparty: string;
+  thirdparties: any[];
+
+  isShowWeight: boolean = false
+  isShowAddress: boolean = false
+  isShowEmployee: boolean = true
+  isShowThirdparty: boolean = false
+
+  noteCode: string
+
+  @ViewChild("addressInput")
+  searchElementRef: ElementRef;
+  noteCodes = [
+    {
+      name: "Cho xem hàng, không thử",
+      code: "CHOXEMHANGKHONGTHU"
+    },
+    {
+      name: "Cho thử hàng",
+      code: "CHOTHUHANG"
+    }, {
+      name: "Không cho xem hàng",
+      code: "KHONGCHOXEMHANG"
+    }
+  ]
+
   constructor(
     public dialogRef: MatDialogRef<UpdateBillDataDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public ref: ChangeDetectorRef,
-    private globals: Globals) { }
+    private ngZone: NgZone,
+    private mapsAPILoader: MapsAPILoader,
+    private globals: Globals) {
+
+  }
 
   ngOnInit() {
-    console.log(this.data);
 
     this.subFee = this.data.subFee;
     this.subFeeNote = this.data.subFeeNote;
@@ -50,6 +91,12 @@ export class UpdateBillDataDialog implements OnInit {
     this.billActivities = [];
     this.note = this.data.note;
 
+    if (this.data.branch) {
+      this.address = this.data.branch.address
+      this.longitude = this.data.branch.longitude
+      this.latitude = this.data.branch.latitude
+    }
+
     let options = this.globals.avaibleBillActivityOption(this.currentActivity);
 
     options.forEach(option => {
@@ -58,7 +105,69 @@ export class UpdateBillDataDialog implements OnInit {
 
     this.billActivity = this.billActivities && this.billActivities.length > 0 ? this.billActivities[0].code : null;
 
+    this.thirdparties = this.globals.SHIPMENT_THIRD_PARTIES
+    this.thirdparty = "MCOM"
+
+    this.noteCode = this.noteCodes[0].code
+
     this.validateInputData();
+    this.changeBillActivity(this.billActivity);
+  }
+
+  setDefaultMap() {
+    //set google maps defaults
+    this.zoom = 8;
+    this.latitudeMap = 39.8282;
+    this.longitudeMap = -98.5795;
+
+    //set current position
+    this.setCurrentPosition();
+  }
+
+  setCurrentPosition() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.latitudeMap = position.coords.latitude;
+        this.longitudeMap = position.coords.longitude;
+        this.zoom = 12;
+      });
+    }
+  }
+
+  setAutocompleteMap() {
+    //load Places Autocomplete
+    try {
+      this.mapsAPILoader.load().then(() => {
+        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+          types: ["address"]
+        });
+        autocomplete.addListener("place_changed", () => {
+          this.ngZone.run(() => {
+            //get the place result
+            let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+            //verify result
+            if (place.geometry === undefined || place.geometry === null) {
+              return;
+            }
+
+            this.address = place.formatted_address;
+
+            //set latitude, longitude and zoom
+            this.latitude = place.geometry.location.lat().toString();
+            this.longitude = place.geometry.location.lng().toString();
+
+            this.latitudeMap = place.geometry.location.lat();
+            this.longitudeMap = place.geometry.location.lng();
+            this.zoom = 12;
+
+            this.ref.detectChanges();
+          });
+        });
+      });
+    } catch (err) {
+      console.log("setAutocompleteMap", err)
+    }
   }
 
   validateInputData() {
@@ -98,26 +207,80 @@ export class UpdateBillDataDialog implements OnInit {
     this.ref.detectChanges();
   }
 
-  confirmBillStatus(){
-    this.info["action"]="updateBillStatus"
+  confirmBillStatus() {
+    this.info["action"] = "updateBillStatus"
     this.info["billActivity"] = this.billActivity;
     this.info["employee"] = this.employee;
     this.info["noteBillActivity"] = this.noteBillActivity;
+    this.info["total_weight"] = this.weightBillActivity;
+    this.info["thirdparty"] = this.thirdparty;
+    this.info["longitude"] = this.longitude
+    this.info["latitude"] = this.latitude
+    this.info["address"] = this.address
+    this.info["note_code"] = this.noteCode
   }
 
-  confirmSubFee(){
-    this.info["action"]="updateSubFee"
+  confirmSubFee() {
+    this.info["action"] = "updateSubFee"
     this.info["subFee"] = this.subFee;
     this.info["subFeeNote"] = this.subFeeNote;
   }
 
-  confirmNote(){
-    this.info["action"]="updateNote"
+  confirmNote() {
+    this.info["action"] = "updateNote"
     this.info["note"] = this.note;
   }
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  changeBillActivity(value: string) {
+    console.log("changeBillActivity", value)
+    switch (value) {
+      case "BILL_SENT_SHIPPER": {
+        this.isShowThirdparty = true
+        break
+      }
+      default: {
+        this.isShowThirdparty = false
+      }
+    }
+    this.ref.detectChanges()
+  }
+
+  changeThirdpartyActivity(value: string) {
+    console.log("changeThirdpartyActivity", value)
+    switch (value) {
+      case 'UBER_DELIVER': {
+        this.isShowAddress = true
+        this.isShowWeight = false
+        this.setDefaultMap();
+        this.setAutocompleteMap();
+        break
+      }
+      case 'GHN': {
+        this.isShowAddress = true
+        this.isShowWeight = true
+        this.setDefaultMap();
+        this.setAutocompleteMap();
+        break
+      }
+      case 'GHTK': {
+        this.isShowAddress = true
+        this.isShowWeight = true
+        this.setDefaultMap();
+        this.setAutocompleteMap();
+        break
+      }
+      case 'MCOM':
+      default: {
+        this.isShowAddress = false
+        this.isShowWeight = false
+        break
+      }
+    }
+    this.ref.detectChanges()
   }
 
 }

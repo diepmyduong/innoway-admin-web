@@ -6,10 +6,14 @@ import { ShipFeeComponent } from './ship-fee.component';
 import { AddComponent } from './add/add.component';
 import { DetailComponent } from './detail/detail.component';
 
+import {AccordionModule} from "ng2-accordion";
+
+
 @NgModule({
   imports: [
     CommonModule,
-    ShipFeeRoutingModule
+    ShipFeeRoutingModule,
+    AccordionModule
   ],
   declarations: [ShipFeeComponent, AddComponent, DetailComponent]
 })

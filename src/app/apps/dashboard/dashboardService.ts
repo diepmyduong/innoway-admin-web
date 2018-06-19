@@ -3,19 +3,19 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class DashboardService {
-  private actionSource = new BehaviorSubject<string>("");
+  private actionSource = new BehaviorSubject<string>(null);
   selectedAction = this.actionSource.asObservable();
 
-  private employeeSource = new BehaviorSubject<string>("");
+  private employeeSource = new BehaviorSubject<any>(null);
   selectedEmployee = this.employeeSource.asObservable();
 
   private areaSource = new BehaviorSubject<number>(0);
   selectedArea = this.areaSource.asObservable();
 
-  private customerSource = new BehaviorSubject<any>({});
+  private customerSource = new BehaviorSubject<string>(null);
   selectedCustomer = this.customerSource.asObservable();
 
-  private customerNameSource = new BehaviorSubject<any>({});
+  private customerNameSource = new BehaviorSubject<string>(null);
   selectedCustomerName = this.customerNameSource.asObservable();
 
   private billSource = new BehaviorSubject<string>("");
@@ -24,12 +24,19 @@ export class DashboardService {
   private loadDailySummarySource = new BehaviorSubject<boolean>(false);
   loadDailySummary = this.loadDailySummarySource.asObservable();
 
-  private updateTopicFromFCMSource = new BehaviorSubject<any>({});
-  updateTopicFromFCM = this.updateTopicFromFCMSource.asObservable();
+  // private updateTopicFromFCMSource = new BehaviorSubject<any>({});
+  // updateTopicFromFCM = this.updateTopicFromFCMSource.asObservable();
 
-  getTopicFromFCM(update: any) {
-    this.updateTopicFromFCMSource.next(update);
+  private filterBillSource = new BehaviorSubject<boolean>(false);
+  filterBill = this.filterBillSource.asObservable();
+
+  filterBillAction(update: any) {
+    this.filterBillSource.next(update);
   }
+
+  // getTopicFromFCM(update: any) {
+  //   // this.updateTopicFromFCMSource.next(update);
+  // }
 
   updateAction(update: any) {
     this.actionSource.next(update);

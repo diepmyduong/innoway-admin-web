@@ -23,8 +23,9 @@ import { ConfigComponent } from './config/config.component';
 import { ThemeComponent } from './theme/theme.component';
 import { AgmCoreModule } from "@agm/core";
 
-import { FroalaComponent } from "app/editor/froala.component";
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+// import { FroalaComponent } from "app/editor/froala.component";
+// import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { MessageSettingComponent } from "app/apps/settings/message-setting/message-setting.component";
 
 @NgModule({
   imports: [
@@ -40,14 +41,14 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     CustomFormsModule,
     TextMaskModule,
 
-    FroalaEditorModule,
-    FroalaViewModule,
+    // FroalaEditorModule,
+    // FroalaViewModule,
 
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
       libraries: ["places,drawing"]
     }),
   ],
-  declarations: [SettingsComponent, AreaComponent, ScheduleComponent, ChatbotComponent, SellComponent, ConfigComponent, ThemeComponent],
+  declarations: [SettingsComponent, AreaComponent, ScheduleComponent, ChatbotComponent, SellComponent, ConfigComponent, ThemeComponent, MessageSettingComponent],
 })
 export class SettingsModule { }

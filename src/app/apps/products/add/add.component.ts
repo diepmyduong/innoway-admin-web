@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm, NgModel } from '@angular/forms';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
@@ -10,6 +10,8 @@ import { InnowayApiService, iTopping } from 'app/services/innoway'
 import { Globals } from './../../../globals';
 import { MatDialog } from '@angular/material';
 import { EditInfoDialog } from "../../../modal/edit-info/edit-info.component";
+import { JsonEditorComponent, JsonEditorOptions } from "angular4-jsoneditor/jsoneditor/jsoneditor.component";
+import { ImagePopupDialog } from '../../../modal/image-popup/image-popup.component';
 
 declare var swal, _: any;
 
@@ -25,7 +27,12 @@ export class AddComponent implements OnInit {
   submitting: boolean = false;
 
   name: string;
-  public description;
+  public description = '';
+
+  public editorOptions: JsonEditorOptions;
+  public data: any = {};
+  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
+
   shortDescription: string;
   category: string;
   product_type: string = null;
@@ -47,6 +54,9 @@ export class AddComponent implements OnInit {
   attributes = new BehaviorSubject<any[]>([]);
   productTypes = new BehaviorSubject<any[]>([]);
 
+  isGift: boolean = false
+  files: any[]
+
   numberMask = createNumberMask({
     prefix: '',
     suffix: ' đ'
@@ -67,6 +77,16 @@ export class AddComponent implements OnInit {
   };
   subscriptions: Subscription[] = []
 
+  @ViewChild("fileUploader")
+  fileUploader: ElementRef;
+
+  isUploading: boolean = false
+  isUploadImage: boolean = false;
+  fileUpload: File;
+  previewImage: string;
+  closeImage: string = "https://d30y9cdsu7xlg0.cloudfront.net/png/55049-200.png";
+  errorImage: string = "http://saveabandonedbabies.org/wp-content/uploads/2015/08/default.png";
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -75,6 +95,8 @@ export class AddComponent implements OnInit {
     public globals: Globals,
     public dialog: MatDialog,
   ) {
+    this.editorOptions = new JsonEditorOptions()
+    this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
   }
 
   async ngOnInit() {
@@ -95,6 +117,7 @@ export class AddComponent implements OnInit {
     if (this.isEdit) {
       this.setData();
     }
+
   }
 
   ngOnDestroy() {
@@ -109,6 +132,17 @@ export class AddComponent implements OnInit {
     this.base_price = '0';
     this.description = '';
     this.shortDescription = '';
+    let dataDefault: any = {
+      "lang": {
+        "en": {
+          "name": "",
+          "short_description": "",
+          "description": ""
+        }
+      }
+    }
+    this.editor.set(dataDefault)
+
     if (this.categories.getValue()[0]) {
       this.category = this.categories.getValue()[0].id;
     }
@@ -128,6 +162,7 @@ export class AddComponent implements OnInit {
     this.thumb = null;
     this.unit = null;
     this.product_type = null;
+    this.isGift = false;
 
     return {
       status: this.status,
@@ -140,7 +175,9 @@ export class AddComponent implements OnInit {
       list_image: this.list_image,
       thumb: this.thumb,
       unit: this.unit,
-      product_type: this.product_type
+      product_type: this.product_type,
+      isGift: this.isGift,
+      metaData: this.data
     }
   }
 
@@ -232,16 +269,12 @@ export class AddComponent implements OnInit {
         local: false, reload: true, query: {
           fields: ["$all", {
             toppings: ["id", "topping_id"]
-            // {
-            //   topping: ["id", "description", "name", {
-            //     values: ["$all"]
-            //   }]
-            // }]
           }]
         }
       })
 
       console.log("setdata", product)
+      this.isGift = product.is_gift
       this.name = product.name
       this.thumb = product.thumb
       this.description = product.description
@@ -253,6 +286,18 @@ export class AddComponent implements OnInit {
       this.category = product.category_id ? product.category_id : null
       this.list_image = product.list_image
       this.product_type = product.product_type_id ? product.product_type_id : null
+      let dataDefault = {
+        "lang": {
+          "en": {
+            "name": "",
+            "short_description": "",
+            "description": ""
+          }
+        }
+      }
+      this.data = JSON.stringify(product.meta_data) != "{}" ? product.meta_data : dataDefault
+      this.editor.set(this.data)
+
       let toppings = this.toppings.getValue()
       this.toppingSelecter.active = product.toppings.map(product_topping => {
         const topping = toppings.find(t => t.id === product_topping.topping_id)
@@ -371,6 +416,8 @@ export class AddComponent implements OnInit {
   async removeImage(index) {
     _.pullAt(this.list_image, [index]);
     // this.imageSwiper.Swiper.onResize();
+    if (this.list_image.length > 0) this.thumb = this.list_image[0]
+    else this.thumb = null
   }
 
   async setThumbnail(index) {
@@ -381,13 +428,19 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       if (form.valid) {
-        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status } = this;
+        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift, data } = this;
 
+        let is_gift = isGift
         let category_id = this.category ? this.category : undefined;
         let short_description = this.shortDescription;
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
-        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image })
+        let meta_data = this.editor.get()
+        if (!thumb && this.list_image.length > 0) thumb = this.list_image[0]
+        let product = await this.innowayApi.product.add({
+          name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
+          status, category_id, unit_id, product_type_id, list_image, is_gift, meta_data
+        })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -411,12 +464,19 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       if (form.valid) {
-        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status } = this;
+        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift, data } = this;
+
+        let is_gift = isGift
         let category_id = this.category ? this.category : undefined;
         let short_description = this.shortDescription;
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
-        let product = await this.innowayApi.product.add({ name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image })
+        let meta_data = this.editor.get()
+        if (!thumb && this.list_image.length > 0) thumb = this.list_image[0]
+        let product = await this.innowayApi.product.add({
+          name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
+          status, category_id, unit_id, product_type_id, list_image, isGift, meta_data
+        })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
         })
@@ -440,12 +500,18 @@ export class AddComponent implements OnInit {
     this.submitting = true;
     try {
       if (form.valid) {
-        let { name, description, list_image, thumb, price, base_price, unit, status, shortDescription } = this;
+        let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift, data } = this;
+        let is_gift = isGift
         let category_id = this.category ? this.category : undefined;
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
         let short_description = this.shortDescription;
-        let product = await this.innowayApi.product.update(this.id, { name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price), status, category_id, unit_id, product_type_id, list_image })
+        let meta_data = this.editor.get()
+        if (!thumb && this.list_image.length > 0) thumb = this.list_image[0]
+        let product = await this.innowayApi.product.update(this.id, {
+          name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
+          status, category_id, unit_id, product_type_id, list_image, meta_data
+        })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id ? item.id : undefined
         })
@@ -716,6 +782,74 @@ export class AddComponent implements OnInit {
       this.loadUnitData()
     } catch (err) {
 
+    }
+  }
+
+  onImageError(event) {
+    this.previewImage = this.errorImage;
+  }
+
+  onImageChangeData(event) {
+    this.previewImage = event;
+  }
+
+  removePreviewImage() {
+    this.previewImage = undefined;
+  }
+
+  checkGift(event) {
+    this.isGift = event;
+  }
+  
+  async openImage(imageSrc) {
+    let data = {
+        image: imageSrc
+    };
+
+    let dialogRef = this.dialog.open(ImagePopupDialog, {
+        height: '60vh',
+        panelClass: 'image-popup',
+        data: data
+    });
+  }
+
+  moveLeft(i) {
+    if (i == 0) return;
+    let temp = this.list_image[i - 1];
+    this.list_image[i - 1] = this.list_image[i];
+    this.list_image[i] = temp;
+    if (this.list_image.length > 0) this.thumb = this.list_image[0]
+  }
+
+  moveRight(i) {
+    if (i == this.list_image.length - 1) return;
+    let temp = this.list_image[i + 1];
+    this.list_image[i + 1] = this.list_image[i];
+    this.list_image[i] = temp;
+    if (this.list_image.length > 0) this.thumb = this.list_image[0]
+  }  
+
+  async onChangeImageFile(event) {
+    // this.startLoading()
+    let files = this.fileUploader.nativeElement.files
+
+    if (files.length == 0) return
+
+    try {
+      this.isUploading = true;
+      
+      let tasks = []
+      for(let file of files) {
+        tasks.push(this.innowayApi.upload.uploadImage(file).then(result => {
+          this.list_image.push(result.link)
+        }))
+      }
+      await Promise.all(tasks)
+    } catch (err) {
+      console.log("upload image", err)
+    } finally {
+      this.isUploading = false;
+      if (this.list_image.length > 0) this.thumb = this.list_image[0]
     }
   }
 }

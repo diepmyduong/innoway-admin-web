@@ -1,0 +1,156 @@
+@import '../../../../scss/bootstrap-variables';
+
+.card .card-header {
+  padding: 0.75rem 1.25rem;
+}
+
+.title {
+  text-align: center;
+  color: $bluegrey;
+  margin: 0 auto 20px;
+  font-size: 1.5rem;
+}
+
+.header-text { text-align:right;
+  color: $bluegrey-darker;
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.info-text {
+  color: $grey;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.row {
+  padding-bottom: 20px;
+}
+
+.bottom-btn-group {
+  text-align: center;
+
+  .btn-confirm {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+    background-color: $brand-light;
+    color: white;
+    transition: all 0.3s ease;
+    text-transform: none !important;
+
+    &:hover {
+      background-color: $brand-primary;
+    }
+  }
+
+  .btn-cancel {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: $grey-lighter;
+    color: $grey;
+    transition: all 0.3s ease;
+    text-transform: none !important;
+
+    &:hover {
+      background-color: $grey-light;
+      color: $grey-dark;
+    }
+  }
+}
+
+/deep/ ng-select span {
+  text-transform: none !important;
+}
+
+/deep/ ng-select .btn {
+  padding: 0.25rem !important;
+}
+
+/deep/ ng-select input {
+  color: $grey-dark;
+  border-radius: 3px;
+  font-size: 0.85rem;
+
+  &::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+
+  &::-moz-placeholder {
+    /* Firefox 19+ */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+
+  &:-ms-input-placeholder {
+    /* IE 10+ */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+
+  &:-moz-placeholder {
+    /* Firefox 18- */
+    color: $grey-mild;
+    font-size: 0.85rem;
+  }
+
+  &:focus {
+    color: $grey-dark;
+  }
+}
+
+.remove-pb {
+  padding-bottom: 0 !important;
+}
+
+label.checkbox-inline {
+  padding-left: 0 !important;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #000;
+  font-family: 'Helvetica Neue';
+}
+
+.sub-header-text {
+  float: left;
+  font-size: 0.85rem;
+}
+
+/deep/ ng-select .ui-select-choices li .active{
+  background-color: #428bca !important;
+}
+
+/deep/ ng-select .dropdown-item div{
+  padding-top: 0.5rem !important;
+}
+
+button {
+  margin: 0;
+  color: $grey-dark;
+  border: 1px solid $grey-mild;
+  border-radius: 5px;
+  text-transform: none !important;
+  i {
+    margin-right: 3px;
+  }
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  border-color: transparent;
+  background-color: $brand-primary;
+  color: $grey-white;
+}
+
+.add-title{
+  padding-top: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}

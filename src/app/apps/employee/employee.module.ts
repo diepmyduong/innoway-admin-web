@@ -20,12 +20,13 @@ import { TooltipModule } from 'ngx-bootstrap';
   imports: [
     CommonModule,
     EmployeeRoutingModule,
-    TabsModule,
 
+    TabsModule,
     FormsModule,
     ReactiveFormsModule,
     DataTableModule,
     LaddaModule,
+
     MatTooltipModule,
     TooltipModule.forRoot(),
     AgmCoreModule.forRoot({

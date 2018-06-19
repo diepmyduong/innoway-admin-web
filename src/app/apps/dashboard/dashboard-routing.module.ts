@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard.component';
 import { BillsComponent } from './bills/bills.component';
 import { BillDetailComponent } from './bill-detail/bill-detail.component';
 import { BillLocationComponent } from './bill-location/bill-location.component'
+import { OverviewComponent } from "./overview/overview.component";
 
 const routes: Routes = [
   {
@@ -35,6 +36,13 @@ const routes: Routes = [
         component: BillLocationComponent
       }
     ]
+  },
+  {
+    path: 'overview',
+    component: OverviewComponent,
+    data: {
+      title: 'Trang tổng quan'
+    },
   }
 ];
 

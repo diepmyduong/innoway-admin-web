@@ -26,8 +26,8 @@
             <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Số điện thoại</label>
               <div class="col-md-10">
-                <input type="text" #phoneControl="ngModel" [(ngModel)]="phone" (ngModelChange)="validateCustomerByPhone($event)" (blur)="onBlurMethodPhone($event)" name="phone" class="form-control input-control" [placeholder]="'Nhập số điện thoại'" required>
-                <small *ngIf="phoneControl.errors?.required" class="text-muted danger">
+                <input type="text" #phoneControl="ngModel" [(ngModel)]="phone" (ngModelChange)="validateCustomerByPhone($event)" (blur)="onBlurMethodPhone($event)" name="phone" class="form-control input-control" [placeholder]="'Nhập số điện thoại'">
+                <!-- <small *ngIf="phoneControl.errors?.required" class="text-muted danger">
                     (Không được bỏ trống)
                   </small>
                 <small *ngIf="isExisted" class="text-muted danger">
@@ -35,13 +35,47 @@
                     </small>
                 <small *ngIf="!isValidPhone" class="text-muted danger">
                         (Số điện thoại không đúng)
-                      </small>
+                      </small> -->
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-2 header-text" for="email-input">Email</label>
               <div class="col-md-10">
                 <input type="email" #emailControl="ngModel" [(ngModel)]="email" name="email" class="form-control input-control" [placeholder]="'Nhập email'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="select">Chọn loại công ty</label>
+              <div class="col-md-10">
+                <select #companyControl="ngModel" [(ngModel)]="company" name="company" class="form-control input-control">
+                      <option value=null [selected]="true">Chọn loại công ty</option>
+                      <option *ngFor="let v of companies" [value]="v.code">
+                        {{ v.name }}
+                      </option>
+                    </select>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="company === 'PRUDENTIAL'">
+              <label class="col-md-2 header-text" for="password-input">Username</label>
+              <div class="col-md-10">
+                <input type="username" #usernameControl="ngModel" [(ngModel)]="username" name="username" class="form-control input-control" [placeholder]="'Nhập username'">
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="company === 'PRUDENTIAL' && !isEdit">
+              <label class="col-md-2 header-text" for="password-input">Password</label>
+              <div class="col-md-10">
+                <input type="password" #passwordControl="ngModel" [(ngModel)]="password" name="password" class="form-control input-control" [placeholder]="'Nhập password'">
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="company === 'PRUDENTIAL'">
+              <label class="col-md-2 header-text">Loại nhân viên của Prudential</label>
+              <div class="col-md-10">
+                <select id="prudCustomerTypeSelect" #prudCustomerTypeControl="ngModel" [(ngModel)]="prudCustomerType" name="prudCustomerType" class="form-control input-control">
+                      <option value=null [selected]="true">Chọn loại nhân viên</option>
+                      <option *ngFor="let v of prudCustomerTypes" [value]="v.code">
+                        {{ v.name }}
+                      </option>
+                    </select>
               </div>
             </div>
             <!-- <div class="form-group row" *ngIf="!isEdit">
@@ -97,9 +131,9 @@
             </div>
           </div>
           <div class="card-footer">
-            <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
-            <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
-            <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
+            <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và tạo mới</button>
+            <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và thoát</button>
+            <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-edit"></i> Sửa và thoát</button>
           </div>
         </div>
       </div>

@@ -145,6 +145,34 @@ export class Globals {
     }
   ]
 
+  SHIPMENT_THIRD_PARTIES = [
+    {
+      code: "MCOM",
+      name: "Nhân viên giao hàng"
+    }
+    //, {
+    //   code: "UBER_DELIVER",
+    //   name: "UBER Deliver"
+    // }
+    , {
+      code: "GHN",
+      name: "Giao hàng nhanh",
+    }, {
+      code: "GHTK",
+      name: "Giao hàng tiết kiệm"
+    }
+  ]
+
+  public detectShipmentThirdpartyNameByCode(code: string): string {
+    let result: string = null;
+    this.SHIPMENT_THIRD_PARTIES.forEach(item => {
+      if (item.code == code) {
+        result = item.name;
+      }
+    });
+    return result;
+  }
+
   public detectPromotionTypeByCode(code: string): any {
     let result = null;
     this.PROMOTION_TYPES.forEach(type => {

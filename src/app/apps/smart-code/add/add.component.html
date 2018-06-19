@@ -39,6 +39,17 @@
               </div>
             </div>
             <div class="form-group row">
+              <label class="col-md-2 header-text" for="select">Bot App</label>
+              <div class="col-md-10">
+                <select #promotionControl="ngModel" [(ngModel)]="botApp" name="botApp" class="form-control input-control">
+                    <option value="null" disabled="true" [selected]="true">Chọn loại bot app</option>
+                    <option *ngFor="let v of botApps | async" [value]="v.id">
+                      {{v.facebook_name}}
+                    </option>
+                  </select>
+              </div>
+            </div>
+            <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Thời gian bắt đầu</label>
               <div class="col-md-10">
                 <input type="text" #startTimeControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="startTime" name="startTime" class="form-control input-control" [placeholder]="'Nhập ngày bắt đầu'" [readonly]="isSelectedPromotion" required>
@@ -96,10 +107,10 @@
           </form>
         </div>
         <div class="card-footer">
-          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
-          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
-          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
-          <button (click)="requireCreateSmartCodeOnChatbot()" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Tích hợp chatbot</button>
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và tạo mới</button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và thoát</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-edit"></i> Sửa và thoát</button>
+          <button (click)="requireCreateSmartCodeOnChatbot()" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-edit"></i> Tích hợp chatbot</button>
           <!-- <button (click)="send()" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda">
             Send
           </button> -->

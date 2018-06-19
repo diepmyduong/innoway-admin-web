@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { InnowayApiService } from 'app/services/innoway';
+import { JsonEditorOptions, JsonEditorComponent } from "angular4-jsoneditor/jsoneditor/jsoneditor.component";
 
 declare let swal: any
 
@@ -23,6 +24,20 @@ export class AddComponent implements OnInit {
   image: string;
   status: number;
 
+  @ViewChild("fileUploader")
+  fileUploader: ElementRef;
+
+  progress: boolean | number = false;
+
+  isUploadImage: boolean = false;
+  fileUpload: File;
+  previewImage: string;
+  closeImage: string = "https://d30y9cdsu7xlg0.cloudfront.net/png/55049-200.png";
+  errorImage: string = "http://saveabandonedbabies.org/wp-content/uploads/2015/08/default.png";
+
+  public editorOptions: JsonEditorOptions;
+  public metaData: any;
+  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,6 +45,8 @@ export class AddComponent implements OnInit {
     private ref: ChangeDetectorRef,
     public innowayApi: InnowayApiService
   ) {
+    this.editorOptions = new JsonEditorOptions()
+    this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
   }
 
   ngOnInit() {
@@ -47,22 +64,56 @@ export class AddComponent implements OnInit {
   }
 
   setDefaultData() {
-    this.status = 1;
+    this.status = 1
+    this.name = null
+    this.shortDescription = null
+    this.description = null
+    this.previewImage = null
+
+    this.metaData = {
+      "lang": {
+        "en": {
+          "name": "",
+          "short_description": "",
+          "description": ""
+        }
+      }
+    }
+
     return {
-      status: this.status
+      status: this.status,
+      name: this.name,
+      shortDescription: this.shortDescription,
+      description: this.description,
+      previewImage: this.previewImage,
+      metaData: this.metaData
     }
   }
 
   async setData() {
     try {
       let category = await this.innowayApi.productCategory.getItem(this.id, {
-        query: { fields: ["name", "description", "image", "status"] }
+        query: { fields: ["$all"] }
       })
       this.name = category.name
       this.image = category.image
+      this.previewImage = category.image
       this.shortDescription = category.short_description
       this.description = category.description
       this.status = category.status
+
+      let dataDefault: any = {
+        "lang": {
+          "en": {
+            "name": "",
+            "short_description": "",
+            "description": ""
+          }
+        }
+      }
+      this.metaData = JSON.stringify(category.meta_data) != "{}" ? category.meta_data : dataDefault
+      this.editor.set(this.metaData)
+
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
       this.backToList()
@@ -127,9 +178,11 @@ export class AddComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, image, status, shortDescription } = this;
+      let { name, description, previewImage, status, shortDescription, metaData } = this;
       let short_description = shortDescription;
-      await this.innowayApi.productCategory.add({ name, description, short_description, image, status})
+      let image = previewImage
+      let meta_data: any = this.editor.get()
+      await this.innowayApi.productCategory.add({ name, description, short_description, image, status, meta_data })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -140,9 +193,11 @@ export class AddComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, image, status, shortDescription } = this;
+      let { name, description, previewImage, status, shortDescription, metaData } = this;
       let short_description = shortDescription;
-      await this.innowayApi.productCategory.update(this.id, { name, description, short_description, image, status})
+      let image = previewImage;
+      let meta_data: any = this.editor.get()
+      await this.innowayApi.productCategory.update(this.id, { name, description, short_description, image, status, meta_data })
       this.alertUpdateSuccess();
       form.reset();
     } else {
@@ -151,7 +206,6 @@ export class AddComponent implements OnInit {
   }
 
   async submitAndNew(form: NgForm) {
-    console.log('submit', form);
     this.submitting = true;
     try {
       await this.addItem(form);
@@ -184,5 +238,45 @@ export class AddComponent implements OnInit {
     } finally {
       this.submitting = false;
     }
+  }
+
+  async onChangeImageFile(event) {
+    // this.startLoading()
+    let files = this.fileUploader.nativeElement.files
+    let file = files[0]
+    try {
+      let response = await this.innowayApi.upload.uploadImage(file)
+      this.previewImage = response.link
+      // this.endLoading()
+    } catch (err) {
+      // this.endLoading()
+    }
+  }
+
+  onImageError(event) {
+    this.previewImage = this.errorImage;
+  }
+
+  onImageChangeData(event) {
+    this.previewImage = event;
+  }
+
+  removeImage() {
+    this.previewImage = undefined;
+  }
+
+  startLoading() {
+    this.progress = 0;
+    setTimeout(() => {
+      this.progress = 0.5;
+    }, 30000);
+  }
+
+  endLoading() {
+    this.progress = 1;
+
+    setTimeout(() => {
+      this.progress = false;
+    }, 200);
   }
 }

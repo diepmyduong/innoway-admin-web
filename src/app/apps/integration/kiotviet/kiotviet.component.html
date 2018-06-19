@@ -1,3 +1,32 @@
-<p>
-  kiotviet works!
-</p>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <tabset #staticTabs>
+        <!-- client_id, client_secret, retailer  -->
+        <tab heading="Đăng nhập">
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Client Id:</label>
+            <div class="col-md-10">
+              <input type="text" #kiotVietClientIdControl="ngModel" [(ngModel)]="kiotVietClientId" name="kiotVietClientId" class="form-control input-control" [placeholder]="'Client Id'" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Client Secret:</label>
+            <div class="col-md-10">
+              <input type="text" #kiotVietClientSecretControl="ngModel" [(ngModel)]="kiotVietClientSecret" name="kiotVietClientSecret" class="form-control input-control" [placeholder]="'Client Secret'" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="select">Retailer:</label>
+            <div class="col-md-10">
+              <input type="text" #kiotVietRetailerControl="ngModel" [(ngModel)]="kiotVietRetailer" name="kiotVietRetailer" class="form-control input-control" [placeholder]="'Retailer'" />
+            </div>
+          </div>
+          <button (click)="connectKiotViet()" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'>
+          Đăng nhập
+          </button>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>

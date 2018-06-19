@@ -1,4 +1,27 @@
 <div class="animated fadeIn">
+  <!-- <div class="row" *ngIf="false">
+    <div class="col-md-6 text-center">
+      <div style="display: block">
+        <canvas baseChart [data]="pieChartData | async" [colors]="pieChartColors" [labels]="pieChartLabels | async" [chartType]="pieChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
+        </canvas>
+      </div>
+    </div>
+    <div class="col-md-6 text-center">
+      <table class="table table-responsive table-condensed">
+        <tr>
+          <th>Sản phẩm</th>
+          <th>Màu sắc</th>
+          <th>Phần trăm</th>
+        </tr>
+        <tr *ngFor="let label of pieChartLabels | async; let i = index" [attr.data-index]="i">
+          <th>{{label}}</th>
+          <th><div style="height:20px; width:20px;" [style.background-color]="pieChartColors[0].backgroundColor[i]"></div></th>
+          <th>{{pieChartData.getValue()[i]}} %</th>
+        </tr>
+      </table>
+    </div>
+  </div> -->
+
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -17,32 +40,16 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
-              <div class="col-md-10">
-                <input type="text" #imageControl="ngModel" [(ngModel)]="image" name="image"
-                  class="form-control input-control" [placeholder]="image?'':'Nhập url'" url required/>
-                  <small *ngIf="imageControl.errors?.required" class="text-muted danger">
-                    (Không được bỏ trống)
-                  </small>
-                  <small *ngIf="imageControl.errors?.url"
-                  class="text-muted danger" >
-                    (Link không hợp lệ)
-                  </small>
-                  <img *ngIf="imageControl.value && imageControl.valid" style="width:auto;height:80px;margin-top:0.1rem;"
-                    [src]="imageControl.value" />
-              </div>
-            </div>
-            <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Mô tả ngắn</label>
               <div class="col-md-10">
-                <input type="text" #shortDescriptionControl="ngModel" [(ngModel)]="shortDescription" name="shortDescription"
-                  class="form-control input-control" [placeholder]="'Mô tả ngắn'"/>
+                <input type="text" #shortDescriptionControl="ngModel" [(ngModel)]="shortDescription" name="shortDescription" class="form-control input-control" [placeholder]="'Mô tả ngắn'" />
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
               <div class="col-md-10">
-                <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
+                <textarea type="text" [froalaEditor] #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Mô tả'"></textarea>
+                <!-- <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea> -->
               </div>
             </div>
             <div class="form-group row">
@@ -99,12 +106,10 @@
                 <small *ngIf="valueControl.errors?.required" class="text-muted danger">
                   (Không được bỏ trống)
                 </small>
-                <small *ngIf="valueControl.value == 0"
-                class="text-muted danger" >
+                <small *ngIf="valueControl.value == 0" class="text-muted danger">
                   (Không thể để giá trị bằng 0)
                 </small>
-                <small *ngIf="valueControl.value > 100 && promotionType=='discount_by_percent'"
-                class="text-muted danger" >
+                <small *ngIf="valueControl.value > 100 && promotionType=='discount_by_percent'" class="text-muted danger">
                   (Không thể để giá trị lớn hơn 100%)
                 </small>
               </div>
@@ -143,38 +148,35 @@
                 </select>
               </div>
             </div>
-            <div class="form-group row" [hidden]="true">
-              <div class="col-md-12">
-                <div class="row">
-                  <label class="col-md-3 form-control-label" for="text-input">Hình ảnh</label>
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
+              <div class="col-md-10">
+                <div class="input-group">
+                  <input type="file" name="file-input" #fileUploader (change)="onChangeImageFile($event)" [style.display]="'none'">
+                  <input type="text" #imageControl="ngModel" [(ngModel)]="image" (input)="onImageChangeData($event.target.value)" name="image" url class="form-control input-control" [placeholder]="image?'':'Nhập url'" />
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-ladda ladda-button btn-primary" (click)="fileUploader.click()"
+                    data-style="contract-overlay" style="z-index: 10;">
+                      <span class="ladda-label">Đăng ảnh</span>
+                      <span class="ladda-spinner"></span>
+                      <div class="ladda-progress" style="width: 0px;"></div>
+                    </button>
+                  </span>
                 </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                  <div class="col-md-3">
-                    <img src="http://www.yaliscafe.com/wp-content/uploads/CafeMenu_HotDrinksImage.jpg" width="100%" />
-                  </div>
-                </div>
-                <div class="form-group row mt-1">
-                  <div class="col-md-12">
-                    <input type="file" id="file-multiple-input" name="file-multiple-input" multiple>
-                  </div>
-                </div>
+              </div>
+              <div class="offset-md-2 col-md-10" *ngIf="previewImage">
+                <span class="image-wrapper" *ngIf="previewImage">
+                  <img class="close-btn" [attr.src]="closeImage" (click)="removeImage()" />
+                  <img id="preview-image" *ngIf="fileUploader.value || imageControl.value" [src]="previewImage" (error)="this.previewImage = this.errorImage" />
+                </span>
               </div>
             </div>
           </form>
         </div>
         <div class="card-footer">
-          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
-          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
-          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
+          <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và tạo mới</button>
+          <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và thoát</button>
+          <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-edit"></i> Sửa và thoát</button>
           <!-- <button (click)="send()" *ngIf="isEdit" class="btn btn-sm btn-primary btn-ladda">
             Send
           </button> -->

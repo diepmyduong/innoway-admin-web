@@ -92,6 +92,83 @@ export class Promotion extends CrudAPI<iPromotion> {
     return res;
   }
 
+  async createPromotion(params: {
+    name: string,
+    description: string,
+    short_description: string,
+    is_must_use_scanning_code: boolean,
+    customer_type_id: string,
+    code: string,
+    amount: number,
+    value: number,
+    limit: number,
+    promotion_type: string,
+    start_date: Date,
+    end_date: Date,
+    status: number,
+    image: string,
+  }) {
+    let { name, description, short_description, is_must_use_scanning_code, code, amount, value, limit, promotion_type, start_date, end_date, status, image, customer_type_id } = params;
+    let setting = {
+      method: 'POST',
+      uri: this.apiUrl(`create_promotion`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body: { name, description, short_description, is_must_use_scanning_code, code, amount, value, limit, promotion_type, start_date, end_date, status, image, customer_type_id }
+    }
+    let res: any = await this.exec(setting);
+    return res;
+  }
+
+  async updatePromotion(id: string, params: {
+    name: string,
+    description: string,
+    short_description: string,
+    is_must_use_scanning_code: boolean,
+    customer_type_id: string,
+    code: string,
+    amount: number,
+    value: number,
+    limit: number,
+    promotion_type: string,
+    start_date: Date,
+    end_date: Date,
+    status: number,
+    image: string,
+  }) {
+    let { name, description, short_description, is_must_use_scanning_code, code, amount, value, limit, promotion_type, start_date, end_date, status, image, customer_type_id } = params;
+    let setting = {
+      method: 'PUT',
+      uri: this.apiUrl(`${id}/promotion`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body: { name, description, short_description, is_must_use_scanning_code, code, amount, value, limit, promotion_type, start_date, end_date, status, image, customer_type_id }
+    }
+    let res: any = await this.exec(setting);
+    return res;
+  }
+
+  async deletePromotion(id: string) {
+    let setting = {
+      method: 'DELETE',
+      uri: this.apiUrl(`${id}/promotion`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+    }
+    let res: any = await this.exec(setting);
+    return res;
+  }
+
+
   // this.router.post('/:id/send', this.sendMiddlewares(), this.route(this.send))
   // this.router.post('/:promotion_id/get_detail_promotion', this.getDetailPromotionMiddlewares(), this.route(this.getDetailPromotion));
 }

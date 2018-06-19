@@ -57,10 +57,6 @@ export class Bill extends CrudAPI<iBill> {
           break;
       }
       this.onInformationBillFromFCM.next(undefined)
-      // if (message.topic == 'bills') {
-      //   this.log('on bill change', message.json)
-      //   this.onBillChange.next(message.json)
-      // } else if ()
     })
   }
 
@@ -86,12 +82,7 @@ export class Bill extends CrudAPI<iBill> {
     return this.onInformationBillFromFCM
   }
 
-  async changeActivity(billId: string, params: {
-    activity: string,
-    employeeId: string,
-    note: string
-  }) {
-    let { activity, employeeId, note } = params
+  async changeActivity(billId: string, params: any) {
     let setting: any = {
       method: 'POST',
       headers: { //headers
@@ -99,9 +90,9 @@ export class Bill extends CrudAPI<iBill> {
         'access_token': this.api.innowayAuth.adminToken
       },
       json: true,
-      body: { employee_id: employeeId, note }
+      body: { employee_id: params.employeeId, note: params.note }
     }
-    switch (activity) {
+    switch (params.activity) {
       case ActivityEnum.BILL_SENT_SUCCESSFULLY:
         setting.uri = this.apiUrl(`${billId}/activity/sentSuccessfullyBillStatus`);
         break;
@@ -164,6 +155,78 @@ export class Bill extends CrudAPI<iBill> {
         break;
       case ActivityEnum.BILL_SENT_SHIPPER:
         setting.uri = this.apiUrl(`${billId}/activity/sentShipperBillStatus`);
+        switch (params.type) {
+          case "GHN": {
+            setting.body = {
+              employee_id: params.employeeId,
+              note: params.note,
+              type: "GHN",
+              data: {
+                pick_address: {
+                  longitude: params.data.pick_address.longitude,
+                  latitude: params.data.pick_address.latitude
+                },
+                receive_address: {
+                  longitude: params.data.receive_address.longitude,
+                  latitude: params.data.receive_address.latitude
+                },
+                total_weight: params.data.total_weight,
+                note_code: params.data.note_code
+              }
+            }
+            break;
+          }
+          case "GHTK": {
+            setting.body = {
+              employee_id: params.employeeId,
+              note: params.note,
+              type: "GHTK",
+              data: {
+                pick_address: {
+                  longitude: params.data.pick_address.longitude,
+                  latitude: params.data.pick_address.latitude
+                },
+                receive_address: {
+                  longitude: params.data.receive_address.longitude,
+                  latitude: params.data.receive_address.latitude
+                },
+                total_weight: params.data.total_weight,
+                note_code: params.data.note_code
+              }
+            }
+            break;
+          }
+          case "UBER_DELIVER": {
+            setting.body = {
+              employee_id: params.employeeId,
+              note: params.note,
+              type: "UBER_DELIVER",
+              data: {
+                pick_address: {
+                  longitude: params.data.pick_address.longitude,
+                  latitude: params.data.pick_address.latitude
+                },
+                receive_address: {
+                  longitude: params.data.receive_address.longitude,
+                  latitude: params.data.receive_address.latitude
+                },
+                user: {
+                  token: params.data.user.token
+                }
+              }
+            }
+            break;
+          }
+          case "MCOM":
+          default: {
+            setting.body = {
+              employee_id: params.employeeId,
+              note: params.note,
+              type: "MCOM",
+            }
+            break;
+          }
+        }
         break;
       case ActivityEnum.BILL_MODIFIED_AT_SENT_SHIPPER:
         setting.uri = this.apiUrl(`${billId}/activity/sentShipperBillStatus/modified`);
@@ -313,5 +376,56 @@ export class Bill extends CrudAPI<iBill> {
     return row;
   }
 
+  async getPrudentialEmployeeBill(params: any
+    // {
+    //   customer_type: string
+    // }
+  ) {
+    let setting = {
+      method: 'POST',
+      uri: this.apiUrl(`get_prudential_employee_bill`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body: params
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
+
+  async getPrudentialPaidHistory(params: any) {
+    let setting = {
+      method: 'POST',
+      uri: this.apiUrl(`get_prudential_paid_history`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': this.api.innowayAuth.adminToken
+      },
+      json: true,
+      body: params
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
+
+  async orderOnlineByCustomer(accessToken: string, params: any) {
+    let setting = {
+      method: 'POST',
+      uri: this.apiUrl(`order_online_by_customer`),
+      headers: { //headers
+        'User-Agent': 'Request-Promise',
+        'access_token': accessToken
+      },
+      json: true,
+      body: params
+    }
+    var res: any = await this.exec(setting);
+    var row = res.results.object;
+    return row;
+  }
 
 }

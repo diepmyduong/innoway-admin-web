@@ -1,13 +1,18 @@
-<div class="toolbar">
-  <div class="branch-info">
-    <div>Chi nhánh: {{branch?.address}}</div>
-    <div>Nhân viên phụ trách: {{employeeData?.fullname}} | Hotline: {{branch?.phone}}</div>
+<div style="padding: 0.5rem;">
+  <button class="btn btn-ladda btn-primary ml-auto" (click)="createBill()"><i class="fas fa-plus"></i> Tạo đơn hàng</button>
+  <button class="btn btn-ladda btn-primary ml-auto" (click)="showOrHideSort()"><i class="fas fa-bolt"></i> Nâng cao</button>
+    <button class="btn btn-ladda btn-primary" (click)="refreshBill()"><i class="fas fa-sync-alt"></i> Tải lại</button>
+  <div *ngIf="isShowSort">
+    <input name="options" #option1 ng-control="options" type="radio" [value]="1" (change)="changeOptions(option1.value)"><span class="sort-title">Đơn trong ngày</span>
+    <input name="options" #option2 ng-control="options" type="radio" [value]="2" (change)="changeOptions(option2.value)"><span class="sort-title">Đơn cần xử lý trong ngày</span>
+    <input name="options" #option3 ng-control="options" type="radio" [value]="3" (change)="changeOptions(option3.value)"><span class="sort-title">Đơn chưa xử lý</span>
   </div>
-  <button class="btn btn-ladda btn-primary ml-auto" (click)="createBill()"><i class="fa fa-plus"></i> Tạo đơn hàng</button>
+  <p class="text-center" *ngIf="numberOfResult"> {{numberOfResult}} kết quả</p>
 </div>
 
 <div class="content">
   <ul class="list-group">
+
     <li href="#" class="list-group-item" *ngFor="let bill of bills | async | billFilter: billFilterInfo; let i = index">
 
       <div class="bill-avatar">
@@ -22,24 +27,24 @@
               Mã đơn hàng: <b>{{formatBillCode(bill.code)}}</b>
             </div>
             <div>
-              <span><i class="fa fa-money"></i>{{bill.total_price | accounting}}</span>
-              <span><i class="fa fa-gears"></i>{{formatChannelStyle(bill.channel)}}</span>
+              <span><i class="fas fa-money-bill"></i>{{bill.total_price | accounting}}</span>
+              <span><i class="fas fa-cogs"></i>{{formatChannelStyle(bill.channel)}}</span>
             </div>
             <div class="bill-address">
-              <i class="fa fa-location-arrow"></i>
+              <i class="fas fa-location-arrow"></i>
               <div>{{bill.address}}</div>
             </div>
             <div>
-              <span><i class="fa fa-gift"></i> Khuyến mãi: {{bill.promotion_id?"có":"không có"}}</span>
-              <span><i class="fa fa-flag"></i><strong>{{bill.activity?formatBillActivityStyle(bill.activity.action):"không có"}}</strong></span>
+              <span><i class="fas fa-gift"></i> Khuyến mãi: {{bill.promotion_id?"có":"không có"}}</span>
+              <span><i class="fas fa-flag"></i><strong>{{bill.activity?formatBillActivityStyle(bill.activity.action):"không có"}}</strong></span>
             </div>
           </div>
           <div class="bill-date-time">
-            <div>{{bill.updated_at | date:'dd/MM/yyyy'}}</div>
-            <div>{{bill.updated_at | date:'HH:mm'}}</div>
+            <div>{{bill.updated_at | date:'dd/MM/yyyy':'+0000'}}</div>
+            <div>{{bill.updated_at | date:'HH:mm':'+0000'}}</div>
             <!-- <div>{{bill.bill_ship_detail?.received_time | date:'dd/MM/yyyy HH:mm'}}</div> -->
             <div>{{timeFromNow(bill.bill_ship_detail?.received_time)}}</div>
-            <span *ngIf="!detectShowCancelButton(bill)" class="cancel-bill" (click)="showCancelBillDialog(bill)"><i class="fa fa-remove mr-h"></i>Hủy đơn hàng</span>
+            <span *ngIf="!detectShowCancelButton(bill)" class="cancel-bill" (click)="showCancelBillDialog(bill)"><i class="fas fa-times mr-h"></i>Hủy đơn hàng</span>
           </div>
         </div>
         <div class="bill-button">

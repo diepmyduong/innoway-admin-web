@@ -27,7 +27,21 @@
                 <div class="form-group row">
                   <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
                   <div class="col-md-10">
-                    <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea>
+                    <!-- <textarea type="text" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Mô tả'"></textarea> -->
+                    <!-- <textarea [froalaEditor] [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea> -->
+                    <quill-editor [(ngModel)]="description" name="description" placeholder="'Nhập mô tả'" class="form-control input-control" style="border:none; padding: 0"></quill-editor>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 header-text" for="text-input">Quả tặng?</label>
+                  <div class="col-md-10">
+                    <mat-checkbox #isGiftControl="ngModel" [(ngModel)]="isGift" name="isGift" (ngModelChange)="checkGift($event)"> </mat-checkbox>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 header-text" for="textarea-input">Meta-data</label>
+                  <div class="col-md-10">
+                    <json-editor [options]="editorOptions" [data]="data"></json-editor>
                   </div>
                 </div>
               </div>
@@ -51,7 +65,7 @@
                         </select>
                   </div>
                   <div class="col-md-10 offset-md-2">
-                    <span class="add-title" (click)="showDialogAddNewEntity('category')"><i class="fa fa-plus"></i> Thêm loại sản phẩm mới</span>
+                    <span class="add-title" (click)="showDialogAddNewEntity('category')"><i class="fas fa-plus"></i> Thêm loại sản phẩm mới</span>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -62,27 +76,6 @@
                           {{ v===1?"Hoạt động":"Không hoạt động"}}
                         </option>
                       </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12" [hidden]="true">
-            <div class="card n-mb-card">
-              <div class="card-header">
-                Mã sản phẩm
-              </div>
-              <div class="card-block">
-                <div class="form-group row">
-                  <label class="col-md-2 header-text" for="text-input">SKU</label>
-                  <div class="col-md-10">
-                    <input type="text" name="text-input" class="form-control input-control" placeholder="SKU">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label class="col-md-2 header-text" for="text-input">Barcode</label>
-                  <div class="col-md-10">
-                    <input type="text" name="text-input" class="form-control input-control" placeholder="Barcode">
                   </div>
                 </div>
               </div>
@@ -130,7 +123,7 @@
                         </select>
                   </div>
                   <div class="col-md-10 offset-md-2">
-                    <span class="add-title" (click)="showDialogAddNewEntity('product-type')"><i class="fa fa-plus"></i> Thêm trạng thái sản phẩm mới</span>
+                    <span class="add-title" (click)="showDialogAddNewEntity('product-type')"><i class="fas fa-plus"></i> Thêm trạng thái sản phẩm mới</span>
                   </div>
                 </div>
               </div>
@@ -153,7 +146,7 @@
                         </select>
                   </div>
                   <div class="col-md-10 offset-md-2">
-                    <span class="add-title" (click)="showDialogAddNewEntity('unit')"><i class="fa fa-plus"></i> Thêm đơn vị mới</span>
+                    <span class="add-title" (click)="showDialogAddNewEntity('unit')"><i class="fas fa-plus"></i> Thêm đơn vị mới</span>
                   </div>
                 </div>
               </div>
@@ -163,38 +156,84 @@
             <div class="card n-mb-card">
               <div class="card-header">
                 Hình ảnh
-                <button type="submit" class="btn btn-sm btn-primary float-right" (click)="addImage()"> Thêm</button>
+                <button type="submit" class="btn btn-sm btn-primary float-right ml-1" (click)="addImage()"><i class="fas fa-link"></i>Thêm URL</button>
+                <button type="submit" class="btn btn-sm btn-primary float-right" (click)="fileUploader.click()"><i class="fas fa-upload"></i>Upload ảnh</button>
+                <input [(ngModel)]="files" type="file" accept="image/*" #fileUploader (change)="onChangeImageFile($event)" 
+                [hidden]="true" [ngModelOptions]="{standalone: true}" multiple>
               </div>
+              <!-- <div class="card-block" *ngIf="falseococo">
+                <div class="form-group row">
+                  <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
+                  <div class="col-md-10">
+                    <div class="input-group">
+                      <input type="file" name="file-input" #fileUploader (change)="onChangeImageFile($event)" [style.display]="'none'">
+                      <input type="text" #imageControl="ngModel" [(ngModel)]="image" (input)="onImageChangeData($event.target.value)" name="image" url class="form-control input-control" [placeholder]="image?'':'Nhập url'" />
+                      <span class="input-group-append">
+                        <button type="button" class="btn btn-ladda ladda-button btn-primary" (click)="fileUploader.click()"
+                        data-style="contract-overlay" style="z-index: 10;">
+                          <span class="ladda-label">Đăng ảnh</span>
+                      </button>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="offset-md-2 col-md-10" *ngIf="previewImage">
+                    <span class="image-wrapper" *ngIf="previewImage">
+                      <img class="close-btn" [attr.src]="closeImage" (click)="removeImage()" />
+                      <img id="preview-image" *ngIf="fileUploader.value || imageControl.value" [src]="previewImage" (error)="this.previewImage = this.errorImage" />
+                    </span>
+                  </div>
+                </div>
+              </div> -->
               <div class="card-block">
-                <small *ngIf="list_image == null || list_image.length == 0" class="text-muted danger">
+                <small *ngIf="list_image == null || list_image.length == 0" class="not-found">
                   Chưa có hình ảnh
                 </small>
-                <swiper [config]="imageConfig" #imageSwiper id="product-swiper">
+                <div class="image-list-wrapper">
+                  <div class="image-container" *ngFor="let image of list_image; let i = index" (click)="openImage(image)">
+                    <div class="image-wrapper">
+                      <img src="{{image}}">
+                    </div>
+                    <div *ngIf="i == 0" class="rect" [matTooltip]="'Ảnh đại diện'" matTooltipPosition="before">
+                      <i class="fas fa-star"></i>
+                      <div class="triangle"></div>
+                    </div>
+                    <button class="btn btn-sort btn-left" (click)="moveLeft(i); $event.stopPropagation()" [hidden]="i == 0"><i class="fas fa-arrow-left"></i></button>
+                    <button class="btn btn-sort btn-right" (click)="moveRight(i); $event.stopPropagation()" [hidden]="i == list_image.length - 1"><i class="fas fa-arrow-right"></i></button>
+                    <button class="btn btn-sort btn-remove" (click)="removeImage(i); $event.stopPropagation()"><i class="fas fa-times"></i></button>
+                  </div>
+                  <div class="image-container" [hidden]="!isUploading">
+                    <div class="loading-wrapper">
+                      <div><i class="fas fa-circle-notch fa-spin m-auto"></i></div>
+                      <div>Đang tải ảnh...</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <swiper [config]="imageConfig" #imageSwiper id="product-swiper">
                   <div class="swiper-wrapper">
                     <div class="swiper-slide" *ngFor="let image of list_image; let i = index" (mouseenter)="image_on_hover = i" (mouseleave)="image_on_hover = -1">
                       <div class="card n-mb-card">
                         <div class="card-block p-0">
                           <div class="product-swiper-image" [style.background-image]="'url('+image+')'">
                             <div class="btn-group pull-right" *ngIf="image_on_hover == i">
-                              <button (click)="setThumbnail(i)" class="btn btn-primary btn-sm"><i class="fa fa-star"></i></button>
-                              <button (click)="removeImage(i)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                              <button (click)="setThumbnail(i)" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button>
+                              <button (click)="removeImage(i)" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <!-- Add Pagination -->
+
                   <div class="swiper-pagination"></div>
-                  <!-- Add Arrows -->
+
                   <div class="swiper-button-next"></div>
                   <div class="swiper-button-prev"></div>
-                </swiper>
+                </swiper> -->
               </div>
             </div>
           </div>
 
-          <div class="col-md-12" *ngIf="thumb">
+          <!-- <div class="col-md-12" *ngIf="thumb">
             <div class="card n-mb-card">
               <div class="card-header">
                 Ảnh đại diện
@@ -203,7 +242,7 @@
                 <img style="width: 100px; height: 100px;" [src]="thumb" />
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="col-md-12 remove-pb">
             <div class="card n-mb-card remove-pb">
@@ -214,8 +253,8 @@
                 <div class="form-group row remove-pb">
                   <label class="col-md-2 header-text">Topping:</label>
                   <div class="col-md-12 mt-1 mb-1">
-                    <span class="add-title" (click)="showDialogAddNewEntity('topping-type')"><i class="fa fa-plus"></i> Thêm topping mới</span><br>
-                    <span class="add-title" (click)="showDialogAddNewEntity('topping')"><i class="fa fa-plus"></i> Thêm trạng thái sản phẩm mới</span>
+                    <span class="add-title" (click)="showDialogAddNewEntity('topping-type')"><i class="fas fa-plus"></i> Thêm loại topping mới</span><br>
+                    <span class="add-title" (click)="showDialogAddNewEntity('topping')"><i class="fas fa-plus"></i> Thêm topping mới</span>
                   </div>
                   <div class="col-md-12">
                     <ng-select class="form-group input-control" [multiple]="true" #toppingSelecter [allowClear]="true" [items]="topping_items | async" (selected)="toppingSelected($event)" (removed)="toppingRemoved($event)" placeholder="Chọn loại topping">
@@ -225,19 +264,6 @@
                     <app-topping-detail [topping]="getTopping(item.id)" [price]="price" *ngFor="let item of toppingSelecter.active"></app-topping-detail>
                   </div>
                 </div>
-                <!-- <div class="form-group row remove-pb" *ngFor="let item of toppingSelecter.active" [hidden]="toppings!=null?false:true">
-                  <pre>{{item | json}}</pre>
-                  <label class="col-md-2 sub-header-text">{{item.src.name}}<span *ngIf="item.src.description" class="color-primary"> ({{item.src.description}})</span></label>
-                    <div class="col-md-12" *ngIf="item.src.values">
-                      <div class="row remove-pb">
-                        <div class="col-md-2" *ngFor="let value of item.src.values">
-                          <label class="checkbox-inline" for="inline-checkbox1">
-                            <i class="icon-check icons mr-h"></i> {{value.name}} <span class="color-dark">(+{{value.price | accounting}}) -> {{showPrice(value.price) | accounting}}</span>
-                        </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
               </div>
             </div>
           </div>
@@ -249,9 +275,9 @@
                     Thêm sản phẩm
                   </div>
                   <div class="card-block">
-                    <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
-                    <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
-                    <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
+                    <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và tạo mới</button>
+                    <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-plus"></i> Thêm và thoát</button>
+                    <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fas fa-edit"></i> Sửa và thoát</button>
                   </div>
                 </div>
               </div>

@@ -20,7 +20,7 @@ export class BranchComponent implements OnInit, ListPageInterface {
   query: any = {};
   searchTimeOut: number = 250;
   searchRef: any;
-  subscriptions: Subscription[] = []
+  // subscriptions: Subscription[] = []
   @ViewChild('itemsTable') itemsTable: DataTable;
 
   constructor(
@@ -31,7 +31,18 @@ export class BranchComponent implements OnInit, ListPageInterface {
   ) {
   }
 
+  subscriptions:any = {}
+
   ngOnInit() {
+    this.subscriptions.onItemsChange = this.innowayApi.smartCode.items.subscribe(items => {
+      if(items)  this.itemsTable.reloadItems()
+    })
+  }
+
+  ngAfterViewDestroy() {
+    this.subscriptions.forEach(s => {
+      s.unsubscribe()
+    })
   }
 
   async reloadItems(params) {

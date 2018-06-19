@@ -32,10 +32,44 @@
               </select>
           </div>
         </div>
-        <button type="submit" class="btn btn-ladda btn-primary ml-auto" (click)="integrateToChatbotSystem()"><i class="fa fa-plus"></i> Kết nối</button>
-        <button *ngIf="appToken" type="submit" class="btn btn-ladda btn-warning ml-auto" (click)="disconnectChatbotSystem()"><i class="fa fa-trash"></i> Gửi story</button>
-        <button *ngIf="appToken" type="submit" class="btn btn-ladda btn-primary ml-auto" (click)="sendMessage()"><i class="fa fa-send"></i> Gửi story</button>
+        <button type="submit" class="btn btn-ladda btn-primary ml-auto" (click)="integrateToChatbotSystem()"><i class="fas fa-plus"></i> Kết nối</button>
+        <button *ngIf="appToken" type="submit" class="btn btn-ladda btn-warning ml-auto" (click)="disconnectChatbotSystem()"><i class="fas fa-trash"></i> Hủy kết nối</button>
+        <button *ngIf="appToken" type="submit" class="btn btn-ladda btn-primary ml-auto" (click)="sendMessage()"><i class="fas fa-paper-plane"></i> Gửi story</button>
       </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" *ngFor="let app of botApps | async">
+      <div class="card">
+        <div class="card-header">
+          <strong>{{app.facebook_name}}</strong>
+          <span *ngIf="detectMainBotApp(app.id)"> - <i class="fas fa-check"></i> Mặc định</span>
+          <button *ngIf="!detectMainBotApp(app.id)" (click)="setDefaultConnectedBotApp(app.id)"> Đặt mặc định </button>
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="text-input">Fanpage</label>
+            <div class="col-md-10">
+              <input type="text" value="{{app.facebook_name}}" class="form-control input-control" readonly>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="text-input">App Id</label>
+            <div class="col-md-10">
+              <input type="text" value="{{app.app_id}}" class="form-control input-control" readonly>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 header-text" for="text-input">App Secret</label>
+            <div class="col-md-10">
+              <input type="text" value="{{app.app_secret}}" class="form-control input-control" readonly>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button (click)="disconnectChatbotSystem(app)"> Ngắt kết nối </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,8 +28,8 @@ import { ServicesModule } from './services';
 import { SharedModule } from './shared/shared.module'
 import { LayoutsModule } from './layouts/layouts.module';
 
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+// import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { BsDropdownModule } from 'ngx-bootstrap';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { UiComponentComponent } from './apps/ui-component/ui-component.component';
 import { UpdateBillStatusComponentComponent } from './apps/ui-component/update-bill-status-component/update-bill-status-component.component';
@@ -43,8 +43,28 @@ import { UpdateBillDataDialog } from "./modal/update-bill-data/update-bill-data.
 import { UpdatePaidHistoryDialog } from "./modal/update-paid-history/update-paid-history.component";
 import { SendMessageDialog } from "./modal/send-message/send-message.component";
 import { SendStoryDialog } from "./modal/send-story/send-story.component";
+import { GuideCustomerDialog } from "./modal/guide-customer/guide-customer.component";
 import { TextMaskModule } from 'angular2-text-mask';
 
+import * as Raven from 'raven-js';
+import { AgmCoreModule } from "@agm/core";
+import { AccordionModule } from "ngx-bootstrap/accordion";
+import { environment } from "environments";
+import { ImagePopupDialog } from './modal/image-popup/image-popup.component';
+
+Raven
+  .config('https://997c474fe1004e2da0f34f05c79c540e@sentry.io/278600')
+  .install();
+
+export class RavenErrorHandler implements ErrorHandler {
+  handleError(err: any): void {
+    console.error(err)
+    // Raven.captureException(err.originalError || err);
+    // if (!environment.production) {
+    //   console.error(err)
+    // }
+  }
+}
 
 @NgModule({
   imports: [
@@ -52,6 +72,7 @@ import { TextMaskModule } from 'angular2-text-mask';
     BrowserAnimationsModule,
     AppRoutingModule,
     TabsModule.forRoot(),
+    AccordionModule.forRoot(),
     // Ng2ModalModule.forRoot(),
     ChartsModule,
     SimpleNotificationsModule.forRoot(),
@@ -65,10 +86,15 @@ import { TextMaskModule } from 'angular2-text-mask';
     LayoutsModule,
     FormsModule,
     TextMaskModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot(),
+    // FroalaEditorModule.forRoot(),
+    // FroalaViewModule.forRoot(),
     // BsDropdownModule.forRoot(),
     ColorPickerModule,
+
+    AgmCoreModule.forRoot({
+      apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
+      libraries: ["places,drawing"]
+    }),
   ],
   declarations: [
     AppComponent,
@@ -81,12 +107,20 @@ import { TextMaskModule } from 'angular2-text-mask';
     UpdateBillDataDialog,
     UpdatePaidHistoryDialog,
     SendMessageDialog,
-    SendStoryDialog
+    SendStoryDialog,
+    GuideCustomerDialog,
+    ImagePopupDialog
   ],
-  providers: [{
-    provide: LocationStrategy,
-    useClass: PathLocationStrategy
-  }],
+  providers: [
+    {
+      provide: LocationStrategy,
+      useClass: PathLocationStrategy
+    },
+    {
+      provide: ErrorHandler,
+      useClass: RavenErrorHandler
+    }
+  ],
   bootstrap: [AppComponent],
   entryComponents: [
     EditOrderStatusDialog,
@@ -96,7 +130,9 @@ import { TextMaskModule } from 'angular2-text-mask';
     UpdateBillDataDialog,
     UpdatePaidHistoryDialog,
     SendMessageDialog,
-    SendStoryDialog
+    SendStoryDialog,
+    GuideCustomerDialog,
+    ImagePopupDialog
   ]
 })
 export class AppModule { }

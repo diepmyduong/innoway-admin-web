@@ -173,6 +173,50 @@ export const FullLayoutRouting = {
       path: 'smart-code',
       loadChildren: 'app/apps/smart-code/smart-code.module#SmartCodeModule'
     },
+    {
+      path: 'blog',
+      loadChildren: 'app/apps/blog/blog.module#BlogModule'
+    },
+    {
+      path: 'blog-type',
+      loadChildren: 'app/apps/blog-type/blog-type.module#BlogTypeModule'
+    },
+    {
+      path: 'store',
+      loadChildren: 'app/apps/store/store.module#StoreModule'
+    },
+    {
+      path: 'supplier',
+      loadChildren: 'app/apps/supplier/supplier.module#SupplierModule'
+    },
+    {
+      path: 'supplier-category',
+      loadChildren: 'app/apps/supplier-category/supplier-category.module#SupplierCategoryModule'
+    },
+    {
+      path: 'export-history',
+      loadChildren: 'app/apps/export-history/export-history.module#ExportHistoryModule'
+    },
+    {
+      path: 'import-history',
+      loadChildren: 'app/apps/import-history/import-history.module#ImportHistoryModule'
+    },
+    {
+      path: 'ticket',
+      loadChildren: 'app/apps/ticket/ticket.module#TicketModule'
+    },
+    {
+      path: 'ticket-type',
+      loadChildren: 'app/apps/ticket-type/ticket-type.module#TicketTypeModule'
+    },
+    {
+      path: 'ticket-result',
+      loadChildren: 'app/apps/ticket-result/ticket-result.module#TicketResultModule'
+    },
+    {
+      path: 'customer-report',
+      loadChildren: 'app/apps/customer-report/customer-report.module#CustomerReportModule'
+    },
   ],
 
 }

@@ -1,4 +1,5 @@
-<header class="app-header navbar">
+<app-navbar></app-navbar>
+<!-- <header class="app-header navbar">
   <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button"><i class="material-icons">keyboard_arrow_left</i></button>
   <a class="navbar-brand" [routerLink]="['/launcher/tool']">
     <div class="logo-wrapper"><img id="logo" src="../../assets/img/logo-white.svg"/></div>
@@ -13,10 +14,10 @@
         {{employee.fullname}}<i class="material-icons">keyboard_arrow_down</i>
       </div>
       <ul class="dropdown-menu" aria-labelledby="accountDropdownMenu">
-        <li class="dropdown-item"><a><i class="fa fa-user"></i> Thông tin tài khoản</a></li>
-        <li class="dropdown-item"><a><i class="fa fa-wrench"></i> Cài đặt</a></li>
-        <li class="dropdown-item"><a><i class="fa fa-shield"></i> Khoá tài khoản</a></li>
-        <li class="dropdown-item" (click)="logout()"><a><i class="fa fa-lock"></i> Đăng xuất</a></li>
+        <li class="dropdown-item"><a><i class="fas fa-user"></i> Thông tin tài khoản</a></li>
+        <li class="dropdown-item"><a><i class="fas fa-wrench"></i> Cài đặt</a></li>
+        <li class="dropdown-item"><a><i class="fas fa-shield-alt"></i> Khoá tài khoản</a></li>
+        <li class="dropdown-item" (click)="logout()"><a><i class="fas fa-lock"></i> Đăng xuất</a></li>
       </ul>
     </li>
 
@@ -24,18 +25,18 @@
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-bell-o" aria-hidden="true"></i><span class="badge badge-pill badge-danger">5</span>
+              <i class="far fa-bell" aria-hidden="true"></i><span class="badge badge-pill badge-danger">5</span>
           </a>
       <ul class="dropdown-menu" aria-labelledby="accountDropdownMenu">
-        <li class="dropdown-item"><i class="fa fa-user"></i> Đơn hàng chờ duyệt</li>
-        <li class="dropdown-item"><i class="fa fa-wrench"></i> Đơn hàng chờ thu phí</li>
-        <li class="dropdown-item"><i class="fa fa-shield"></i> Đơn hàng báo huỷ</li>
+        <li class="dropdown-item"><i class="fas fa-user"></i> Đơn hàng chờ duyệt</li>
+        <li class="dropdown-item"><i class="fas fa-wrench"></i> Đơn hàng chờ thu phí</li>
+        <li class="dropdown-item"><i class="fas fa-shield-alt"></i> Đơn hàng báo huỷ</li>
       </ul>
     </li>
 
     <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-commenting-o"></i>
+              <i class="far fa-comment-dots"></i>
           </a>
     </li>
 
@@ -45,9 +46,9 @@
           </a>
     </li>
 
-    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)">
+    <li class="nav-item dropdown hidden-md-down" dropdown placement="bottom right" (onToggle)="toggled($event)" (click)="logout()">
       <a class="nav-link nav-pill" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
-              <i class="fa fa-power-off"></i>
+              <i class="fas fa-power-off"></i>
           </a>
     </li>
   </ul>
@@ -56,7 +57,7 @@
           <a class="nav-link navbar-toggler aside-menu-toggler" href="javascript:;"><i class="material-icons">menu</i></a>
         </li>
   </ul>
-</header>
+</header> -->
 
 <div class="app-body">
     <div class="container-fluid">

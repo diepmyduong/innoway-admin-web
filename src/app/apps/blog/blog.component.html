@@ -1,72 +1,39 @@
 <div class="animated fadeIn">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="card">
-        <div class="card-header">
-        	<div class="row">
-	        	<div class="col-lg-4 mt-h">
-	        		<span><i class="fa fa-align-justify px-1 mt-h"></i> Danh sách bài viết</span>
-	        	</div>
-	        	<div class="col-lg-8 col-xs-12 mt-h">	          	
 
-	          		<button type="button" class="btn btn-outline-success mt-0 px-2 float-right">Thêm</button>
-	          		
-	          		<form class="form-inline float-right px-2">
-	          		 	<label class="form-control-label mr-1" for="text-input">Số lượng:  </label>
-			            <select class="form-control input-sm">
-							<option value="10">10</option>
-							<option value="25">25</option>
-							<option value="50">50</option>
-							<option value="100">100</option>
-						</select> 
-			            <i class="fa fa-search px-1"></i>
-			            <input class="form-control" type="text" placeholder="Search...">
-			        </form>
-                    
-				</div>
-        	</div>
-        </div>
-        <div class="card-block">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th class="text-center">Tiêu đề</th>
-                <th class="text-center">Loại bài viết</th>
-                <th class="text-center">Người đăng</th>
-                <th class="text-center">Ngày đăng</th>
-                <th class="text-center">Trạng thái</th>
-                <th class="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="text-center"><a class="nav-link" routerLinkActive="active" [routerLink]="['/blog/detail']">Cafe sạch đang phổ biến</a></td>
-                <td class="text-center">Blog</td>
-                <td class="text-center">Khoi Tran</td>
-                <td class="text-center">15:00:00 04/11/2017</td>
-                <td class="text-center">
-                  	<span class="badge badge-success p-h">Active</span>
-                </td>
-                <td class="text-center">
-                	<span class="badge badge-default"><i class="icon-eye icons font-xl p-q d-block"></i></span>
-                 	<span class="badge badge-success"><i class="icon-pencil icons font-xl p-q d-block"></i></span>
-                 	<span class="badge badge-danger"><i class="icon-trash icons font-xl p-q d-block"></i></span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-            <li class="page-item active">
-              <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">4</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-          </ul>
-        </div>
-      </div>
+  <div class="row">
+    <h3 class="col-6">Danh sách bài viết</h3>
+    <div class="col-6">
+      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fas fa-plus"></i>Thêm bài viết</button>
+      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i class="fas fa-trash"></i>Xóa bài viết</button>
     </div>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="search-bar">
+      <p>Tìm kiếm</p>
+      <input type="text" class="input-control form-control" (keyup)="onSearch($event)">
+    </div>
+    <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true" [substituteRows]="false"
+      [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
+      <data-table-column property="image" header="Hình ảnh">
+        <template #dataTableCell let-item="item">
+                <img height="50px" [src]="item.thumb?item.thumb:thumbDefault">
+            </template>
+      </data-table-column>
+      <data-table-column property="title" header="Bài viết" [sortable]="true">
+      </data-table-column>
+      <data-table-column property="status" header="Trạng thái" [sortable]="true">
+        <template #dataTableCell let-item="item">
+              <span class="badge p-h" [ngClass]="{'badge-success': item.status == 1, 'badge-danger':item.status == 0}">{{item.status == 1?"Hoạt động":"Không hoạt động"}}</span>
+            </template>
+      </data-table-column>
+      <data-table-column header="Actions">
+        <template #dataTableCell let-item="item">
+          <span class="btn-group">
+                    <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fas fa-edit"></i></button>
+          </span>
+            </template>
+      </data-table-column>
+    </data-table>
   </div>
 </div>

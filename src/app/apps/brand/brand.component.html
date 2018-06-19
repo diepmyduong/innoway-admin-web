@@ -3,8 +3,8 @@
   <div class="row">
     <h3 class="col-6">Danh sách thương hiệu</h3>
     <div class="col-6">
-      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm thương hiệu</button>
-      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa thương hiệu</button>
+      <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fas fa-plus"></i>Thêm thương hiệu</button>
+      <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i class="fas fa-trash"></i>Xóa thương hiệu</button>
     </div>
   </div>
 
@@ -22,6 +22,10 @@
               <img height="50px" [src]="item.logo?item.logo:thumbDefault">
           </template>
       </data-table-column>
+      <data-table-column property="id" header="Id" [sortable]="true">
+      </data-table-column>
+      <data-table-column property="code" header="Code" [sortable]="true">
+      </data-table-column>
       <data-table-column property="name" header="Tên công ty" [sortable]="true">
       </data-table-column>
       <data-table-column property="status" header="Trạng thái" [sortable]="true">
@@ -32,7 +36,7 @@
       <data-table-column header="Actions">
         <template #dataTableCell let-item="item">
           <span class="btn-group">
-                    <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
+                    <button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fas fa-edit"></i></button>
           </span>
             </template>
       </data-table-column>

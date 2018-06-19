@@ -26,6 +26,7 @@ import { ToasterModule, ToasterService} from 'angular2-toaster/angular2-toaster'
 import { DashboardService } from "app/apps/dashboard/DashboardService";
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { SelectModule } from 'ng2-select';
+import { OverviewComponent } from './overview/overview.component';
 
 @NgModule({
   imports: [
@@ -54,9 +55,9 @@ import { SelectModule } from 'ng2-select';
     SelectModule
   ],
   providers: [DashboardService],
-  bootstrap: [DashboardComponent, BillsComponent, BillDetailComponent, BillLocationComponent],
-  declarations: [DashboardComponent, BillsComponent, BillDetailComponent, BillLocationComponent]
+  bootstrap: [DashboardComponent, BillsComponent, BillDetailComponent, BillLocationComponent, OverviewComponent],
+  declarations: [DashboardComponent, BillsComponent, BillDetailComponent, BillLocationComponent, OverviewComponent]
 })
 export class DashboardModule {
-  
+
 }
