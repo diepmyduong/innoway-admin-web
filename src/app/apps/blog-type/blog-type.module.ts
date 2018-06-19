@@ -15,8 +15,8 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { PipesModule } from 'app/pipes/pipes.module'
 import { SwiperModule } from 'angular2-useful-swiper';
 
-import { FroalaComponent } from "app/editor/froala.component";
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+// import { FroalaComponent } from "app/editor/froala.component";
+// import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 @NgModule({
   imports: [
     CommonModule,

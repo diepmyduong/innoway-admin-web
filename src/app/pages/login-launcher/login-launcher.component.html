@@ -97,7 +97,10 @@
               {{cat.name}}
             </option>
           </select>
-        </div>
+        </div>    
+        <button class="btn btn-back-login" (click)="mode = 'login'">
+          <i class="fas fa-sign-in-alt"></i>Đăng nhập
+        </button>
         <button type="button" class="btn btn-next" (click)="tab = 'admin'">
           <span>Tiếp tục</span>
           <i class="fas fa-arrow-right"></i>
@@ -153,9 +156,9 @@
           <input type="password" [(ngModel)]="adminRepassword" name="adminRepassword" placeholder="Xác nhận mật khẩu" 
           maxlength="70" tabindex="13" required #adminRepasswordControl="ngModel">
         </div>
-        <div class="button-row">
+        <div class="button-row second">
           <button type="button" class="btn btn-prev" (click)="tab = 'business'">
-            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-left"></i>Quay lại
           </button>
           <button [disabled]="submitting" type="button" class="btn btn-register" (click)="register(registerForm)" tabindex="14">
             <i *ngIf='submitting' class="fas fa-circle-notch fa-spin loading-spinner"></i>
@@ -164,9 +167,5 @@
         </div>
       </div>      
     </div>
-    
-    <button class="btn btn-back-login" (click)="mode = 'login'">
-      <i class="fas fa-sign-in-alt"></i>Trở lại đăng nhập
-    </button>
   </form>
 </div>

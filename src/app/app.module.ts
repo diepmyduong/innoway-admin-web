@@ -28,7 +28,7 @@ import { ServicesModule } from './services';
 import { SharedModule } from './shared/shared.module'
 import { LayoutsModule } from './layouts/layouts.module';
 
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+// import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { UiComponentComponent } from './apps/ui-component/ui-component.component';
@@ -50,6 +50,7 @@ import * as Raven from 'raven-js';
 import { AgmCoreModule } from "@agm/core";
 import { AccordionModule } from "ngx-bootstrap/accordion";
 import { environment } from "environments";
+import { ImagePopupDialog } from './modal/image-popup/image-popup.component';
 
 Raven
   .config('https://997c474fe1004e2da0f34f05c79c540e@sentry.io/278600')
@@ -85,8 +86,8 @@ export class RavenErrorHandler implements ErrorHandler {
     LayoutsModule,
     FormsModule,
     TextMaskModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot(),
+    // FroalaEditorModule.forRoot(),
+    // FroalaViewModule.forRoot(),
     // BsDropdownModule.forRoot(),
     ColorPickerModule,
 
@@ -108,6 +109,7 @@ export class RavenErrorHandler implements ErrorHandler {
     SendMessageDialog,
     SendStoryDialog,
     GuideCustomerDialog,
+    ImagePopupDialog
   ],
   providers: [
     {
@@ -129,7 +131,8 @@ export class RavenErrorHandler implements ErrorHandler {
     UpdatePaidHistoryDialog,
     SendMessageDialog,
     SendStoryDialog,
-    GuideCustomerDialog
+    GuideCustomerDialog,
+    ImagePopupDialog
   ]
 })
 export class AppModule { }

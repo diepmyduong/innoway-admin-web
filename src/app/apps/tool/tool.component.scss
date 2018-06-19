@@ -1,85 +1,139 @@
 @import '../../../scss/bootstrap-variables';
 
-/deep/ .app {
-  margin: 0 !important;
-  height: 100% !important;
-  background-color: white !important;
+.tool-wrapper {
+  width: 94%;
+  margin: 24px auto;
+  .tool {
+    padding: 8px;
+    background: white;
+    border: 1px solid $grey-light;
+    border-radius: 3px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    height: calc(100% - 16px);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .image-wrapper {
+      width: 50%;
+      padding-bottom: 50%;
+      margin-top: 16px;
+      margin-bottom: 12px;
+      .image {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        object-fit: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        background-color: $grey-dark;
+      }
+    }
+    .header-text{
+      color: $grey-dark;
+      font-size: 17px;
+      font-weight: bold;
+      margin-top: 4px;
+    }
+    .header-subtitle {
+      color: $grey;
+      font-size: 13px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    &:hover {
+      border-color: $brand-primary;
+      .image {
+        background-color: $brand-primary !important;
+      }
+      .header-text {
+        color: $brand-primary;
+      }
+      .header-subtitle {
+        color: $brand-light;
+      }
+    }
+  }
 }
 
-.item {
-  margin-bottom: 1.5rem;
+.tools-wrapper {  
+  height: calc(100vh - 100px);
+  >div {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
-.item img {
-  height: 50px;
-  width: 100%;
-  object-fit: contain;
-  padding: 0.25rem;
-}
-
-.header-text {
-  text-align: right;
-  color: $bluegrey-darker;
-  font-size: 0.95rem;
-  padding: 0.25rem;
-  margin: 0.25rem;
-  font-weight: 400;
-  display: flex;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-}
-
-.row {
-  background: white;
-}
-
-/deep/ .card,
-/deep/ .card-header {
-  // background: white;
-  // border: 0 !important;
-  // padding-left: 16px;
-  // padding-right: 16px;
-}
-
-/deep/ tabset .tab-content {
-  background: white;
-  border: 0 !important;
-}
-
-/deep/ tabset .nav-tabs .active {
-  border: 0 !important;
-}
-
-/deep/ tabset .nav-item:hover {
-  border: 0 !important;
-}
-
-/deep/ tabset .nav-link:hover {
-  border: 0 !important;
-}
-
-/deep/ tabset .nav-tabs {
-  border: 0 !important;
-}
-
-/deep/ tabset .nav-link {
-  border: 0 !important;
-}
-
-/deep/ tabset .nav-tabs {
-  border-bottom: none;
-}
-
-.title {
-  font-size: 1rem;
-}
-
-.mySkip {
+.button-intro {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  color: lighten($brand-light, 30%);
+  background: $brand-light;
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
+  padding: 6px 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  i {    
+    margin-right: 2px;
+  }
+  &:hover {
     color: white;
-    border-color: white;
+    background: $brand-primary;
+    box-shadow: 0 7px 7px rgba(0,0,0,0.25), 0 5px 5px rgba(0,0,0,0.22);
+  }
 }
 
-/deep/ .enjoyhint div{
-  font-family: Roboto,Helvetica,Arial,sans-serif !important;
-}
+// ::ng-deep.app {
+//   margin: 0 !important;
+//   height: 100% !important;
+//   background-color: white !important;
+// }
+
+// .item {
+//   margin-bottom: 1.5rem;
+// }
+
+// .item img {
+//   height: 50px;
+//   width: 100%;
+//   object-fit: contain;
+//   padding: 0.25rem;
+// }
+
+// .header-text {
+//   text-align: right;
+//   color: $bluegrey-darker;
+//   font-size: 0.95rem;
+//   padding: 0.25rem;
+//   margin: 0.25rem;
+//   font-weight: 400;
+//   display: flex;
+//   text-align: center;
+//   align-items: center;
+//   justify-content: center;
+// }
+
+// .row {
+//   background: white;
+// }
+
+// .title {
+//   font-size: 1rem;
+// }
+
+// .mySkip {
+//     color: white;
+//     border-color: white;
+// }
+
+// ::ng-deep.enjoyhint div{
+//   font-family: Roboto,Helvetica,Arial,sans-serif !important;
+// }

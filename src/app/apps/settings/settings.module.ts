@@ -23,8 +23,8 @@ import { ConfigComponent } from './config/config.component';
 import { ThemeComponent } from './theme/theme.component';
 import { AgmCoreModule } from "@agm/core";
 
-import { FroalaComponent } from "app/editor/froala.component";
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+// import { FroalaComponent } from "app/editor/froala.component";
+// import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { MessageSettingComponent } from "app/apps/settings/message-setting/message-setting.component";
 
 @NgModule({
@@ -41,8 +41,8 @@ import { MessageSettingComponent } from "app/apps/settings/message-setting/messa
     CustomFormsModule,
     TextMaskModule,
 
-    FroalaEditorModule,
-    FroalaViewModule,
+    // FroalaEditorModule,
+    // FroalaViewModule,
 
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyDAC_NI2xITI6n6hky-5CAiemtWYCsrO28",
