@@ -1,27 +1,4 @@
 <div class="animated fadeIn">
-  <!-- <div class="row" *ngIf="false">
-    <div class="col-md-6 text-center">
-      <div style="display: block">
-        <canvas baseChart [data]="pieChartData | async" [colors]="pieChartColors" [labels]="pieChartLabels | async" [chartType]="pieChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-        </canvas>
-      </div>
-    </div>
-    <div class="col-md-6 text-center">
-      <table class="table table-responsive table-condensed">
-        <tr>
-          <th>Sản phẩm</th>
-          <th>Màu sắc</th>
-          <th>Phần trăm</th>
-        </tr>
-        <tr *ngFor="let label of pieChartLabels | async; let i = index" [attr.data-index]="i">
-          <th>{{label}}</th>
-          <th><div style="height:20px; width:20px;" [style.background-color]="pieChartColors[0].backgroundColor[i]"></div></th>
-          <th>{{pieChartData.getValue()[i]}} %</th>
-        </tr>
-      </table>
-    </div>
-  </div> -->
-
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -48,8 +25,7 @@
             <div class="form-group row">
               <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
               <div class="col-md-10">
-                <textarea type="text" [froalaEditor] #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Mô tả'"></textarea>
-                <!-- <textarea [froalaEditor] [(froalaModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea> -->
+                <quill-editor [(ngModel)]="description" name="description" placeholder="'Nhập mô tả'" class="form-control input-control" style="border:none; padding: 0"></quill-editor>
               </div>
             </div>
             <div class="form-group row">
@@ -158,9 +134,9 @@
                     <button type="button" class="btn btn-ladda ladda-button btn-primary" (click)="fileUploader.click()"
                     data-style="contract-overlay" style="z-index: 10;">
                       <span class="ladda-label">Đăng ảnh</span>
-                      <span class="ladda-spinner"></span>
-                      <div class="ladda-progress" style="width: 0px;"></div>
-                    </button>
+                  <span class="ladda-spinner"></span>
+                  <div class="ladda-progress" style="width: 0px;"></div>
+                  </button>
                   </span>
                 </div>
               </div>
