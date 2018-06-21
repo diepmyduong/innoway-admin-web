@@ -24,6 +24,7 @@ export class ConfigComponent implements OnInit {
   name: string;
   color: string = "#127bdc";
   logo: string;
+  code: string;
   trialExpire: string;
   status: number = 1;
   vatValue: number;
@@ -187,6 +188,7 @@ export class ConfigComponent implements OnInit {
       })
 
       this.name = data.name
+      this.code = data.code
       this.color = data.color
       if (this.color) {
         this.onChangeColorHex8(this.color)
@@ -280,7 +282,7 @@ export class ConfigComponent implements OnInit {
   async addItem(form: NgForm) {
     if (form.valid) {
 
-      let { name, color, logo, trialExpire, description, address, vatValue, openHour, closeHour, brandCategory, status, isOnlinePayment } = this;
+      let { name, color, logo, trialExpire, description, address, vatValue, openHour, closeHour, brandCategory, status, isOnlinePayment, code } = this;
       let brand_category_id = brandCategory
       let trial_expire = trialExpire
       let vat_value = vatValue
@@ -295,7 +297,7 @@ export class ConfigComponent implements OnInit {
       });
       await this.innowayApi.brand.add({
         name, color, logo, trial_expire, description, address, vat_value,
-        open_hour_online, close_hour_online, open_days_of_week, brand_category_id, status, is_enable_online_payment
+        open_hour_online, close_hour_online, open_days_of_week, brand_category_id, status, is_enable_online_payment, code
       })
       this.alertAddSuccess();
       form.reset();
@@ -308,7 +310,7 @@ export class ConfigComponent implements OnInit {
   async updateItem(form: NgForm) {
     if (form.valid) {
       try {
-        let { name, color, logo, trialExpire, description, address, phone, vatValue, openHour, closeHour, brandCategory, status, isOnlinePayment } = this;
+        let { name, color, logo, trialExpire, description, address, phone, vatValue, openHour, closeHour, brandCategory, status, isOnlinePayment, code } = this;
         let brand_category_id = brandCategory
         let trial_expire = trialExpire;
         let vat_value = vatValue
@@ -324,7 +326,7 @@ export class ConfigComponent implements OnInit {
 
         await this.innowayApi.brand.update(this.employee.brand_id, {
           name, color, logo, trial_expire, description, address, vat_value, phone,
-          open_hour_online, close_hour_online, open_days_of_week, brand_category_id, status, is_enable_online_payment
+          open_hour_online, close_hour_online, open_days_of_week, brand_category_id, status, is_enable_online_payment, code
         })
         this.alertUpdateSuccess();
         // form.reset();
