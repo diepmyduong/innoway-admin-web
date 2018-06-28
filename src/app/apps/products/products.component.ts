@@ -20,6 +20,7 @@ export class ProductsComponent implements OnInit {
     public innowayApi: InnowayApiService
   ) {
   }
+  public categories: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([])
   public items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   public itemCount = 0; // item total  count
   public thumbDefault: string = "http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png";
@@ -41,7 +42,8 @@ export class ProductsComponent implements OnInit {
 
   subscriptions:any = {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.loadCategoryData()
     this.subscriptions.onItemsChange = this.innowayApi.smartCode.items.subscribe(items => {
       if(items)  this.itemsTable.reloadItems()
     })
@@ -51,6 +53,20 @@ export class ProductsComponent implements OnInit {
     this.subscriptions.forEach(s => {
       s.unsubscribe()
     })
+  }
+
+  async loadCategoryData() {
+    try {
+      this.categories.next(await this.innowayApi.productCategory.getList({
+        local: false, query: {
+          fields: ["id", "name"],
+          limit: 0
+        }
+      }))
+      this.ref.detectChanges()
+    } catch (err) {
+      console.error('Cannot load category', err);
+    }
   }
 
   // ngOnDestroy() {
@@ -72,9 +88,17 @@ export class ProductsComponent implements OnInit {
       fields: this.itemFields
     }, this.query);
     console.log("bibi: " + JSON.stringify(query));
+    let list = await this.innowayApi.product.getList({ query })
+    list.forEach(p => {
+      if (!p.category) {
+        p.category = this.categories.getValue().find(x => x.id == p.category_id)
+      }
+    })
     this.items.next(await this.innowayApi.product.getList({ query }))
     this.itemCount = this.innowayApi.product.pagination.totalItems
     this.ref.detectChanges();
+    console.log('items', this.items.getValue()[0])
+
     return this.items;
   }
 
@@ -223,6 +247,7 @@ export class ProductsComponent implements OnInit {
       let response = await this.innowayApi.product.import(file, {
         mode: "overwrite"
       })
+      window.location.reload();
       // this.upload(files)
       console.log("onChangeImportFile", response);
     } catch (err) {

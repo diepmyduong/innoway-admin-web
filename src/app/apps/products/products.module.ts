@@ -31,8 +31,6 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { PipesModule } from 'app/pipes/pipes.module'
 import { SwiperModule } from 'angular2-useful-swiper';
 
-// import { FroalaComponent } from "app/editor/froala.component";
-// import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { ToppingDetailComponent } from './topping-detail/topping-detail.component';
 import { MatCheckboxModule, MatTooltipModule } from "@angular/material";
 import { QuillEditorModule } from "ngx-quill-editor";
@@ -58,15 +56,12 @@ import { TooltipModule } from 'ngx-bootstrap';
     DataTableModule,
     PipesModule,
     SwiperModule,
-    // FroalaEditorModule,
-    // FroalaViewModule,
     MatCheckboxModule,
     MatTooltipModule,
     TooltipModule.forRoot(),
 
     QuillEditorModule,
     Ng4JsonEditorModule
-    // UploadImageByUrlComponent
   ],
   declarations: [ProductsComponent, AddComponent, DetailComponent, ToppingDetailComponent],  //UploadImageByUrlComponent
   providers: []
