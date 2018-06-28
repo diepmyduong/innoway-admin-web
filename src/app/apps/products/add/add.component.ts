@@ -34,7 +34,8 @@ export class AddComponent implements OnInit {
   @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 
   shortDescription: string;
-  category: string;
+  category: any;
+  category_id: string;
   product_type: string = null;
   status: number = 1;
   topping: string;
@@ -144,7 +145,8 @@ export class AddComponent implements OnInit {
     this.editor.set(dataDefault)
 
     if (this.categories.getValue()[0]) {
-      this.category = this.categories.getValue()[0].id;
+      this.category = this.categories.getValue()[0]
+      this.category_id = this.category.id;
     }
     if (this.units.getValue()[0]) {
       this.unit = this.units.getValue()[0].id;
@@ -166,6 +168,7 @@ export class AddComponent implements OnInit {
 
     return {
       status: this.status,
+      category_id: this.category_id,
       category: this.category,
       price: this.price,
       base_price: this.base_price,
@@ -283,7 +286,8 @@ export class AddComponent implements OnInit {
       this.base_price = _.toString(product.base_price)
       this.unit = product.unit_id ? product.unit_id : null
       this.status = product.status
-      this.category = product.category_id ? product.category_id : null
+      this.category_id = product.category_id ? product.category_id : null
+      this.category = product.category_id ? this.categories.getValue().find(x => x.id == product.category_id) : null
       this.list_image = product.list_image
       this.product_type = product.product_type_id ? product.product_type_id : null
       let dataDefault = {
@@ -431,7 +435,8 @@ export class AddComponent implements OnInit {
         let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift, data } = this;
 
         let is_gift = isGift
-        let category_id = this.category ? this.category : undefined;
+        let category_id = this.category_id ? this.category_id : undefined;
+        let category = this.category_id ? this.categories.getValue().find(x => x.id == this.category_id) : undefined;
         let short_description = this.shortDescription;
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
@@ -439,7 +444,7 @@ export class AddComponent implements OnInit {
         if (!thumb && this.list_image.length > 0) thumb = this.list_image[0]
         let product = await this.innowayApi.product.add({
           name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
-          status, category_id, unit_id, product_type_id, list_image, is_gift, meta_data
+          status, category, category_id, unit_id, product_type_id, list_image, is_gift, meta_data
         })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
@@ -467,7 +472,8 @@ export class AddComponent implements OnInit {
         let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift, data } = this;
 
         let is_gift = isGift
-        let category_id = this.category ? this.category : undefined;
+        let category_id = this.category_id ? this.category_id : undefined;
+        let category = this.category_id ? this.categories.getValue().find(x => x.id == this.category_id) : undefined;
         let short_description = this.shortDescription;
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
@@ -475,7 +481,7 @@ export class AddComponent implements OnInit {
         if (!thumb && this.list_image.length > 0) thumb = this.list_image[0]
         let product = await this.innowayApi.product.add({
           name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
-          status, category_id, unit_id, product_type_id, list_image, isGift, meta_data
+          status, category, category_id, unit_id, product_type_id, list_image, isGift, meta_data
         })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
@@ -502,7 +508,8 @@ export class AddComponent implements OnInit {
       if (form.valid) {
         let { name, shortDescription, description, list_image, thumb, price, base_price, unit, status, isGift, data } = this;
         let is_gift = isGift
-        let category_id = this.category ? this.category : undefined;
+        let category_id = this.category_id ? this.category_id : undefined;
+        let category = this.category_id ? this.categories.getValue().find(x => x.id == this.category_id) : undefined;
         let unit_id = this.unit ? this.unit : undefined;
         let product_type_id = this.product_type ? this.product_type : undefined;
         let short_description = this.shortDescription;
@@ -510,7 +517,7 @@ export class AddComponent implements OnInit {
         if (!thumb && this.list_image.length > 0) thumb = this.list_image[0]
         let product = await this.innowayApi.product.update(this.id, {
           name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
-          status, category_id, unit_id, product_type_id, list_image, meta_data
+          status, category, category_id, unit_id, product_type_id, list_image, meta_data
         })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id ? item.id : undefined

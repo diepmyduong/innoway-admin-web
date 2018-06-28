@@ -57,7 +57,7 @@
                 <div class="form-group row">
                   <label class="col-md-2 header-text" for="select">Loại sản phẩm</label>
                   <div class="col-md-10">
-                    <select id="categorySelect" #categoryControl="ngModel" [(ngModel)]="category" name="category" class="form-control input-control">
+                    <select id="categorySelect" #categoryControl="ngModel" [(ngModel)]="category_id" name="category" class="form-control input-control">
                           <option value="null" disabled="true" [selected]="true">Chọn loại sản phẩm</option>
                           <option *ngFor="let v of categories | async" [value]="v.id">
                             {{v.name}}
