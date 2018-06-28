@@ -178,8 +178,24 @@ button:hover {
       }
     }
     .image-wrapper {
-      border-radius: 3px;
-      border: 1px solid $grey-mild;
+        box-sizing: border-box;
+        position: relative;
+        height: 0px;
+        width: 100%;
+        padding-bottom: 100%;
+        border-radius: 3px;
+        border: 1px solid $grey-mild;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+        }
     }
     .loading-wrapper {
       display: flex;
