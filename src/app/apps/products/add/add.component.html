@@ -27,8 +27,6 @@
                 <div class="form-group row">
                   <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
                   <div class="col-md-10">
-                    <!-- <textarea type="text" #descriptionControl="ngModel" [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Mô tả'"></textarea> -->
-                    <!-- <textarea [froalaEditor] [(ngModel)]="description" name="description" class="form-control input-control" [placeholder]="'Nhập mô tả'"></textarea> -->
                     <quill-editor [(ngModel)]="description" name="description" placeholder="'Nhập mô tả'" class="form-control input-control" style="border:none; padding: 0"></quill-editor>
                   </div>
                 </div>
@@ -158,7 +156,7 @@
                 Hình ảnh
                 <button type="submit" class="btn btn-sm btn-primary float-right ml-1" (click)="addImage()"><i class="fas fa-link"></i>Thêm URL</button>
                 <button type="submit" class="btn btn-sm btn-primary float-right" (click)="fileUploader.click()"><i class="fas fa-upload"></i>Upload ảnh</button>
-                <input [(ngModel)]="files" type="file" accept="image/*" #fileUploader (change)="onChangeImageFile($event)" 
+                <input [(ngModel)]="files" type="file" accept="image/*" #fileUploader (change)="onChangeImageFile($event)"
                 [hidden]="true" [ngModelOptions]="{standalone: true}" multiple>
               </div>
               <!-- <div class="card-block" *ngIf="falseococo">

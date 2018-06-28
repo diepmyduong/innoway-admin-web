@@ -14,6 +14,12 @@
               </div>
             </div>
             <div class="form-group row">
+              <label class="col-md-2 header-text" for="text-input">Tên dịch vụ</label>
+              <div class="col-md-10">
+                <input type="text" #codeControl="ngModel" [(ngModel)]="code" name="code" class="form-control input-control" [placeholder]="'Nhập mã công ty'">
+              </div>
+            </div>
+            <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Logo</label>
               <div class="col-md-10">
                 <input type="text" #logoControl="ngModel" [(ngModel)]="logo" name="logo" class="form-control input-control" [placeholder]="logo?'':'Nhập logo'" url required/>

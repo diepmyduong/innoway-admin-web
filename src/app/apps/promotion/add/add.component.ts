@@ -10,6 +10,8 @@ import * as moment from 'moment';
 import { Angular2Csv } from 'angular2-csv/Angular2-csv';
 import { BaseChartDirective } from "ng2-charts";
 
+import { JsonEditorComponent, JsonEditorOptions } from "angular4-jsoneditor/jsoneditor/jsoneditor.component";
+
 declare let accounting: any;
 declare let swal: any;
 // declare var $: any;
@@ -33,7 +35,6 @@ export class AddComponent implements OnInit, AddPageInterface {
   code: string;
   limit: number = 0;
   image: string;
-  public description;
   shortDescription: string;
   startDate: string;
   endDate: string;
@@ -62,6 +63,12 @@ export class AddComponent implements OnInit, AddPageInterface {
   closeImage: string = "https://d30y9cdsu7xlg0.cloudfront.net/png/55049-200.png";
   errorImage: string = "http://saveabandonedbabies.org/wp-content/uploads/2015/08/default.png";
 
+  public description = '';
+
+  public editorOptions: JsonEditorOptions;
+  public data: any = {};
+  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
@@ -75,6 +82,9 @@ export class AddComponent implements OnInit, AddPageInterface {
     this.model = {
       method: "url"
     };
+
+    this.editorOptions = new JsonEditorOptions()
+    this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
   }
 
   changeText(event) {

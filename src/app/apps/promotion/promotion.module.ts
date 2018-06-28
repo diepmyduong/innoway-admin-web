@@ -13,13 +13,11 @@ import { DataTableModule } from 'angular-2-data-table-bootstrap4';
 import { TextMaskModule } from 'angular2-text-mask';
 import { PipesModule } from 'app/pipes/pipes.module'
 
-// import { FroalaComponent } from "app/editor/froala.component";
-// import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 import { TabsModule } from 'ngx-bootstrap/tabs';
-
+import { QuillEditorModule } from "ngx-quill-editor";
+import { Ng4JsonEditorModule } from "angular4-jsoneditor";
 import { ChartsModule } from 'ng2-charts/ng2-charts';
-// import { FroalaComponent } from "app/apps/promotion/add/froala.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -29,13 +27,14 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
     LaddaModule,
     DataTableModule,
     TextMaskModule,
-    // FroalaEditorModule,
-    // FroalaViewModule,
 
     PipesModule,
     TabsModule,
 
-    ChartsModule
+    ChartsModule,
+
+    QuillEditorModule,
+    Ng4JsonEditorModule
   ],
   declarations: [
     PromotionComponent,
