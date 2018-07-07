@@ -219,7 +219,7 @@ export class AddComponent implements OnInit {
       let author_id = authorId
       let thumb = previewImage
       let blog_category_id = blogType
-      let meta_data = metaData
+      let meta_data: any = this.editor.get()
       await this.innowayApi.blog.add({ title, description, short_description, thumb, status, blog_category_id, author_id, content, meta_data })
       this.alertAddSuccess();
       form.reset();
@@ -236,7 +236,7 @@ export class AddComponent implements OnInit {
       let author_id = authorId
       let thumb = previewImage
       let blog_category_id = blogType
-      let meta_data = metaData
+      let meta_data: any = this.editor.get()
       await this.innowayApi.blog.update(this.id, { title, description, short_description, thumb, status, blog_category_id, author_id, content, meta_data })
       this.alertUpdateSuccess();
       form.reset();

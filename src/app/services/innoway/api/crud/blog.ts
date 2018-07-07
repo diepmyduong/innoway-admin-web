@@ -11,7 +11,8 @@ export interface iBlog extends iCrud {
   description?: string,
   short_description?: string,
   url?: string,
-  thumb?: string
+  thumb?: string,
+  meta_data?: JSON,
 }
 
 export class Blog extends CrudAPI<iBlog> {

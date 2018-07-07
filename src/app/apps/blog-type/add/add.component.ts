@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@an
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { InnowayApiService } from 'app/services/innoway';
+import { JsonEditorOptions, JsonEditorComponent } from "angular4-jsoneditor/jsoneditor/jsoneditor.component";
 
 declare let swal: any
 
@@ -34,12 +35,18 @@ export class AddComponent implements OnInit {
   closeImage: string = "https://d30y9cdsu7xlg0.cloudfront.net/png/55049-200.png";
   errorImage: string = "http://saveabandonedbabies.org/wp-content/uploads/2015/08/default.png";
 
+  public editorOptions: JsonEditorOptions;
+  public metaData: any;
+  @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
     public innowayApi: InnowayApiService
   ) {
+    this.editorOptions = new JsonEditorOptions()
+    this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
   }
 
   ngOnInit() {
@@ -62,12 +69,24 @@ export class AddComponent implements OnInit {
     this.shortDescription = null
     // this.description = null
     this.previewImage = null
+
+    this.metaData = {
+      "lang": {
+        "en": {
+          "name": "",
+          "short_description": "",
+          "description": ""
+        }
+      }
+    }
+
     return {
       status: this.status,
       name: this.name,
       shortDescription: this.shortDescription,
       // description: this.description,
-      previewImage: this.previewImage
+      previewImage: this.previewImage,
+      metaData: this.metaData
     }
   }
 
@@ -81,6 +100,17 @@ export class AddComponent implements OnInit {
       this.previewImage = category.thumb
       this.shortDescription = category.short_description
       // this.description = category.description
+      let dataDefault: any = {
+        "lang": {
+          "en": {
+            "name": "",
+            "short_description": "",
+            "description": ""
+          }
+        }
+      }
+      this.metaData = JSON.stringify(category.meta_data) != "{}" ? category.meta_data : dataDefault
+      this.editor.set(this.metaData)
       this.status = category.status
     } catch (err) {
       try { await this.alertItemNotFound() } catch (err) { }
@@ -146,10 +176,11 @@ export class AddComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, previewImage, status, shortDescription } = this;
+      let { name, previewImage, status, shortDescription, metaData } = this;
       let short_description = shortDescription;
       let thumb = previewImage
-      await this.innowayApi.blogType.add({ name, short_description, thumb, status })
+      let meta_data: any = this.editor.get()
+      await this.innowayApi.blogType.add({ name, short_description, thumb, status, meta_data })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -160,10 +191,11 @@ export class AddComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, previewImage, status, shortDescription } = this;
-      let short_description = shortDescription;
-      let thumb = previewImage;
-      await this.innowayApi.blogType.update(this.id, { name, short_description, thumb, status })
+      let { name, previewImage, status, shortDescription, metaData } = this;
+      let short_description = shortDescription
+      let thumb = previewImage
+      let meta_data: any = this.editor.get()
+      await this.innowayApi.blogType.update(this.id, { name, short_description, thumb, status, meta_data })
       this.alertUpdateSuccess();
       form.reset();
     } else {

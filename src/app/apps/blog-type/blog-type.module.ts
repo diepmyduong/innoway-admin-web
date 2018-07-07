@@ -15,6 +15,9 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { PipesModule } from 'app/pipes/pipes.module'
 import { SwiperModule } from 'angular2-useful-swiper';
 
+import { QuillEditorModule } from "ngx-quill-editor";
+import { Ng4JsonEditorModule } from "angular4-jsoneditor";
+
 // import { FroalaComponent } from "app/editor/froala.component";
 // import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 @NgModule({
@@ -29,6 +32,9 @@ import { SwiperModule } from 'angular2-useful-swiper';
     TextMaskModule,
 
     PipesModule,
+
+    QuillEditorModule,
+    Ng4JsonEditorModule
   ],
   declarations: [BlogTypeComponent, AddComponent, DetailComponent]
 })

@@ -6,7 +6,8 @@ export interface iBlogType extends iCrud {
   name?: string,
   name_vi?: string,
   short_description?: string,
-  thumb?: string
+  thumb?: string,
+  meta_data?: JSON,
 }
 
 export class BlogType extends CrudAPI<iBlogType> {
