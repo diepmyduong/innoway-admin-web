@@ -19,8 +19,8 @@
     <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true" [substituteRows]="false"
       [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
       <data-table-column property="thumb" header="Hình ảnh">
-        <template #dataTableCell let-item="item">
-                  <img height="50px" [src]="item.thumb?item.thumb:thumbDefault">
+        <template #dataTableCell let-item="item" lazy-load-images>
+                  <img height="50px" data-src="{{(item.thumb?item.thumb:thumbDefault) | compress}}">
               </template>
       </data-table-column>
       <data-table-column property="name" header="Tên" [sortable]="true">

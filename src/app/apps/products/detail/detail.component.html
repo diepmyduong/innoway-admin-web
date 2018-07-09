@@ -162,9 +162,9 @@
                     </div>
                   </div>
                   <div class="offset-md-2 col-md-10" *ngIf="previewImage">
-                    <span class="image-wrapper" *ngIf="previewImage">
+                    <span class="image-wrapper" *ngIf="previewImage" lazy-load-images>
                       <img class="close-btn" [attr.src]="closeImage" (click)="removeImage()" />
-                      <img id="preview-image" *ngIf="fileUploader.value || imageControl.value" [src]="previewImage" (error)="this.previewImage = this.errorImage" />
+                      <img id="preview-image" *ngIf="fileUploader.value || imageControl.value" data-src="{{previewImage | compress}}" (error)="this.previewImage = this.errorImage" />
                     </span>
                   </div>
                 </div>
@@ -203,8 +203,8 @@
               <div class="card-header">
                 Ảnh đại diện
               </div>
-              <div class="card-block" style="text-align: center">
-                <img style="width: 100px; height: 100px;" [src]="thumb" />
+              <div class="card-block" style="text-align: center" lazy-load-images>
+                <img style="width: 100px; height: 100px;" data-src="{{thumb | compress}}" />
               </div>
             </div>
           </div>
