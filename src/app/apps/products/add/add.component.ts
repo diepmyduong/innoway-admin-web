@@ -55,6 +55,14 @@ export class AddComponent implements OnInit {
   attributes = new BehaviorSubject<any[]>([]);
   productTypes = new BehaviorSubject<any[]>([]);
 
+  quillOptions = {
+    modules: {
+      toolbar: { handlers: { 
+        image: () => this.selectLocalImage() }
+      }
+    }
+  }
+
   isGift: boolean = false
   files: any[]
 
@@ -63,6 +71,7 @@ export class AddComponent implements OnInit {
     suffix: ' đ'
   })
 
+  @ViewChild('quillEditor') quill: any;
   @ViewChild('categoryControl') categoryControl: NgModel;
   @ViewChild('toppingSelecter') toppingSelecter: SelectComponent;
   @ViewChild('imageSwiper') imageSwiper: any;
@@ -126,6 +135,41 @@ export class AddComponent implements OnInit {
       subscription.unsubscribe()
     })
   }
+
+  ngAfterViewInit() {
+    this.quill.quillEditor.getModule("toolbar").addHandler("image", () => this.selectLocalImage());
+  }
+
+  selectLocalImage() {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.click();
+
+    // Listen upload local image and save to server
+    input.onchange = () => {
+      const file = input.files[0];
+
+      // file type is only image.
+      if (/^image\//.test(file.type)) {
+        this.saveToServer(file);
+      } else {
+        console.warn('You could only upload images.');
+      }
+    };
+  }
+
+  async saveToServer(file: File) {
+    this.innowayApi.upload.uploadImage(file).then(result => {
+      this.insertToEditor(result.link)
+    })
+  }
+
+  insertToEditor(url: string) {
+    // push image url to rich editor.
+      const range = this.quill.quillEditor.getSelection();
+      this.quill.quillEditor.insertEmbed(range.index, 'image', url);
+    }
+    
 
   setDefaultData() {
     this.status = 1;
