@@ -430,3 +430,9 @@ a {
         }
     }
 }
+
+.quill {
+    /deep/.ql-editor {
+        height: 50vh;
+    }
+}

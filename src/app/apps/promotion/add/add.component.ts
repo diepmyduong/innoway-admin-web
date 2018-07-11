@@ -53,6 +53,7 @@ export class AddComponent implements OnInit, AddPageInterface {
   // promotionTypeData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   model: any;
 
+  @ViewChild('quillEditor') quill: any;
   @ViewChild("fileUploader")
   fileUploader: ElementRef;
 
@@ -136,6 +137,40 @@ export class AddComponent implements OnInit, AddPageInterface {
       }
     };
   }
+
+  ngAfterViewInit() {
+    this.quill.quillEditor.getModule("toolbar").addHandler("image", () => this.selectLocalImage());
+  }
+
+  selectLocalImage() {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.click();
+
+    // Listen upload local image and save to server
+    input.onchange = () => {
+      const file = input.files[0];
+
+      // file type is only image.
+      if (/^image\//.test(file.type)) {
+        this.saveToServer(file);
+      } else {
+        console.warn('You could only upload images.');
+      }
+    };
+  }
+
+  async saveToServer(file: File) {
+    this.innowayApi.upload.uploadImage(file).then(result => {
+      this.insertToEditor(result.link)
+    })
+  }
+
+  insertToEditor(url: string) {
+    // push image url to rich editor.
+      const range = this.quill.quillEditor.getSelection();
+      this.quill.quillEditor.insertEmbed(range.index, 'image', url);
+    }
 
   private pieChartColors = [
     {
