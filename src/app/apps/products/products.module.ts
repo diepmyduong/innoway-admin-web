@@ -4,7 +4,6 @@ import { ProductsComponent } from './products.component';
 import { ProductsRoutingModule } from './products-routing.module';
 import { AddComponent } from './add/add.component';
 
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { DetailComponent } from './detail/detail.component';
 import { VSChecklistModule } from 'ng2-vs-checklist';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
@@ -16,9 +15,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 // Ng2-select
 import { SelectModule } from 'ng2-select';
 
-import { UploadImageByUrlComponent } from 'app/modal/upload-image-by-url/upload-image-by-url.component';
-
-import { ModalModule as Ng2ModalModule } from 'angular2-modal';
 import { ModalModule as CustomModal} from 'app/modal/modal.module';
 
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
@@ -35,7 +31,7 @@ import { ToppingDetailComponent } from './topping-detail/topping-detail.componen
 import { MatCheckboxModule, MatTooltipModule } from "@angular/material";
 import { QuillEditorModule } from "ngx-quill-editor";
 import { Ng4JsonEditorModule } from "angular4-jsoneditor";
-import { TooltipModule } from 'ngx-bootstrap';
+import { TooltipModule, BsDropdownModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
@@ -59,6 +55,7 @@ import { TooltipModule } from 'ngx-bootstrap';
     MatCheckboxModule,
     MatTooltipModule,
     TooltipModule.forRoot(),
+    BsDropdownModule.forRoot(),
 
     QuillEditorModule,
     Ng4JsonEditorModule
