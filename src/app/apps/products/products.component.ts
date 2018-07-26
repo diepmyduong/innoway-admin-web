@@ -20,6 +20,8 @@ export class ProductsComponent implements OnInit {
     public innowayApi: InnowayApiService
   ) {
   }
+  search_text: any = ''
+  selectedCategory: any = ''
   public categories: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([])
   public items: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   public itemCount = 0; // item total  count
@@ -33,6 +35,7 @@ export class ProductsComponent implements OnInit {
   public query: any = {}
   public searchTimeOut = 250;
   public searchRef: any;
+  loadDone = false
   // subscriptions: Subscription[] = []
 
   @ViewChild('itemsTable') itemsTable: DataTable;
@@ -69,6 +72,11 @@ export class ProductsComponent implements OnInit {
     }
   }
 
+  async changeCategory() {
+    
+    this.getItems();
+  }
+
   // ngOnDestroy() {
   //   this.subscriptions.forEach(subscription => {
   //     subscription.unsubscribe()
@@ -84,6 +92,14 @@ export class ProductsComponent implements OnInit {
   }
 
   async getItems() {
+    this.loadDone = false
+
+    this.query.filter = {}
+    this.query.filter.name_vi = { $iLike: "%" + this.convertViToEng(this.search_text) + "%" }
+    if (this.selectedCategory) {
+      this.query.filter.category_id = this.selectedCategory
+    }
+
     let query = Object.assign({
       fields: this.itemFields
     }, this.query);
@@ -98,6 +114,7 @@ export class ProductsComponent implements OnInit {
     this.itemCount = this.innowayApi.product.pagination.totalItems
     this.ref.detectChanges();
     console.log('items', this.items.getValue()[0])
+    this.loadDone = true
 
     return this.items;
   }
@@ -200,18 +217,7 @@ export class ProductsComponent implements OnInit {
   }
 
   onSearch(e) {
-    console.log("search", e)
-    const key = e.target.value;
-    if (this.searchRef) clearTimeout(this.searchRef);
-    this.searchRef = setTimeout(() => {
-      this.query.filter = {
-        $or: {
-          name: { $iLike: `%${key}%` },
-          description: { $iLike: `%${key}%` },
-        }
-      }
-      this.getItems();
-    }, this.searchTimeOut);
+    this.getItems();
   }
 
   async export() {
@@ -253,5 +259,38 @@ export class ProductsComponent implements OnInit {
     } catch (err) {
       console.log("onChangeImportFile", err);
     }
+  }
+
+  convertViToEng(string) {
+      let obj = {
+          Đ: 'D', đ: 'd', â: 'a',
+          ă: 'a', ê: 'e', ô: 'o', ơ: 'o',
+          ư: 'u',
+          á: 'a', à: 'a', ạ: 'a', ả: 'a', ã: 'a',
+          ắ: 'a', ằ: 'a', ặ: 'a', ẳ: 'a', ẵ: 'a',
+          ấ: 'a', ầ: 'a', ậ: 'a', ẩ: 'a', ẫ: 'a',
+          é: 'e', è: 'e', ẻ: 'e', ẽ: 'e', ẹ: 'e',
+          ế: 'e', ề: 'e', ể: 'e', ễ: 'e', ệ: 'e',
+          ý: 'y', ỳ: 'y', ỵ: 'y', ỷ: 'y', ỹ: 'y',
+          ú: 'u', ù: 'u', ủ: 'u', ũ: 'u', ụ: 'u',
+          ứ: 'u', ừ: 'u', ử: 'u', ữ: 'u', ự: 'u',
+          í: 'i', ì: 'i', ị: 'i', ỉ: 'i', ĩ: 'i',
+          ó: 'o', ò: 'o', ỏ: 'o', õ: 'o', ọ: 'o',
+          ố: 'o', ồ: 'o', ổ: 'o', ỗ: 'o', ộ: 'o',
+          ớ: 'o', ờ: 'o', ở: 'o', ỡ: 'o', ợ: 'o'
+      }
+  
+      string = string.trim();
+      string = string.toLowerCase();
+  
+      let arr = string.split('');
+  
+      for (let i in arr) {
+          if (obj[arr[i]]) {
+              arr[i] = obj[arr[i]];
+          }
+      }
+  
+      return arr.join('');
   }
 }

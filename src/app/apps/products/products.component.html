@@ -1,8 +1,9 @@
 <div class="animated fadeIn">
 
   <div class="row">
-    <h3 class="col-6">Danh sách sản phẩm</h3>
+    <h3 class="col-6">Danh sách sản phẩm<i class="fas fa-circle-notch fa-spin ml-1" style="font-size: 14px" [hidden]="loadDone"></i></h3>
     <div class="col-6 button-center">
+
       <button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fas fa-plus"></i>Thêm sản phẩm</button>
       <button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i class="fas fa-trash"></i>Xóa sản phẩm</button>
     </div>
@@ -11,7 +12,16 @@
   <div class="table-wrapper">
     <div class="search-bar">
       <p>Tìm kiếm</p>
-      <input type="text" class="input-control form-control" (keyup)="onSearch($event)">
+      <input type="text" class="input-control form-control" [(ngModel)]="search_text" (keydown.enter)="onSearch($event)"
+      (blur)="onSearch($event)">
+
+      <select class="category-select" [(ngModel)]="selectedCategory" (ngModelChange)="changeCategory()">
+        <option value="">Tất cả</option>
+        <option *ngFor="let cat of categories | async " [value]="cat.id">
+          {{cat.name}}
+        </option>
+      </select>
+
       <button class="btn btn-md button-default-primary ml-h" (click)="export()"><i class="fas fa-sign-out-alt"></i>Xuất dữ liệu</button>
       <input type="file" #fileImportUploader name="file-input" #file (change)="import($event)" [hidden]="true">
       <button class="btn btn-md button-default-primary ml-h" (click)="file.click()"><i class="fas fa-sign-in-alt"></i>Nhập dữ liệu</button>
