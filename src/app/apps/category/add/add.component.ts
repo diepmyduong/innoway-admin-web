@@ -26,11 +26,10 @@ export class AddComponent implements OnInit {
 
   @ViewChild("fileUploader")
   fileUploader: ElementRef;
-
   progress: boolean | number = false;
-
   isUploadImage: boolean = false;
   fileUpload: File;
+
   previewImage: string;
   closeImage: string = "https://d30y9cdsu7xlg0.cloudfront.net/png/55049-200.png";
   errorImage: string = "http://saveabandonedbabies.org/wp-content/uploads/2015/08/default.png";

@@ -11,7 +11,7 @@
   font-size: 1.5rem;
 }
 
-.header-text { 
+.header-text {
   text-align:right;
   color: $bluegrey-darker;
   font-size: 0.85rem;
@@ -174,4 +174,22 @@ img {
   -moz-background-size:30px 30px;
   background-size:30px 30px;
   background-position:0 0, 15px 15px;
+}
+
+.close-btn {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  margin-top: 5px;
+  right: -20px;
+}
+
+.preview-image{
+  width:auto;
+  height:80px;
+  margin-top:0.25rem;
+}
+
+.image-wrapper{
+  position: relative;
 }

@@ -11,7 +11,7 @@
   font-size: 1.5rem;
 }
 
-.header-text { 
+.header-text {
   color: $bluegrey-darker;
   font-size: 0.85rem;
   font-weight: bold;
@@ -170,4 +170,22 @@ button:hover {
 agm-map {
   height: 300px;
   width: 100% !important;
+}
+
+.close-btn {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  margin-top: 5px;
+  right: -20px;
+}
+
+#preview-image{
+  width:auto;
+  height:80px;
+  margin-top:0.25rem;
+}
+
+.image-wrapper{
+  position: relative;
 }

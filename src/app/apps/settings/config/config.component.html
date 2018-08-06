@@ -20,16 +20,26 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Logo</label>
+              <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
               <div class="col-md-10">
-                <input type="text" #logoControl="ngModel" [(ngModel)]="logo" name="logo" class="form-control input-control" [placeholder]="logo?'':'Nhập logo'" url required/>
-                <small *ngIf="logoControl.errors?.url" class="text-muted danger">
-                    (Link không hợp lệ)
-                  </small>
-                  <small *ngIf="logoControl.errors?.required" class="text-muted danger">
-                      (Không thể bỏ trống)
-                    </small>
-                <img *ngIf="logoControl.value && logoControl.valid" style="width:auto;height:80px;margin-top:0.25rem;" [src]="logoControl.value" />
+                <div class="input-group">
+                  <input type="file" name="file-input" #fileUploader (change)="onChangeImageFile($event)" [style.display]="'none'">
+                  <input type="text" #imageControl="ngModel" [(ngModel)]="logo" (input)="onImageChangeData($event.target.value)" name="logo" url class="form-control input-control" [placeholder]="logo?'':'Nhập url'" />
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-ladda ladda-button btn-primary" [ladda]="progress" (click)="fileUploader.click()"
+                    data-style="contract-overlay" style="z-index: 10;">
+                      <span class="ladda-label">Đăng ảnh</span>
+                  <span class="ladda-spinner"></span>
+                  <div class="ladda-progress" style="width: 0px;"></div>
+                  </button>
+                  </span>
+                </div>
+              </div>
+              <div class="offset-md-2 col-md-10" *ngIf="previewImage">
+                <span class="image-wrapper" *ngIf="previewImage">
+                  <img class="close-btn" [attr.src]="closeImage" (click)="removeImage()" />
+                  <img id="preview-image" *ngIf="fileUploader.value || imageControl.value" [src]="previewImage" (error)="this.previewImage = this.errorImage" />
+                </span>
               </div>
             </div>
             <div class="form-group row">
@@ -85,47 +95,6 @@
                     </select>
               </div>
             </div>
-            <!-- <div class="form-group row">
-              <label class="col-md-2 header-text" for="select">Nhóm kinh doanh</label>
-              <div class="col-md-10">
-                <select id="select" name="select" class="form-control input-control" size="1">
-                  <option value="0">Chọn nhóm kinh doanh</option>
-                  <option value="1">Dịch vụ ăn uống</option>
-                  <option value="2">Cho thuê nhân sự</option>
-                  <option value="3">Khác</option>
-                </select>
-              </div>
-            </div> -->
-            <!-- <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Thời gian trial</label>
-              <div class="col-md-10">
-                <input type="text" #dateModelControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="trialExpire" name="trialExpire" class="form-control input-control" [placeholder]="'Nhập trial'">
-              </div>
-            </div> -->
-            <!-- <div class="form-group row">
-              <label class="col-md-2 header-text" for="select">Gói dịch vụ</label>
-              <div class="col-md-10">
-                <select id="select" name="select" class="form-control input-control" size="1">
-                  <option value="0">Chọn gói dịch vụ</option>
-                  <option value="1">Gói A</option>
-                  <option value="2">Gói B</option>
-                  <option value="3">Gói C</option>
-                </select>
-              </div>
-            </div>
-            <hr>
-            <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Hạn mức ký quỹ</label>
-              <div class="col-md-10">
-                <input type="text" #depositControl="ngModel" [(ngModel)]="deposit" name="deposit" class="form-control input-control" [placeholder]="'Nhập tiền ký quỹ'">
-              </div>
-            </div> -->
-            <!-- <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Giờ mở cửa</label>
-              <div class="col-md-10">
-                <input type="text" #dateModelControl="ngModel" [textMask]="{mask: dateMask}" [(ngModel)]="trialExpire" name="trialExpire" class="form-control input-control" [placeholder]="'Nhập trial'">
-              </div>
-            </div> -->
             <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Thanh toán online</label>
               <div class="col-md-10">

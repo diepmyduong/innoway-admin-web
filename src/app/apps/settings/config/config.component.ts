@@ -89,6 +89,16 @@ export class ConfigComponent implements OnInit {
     }
   ]
 
+  @ViewChild("fileUploader")
+  fileUploader: ElementRef;
+  progress: boolean | number = false;
+  isUploadImage: boolean = false;
+  fileUpload: File;
+
+  previewImage: string;
+  closeImage: string = "https://d30y9cdsu7xlg0.cloudfront.net/png/55049-200.png";
+  errorImage: string = "http://saveabandonedbabies.org/wp-content/uploads/2015/08/default.png";
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
@@ -195,6 +205,7 @@ export class ConfigComponent implements OnInit {
       }
       this.isOnlinePayment = data.is_enable_online_payment
       this.logo = data.logo
+      this.previewImage = data.logo
       this.trialExpire = data.trail_expire
       this.status = data.status
       this.address = data.address
@@ -329,9 +340,7 @@ export class ConfigComponent implements OnInit {
           open_hour_online, close_hour_online, open_days_of_week, brand_category_id, status, is_enable_online_payment, code
         })
         this.alertUpdateSuccess();
-        // form.reset();
       } catch (err) {
-        // alert(err.toString())
       }
     } else {
       this.alertFormNotValid();
@@ -404,5 +413,43 @@ export class ConfigComponent implements OnInit {
     } catch (err) {
 
     }
+  }
+
+  async onChangeImageFile(event) {
+    let files = this.fileUploader.nativeElement.files
+    let file = files[0]
+    try {
+      let response = await this.innowayApi.upload.uploadImage(file)
+      this.previewImage = response.link
+      this.logo = response.link
+    } catch (err) {
+    }
+  }
+
+  onImageError(event) {
+    this.previewImage = this.errorImage;
+  }
+
+  onImageChangeData(event) {
+    this.previewImage = event;
+  }
+
+  removeImage() {
+    this.previewImage = undefined;
+  }
+
+  startLoading() {
+    this.progress = 0;
+    setTimeout(() => {
+      this.progress = 0.5;
+    }, 30000);
+  }
+
+  endLoading() {
+    this.progress = 1;
+
+    setTimeout(() => {
+      this.progress = false;
+    }, 200);
   }
 }

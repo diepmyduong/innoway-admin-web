@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { CustomValidators } from "ng2-validation/dist";
 import { InnowayApiService } from 'app/services/innoway'
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
@@ -46,6 +46,35 @@ export class ThemeComponent implements OnInit {
   priceColorpickerColor: string;
 
   id: string;
+
+  @ViewChild("fileLogoUploader")
+  fileLogoUploader: ElementRef;
+  @ViewChild("fileBannerLogoUploader")
+  fileBannerLogoUploader: ElementRef;
+  @ViewChild("fileBackgroundImageUploader")
+  fileBackgroundImageUploader: ElementRef;
+  @ViewChild("fileProductImageUploader")
+  fileProductImageUploader: ElementRef;
+  @ViewChild("fileLogoCircleUploader")
+  fileLogoCircleUploader: ElementRef;
+
+  progress: boolean | number = false;
+  isUploadImage: boolean = false;
+
+  fileLogoUpload: File;
+  fileBannerLogoUpload: File;
+  fileBannerImageUpload: File;
+  fileProductImageUpload: File;
+  fileLogoCircleUpload: File;
+
+  previewLogoImage: string;
+  previewBannerLogoImage: string;
+  previewBackgroundImage: string;
+  previewProductImage: string;
+  previewLogoCircleImage: string;
+
+  closeImage: string = "https://d30y9cdsu7xlg0.cloudfront.net/png/55049-200.png";
+  errorImage: string = "http://saveabandonedbabies.org/wp-content/uploads/2015/08/default.png";
 
   constructor(
     private innowayApi: InnowayApiService,
@@ -106,11 +135,15 @@ export class ThemeComponent implements OnInit {
       this.dark = data.dark;
       this.darkpickerColor = data.dark;
       this.logo = data.logo;
+      this.previewLogoImage = data.logo;
       this.bannerLogo = data.banner_logo;
+      this.previewBannerLogoImage = data.banner_logo;
       this.bannerBackgroundImage = data.banner_background_image;
+      this.previewBackgroundImage = data.banner_background_image;
       this.bannerBackgroundColor = data.banner_background_color;
       this.bannerBackgroundColorpickerColor = data.banner_background_color;
       this.defaultProductImage = data.default_product_image;
+      this.previewProductImage = data.default_product_image;
       this.defaultProductColor = data.default_product_color;
       this.defaultProductColorpickerColor = data.default_product_color;
       this.defaultPromotionCover = data.default_promotion_cover;
@@ -121,28 +154,13 @@ export class ThemeComponent implements OnInit {
       this.priceColor = data.price_color;
       this.priceColorpickerColor = data.price_color;
       this.logoCircle = data.logo_circle;
+      this.previewLogoCircleImage = data.logo_circle;
       this.contentJSON = JSON.stringify(data)
-      console.log("getTheme", JSON.stringify(data))
       this.ref.detectChanges()
     } catch (err) {
 
     }
   }
-
-  // {
-  //             primary: "#2ba8d6",
-  //             light: "#6edaff",
-  //             dark: "#0079a4",
-  //             banner_logo: "https://i.imgur.com/aHN8fUc.png",
-  //             banner_background_image: "https://i.imgur.com/mDy5P4w.png",
-  //             banner_background_color: "",
-  //             default_product_image: "",
-  //             default_promotion_cover: "",
-  //             navbar_color: "",
-  //             footer_color: "",
-  //             price_color: "#ffc107",
-  //             logo_circle: "https://i.imgur.com/ZeXC8pg.png"
-  //         }
 
   async updateTheme() {
     try {
@@ -189,5 +207,154 @@ export class ThemeComponent implements OnInit {
     })
   }
 
+  async onChangeImageFile(event, type) {
+    switch (type) {
+      case "logo": {
+        let files = this.fileLogoUploader.nativeElement.files
+        let file = files[0]
+        try {
+          let response = await this.innowayApi.upload.uploadImage(file)
+          this.previewLogoImage = response.link
+          this.logo = response.link
+        } catch (err) {
+        }
+        break;
+      }
+      case "banner_logo": {
+        let files = this.fileBannerLogoUploader.nativeElement.files
+        let file = files[0]
+        try {
+          let response = await this.innowayApi.upload.uploadImage(file)
+          this.previewBannerLogoImage = response.link
+          this.bannerLogo = response.link
+        } catch (err) {
+        }
+        break;
+      }
+      case "background_image": {
+        let files = this.fileBackgroundImageUploader.nativeElement.files
+        let file = files[0]
+        try {
+          let response = await this.innowayApi.upload.uploadImage(file)
+          this.previewBackgroundImage = response.link
+          this.bannerBackgroundImage = response.link
+        } catch (err) {
+        }
+        break;
+      }
+      case "product_image": {
+        let files = this.fileProductImageUploader.nativeElement.files
+        let file = files[0]
+        try {
+          let response = await this.innowayApi.upload.uploadImage(file)
+          this.previewProductImage = response.link
+          this.defaultProductImage = response.link
+        } catch (err) {
+        }
+        break;
+      }
+      case "logo_circle": {
+        let files = this.fileLogoCircleUploader.nativeElement.files
+        let file = files[0]
+        try {
+          let response = await this.innowayApi.upload.uploadImage(file)
+          this.previewLogoCircleImage = response.link
+          this.logoCircle = response.link
+        } catch (err) {
+        }
+        break;
+      }
+    }
+  }
+
+  onImageError(event, type) {
+    switch (type) {
+      case "logo": {
+        this.previewLogoImage = this.errorImage;
+        break;
+      }
+      case "banner_logo": {
+        this.previewBannerLogoImage = this.errorImage;
+        break;
+      }
+      case "background_image": {
+        this.previewBackgroundImage = this.errorImage;
+        break;
+      }
+      case "product_image": {
+        this.previewProductImage = this.errorImage;
+        break;
+      }
+      case "logo_circle": {
+        this.previewLogoCircleImage = this.errorImage;
+        break;
+      }
+    }
+  }
+
+  onImageChangeData(event, type) {
+    switch (type) {
+      case "logo": {
+        this.previewLogoImage = event;
+        break;
+      }
+      case "banner_logo": {
+        this.previewBannerLogoImage = event;
+        break;
+      }
+      case "background_image": {
+        this.previewBackgroundImage = event;
+        break;
+      }
+      case "product_image": {
+        this.previewProductImage = event;
+        break;
+      }
+      case "logo_circle": {
+        this.previewLogoCircleImage = event;
+        break;
+      }
+    }
+  }
+
+  removeImage(type) {
+    switch (type) {
+      case "logo": {
+        this.previewLogoImage = undefined;
+        break;
+      }
+      case "banner_logo": {
+        this.previewBannerLogoImage = undefined;
+        break;
+      }
+      case "background_image": {
+        this.previewBackgroundImage = undefined;
+        break;
+      }
+      case "product_image": {
+        this.previewProductImage = undefined;
+        break;
+      }
+      case "logo_circle": {
+        this.previewLogoCircleImage = undefined;
+        break;
+      }
+    }
+  }
+
+  startLoading() {
+    this.progress = 0;
+    setTimeout(() => {
+      this.progress = 0.5;
+    }, 30000);
+  }
+
+  endLoading() {
+    this.progress = 1;
+
+    setTimeout(() => {
+      this.progress = false;
+    }, 200);
+  }
 
 }

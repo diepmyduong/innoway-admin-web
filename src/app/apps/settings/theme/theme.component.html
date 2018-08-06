@@ -22,7 +22,7 @@
         </div>
         <div class="card-block">
           <form #itemFrm="ngForm">
-            <div class="form-group row">
+            <!-- <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Logo</label>
               <div class="col-md-10">
                 <input type="text" #logoControl="ngModel" [(ngModel)]="logo" name="logo" url class="form-control input-control" [placeholder]="image?'':'Nhập logo'" />
@@ -30,6 +30,29 @@
                     (Link không hợp lệ)
                 </small>
                 <img *ngIf="logoControl.value && logoControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="logoControl.value" />
+              </div>
+            </div> -->
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="textarea-input">Logo</label>
+              <div class="col-md-10">
+                <div class="input-group">
+                  <input type="file" name="file-input" #fileLogoUploader (change)="onChangeImageFile($event,'logo')" [style.display]="'none'">
+                  <input type="text" #logoControl="ngModel" [(ngModel)]="logo" (input)="onImageChangeData($event.target.value,'logo')" name="logo" url class="form-control input-control" [placeholder]="logo?'':'Nhập url'" />
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-ladda ladda-button btn-primary" [ladda]="progress" (click)="fileLogoUploader.click()"
+                    data-style="contract-overlay" style="z-index: 10;">
+                      <span class="ladda-label">Đăng ảnh</span>
+                  <span class="ladda-spinner"></span>
+                  <div class="ladda-progress" style="width: 0px;"></div>
+                  </button>
+                  </span>
+                </div>
+              </div>
+              <div class="offset-md-2 col-md-10" *ngIf="previewLogoImage">
+                <span class="image-wrapper" *ngIf="previewLogoImage">
+                  <img class="close-btn" [attr.src]="closeImage" (click)="removeImage('logo')" />
+                  <img class="preview-image" *ngIf="fileLogoUploader.value || logoControl.value" [src]="previewLogoImage" (error)="this.previewLogoImage = this.errorImage" />
+                </span>
               </div>
             </div>
             <div class="form-group row">
@@ -53,7 +76,7 @@
                 <input [(colorPicker)]="darkpickerColor" [style.background]="darkpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'dark');darkpickerColor=$event" />
               </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Banner Logo</label>
               <div class="col-md-10">
                 <input type="text" #bannerLogoControl="ngModel" [(ngModel)]="bannerLogo" name="bannerLogo" class="form-control input-control" [placeholder]="'Nhập mã màu'">
@@ -62,8 +85,31 @@
                   </small>
                 <img *ngIf="bannerLogoControl.value && bannerLogoControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="bannerLogoControl.value" />
               </div>
-            </div>
+            </div> -->
             <div class="form-group row">
+              <label class="col-md-2 header-text" for="textarea-input">Banner Logo</label>
+              <div class="col-md-10">
+                <div class="input-group">
+                  <input type="file" name="file-input" #fileBannerLogoUploader (change)="onChangeImageFile($event,'banner_logo')" [style.display]="'none'">
+                  <input type="text" #bannerLogoControl="ngModel" [(ngModel)]="bannerLogo" (input)="onImageChangeData($event.target.value,'banner_logo')" name="bannerLogo" url class="form-control input-control" [placeholder]="logo?'':'Nhập url'" />
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-ladda ladda-button btn-primary" [ladda]="progress" (click)="fileBannerLogoUploader.click()"
+                    data-style="contract-overlay" style="z-index: 10;">
+                      <span class="ladda-label">Đăng ảnh</span>
+                  <span class="ladda-spinner"></span>
+                  <div class="ladda-progress" style="width: 0px;"></div>
+                  </button>
+                  </span>
+                </div>
+              </div>
+              <div class="offset-md-2 col-md-10" *ngIf="previewBannerLogoImage">
+                <span class="image-wrapper" *ngIf="previewBannerLogoImage">
+                  <img class="close-btn" [attr.src]="closeImage" (click)="removeImage('banner_logo')" />
+                  <img class="preview-image" *ngIf="fileBannerLogoUploader.value || bannerLogoControl.value" [src]="previewBannerLogoImage" (error)="this.previewBannerLogoImage = this.errorImage" />
+                </span>
+              </div>
+            </div>
+            <!-- <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Banner Background Image</label>
               <div class="col-md-10">
                 <input type="text" #bannerBackgroundImageControl="ngModel" [(ngModel)]="bannerBackgroundImage" name="bannerBackgroundImage" class="form-control input-control" [placeholder]="'Nhập mã màu'">
@@ -71,6 +117,29 @@
                     (Link không hợp lệ)
                   </small>
                 <img *ngIf="bannerBackgroundImageControl.value && bannerBackgroundImageControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="bannerBackgroundImageControl.value" />
+              </div>
+            </div> -->
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="textarea-input">Banner Background Image</label>
+              <div class="col-md-10">
+                <div class="input-group">
+                  <input type="file" name="file-input" #fileBackgroundImageUploader (change)="onChangeImageFile($event,'background_image')" [style.display]="'none'">
+                  <input type="text" #bannerBackgroundImageControl="ngModel" [(ngModel)]="bannerBackgroundImage" (input)="onImageChangeData($event.target.value,'background_image')" name="bannerBackgroundImage" url class="form-control input-control" [placeholder]="bannerBackgroundImage?'':'Nhập url'" />
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-ladda ladda-button btn-primary" [ladda]="progress" (click)="fileBackgroundImageUploader.click()"
+                    data-style="contract-overlay" style="z-index: 10;">
+                      <span class="ladda-label">Đăng ảnh</span>
+                  <span class="ladda-spinner"></span>
+                  <div class="ladda-progress" style="width: 0px;"></div>
+                  </button>
+                  </span>
+                </div>
+              </div>
+              <div class="offset-md-2 col-md-10" *ngIf="previewBackgroundImage">
+                <span class="image-wrapper" *ngIf="previewBackgroundImage">
+                  <img class="close-btn" [attr.src]="closeImage" (click)="removeImage('background_image')" />
+                  <img class="preview-image" *ngIf="fileBackgroundImageUploader.value || bannerBackgroundImageControl.value" [src]="previewBackgroundImage" (error)="this.previewBackgroundImage = this.errorImage" />
+                </span>
               </div>
             </div>
             <div class="form-group row">
@@ -80,7 +149,7 @@
                 <input [(colorPicker)]="bannerBackgroundColorpickerColor" [style.background]="bannerBackgroundColorpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'bannerBackgroundColor');bannerBackgroundColorpickerColor=$event" />
               </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Default Product Image</label>
               <div class="col-md-10">
                 <input type="text" #defaultProductImageControl="ngModel" [(ngModel)]="defaultProductImage" name="defaultProductImage" class="form-control input-control" [placeholder]="'Nhập mã màu'">
@@ -88,6 +157,29 @@
                     (Link không hợp lệ)
                   </small>
                 <img *ngIf="defaultProductImageControl.value && defaultProductImageControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="defaultProductImageControl.value" />
+              </div>
+            </div> -->
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="textarea-input">Default Product Image</label>
+              <div class="col-md-10">
+                <div class="input-group">
+                  <input type="file" name="file-input" #fileProductImageUploader (change)="onChangeImageFile($event,'product_image')" [style.display]="'none'">
+                  <input type="text" #defaultProductImageControl="ngModel" [(ngModel)]="defaultProductImage" (input)="onImageChangeData($event.target.value,'product_image')" name="defaultProductImage" url class="form-control input-control" [placeholder]="defaultProductImage?'':'Nhập url'" />
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-ladda ladda-button btn-primary" [ladda]="progress" (click)="fileProductImageUploader.click()"
+                    data-style="contract-overlay" style="z-index: 10;">
+                      <span class="ladda-label">Đăng ảnh</span>
+                  <span class="ladda-spinner"></span>
+                  <div class="ladda-progress" style="width: 0px;"></div>
+                  </button>
+                  </span>
+                </div>
+              </div>
+              <div class="offset-md-2 col-md-10" *ngIf="previewProductImage">
+                <span class="image-wrapper" *ngIf="previewProductImage">
+                  <img class="close-btn" [attr.src]="closeImage" (click)="removeImage('product_image')" />
+                  <img class="preview-image" *ngIf="fileProductImageUploader.value || defaultProductImageControl.value" [src]="previewProductImage" (error)="this.previewProductImage = this.errorImage" />
+                </span>
               </div>
             </div>
             <div class="form-group row">
@@ -128,7 +220,7 @@
                 <input [(colorPicker)]="priceColorpickerColor" [style.background]="priceColorpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'priceColor');priceColorpickerColor=$event" />
               </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Logo Circle</label>
               <div class="col-md-10">
                 <input type="text" #logoCircleControl="ngModel" [(ngModel)]="logoCircle" name="logoCircle" class="form-control input-control" [placeholder]="'Nhập mã màu'">
@@ -136,6 +228,29 @@
                     (Link không hợp lệ)
                   </small>
                 <img *ngIf="logoCircleControl.value && logoCircleControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="logoCircleControl.value" />
+              </div>
+            </div> -->
+            <div class="form-group row">
+              <label class="col-md-2 header-text" for="textarea-input">Logo Circle</label>
+              <div class="col-md-10">
+                <div class="input-group">
+                  <input type="file" name="file-input" #fileLogoCircleUploader (change)="onChangeImageFile($event,'logo_circle')" [style.display]="'none'">
+                  <input type="text" #logoCircleControl="ngModel" [(ngModel)]="logoCircle" (input)="onImageChangeData($event.target.value,'logo_circle')" name="logoCircle" url class="form-control input-control" [placeholder]="logoCircle?'':'Nhập url'" />
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-ladda ladda-button btn-primary" [ladda]="progress" (click)="fileLogoCircleUploader.click()"
+                    data-style="contract-overlay" style="z-index: 10;">
+                      <span class="ladda-label">Đăng ảnh</span>
+                  <span class="ladda-spinner"></span>
+                  <div class="ladda-progress" style="width: 0px;"></div>
+                  </button>
+                  </span>
+                </div>
+              </div>
+              <div class="offset-md-2 col-md-10" *ngIf="previewLogoCircleImage">
+                <span class="image-wrapper" *ngIf="previewLogoCircleImage">
+                  <img class="close-btn" [attr.src]="closeImage" (click)="removeImage('logo_circle')" />
+                  <img class="preview-image" *ngIf="fileLogoCircleUploader.value || logoCircleControl.value" [src]="previewLogoCircleImage" (error)="this.previewLogoCircleImage = this.errorImage" />
+                </span>
               </div>
             </div>
             <div class="form-group row" [hidden]="true">
