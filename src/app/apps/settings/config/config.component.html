@@ -14,7 +14,7 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Tên dịch vụ</label>
+              <label class="col-md-2 header-text" for="text-input">Mã dịch vụ</label>
               <div class="col-md-10">
                 <input type="text" #codeControl="ngModel" [(ngModel)]="code" name="code" class="form-control input-control" [placeholder]="'Nhập mã công ty'">
               </div>
@@ -48,16 +48,7 @@
                 <input type="text" #colorControl="ngModel" [(ngModel)]="color" name="color" class="form-control input-control" [placeholder]="'Nhập mã màu'">
                 <input [(colorPicker)]="color" [style.background]="color" (colorPickerChange)="rgbaText=onChangeColorHex8($event);color=$event" />
               </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Tên chủ dịch vụ</label>
-              <div class="col-md-10">
-                <input type="text" #ownerControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Nhập tên chủ dịch vụ'" required>
-                <small *ngIf="ownerControl.errors?.required" class="text-muted danger">
-                    (Không thể bỏ trống)
-                  </small>
-              </div>
-            </div>
+            </div>  
             <div class="form-group row">
               <label class="col-md-2 header-text" for="textarea-input">Mô tả</label>
               <div class="col-md-10">
