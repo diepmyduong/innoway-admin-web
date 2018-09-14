@@ -57,7 +57,7 @@ export class AddComponent implements OnInit {
 
   quillOptions = {
     modules: {
-      toolbar: { handlers: { 
+      toolbar: { handlers: {
         image: () => this.selectLocalImage() }
       }
     }
@@ -169,7 +169,7 @@ export class AddComponent implements OnInit {
       const range = this.quill.quillEditor.getSelection();
       this.quill.quillEditor.insertEmbed(range.index, 'image', url);
     }
-    
+
 
   setDefaultData() {
     this.status = 1;
@@ -525,7 +525,7 @@ export class AddComponent implements OnInit {
         if (!thumb && this.list_image.length > 0) thumb = this.list_image[0]
         let product = await this.innowayApi.product.add({
           name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
-          status, category, category_id, unit_id, product_type_id, list_image, isGift, meta_data
+          status, category, category_id, unit_id, product_type_id, list_image, is_gift, meta_data
         })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id
@@ -561,7 +561,7 @@ export class AddComponent implements OnInit {
         if (!thumb && this.list_image.length > 0) thumb = this.list_image[0]
         let product = await this.innowayApi.product.update(this.id, {
           name, short_description, description, thumb, price: this.globals.convertStringToPrice(price), base_price: this.globals.convertStringToPrice(base_price),
-          status, category, category_id, unit_id, product_type_id, list_image, meta_data
+          status, category, category_id, unit_id, product_type_id, list_image, meta_data, is_gift
         })
         let toppings = this.toppingSelecter.active.map(item => {
           return item.id ? item.id : undefined
@@ -851,7 +851,7 @@ export class AddComponent implements OnInit {
   checkGift(event) {
     this.isGift = event;
   }
-  
+
   async openImage(imageSrc) {
     let data = {
         image: imageSrc
@@ -878,7 +878,7 @@ export class AddComponent implements OnInit {
     this.list_image[i + 1] = this.list_image[i];
     this.list_image[i] = temp;
     if (this.list_image.length > 0) this.thumb = this.list_image[0]
-  }  
+  }
 
   async onChangeImageFile(event) {
     // this.startLoading()
@@ -888,7 +888,7 @@ export class AddComponent implements OnInit {
 
     try {
       this.isUploading = true;
-      
+
       let tasks = []
       for(let file of files) {
         tasks.push(this.innowayApi.upload.uploadImage(file).then(result => {

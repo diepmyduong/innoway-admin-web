@@ -33,7 +33,7 @@
                 <div class="form-group row">
                   <label class="col-md-2 header-text" for="text-input">Quả tặng?</label>
                   <div class="col-md-10">
-                    <mat-checkbox #isGiftControl="ngModel" [(ngModel)]="isGift" name="isGift" (ngModelChange)="checkGift($event)"> </mat-checkbox>
+                    <mat-checkbox #isGiftControl="ngModel" [(ngModel)]="isGift" name="isGift" [checked]="isGift" (ngModelChange)="checkGift($event)"> </mat-checkbox>
                   </div>
                 </div>
                 <div class="form-group row">
