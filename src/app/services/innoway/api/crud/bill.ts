@@ -170,8 +170,13 @@ export class Bill extends CrudAPI<iBill> {
                   longitude: params.data.receive_address.longitude,
                   latitude: params.data.receive_address.latitude
                 },
-                total_weight: params.data.total_weight,
-                note_code: params.data.note_code
+                total_weight:   params.data.total_weight,
+                note_code: params.data.note_code,
+                client: {
+                  contact_name: params.data.client.contact_name,
+                  address: params.data.client.address,
+                  contact_phone: params.data.client.contact_phone
+                }
               }
             }
             break;

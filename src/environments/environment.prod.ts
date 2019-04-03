@@ -6,12 +6,12 @@
 export const environment = {
   production: true,
   chatbot: {
-    host: "https://bot-server.mcommerce.com.vn",
+    host: "https://bot-server.mcom.app",
     version: "v1"
   },
   innoway: {
     // host: "https://m-commerce-cloud-service.appspot.com",
-    host: "https://innoway-server.mcommerce.com.vn",
+    host: "https://innoway-server.mcom.app",
     version: "v1",
     firebase: {
       apiKey: "AIzaSyCV7iiP9I8axVH3zT1AzltHlvcDWYoOySs",

@@ -28,6 +28,12 @@
             </div>
           </div>
           <div class="form-group row">
+            <label class="col-md-2 header-text" for="text-input">Độ ưu tiên hiển thị</label>
+            <div class="col-md-10">
+              <input type="number" #priorityControl="ngModel" [(ngModel)]="priority" name="priority" class="input-control form-control" [placeholder]="'Nhập độ ưu tiên'">
+            </div>
+          </div>
+          <div class="form-group row">
             <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
             <div class="col-md-10">
               <div class="input-group">

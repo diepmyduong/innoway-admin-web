@@ -904,7 +904,7 @@ export class BillsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
+        console.log('edit bill infomation', bill, result);
         this.editBillInformation(bill, result);
       }
     })
@@ -919,7 +919,7 @@ export class BillsComponent implements OnInit {
             employeeId: data.employee,
             note: data.noteBillActivity,
             type: data.thirdparty,
-            total_weight: data.total_weight,
+            total_weight: data.total_weight?data.total_weight:0,
             address: data.address,
             longitude: data.longitude,
             latitude: data.latitude,
@@ -988,9 +988,15 @@ export class BillsComponent implements OnInit {
                 latitude: Number.parseFloat(bill.latitude)
               },
               total_weight: Number.parseFloat(data.total_weight),
-              note_code: data.note_code
+              note_code: data.note_code,
+              client: {
+                contact_name: bill.customer.fullname,
+                address: bill.address,
+                contact_phone: bill.customer.phone
+              }
             },
           }
+          console.log('request', request)
           break
         case 'GHTK':
           request = {

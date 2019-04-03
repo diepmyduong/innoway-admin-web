@@ -22,16 +22,6 @@
         </div>
         <div class="card-block">
           <form #itemFrm="ngForm">
-            <!-- <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Logo</label>
-              <div class="col-md-10">
-                <input type="text" #logoControl="ngModel" [(ngModel)]="logo" name="logo" url class="form-control input-control" [placeholder]="image?'':'Nhập logo'" />
-                <small *ngIf="logoControl.errors?.url" class="error-text">
-                    (Link không hợp lệ)
-                </small>
-                <img *ngIf="logoControl.value && logoControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="logoControl.value" />
-              </div>
-            </div> -->
             <div class="form-group row">
               <label class="col-md-2 header-text" for="textarea-input">Logo</label>
               <div class="col-md-10">
@@ -51,10 +41,47 @@
               <div class="offset-md-2 col-md-10" *ngIf="previewLogoImage">
                 <span class="image-wrapper" *ngIf="previewLogoImage">
                   <img class="close-btn" [attr.src]="closeImage" (click)="removeImage('logo')" />
-                  <img class="preview-image" *ngIf="fileLogoUploader.value || logoControl.value" [src]="previewLogoImage" (error)="this.previewLogoImage = this.errorImage" />
+                <img class="preview-image" *ngIf="fileLogoUploader.value || logoControl.value" [src]="previewLogoImage" (error)="this.previewLogoImage = this.errorImage" />
                 </span>
               </div>
             </div>
+            <!-- <div class="form-group row">
+              <div class="col-md-12">
+                <div class="card n-mb-card">
+                  <div class="card-header">
+                    Hình ảnh
+                    <button type="submit" class="btn btn-sm btn-primary float-right ml-1" (click)="addImage()"><i class="fas fa-link"></i>Thêm URL</button>
+                    <button type="submit" class="btn btn-sm btn-primary float-right" (click)="fileUploader.click()"><i class="fas fa-upload"></i>Upload ảnh</button>
+                    <input [(ngModel)]="files" type="file" accept="image/*" #fileUploader (change)="onChangeImageFile($event)" [hidden]="true" [ngModelOptions]="{standalone: true}" multiple>
+                  </div>
+                  <div class="card-block">
+                    <small *ngIf="list_image == null || list_image.length == 0" class="not-found">
+                    Chưa có hình ảnh
+                  </small>
+                    <div class="image-list-wrapper">
+                      <div class="image-container" *ngFor="let image of list_image; let i = index" (click)="openImage(image)">
+                        <div class="image-wrapper">
+                          <img src="{{image}}">
+                        </div>
+                        <div *ngIf="i == 0" class="rect" [matTooltip]="'Ảnh đại diện'" matTooltipPosition="before">
+                          <i class="fas fa-star"></i>
+                          <div class="triangle"></div>
+                        </div>
+                        <button class="btn btn-sort btn-left" (click)="moveLeft(i); $event.stopPropagation()" [hidden]="i == 0"><i class="fas fa-arrow-left"></i></button>
+                        <button class="btn btn-sort btn-right" (click)="moveRight(i); $event.stopPropagation()" [hidden]="i == list_image.length - 1"><i class="fas fa-arrow-right"></i></button>
+                        <button class="btn btn-sort btn-remove" (click)="removeImage(i); $event.stopPropagation()"><i class="fas fa-times"></i></button>
+                      </div>
+                      <div class="image-container" [hidden]="!isUploading">
+                        <div class="loading-wrapper">
+                          <div><i class="fas fa-circle-notch fa-spin m-auto"></i></div>
+                          <div>Đang tải ảnh...</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
             <div class="form-group row">
               <label class="col-md-2 header-text" for="text-input">Primary</label>
               <div class="col-md-10">
@@ -76,16 +103,6 @@
                 <input [(colorPicker)]="darkpickerColor" [style.background]="darkpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'dark');darkpickerColor=$event" />
               </div>
             </div>
-            <!-- <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Banner Logo</label>
-              <div class="col-md-10">
-                <input type="text" #bannerLogoControl="ngModel" [(ngModel)]="bannerLogo" name="bannerLogo" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <small *ngIf="bannerLogoControl.errors?.url" class="text-muted danger">
-                    (Link không hợp lệ)
-                  </small>
-                <img *ngIf="bannerLogoControl.value && bannerLogoControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="bannerLogoControl.value" />
-              </div>
-            </div> -->
             <div class="form-group row">
               <label class="col-md-2 header-text" for="textarea-input">Banner Logo</label>
               <div class="col-md-10">
@@ -124,7 +141,8 @@
               <div class="col-md-10">
                 <div class="input-group">
                   <input type="file" name="file-input" #fileBackgroundImageUploader (change)="onChangeImageFile($event,'background_image')" [style.display]="'none'">
-                  <input type="text" #bannerBackgroundImageControl="ngModel" [(ngModel)]="bannerBackgroundImage" (input)="onImageChangeData($event.target.value,'background_image')" name="bannerBackgroundImage" url class="form-control input-control" [placeholder]="bannerBackgroundImage?'':'Nhập url'" />
+                  <input type="text" #bannerBackgroundImageControl="ngModel" [(ngModel)]="bannerBackgroundImage" (input)="onImageChangeData($event.target.value,'background_image')" name="bannerBackgroundImage" url class="form-control input-control" [placeholder]="bannerBackgroundImage?'':'Nhập url'"
+                  />
                   <span class="input-group-append">
                     <button type="button" class="btn btn-ladda ladda-button btn-primary" [ladda]="progress" (click)="fileBackgroundImageUploader.click()"
                     data-style="contract-overlay" style="z-index: 10;">
@@ -149,22 +167,13 @@
                 <input [(colorPicker)]="bannerBackgroundColorpickerColor" [style.background]="bannerBackgroundColorpickerColor" (colorPickerChange)="rgbaText=onChangeColorHex8($event,'bannerBackgroundColor');bannerBackgroundColorpickerColor=$event" />
               </div>
             </div>
-            <!-- <div class="form-group row">
-              <label class="col-md-2 header-text" for="text-input">Default Product Image</label>
-              <div class="col-md-10">
-                <input type="text" #defaultProductImageControl="ngModel" [(ngModel)]="defaultProductImage" name="defaultProductImage" class="form-control input-control" [placeholder]="'Nhập mã màu'">
-                <small *ngIf="defaultProductImageControl.errors?.url" class="text-muted danger">
-                    (Link không hợp lệ)
-                  </small>
-                <img *ngIf="defaultProductImageControl.value && defaultProductImageControl.valid" style="width:auto;height:80px;margin-top:1rem" [src]="defaultProductImageControl.value" />
-              </div>
-            </div> -->
             <div class="form-group row">
               <label class="col-md-2 header-text" for="textarea-input">Default Product Image</label>
               <div class="col-md-10">
                 <div class="input-group">
                   <input type="file" name="file-input" #fileProductImageUploader (change)="onChangeImageFile($event,'product_image')" [style.display]="'none'">
-                  <input type="text" #defaultProductImageControl="ngModel" [(ngModel)]="defaultProductImage" (input)="onImageChangeData($event.target.value,'product_image')" name="defaultProductImage" url class="form-control input-control" [placeholder]="defaultProductImage?'':'Nhập url'" />
+                  <input type="text" #defaultProductImageControl="ngModel" [(ngModel)]="defaultProductImage" (input)="onImageChangeData($event.target.value,'product_image')" name="defaultProductImage" url class="form-control input-control" [placeholder]="defaultProductImage?'':'Nhập url'"
+                  />
                   <span class="input-group-append">
                     <button type="button" class="btn btn-ladda ladda-button btn-primary" [ladda]="progress" (click)="fileProductImageUploader.click()"
                     data-style="contract-overlay" style="z-index: 10;">

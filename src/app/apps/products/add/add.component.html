@@ -35,7 +35,7 @@
                   <div class="col-md-10">
                     <mat-checkbox #isGiftControl="ngModel" [(ngModel)]="isGift" name="isGift" [checked]="isGift" (ngModelChange)="checkGift($event)"> </mat-checkbox>
                   </div>
-                </div>
+                </div>              
                 <div class="form-group row">
                   <label class="col-md-2 header-text" for="textarea-input">Meta-data</label>
                   <div class="col-md-10">
@@ -159,29 +159,6 @@
                 <input [(ngModel)]="files" type="file" accept="image/*" #fileUploader (change)="onChangeImageFile($event)"
                 [hidden]="true" [ngModelOptions]="{standalone: true}" multiple>
               </div>
-              <!-- <div class="card-block" *ngIf="falseococo">
-                <div class="form-group row">
-                  <label class="col-md-2 header-text" for="textarea-input">Hình ảnh</label>
-                  <div class="col-md-10">
-                    <div class="input-group">
-                      <input type="file" name="file-input" #fileUploader (change)="onChangeImageFile($event)" [style.display]="'none'">
-                      <input type="text" #imageControl="ngModel" [(ngModel)]="image" (input)="onImageChangeData($event.target.value)" name="image" url class="form-control input-control" [placeholder]="image?'':'Nhập url'" />
-                      <span class="input-group-append">
-                        <button type="button" class="btn btn-ladda ladda-button btn-primary" (click)="fileUploader.click()"
-                        data-style="contract-overlay" style="z-index: 10;">
-                          <span class="ladda-label">Đăng ảnh</span>
-                      </button>
-                      </span>
-                    </div>
-                  </div>
-                  <div class="offset-md-2 col-md-10" *ngIf="previewImage">
-                    <span class="image-wrapper" *ngIf="previewImage">
-                      <img class="close-btn" [attr.src]="closeImage" (click)="removeImage()" />
-                      <img id="preview-image" *ngIf="fileUploader.value || imageControl.value" [src]="previewImage" (error)="this.previewImage = this.errorImage" />
-                    </span>
-                  </div>
-                </div>
-              </div> -->
               <div class="card-block">
                 <small *ngIf="list_image == null || list_image.length == 0" class="not-found">
                   Chưa có hình ảnh
@@ -206,42 +183,9 @@
                     </div>
                   </div>
                 </div>
-                <!-- <swiper [config]="imageConfig" #imageSwiper id="product-swiper">
-                  <div class="swiper-wrapper">
-                    <div class="swiper-slide" *ngFor="let image of list_image; let i = index" (mouseenter)="image_on_hover = i" (mouseleave)="image_on_hover = -1">
-                      <div class="card n-mb-card">
-                        <div class="card-block p-0">
-                          <div class="product-swiper-image" [style.background-image]="'url('+image+')'">
-                            <div class="btn-group pull-right" *ngIf="image_on_hover == i">
-                              <button (click)="setThumbnail(i)" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button>
-                              <button (click)="removeImage(i)" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="swiper-pagination"></div>
-
-                  <div class="swiper-button-next"></div>
-                  <div class="swiper-button-prev"></div>
-                </swiper> -->
               </div>
             </div>
           </div>
-
-          <!-- <div class="col-md-12" *ngIf="thumb">
-            <div class="card n-mb-card">
-              <div class="card-header">
-                Ảnh đại diện
-              </div>
-              <div class="card-block" style="text-align: center">
-                <img style="width: 100px; height: 100px;" [src]="thumb" />
-              </div>
-            </div>
-          </div> -->
-
           <div class="col-md-12 remove-pb">
             <div class="card n-mb-card remove-pb">
               <div class="card-header">

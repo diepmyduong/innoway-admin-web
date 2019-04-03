@@ -23,6 +23,7 @@ export class AddComponent implements OnInit {
   shortDescription: string;
   image: string;
   status: number;
+  priority: number;
 
   @ViewChild("fileUploader")
   fileUploader: ElementRef;
@@ -68,6 +69,7 @@ export class AddComponent implements OnInit {
     this.shortDescription = null
     this.description = null
     this.previewImage = null
+    this.priority = 3
 
     this.metaData = {
       "lang": {
@@ -85,7 +87,8 @@ export class AddComponent implements OnInit {
       shortDescription: this.shortDescription,
       description: this.description,
       previewImage: this.previewImage,
-      metaData: this.metaData
+      metaData: this.metaData,
+      priority: this.priority
     }
   }
 
@@ -100,6 +103,7 @@ export class AddComponent implements OnInit {
       this.shortDescription = category.short_description
       this.description = category.description
       this.status = category.status
+      this.priority = category.priority
 
       let dataDefault: any = {
         "lang": {
@@ -177,11 +181,11 @@ export class AddComponent implements OnInit {
 
   async addItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, previewImage, status, shortDescription, metaData } = this;
+      let { name, description, previewImage, status, shortDescription, metaData, priority } = this;
       let short_description = shortDescription;
       let image = previewImage
       let meta_data: any = this.editor.get()
-      await this.innowayApi.productCategory.add({ name, description, short_description, image, status, meta_data })
+      await this.innowayApi.productCategory.add({ name, description, short_description, image, status, meta_data, priority })
       this.alertAddSuccess();
       form.reset();
       form.resetForm(this.setDefaultData());
@@ -192,11 +196,11 @@ export class AddComponent implements OnInit {
 
   async updateItem(form: NgForm) {
     if (form.valid) {
-      let { name, description, previewImage, status, shortDescription, metaData } = this;
+      let { name, description, previewImage, status, shortDescription, metaData, priority } = this;
       let short_description = shortDescription;
       let image = previewImage;
       let meta_data: any = this.editor.get()
-      await this.innowayApi.productCategory.update(this.id, { name, description, short_description, image, status, meta_data })
+      await this.innowayApi.productCategory.update(this.id, { name, description, short_description, image, status, meta_data, priority })
       this.alertUpdateSuccess();
       form.reset();
     } else {

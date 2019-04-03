@@ -11,6 +11,7 @@ export interface iProductCategory extends iCrud {
     parent_id?: string,
     short_description?: string,
     meta_data?: string,
+    priority?: number,
     parent?: iProductCategory
 }
 
